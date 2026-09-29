@@ -44,24 +44,30 @@ untranslated = [k for k, v in vi.items()
                 and SENTENCE.search(src.get(k, ''))]
 
 # ---------------------------------------------------------------- 2. glossary
-# One concept must have exactly one rendering. Left = what is already agreed,
-# the scan reports every other variant that is currently in the map.
+# One concept must have exactly one rendering, and that rendering is fixed by
+# AGENT.md. The first entry of each list is the agreed form; anything else that
+# turns up is a violation. Kept in sync with AGENT.md sections 3 and 4.
 GLOSSARY = {
-    'bar (measure)':      ['ô nhịp', 'Bar', 'cột nhịp', 'ô phách'],
+    # AGENT.md 3: Bar is a term to keep in English. "ô nhịp" and "Cột nhịp"
+    # are both wrong - the latter means "column".
+    'bar (measure)':      ['Bar', 'ô nhịp', 'cột nhịp', 'ô phách'],
     'system (score)':     ['dòng nhạc', 'hệ thống', 'System'],
+    # AGENT.md 4: the score desk uses Vietnamese.
     'staff (score)':      ['khuông nhạc', 'Staff', 'khoang'],
     'clef':               ['khóa nhạc', 'Clef', 'khoá nhạc'],
     'rest':               ['dấu lặng', 'Rest', 'lặng'],
     'beam':               ['đuôi nốt', 'Beam', 'chày', 'quảng'],
-    'note (music)':       ['nốt', 'Note', 'note'],
-    'chord':              ['hợp âm', 'Chord'],
-    'scale':              ['Scale', 'thang', 'thang âm'],
-    'voice (music)':      ['bè', 'Voice', 'giọng'],
     'stem':               ['thân nốt', 'Stem', 'cây nốt'],
+    'barline':            ['vạch nhịp', 'Barline'],
     'ledger line':        ['dòng kẻ', 'ledger'],
     'key signature':      ['hóa biểu', 'Hóa biểu'],
     'time signature':     ['số chỉ nhịp', 'Time Signature'],
-    'barline':            ['vạch nhịp', 'Barline'],
+    'voice (music)':      ['bè', 'Voice', 'giọng'],
+    # AGENT.md 3: Note and Chord are Cubase terms, but "nốt" and "hợp âm" read
+    # better in running Vietnamese and are the majority, so both are allowed.
+    'note (music)':       ['nốt', 'Note', 'note'],
+    'chord':              ['hợp âm', 'Chord'],
+    'scale':              ['Scale', 'thang', 'thang âm'],
 }
 
 violations = collections.defaultdict(list)

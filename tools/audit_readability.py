@@ -77,6 +77,15 @@ RULES = [
         r'\b(chọn|vào|thêm|đặt|xoá|xóa|gỡ)\s+(vào|cho|ra|đi)\b', re.I),
      'động từ + giới từ thừa'),
 
+    # AGENT.md 2: "vào" is redundant only when the verb already carries the
+    # direction, which in practice means the English verbs below. Vietnamese
+    # verbs like "gán vào" or "chuyển vào" are natural and are not matched -
+    # they need an object, which is what "vào" introduces.
+    ('redundant vào', re.compile(
+        r'\b(Go|Move|Map|Drag|Scroll|Synchronize|Kéo)\s+vào\s+'
+        r'(?!thư mục|Group|thùng|Blocklist|Bus|Chord|bè)\w', re.I),
+     'động từ đã chứa hướng + giới từ "vào" thừa'),
+
     # A very long noun-phrase stack with no verb: over 9 words before the first
     # Vietnamese verb-like word.
     ('long noun stack', re.compile(r'^(?:\S+\s+){9,}(?:và|hoặc|trong)\b', re.I),
