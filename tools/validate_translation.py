@@ -41,7 +41,7 @@ if vi_empty:
     print(f'  !! {vi_empty} empty <vi> elements')
 
 # spot-check a few known menus per AGENT.md
-checks = {'File': 'Tệp (File)', 'Edit': 'Sửa (Edit)', 'Transport': 'Transport', 'Devices': 'Thiết bị (Devices)'}
+checks = {'File': 'File', 'Edit': 'Sửa', 'Transport': 'Transport', 'Devices': 'Thiết bị'}
 print('  spot-check:')
 for s in strings:
     k = s.get('Key')
