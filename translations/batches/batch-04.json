@@ -117,7 +117,7 @@
   "Drag to Copy Pre Filter Settings": "Kéo để sao chép cài đặt Pre Filter",
   "Draw Event Volume Curve": "Vẽ đường cong âm lượng Event",
   "Draw Tempo Curve": "Vẽ đường cong Tempo",
-  "Dynamics (Compressor, Gate, etc.)": "Dynamics (Compressor, Gate, etc.)",
+  "Dynamics (Compressor, Gate, etc.)": "Dynamics (Compressor, Gate, v.v.)",
   "Edit Articulation Combinations": "Sửa tổ hợp Articulation",
   "Edit Bank Assignment": "Sửa gán Bank",
   "Edit Channel Panner for selected": "Sửa Channel Panner cho mục đã chọn",
@@ -199,6 +199,6 @@
   "Shuttle Play Reverse 1x": "Shuttle Play ngược 1x",
   "Shuttle Play Reverse 2x": "Shuttle Play ngược 2x",
   "Soft Quantize": "Soft Quantize",
-  "Stereo Pan Law": "Stereo Pan Law",
+  "Stereo Pan Law": "Quy tắc Pan Stereo",
   "Undo Quantize": "Hoàn tác Quantize"
 }

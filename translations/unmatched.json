@@ -1,6 +1,11 @@
 {
+ "%d new VST effect(s) and\n%d new VST instrument(s) and\n%d new VST modulators(s) found.": "Tìm thấy %d VST effect mới và\n%d VST instrument mới và\n%d VST modulator mới.",
+ "%d new VST effect(s) and\n%d new VST instrument(s) found.": "Tìm thấy %d VST effect mới và\n%d VST instrument mới.",
+ "About %s...": "Về %s...",
  "Add Send": "Thêm Send",
  "Adjust": "Điều chỉnh",
+ "Agogô (High)": "Agogô (Cao)",
+ "Agogô (Low)": "Agogô (Trầm)",
  "Align Tracks": "Căn chỉnh track",
  "Any Type": "Bất kỳ loại",
  "Archive": "Lưu trữ",
@@ -12,6 +17,7 @@
  "At": "Tại",
  "Attach": "Gắn",
  "Audio File": "Tệp âm thanh",
+ "Audio recording aborted. The Disk is full!\n": "Ghi Audio đã bị hủy. Đĩa đã đầy!\n",
  "Auto Scroll": "Tự cuộn",
  "Avoid": "Tránh",
  "Balance": "Cân bằng",
@@ -43,5 +49,17 @@
  "Contrast": "Độ tương phản",
  "Control": "Điều khiển",
  "Copy Loop": "Sao chép vòng lặp",
- "Cycle Value": "Giá trị lặp"
+ "Cuíca (High)": "Cuíca (Cao)",
+ "Cuíca (Low)": "Cuíca (Trầm)",
+ "Cycle Value": "Giá trị lặp",
+ "Database creation failed because the target is write protected.\n": "Tạo cơ sở dữ liệu thất bại vì đích bị chống ghi.\n",
+ "Database removal failed because the database file is write protected.\n": "Xóa cơ sở dữ liệu thất bại vì file cơ sở dữ liệu bị chống ghi.\n",
+ "Dial: Destination Parameter before Modulation\nInner Indicator: Modulation\nOuter Indicator: Modulation Depth": "Núm xoay: Tham số đích trước khi Modulation\nChỉ báo trong: Modulation\nChỉ báo ngoài: Độ sâu Modulation",
+ "File Exists!\n%s": "File đã tồn tại!\n%s",
+ "File exists already!\n%s": "File đã tồn tại rồi!\n%s",
+ "Network Collaboration activated, or network configuration changed.\n\nMultiple network interfaces found, please select:": "Đã kích hoạt cộng tác mạng, hoặc cấu hình mạng đã đổi.\n\nTìm thấy nhiều giao diện mạng, vui lòng chọn:",
+ "Reactivating the plug-in failed!\nFor support information, please contact the plug-in vendor.": "Kích hoạt lại Plug-in thất bại!\nĐể biết thông tin hỗ trợ, vui lòng liên hệ nhà cung cấp Plug-in.",
+ "The program is running with a limited license. \nYou may use it for another %s and it can be started %d more time(s).": "Chương trình đang chạy với bản quyền giới hạn. \nBạn có thể dùng thêm %s và có thể khởi động thêm %d lần nữa.",
+ "There already is a preset named\n\"%s\"!\nIt is read only. You cannot overwrite it!": "Đã có sẵn một Preset mang tên\n\"%s\"!\nNó chỉ đọc. Bạn không thể ghi đè lên nó!",
+ "VST Sound Library \"%s\" not found:\n%s": "Không tìm thấy thư viện VST Sound \"%s\":\n%s"
 }

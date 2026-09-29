@@ -1,87 +1,63 @@
 #!/usr/bin/env python3
-"""Extract the TRANSLATION.XML resource from a Steinberg PE and dump stats."""
-import struct, sys, re, os, json, collections
+"""Extract the TRANSLATION.XML resource from a Steinberg PE and report on it.
 
-path = sys.argv[1]
-out = sys.argv[2] if len(sys.argv) > 2 else 'translation.xml'
-raw = open(path, 'rb').read()
+    python tools/extract_translation.py <exe> [out.xml]
 
-e_lfanew = struct.unpack_from('<I', raw, 0x3C)[0]
-coff = e_lfanew + 4
-_, nsec, _, _, _, optsz, _ = struct.unpack_from('<HHIIIHH', raw, coff)
-opt = coff + 20
-pe32plus = struct.unpack_from('<H', raw, opt)[0] == 0x20B
-dirs_off = opt + (112 if pe32plus else 96)
-sec_off = opt + optsz
-sections = []
-for i in range(nsec):
-    o = sec_off + i*40
-    name = raw[o:o+8].rstrip(b'\0').decode('latin-1')
-    vsz, va, rsz, ptr = struct.unpack_from('<IIII', raw, o+8)
-    sections.append((name, va, vsz, ptr, rsz))
+The UI string table is stored as plain, uncompressed UTF-8 XML in a PE
+resource, which is what makes the whole approach possible: Cubase reads
+<dir>/translation.xml from disk before falling back to the copy embedded in the
+executable, so no binary patch is needed to change the language.
+"""
+import os
+import re
+import sys
 
-def rva_to_off(rva):
-    for name, va, vsz, ptr, rsz in sections:
-        if va <= rva < va + max(vsz, rsz):
-            return ptr + (rva - va)
-    return None
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from cubelib.pe import PE                       # noqa: E402
 
-rrva, _ = struct.unpack_from('<II', raw, dirs_off + 2*8)
-rbase = rva_to_off(rrva)
+RESOURCE_NAME = 'TRANSLATION.XML'
+OUT_DEFAULT = 'translation.xml'
 
-def rname(nameoff):
-    if nameoff & 0x80000000:
-        o = rbase + (nameoff & 0x7FFFFFFF)
-        ln = struct.unpack_from('<H', raw, o)[0]
-        return raw[o+2:o+2+ln*2].decode('utf-16-le')
-    return None
+if len(sys.argv) < 2:
+    sys.exit(f'usage: extract_translation.py <exe> [{OUT_DEFAULT}]')
 
-found = None
-def walk(off, names=()):
-    global found
-    nnamed, nid = struct.unpack_from('<HH', raw, off+12)
-    for i in range(nnamed+nid):
-        e = off + 16 + i*8
-        no, do = struct.unpack_from('<II', raw, e)
-        nm = rname(no)
-        names2 = names + ((nm,) if nm else ())
-        if do & 0x80000000:
-            walk(rbase + (do & 0x7FFFFFFF), names2)
-        else:
-            drva, dsz, dcp, _ = struct.unpack_from('<IIII', raw, rbase + do)
-            doff = rva_to_off(drva)
-            if any((n or '').upper() == 'TRANSLATION.XML' for n in names2):
-                found = (doff, dsz, names2)
-walk(rbase)
+pe = PE(sys.argv[1])
+res = pe.find_resource(RESOURCE_NAME)
+if res is None:
+    have = ', '.join(sorted({r.label for r in pe.resources()
+                             if any(isinstance(p, str) for p in r.path)}))
+    pe.close()
+    sys.exit(f'{RESOURCE_NAME} resource not found in {sys.argv[1]}\n'
+             f'named resources present: {have or "(none)"}')
 
-if not found:
-    raise SystemExit('TRANSLATION.XML resource not found')
-doff, dsz, path = found
-print(f'resource path: {path}')
-xml = raw[doff:doff+dsz]
-print(f'resource at file 0x{doff:X}, {dsz:,} bytes')
+xml = pe.bin.slice(res.off, res.size)
+print(f'resource path: {res.label}')
+print(f'resource at file 0x{res.off:X}, {res.size:,} bytes')
 print(f'starts: {xml[:60]!r}')
 print(f'ends  : {xml[-40:]!r}')
 
-open(out, 'wb').write(xml)
+out = sys.argv[2] if len(sys.argv) > 2 else OUT_DEFAULT
+with open(out, 'wb') as fh:
+    fh.write(xml)
 print(f'wrote {out} ({os.path.getsize(out):,} bytes)')
 
-txt = xml.decode('utf-8')
-langs = re.findall(r'<language key="([^"]+)">([^<]*)</language>', txt)
+text = xml.decode('utf-8', errors='replace')
+langs = re.findall(r'<language key="([^"]+)">([^<]*)</language>', text)
 print(f'\nlanguages ({len(langs)}): {langs}')
 
-strings = re.findall(r'<String Key="((?:[^"]|"(?!>))*?)">', txt)
-print(f'String entries: {len(strings):,}')
+keys = re.findall(r'<String Key="((?:[^"]|"(?!>))*?)">', text)
+print(f'String entries: {len(keys):,}')
 
-# how often does Key equal the <us> value?
-m = re.findall(r'<String Key="(.*?)">\s*<us>(.*?)</us>', txt, re.S)
-same = sum(1 for k, u in m if k == u)
-print(f'Key == us  : {same:,} / {len(m):,}  ({same*100//max(1,len(m))}%)')
+pairs = re.findall(r'<String Key="(.*?)">\s*<us>(.*?)</us>', text, re.S)
+same = sum(1 for k, u in pairs if k == u)
+print(f'Key == us  : {same:,} / {len(pairs):,}  '
+      f'({same * 100 // max(1, len(pairs))}%)')
 
-# look for the main top-level menus
 print('\n--- main menus present? ---')
 for probe in ['File', 'Edit', 'Project', 'Audio', 'MIDI', 'Media', 'Transport',
-              'Devices', 'Window', 'Help', 'Studio', 'Scores', 'Plug-ins', 'Nudge',
-              'Mixer', 'VST Connections', 'Audio Connections']:
-    hit = re.search(r'<String Key="' + re.escape(probe) + r'">\s*<us>([^<]*)</us>', txt)
-    print(f'  {probe:20} -> {"HIT: " + hit.group(1) if hit else "not found as exact key"}')
+              'Devices', 'Window', 'Help', 'Studio', 'Scores', 'Plug-ins',
+              'Nudge', 'Mixer', 'VST Connections', 'Audio Connections']:
+    m = re.search(r'<String Key="' + re.escape(probe) + r'">\s*<us>([^<]*)</us>', text)
+    print(f'  {probe:20} -> {"HIT: " + m.group(1) if m else "not found as exact key"}')
+
+pe.close()

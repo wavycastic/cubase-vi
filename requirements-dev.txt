@@ -1,0 +1,12 @@
+# Development extras for the cubase-vi toolchain.
+#
+# The translation pipeline (tools/build.py and everything it calls) needs
+# nothing but the Python standard library.  These are only for the reverse
+# engineering helpers under tools/research/, which disassemble code.
+#
+#     pip install -r requirements-dev.txt
+#
+# The same list lives in tools/cubelib/x86.py as an explicit import; keeping it
+# here is the single place to add more.
+
+capstone>=5.0,<6

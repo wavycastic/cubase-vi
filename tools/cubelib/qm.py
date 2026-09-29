@@ -136,12 +136,12 @@ class QM:
             return []
         out, i = [], 0
         while i + 2 <= len(blob):
-            n = _u16be(blob, i)
-            s = blob[i + 2:i + 2 + n]
-            if len(s) < n:
+            n = _u16be(blob, i)          # length in UTF-16 code units
+            s = blob[i + 2:i + 2 + 2 * n]
+            if len(s) < 2 * n:
                 break
             out.append(decode_utf16(s))
-            i += 2 + n
+            i += 2 + 2 * n
         return out
 
     @property
