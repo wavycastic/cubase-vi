@@ -21,30 +21,8 @@ for line in open(os.path.join(ROOT, 'keys', 'all_strings.tsv'),
         k, u = line.split('\t', 1)
         src[k] = u
 
-
-def domain(k):
-    s = k.lower()
-    if re.search(r'\b(chord|voicing|tension|scale|articulation|harmony|note)\b', s):
-        return 'music-theory'
-    if re.search(r'\b(export|render|bounce|warp|audio|file|pool|import|media|'
-                 r'format|bit|sample rate|fade|freeze|process)\b', s):
-        return 'media'
-    if re.search(r'\b(insert|send|eq|plugin|vst|bus|channel|fader|pan|routing|'
-                 r'compressor|gate|limiter)\b', s):
-        return 'mixer'
-    if re.search(r'\b(locator|marker|cycle|transport|cursor|record|play|loop|'
-                 r'tempo|quantize|grid|snap|scroll|zoom)\b', s):
-        return 'transport'
-    if re.search(r'\b(shortcut|key command|assign|menu|command|context|'
-                 r'right.click|window|toolbar|panel|dialog|page)\b', s):
-        return 'ui'
-    if re.search(r'\b(score|stave|staff|system|bar|beat|clef|rest|notation|'
-                 r'beam|ledger|signatur)\b', s):
-        return 'notation'
-    if re.search(r'\b(network|server|user|permission|shared|profile|'
-                 r'project setup|template|preferences)\b', s):
-        return 'project'
-    return 'general'
+sys.path.insert(0, os.path.join(ROOT, 'tools'))
+from sample_domain import domain
 
 
 def islong(v):

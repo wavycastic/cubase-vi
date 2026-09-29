@@ -40,22 +40,27 @@ def domain(k):
     return 'general'
 
 
-want = sys.argv[1] if len(sys.argv) > 1 else None
-start = int(sys.argv[2]) if len(sys.argv) > 2 else 0
-count = int(sys.argv[3]) if len(sys.argv) > 3 else 60
+# Everything below is the command line entry point. It is guarded so that
+# read_long.py and read_short.py can import domain() from this module without
+# running the printer - which is what made both of them paste their own copy
+# of domain() in instead.
+if __name__ == '__main__':
+    want = sys.argv[1] if len(sys.argv) > 1 else None
+    start = int(sys.argv[2]) if len(sys.argv) > 2 else 0
+    count = int(sys.argv[3]) if len(sys.argv) > 3 else 60
 
-buckets = {}
-for k, v in vi.items():
-    buckets.setdefault(domain(k), []).append((k, v))
+    buckets = {}
+    for k, v in vi.items():
+        buckets.setdefault(domain(k), []).append((k, v))
 
-if want and want != 'all':
-    buckets = {want: buckets.get(want, [])}
+    if want and want != 'all':
+        buckets = {want: buckets.get(want, [])}
 
-random.seed(7)
-for name, items in sorted(buckets.items()):
-    if want and want != 'all' and name != want:
-        continue
-    print(f'\n######## {name}  ({len(items)} strings) ########')
-    for k, v in items[start:start + count]:
-        print(f'  EN: {src.get(k, "?")[:110]}')
-        print(f'  VI: {v[:110]}')
+    random.seed(7)
+    for name, items in sorted(buckets.items()):
+        if want and want != 'all' and name != want:
+            continue
+        print(f'\n######## {name}  ({len(items)} strings) ########')
+        for k, v in items[start:start + count]:
+            print(f'  EN: {src.get(k, "?")[:110]}')
+            print(f'  VI: {v[:110]}')
