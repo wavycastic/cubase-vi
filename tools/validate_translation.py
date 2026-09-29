@@ -40,8 +40,8 @@ for k, v in sorted(counts.items(), key=lambda x: -x[1]):
 if vi_empty:
     print(f'  !! {vi_empty} empty <vi> elements')
 
-# spot-check a few known menus
-checks = {'File': 'Tệp', 'Edit': 'Sửa', 'Transport': 'Phát', 'Devices': 'Thiết bị'}
+# spot-check a few known menus per AGENT.md
+checks = {'File': 'Tệp (File)', 'Edit': 'Sửa (Edit)', 'Transport': 'Transport', 'Devices': 'Thiết bị (Devices)'}
 print('  spot-check:')
 for s in strings:
     k = s.get('Key')
