@@ -368,6 +368,41 @@ danh từ chưa bao giờ được đối chiếu với nó.
 Cùng kiểu: `Event End` → `Event Kết thúc`, `Event Start` → `Event Bắt đầu`,
 `Event Display` → `Event Hiển thị`, `Estimated Pitch` → `Pitch Estimated`.
 
+### `New` là *mới*, không phải `Tạo`
+
+32 nhãn mở đầu bằng `New`, và 28 cái dịch `New` thành `Tạo`:
+
+```
+New Attribute  ->  Tạo Attribute      New Library  ->  Tạo Library
+New Bank       ->  Tạo Bank           New Preset   ->  Tạo Preset
+New Folder     ->  Tạo Folder         New Track    ->  Tạo Track
+...
+```
+
+Hai anh em lại đúng: `New Project` → `Project mới`, `New Version` → `Phiên bản
+mới` — **vì vậy 28 cái kia chưa bao giờ được đối chiếu với ai**. Người dùng đọc
+`Tạo Track` trong menu sẽ hiểu là *tạo* một Track, không phải *Track mới*.
+
+### `No.` là *số*, không phải *không phải*
+
+`No. of Frets` → `No. của Frets`. Ở đây `No.` là viết tắt của **Number**. Trong
+khoảng 60 nhãn mở đầu bằng `No`, bốn cái đã đẩy chữ `No` ra cuối như danh từ:
+
+```
+No Parameter   ->  Tham số No        ← "tham số số"
+No Section     ->  Phần No           ← "phần số"
+No Status Info ->  Thông tin No Status
+```
+
+Cùng lớp với `Group` → `Gộp nhóm`: chữ bị coi là danh từ rồi đẩy hết xuống
+cuối. Đây là lỗi đảo thứ tự từ ở dạng ngắn, chỉ lộ ra khi đọc.
+
+### Không tự sửa chính tả Cubase
+
+`Myxolydian` → `Mixolydian` và `Myxolydic9/11` → `Mixolydic 9/11`. Bản dịch đã
+"tự sửa" chính tả của Cubase, khiến tiếng Việt **mâu thuẫn** với tiếng Anh mà
+người dùng vừa bấm. Tên tính năng thì giữ nguyên, kể cả khi có vẻ sai.
+
 ### `Deactivate` không phải `Hủy`
 
 `Hủy` là **cancel**, huỷ bỏ việc đang làm. `Deactivate` là **tắt**.
@@ -455,7 +490,7 @@ English / tiếng Việt. `python tools/read_short.py <miền> <bắt đầu> <s
 nhãn ngắn. `python tools/sample_domain.py <miền> <bắt đầu> <số>` cho mọi giá
 trị kể cả nhãn ngắn.
 
-### Ba lần rule báo động giả
+### Bốn lần rule báo động giả
 
 Ghi lại để không lặp lại:
 
