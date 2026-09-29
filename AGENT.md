@@ -403,6 +403,24 @@ cuối. Đây là lỗi đảo thứ tự từ ở dạng ngắn, chỉ lộ ra 
 "tự sửa" chính tả của Cubase, khiến tiếng Việt **mâu thuẫn** với tiếng Anh mà
 người dùng vừa bấm. Tên tính năng thì giữ nguyên, kể cả khi có vẻ sai.
 
+### `Notehead` là **đầu nốt**, không phải `đầu nối`
+
+`đầu nối` = joint, terminal, connector. Khoảng 40 nhãn dùng `đầu nốt` (đầu của
+nốt). Đợt 14 tôi sửa `Default Noteheads` → `Đầu nối mặc định` và đợt 15 sửa
+`Hidden Noteheads` → `Các đầu nối đang ẩn` — **tự tạo ra biến thể thứ hai**
+trong lúc đang sửa thứ khác. Đến đợt 20 mới thấy, vì `Plus Noteheads` và
+`Muted Slash Noteheads` vẫn còn `đầu nốt` và không ai trong họ đứng cạnh hai
+bản của tôi.
+
+Bài học: sửa một chuỗi trong một họ thì phải liệt kê **cả họ** ra, kể cả những
+cái tưởng là đã ổn.
+
+### Không tự sửa mệnh đề tiếng Anh
+
+`Pattern Event / Track` → `Track Pattern Event /` và `Pre/Post MIDI Modifiers and
+Inserts` → `Inserts Pre/Post MIDI Modifiers and`: hai chuỗi gốc đã bị tháo ra
+và ghép lại thành hai chuỗi khác. Chỉ còn chứa cùng các từ.
+
 ### `Deactivate` không phải `Hủy`
 
 `Hủy` là **cancel**, huỷ bỏ việc đang làm. `Deactivate` là **tắt**.
