@@ -1,0 +1,13 @@
+# Normalise line endings: keep LF in the repo, check out CRLF on Windows.
+* text=auto
+
+*.py    text eol=lf
+*.ps1   text eol=crlf
+*.json  text eol=lf
+*.md    text eol=lf
+*.tsv   text eol=lf
+
+# Never touch binary-ish artefacts even if someone adds them
+*.xml   -text
+*.exe   -text
+*.dll   -text
