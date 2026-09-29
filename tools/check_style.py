@@ -49,14 +49,15 @@ for key, val in sorted(m.items()):
         errors.append((key, val, 'empty value'))
         continue
 
-    # Rule 1: No trailing dictionary parentheses like "... (Key)"
-    mo = FORBIDDEN_PARENS.search(val)
-    if mo:
-        # Check if the text inside parens is an English word or matches key
-        inside = mo.group(0).strip()[1:-1].strip()
-        if inside.lower() in key.lower() or len(inside) >= 3 and inside.isascii():
-            errors.append((key, val, f'dictionary-style parenthesis {mo.group(0)!r} forbidden by AGENT.md'))
-            continue
+    # Rule 1: No trailing dictionary parentheses like "... (Key)" unless the key itself has them!
+    if not FORBIDDEN_PARENS.search(key):
+        mo = FORBIDDEN_PARENS.search(val)
+        if mo:
+            # Check if the text inside parens is an English word or matches key
+            inside = mo.group(0).strip()[1:-1].strip()
+            if inside.lower() in key.lower() or len(inside) >= 3 and inside.isascii():
+                errors.append((key, val, f'dictionary-style parenthesis {mo.group(0)!r} forbidden by AGENT.md'))
+                continue
 
     # Rule 2: No awkward literal Vietnamese translations of standard DAW terms
     val_lower = val.lower()
