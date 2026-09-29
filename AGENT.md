@@ -301,6 +301,48 @@ một dấu cộng/trừ lơ lửng.
 Tìm họ bằng cách gom các key có cùng tiền tố rồi so **từng từ một**. Sửa một
 cái trong họ mà không sửa anh em chỉ là thêm một biến thể nữa.
 
+### Khung tiếng Việt bọc một mệnh đề tiếng Anh
+
+Lớp lớn nhất mà **không bộ dò nào bắt được**: dịch từng từ theo thứ tự, xong
+không ai đọc lại. Nhãn ra tiếng Anh trần với khung tiếng Việt:
+
+```
+Do you want to continue recording?   ->  Bạn có muốn continue recording không?
+Do you want to copy video files too? ->  Bạn có muốn Sao chép video files too ...?
+Device failed to open!                ->  Device failed vào open!
+Divide by 2                           ->  Divide theo 2
+Delete later events                   ->  Xóa later events
+Displays follow locating device       ->  Thiết bị Displays follow locating
+Different tracks                      ->  Different tracks
+```
+
+Bộ dò "rò rỉ tiếng Anh" **không** báo, vì từng từ nó thấy đều là từ nó mong
+đợi: `Bạn có muốn` là tiếng Việt, `continue` là tiếng Anh, cả hai đều đúng ở
+chỗ của nó. Lớp lỗi này chỉ lộ ra khi đọc.
+
+Hai kiểu nặng nhất:
+
+- **Mệnh đề tiếng Anh nằm nguyên trong câu**: `continue recording`, `video
+  files too`, `failed vào open`, `later events`. Xóa hết, dịch lại.
+- **Câu bị tháo rời**: `Thiết bị Displays follow locating` — câu đã bị bung,
+  phần còn lại là một thiết bị bị "theo" bởi hai động từ tiếng Anh, không
+  nói được điều gì. Cùng dạng:
+  `Double-click opens Editor in Lower Zone` → `Editor Double-click opens
+  trong Lower Zone`.
+
+### Nhãn trường nhập — từ cần gõ phải ở cuối
+
+`Enter Custom Name` → `Tên Enter Custom` đọc thành "tên, nhập, tùy chỉnh": từ
+người dùng phải gõ (`Custom`) nằm giữa câu bảo họ gõ. Cùng lỗi ở
+`Enter Preset Name` → `Tên Enter Preset`, `Enter Model Name` → `Tên Enter
+Model`, `Enter Punch In Position` → `Nhập Punch trong Position`.
+
+### `Deactivate` không phải `Hủy`
+
+`Hủy` là **cancel**, huỷ bỏ việc đang làm. `Deactivate` là **tắt**.
+`Deactivate All Mute States` → `Hủy tất cả trạng thái Mute` sai; ba anh em
+(`Solo`, `Solo States`, `Listen States`) đã dùng `Tắt`.
+
 ---
 
 ## 7. Quy trình kiểm tra
