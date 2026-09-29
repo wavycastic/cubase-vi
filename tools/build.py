@@ -31,6 +31,8 @@ def run(args, title):
 run([T('tools', 'extract_translation.py'), EXE, BASE], 'extract TRANSLATION.XML from exe')
 run([T('tools', 'list_strings.py'), BASE, TSV], 'list all strings')
 run([T('tools', 'merge_maps.py'), '--check'], 'check translation maps')
+run([T('tools', 'prune_map.py'), '--dry-run'], 'check every map key exists in Cubase')
+run([T('tools', 'check_style.py')], 'enforce hybrid style (AGENT.md)')
 run([T('tools', 'build_translation.py'), BASE, OUT, MAP], 'build Vietnamese translation.xml')
 run([T('tools', 'validate_translation.py'), OUT], 'validate output')
 

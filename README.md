@@ -8,6 +8,10 @@ và chương trình chủ động đọc file `translation.xml` từ đĩa *trư
 nhúng trong `Cubase15.exe`. Repo này khai thác đúng cơ chế đó: **không cần vá
 file thực thi.**
 
+Kiểu dịch: **lai tiếng Anh – tiếng Việt** (`Thiết bị (Devices)`), thuật ngữ
+kỹ thuật giữ nguyên tiếng Anh để tra được video hướng dẫn. Quy tắc bắt buộc ở
+[`AGENT.md`](AGENT.md).
+
 Chi tiết kỹ thuật: [`docs/RESEARCH.md`](docs/RESEARCH.md)
 
 ---
@@ -41,6 +45,7 @@ Gỡ lại: `powershell -File scripts\install.ps1 -Action uninstall`
 translations/vi.json          bản dịch hợp nhất - nguồn sự thật duy nhất
 translations/batches/*.json   các lô dịch, gộp bằng tools/merge_maps.py
 translations/unmatched.json   các key đoán sai, đã tách ra (tools/prune_map.py)
+AGENT.md                      quy tắc bắt buộc: dịch LAI Anh-Việt, không dịch thuần Việt
 keys/all_strings.tsv          10.737 chuỗi: key <-> tiếng Anh (tham chiếu, đã commit)
 build/                        output (gitignored)
 tools/build.py                pipeline: extract -> list -> merge -> build -> validate
@@ -53,6 +58,7 @@ tools/prune_map.py            tách key đoán sai khỏi vi.json và khỏi cá
 tools/worklist.py             danh sách chuỗi chưa dịch, ưu tiên theo nhóm
 tools/suggest_keys.py         gợi ý key thật khi tên bạn đoán không khớp
 tools/check_dups.py           phát hiện key trùng trong JSON
+tools/check_style.py          cưỡng chế AGENT.md: mỗi giá trị phải là "<Vi> (<key>)" hoặc đúng key
 tools/research/               công cụ RE dùng để tìm ra cơ chế (xem RESEARCH.md)
 scripts/install.ps1           install / uninstall / status
 ```
