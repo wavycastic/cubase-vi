@@ -40,5 +40,14 @@ items = [(k, v) for k, v in vi.items()
          and (want == 'all' or domain(k) == want)]
 items.sort()
 print(f'## {want}  {len(items)} short values  (showing {start}..{start+count})\n')
+# The line printed first is the English from all_strings.tsv, which is NOT
+# always the key - "View Mode: Fill View[Score View Option]" and friends. Every
+# fix_reading*.py table is keyed by the real key, so the key has to be on
+# screen, otherwise the table silently misses and the script reports
+# "NOT IN CUBASE" for a string that plainly exists.
 for k, v in items[start:start + count]:
-    print(f'{src.get(k, "?")}\n    {v}\n')
+    en = src.get(k, '?')
+    print(f'{en}\n    {v}')
+    if k != en:
+        print(f'    <key: {k}>')
+    print()

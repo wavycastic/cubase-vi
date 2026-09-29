@@ -259,6 +259,48 @@ thang, `thứ tự` ("thứ tự nhiên") lại rất thông dụng nên không 
 Giữ nguyên văn, không đổi thứ tự, không dịch nhầm vào tên biến.
 Ví dụ: `Add %d Audio Tracks` → `Thêm %d Audio Track`.
 
+### Dấu câu không được di chuyển
+
+Dấu `:` `?` `!` `.` phải đứng đúng chỗ tiếng Anh đặt. Bốn lỗi thật đã qua:
+
+| Tiếng Anh | Đã dịch sai | Đúng |
+|---|---|---|
+| `CC: Modulation` | `CC Modulation` | `CC: Modulation` |
+| `Ch.` | `Ch` | `Ch.` |
+| `Checked Chains ....` | `Checked Chains...` | `Checked Chains ....` |
+| `Create new Project ?` | `Tạo ? Project` | `Tạo Project mới ?` |
+| `Database creation failed.` | `Tạo cơ sở dữ liệu thất bại.` | `Không thể tạo cơ sở dữ liệu.` |
+
+Dấu `?` nhảy vào giữa vế (`Tạo ? Project`) là hỏng chức năng: đọc lên là
+"tạo cái gì đó không?". Và nếu tiếng Anh có khoảng trắng trước dấu (` ?`, ` !`)
+thì giữ khoảng trắng đó, dù tiếng Việt không quen.
+
+### Từ mang nghĩa không được rơi
+
+`Create New Chain` → `Tạo Chain` là mất chữ **New** trong khi anh em giữ nguyên
+(`Create New Folder`, `Create New MIDI Device`, `Create New Version`). Cùng kiểu:
+
+```
+Date + Time   ->  Thời gian Date +
+Date / Time   ->  Thời gian Date /
+```
+
+Giá trị sau đó **không còn nói xem đang tạo cái gì** — chỉ còn "thời gian" rồi
+một dấu cộng/trừ lơ lửng.
+
+### Một họ nhãn phải giống nhau
+
+| Họ | Lệch |
+|---|---|
+| `Controller Lane Setup` vs `Controller Lane Setup 1..16` | `Cài đặt` vs `Thiết lập` |
+| `Deactivate All Mute/Solo/Solo States/Listen States` | ba cái `Hủy` (huỷ = cancel), một cái `Tắt` |
+| `Delete Automation Spikes` vs `... of Selected Tracks` | `đỉnh nhọn` vs `gai` |
+| `Dark Red/Blue/Yellow` vs `Dark Green/Magenta/Orange` | ba cái dịch, ba cái giữ tiếng Anh |
+| `Bypass: EQs/Inserts/Modulators/Sends` | mất dấu `:` ở một cái, mất `s` ở ba cái |
+
+Tìm họ bằng cách gom các key có cùng tiền tố rồi so **từng từ một**. Sửa một
+cái trong họ mà không sửa anh em chỉ là thêm một biến thể nữa.
+
 ---
 
 ## 7. Quy trình kiểm tra
@@ -290,6 +332,40 @@ Chỉ sửa chuỗi có **key tồn tại thật** trong `keys/all_strings.tsv`.
 nằm trong `tools/glossary_*.py` và được `tools/apply_glossary.py` áp dụng — script này
 từ chối ghi nếu key không tồn tại, placeholder lệch, hoặc giá trị chứa U+FFFD.
 
+Đợt đọc tay thì đặt bảng vào `tools/fix_reading<N>.py`. **Mỗi đợt một file riêng,
+không chép bảng của đợt trước vào.** Đây chính là cái bẫy đã làm hỏng hai
+quyết định:
+
+- `glossary_readthrough.py` giữ `'Command': 'Command'` và vì chạy cuối nên xoá
+  `Lệnh` của `fix_reading4.py` **mỗi lần chạy**.
+- `fix_reading14.py` ban đầu liệt kê lại 98 key của `fix_reading13.py`. Không
+  sai hôm đó, nhưng nếu sau này có quyết định tốt hơn cho `Add Up` thì đợt 14
+  sẽ ghi đè ngược lại đợt 15. Bảng cũ **là** một lệnh ghi đè.
+
+Script tự báo `NOT IN CUBASE` cho key không tồn tại — nhưng chỉ báo được sau khi
+đã viết bảng, nên cứ kiểm `NOT IN CUBASE` **trước** khi `--write`.
+
+### Key không phải lúc nào cũng bằng tiếng Anh
+
+Cột 1 (`key`) và cột 2 (English) của `keys/all_strings.tsv` khác nhau ở nhiều key:
+
+| key | English |
+|---|---|
+| `AppKey[Key]` | `Menu` |
+| `Assume Skipping` | `Process Existing Clip` |
+| `BWF Max Momentary Loudness` | `BWF Max. Momentary Loudness` |
+| `Check Files` | `Find Missing Files` |
+| `Delete Tool` | `Erase Tool` |
+| `Add Device (from a popup list of available devices)` | `... pop-up list ...` |
+
+Bảng quyết định khóa theo **key**. Trước đây `read_short.py` in ra cột English
+nên tôi viết bảng theo English rồi script báo 2 key "không có trong Cubase" —
+và suýt sửa nhầm hai chuỗi đang đúng. Nay `read_short.py` in thêm
+`<key: ...>` cho mọi key khác English.
+
+Marker `[RM]`, `[Score View Option]`, `[Key]`, `[vocal]` là **marker riêng của
+Cubase**, nằm trong key. Giữ nguyên, không phải rò rỉ tiếng Anh.
+
 ### Đọc tay vẫn là bước cuối
 
 Các bộ dò bắt được lỗi **có mẫu**. Lỗi kiểu đảo trong câu dài, cách diễn đạt
@@ -302,8 +378,9 @@ mà **không bộ dò nào bắt được**:
 - `Aeolian (nat. minor)` → `Aeolian (thứ tự nhiên)` (sai nghĩa)
 
 Công cụ để đọc: `python tools/read_long.py <miền> <bắt đầu> <số>`, in ra cặp
-English / tiếng Việt. `python tools/sample_domain.py <miền> <bắt đầu> <số>` cho
-mọi giá trị kể cả nhãn ngắn.
+English / tiếng Việt. `python tools/read_short.py <miền> <bắt đầu> <số>` cho
+nhãn ngắn. `python tools/sample_domain.py <miền> <bắt đầu> <số>` cho mọi giá
+trị kể cả nhãn ngắn.
 
 ### Ba lần rule báo động giả
 
