@@ -699,7 +699,7 @@
   "Ramps/Curves are not supported on Tracks that are set to MIDI channel 'Any'": "Ramp/Đường cong không được hỗ trợ trên Track đặt MIDI Channel là 'Any'",
   "Randomize Parameters. Press [Alt] to limit randomization to parameters used in VST Quick Controls.": "Ngẫu nhiên hóa tham số. Nhấn [Alt] để giới hạn ngẫu nhiên hóa cho các tham số dùng trong VST Quick Control.",
   "Range End": "Vùng Kết thúc",
-  "Range Selection": "Vùng Vùng chọn",
+  "Range Selection": "Chọn vùng",
   "Range Start": "Vùng Bắt đầu",
   "Reaching the 2GB limit of the OMF file format, some media will be missing...": "Đạt giới hạn 2GB của định dạng file OMF, một số Media sẽ bị thiếu...",
   "Reaching the 2GB limit of the OMF file format, the followig media will not be embedded.": "Đạt giới hạn 2GB của định dạng file OMF, các Media sau sẽ không được nhúng.",
