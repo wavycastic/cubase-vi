@@ -68,8 +68,8 @@ WORDING = {
         'Nốt 1/32 trong số chỉ nhịp mẫu số nốt móc kép 1/16',
     '1/8 Notes (Quavers) in 1/4 Note (Crotchet) Denominator Time Signatures':
         'Nốt móc đơn 1/8 trong số chỉ nhịp mẫu số nốt cường 1/4',
-    'Insert Time Signature Event': 'Chèn Time Signature Event',
-    'Insert Time Signature Event...': 'Chèn Time Signature Event...',
+    'Insert Time Signature Event': 'Chèn Event số chỉ nhịp',
+    'Insert Time Signature Event...': 'Chèn Event số chỉ nhịp...',
     'Quarter Note (Crotchet) Denominator Time Signatures With Half-Bars':
         'Số chỉ nhịp mẫu số nốt cường 1/4 kèm nửa Bar',
     'Time Signatures With Half-Bars': 'Số chỉ nhịp kèm nửa Bar',
@@ -82,4 +82,14 @@ WORDING = {
 
     # --- System as a line of music -----------------------------------------
     'All Systems': 'Tất cả các dòng nhạc',
+
+    # --- "ô nhịp" and "cột nhịp" survived two normalisation passes --------
+    # A measure is "Bar" (AGENT.md 3). "ô nhịp" reads as "box of beats" and
+    # "cột nhịp" means "column", which is the mistake the rule was written
+    # to stop in the first place.
+    'Multi-Bar Rests': 'Dấu lặng nhiều Bar',
+    'Multi-Bar Rests and Bar Repeats':
+        'Dấu lặng nhiều Bar và lặp lại Bar',
+    'Open Process Bars Dialog': 'Mở hộp thoại xử lý Bar',
+    'Bars in Original Length': 'Số Bar theo độ dài gốc',
 }

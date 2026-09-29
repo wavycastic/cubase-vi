@@ -117,6 +117,8 @@ Bàn nhạc không nằm trong bảng §3, nên dùng thuật ngữ âm nhạc t
 | Ledger Line | dòng kẻ |
 | Accidental | dấu hóa |
 | Note (trường độ) | **giữ `Note`** → `Note 1/8` |
+| Rhythm Dot | dấu chấm nhịp |
+| Slash (gạch nhịp) | gạch nhịp |
 
 **`System` là từ ngữ cảnh — phải tra từng chuỗi:**
 
@@ -133,6 +135,30 @@ Bàn nhạc không nằm trong bảng §3, nên dùng thuật ngữ âm nhạc t
 **Các từ HLV không nằm trong §3 cũng giữ nguyên bên HLV** vì đọc tự nhiên hơn và
 đã là đa số trong bản dịch: `con trỏ`, `bè`, `số chỉ nhịp`, `phát lại`, `hợp âm`,
 `khuông nhạc`, `dấu lặng`, `đuôi nốt`, `khóa nhạc`.
+
+### Trường độ nốt — số đứng trước, KHÔNG đảo
+
+`16th` là **trường độ**, nên viết `Note 1/16`, không phải `Móc 16`. Lô tự động
+từng đảo thứ tự 4 chuỗi theo đúng kiểu §2:
+
+| Sai | Đúng |
+|---|---|
+| `Móc 8` · `Móc 16` · `Móc 32` · `Móc 64` | `Note 1/8` · `Note 1/16` · `Note 1/32` · `Note 1/64` |
+
+Tương tự, số đứng **trước** danh từ: `100 Events` → `100 Event`, không phải
+`Event 100`; `%d Channels` → `%d Channel`, không phải `Channel %d`.
+
+### `Command` và `Key Command` — hai từ, hai nghĩa
+
+| Tiếng Anh | Tiếng Việt | Ví dụ |
+|---|---|---|
+| Key Command | **phím tắt** | `Assigned Key Commands` → `Phím tắt đã gán` · `Customized Key Commands` → `Phím tắt tùy chỉnh` · `Unassigned Key Commands` → `Phím tắt chưa gán` |
+| Command | **lệnh** | `Basic Commands` → `Lệnh cơ bản` · `Other Commands` → `Lệnh khác` |
+
+**Số ít và số nhiều phải giống nhau.** `Command` (số ít) từng để nguyên tiếng Anh
+trong khi `Commands` (số nhiều) dịch là `Lệnh` — đúng kiểu "nửa chừng có một hệ
+thống riêng" mà §3 cấm. Cũng không viết `Lệnh Assigned Key`: đó là §2 áp vào
+một cụm đã dịch sẵn.
 
 ---
 
@@ -160,6 +186,15 @@ Tính từ phải dịch, không để lại tiếng Anh:
 `Độ dài Fixed` → `Độ dài cố định` · `Tên Full` → `Tên đầy đủ` ·
 `Thêm Steps Randomly` → `Thêm Step ngẫu nhiên` · `Close Threshold` → `Ngưỡng đóng`.
 
+### Không làm mất câu
+
+Bản dịch phải **giữ trọn** nghĩa. Ba kiểu hay mất:
+
+- mất vế cuối — `This option deletes the preferences ... This operation cannot
+  be undone.` bị dịch còn `... sẽ bị gỡ bỏ.`
+- mất cả đoạn — hộp thoại network interfaces chỉ còn 2 câu đầu trong 6 câu
+- mất chủ thể — `Activate/Deactivate Focused Object` → `Bật/Tắt`
+
 ### Câu
 
 - Viết lại **cả câu**, không thay từ rời. Câu tiếng Anh còn sót là lỗi, kể cả khi
@@ -169,6 +204,27 @@ Tính từ phải dịch, không để lại tiếng Anh:
 - Động từ sau `Không thể` phải viết thường: `Không thể tạo file`, không phải
   `Không thể Tạo file` — viết hoa giữa câu nghĩa là danh từ riêng.
 - Văn bản trong ngoặc kép `'` `"` là tên tính năng hoặc giá trị mẫu: giữ nguyên.
+- **Câu phải có chủ thể.** `Đạt giới hạn 2GB của định dạng file OMF, ...` thiếu
+  chủ ngữ vì tiếng Anh bắt đầu bằng gerund. Viết `Đã đạt giới hạn ...`.
+
+### Dịch nghĩa, không dịch từ
+
+`interpret` một file CSV là **phân tích**, không phải `diễn giải`. `chữ` là
+"letter", không phải "content". `emphasis` trong nhạc là **làm nổi bật**, không
+phải `nhấn trọng âm`. Một số từ HLV dịch vội thành từ khác nghĩa:
+
+| Sai | Đúng |
+|---|---|
+| `Aeolian (thứ tự nhiên)` | `Aeolian (thứ sáu tự nhiên)` |
+| `ít chữ hơn ngưỡng` | `ít nội dung hơn ngưỡng` |
+| `nhấn trọng âm Pattern` | `làm nổi bật Pattern` |
+| `đo Loudness cổng thoại` | `đo Loudness theo hội thoại` |
+| `Tôn trọng trường độ tối đa` | `Tuân thủ trường độ tối đa` |
+| `Preset thời gian thực thay thế` | `Preset thời gian thực thay vì` |
+| `dịch vào vùng âm` | `dịch sang vùng âm` |
+
+`Aeolian` là bậc sáu của thang ngũ cung — viết `thứ sáu` mới đúng. Đọc như tên
+thang, `thứ tự` ("thứ tự nhiên") lại rất thông dụng nên không bộ dò nào bắt được.
 
 ---
 
@@ -210,6 +266,31 @@ từ chối ghi nếu key không tồn tại, placeholder lệch, hoặc giá tr
 
 ### Đọc tay vẫn là bước cuối
 
-Các bộ dò bắt được lỗi **có mẫu**. Lỗi kiểu đảo trong câu dài hoặc cách diễn đạt
-khó đọc chỉ lộ ra khi đọc thật — đó là cách phát hiện được 163 chuỗi trật tự từ ở
-đợt gần nhất.
+Các bộ dò bắt được lỗi **có mẫu**. Lỗi kiểu đảo trong câu dài, cách diễn đạt
+khó đọc, mất câu, hay từ dịch sai nghĩa chỉ lộ ra khi đọc thật. Đợt gần nhất,
+đọc tay 1.150 chuỗi dài theo 5 miền tìm được 201 chuỗi — trong đó có lớp lớn
+mà **không bộ dò nào bắt được**:
+
+- `Activate/Deactivate Focused Object` → `Bật/Tắt` (mất chủ thể)
+- một hộp thoại 6 câu còn lại 2 câu
+- `Aeolian (nat. minor)` → `Aeolian (thứ tự nhiên)` (sai nghĩa)
+
+Công cụ để đọc: `python tools/read_long.py <miền> <bắt đầu> <số>`, in ra cặp
+English / tiếng Việt. `python tools/sample_domain.py <miền> <bắt đầu> <số>` cho
+mọi giá trị kể cả nhãn ngắn.
+
+### Ba lần rule báo động giả
+
+Ghi lại để không lặp lại:
+
+1. `Tên Channel`, `Số Note`, `Chế độ Value` trông như đảo nhưng **đúng** —
+   tiếng Việt đặt danh từ trước. 201 chuỗi phải giữ nguyên.
+2. `gán vào`, `chuyển vào` là cách nói tự nhiên, cần `vào` để dẫn tân ngữ.
+   Rule "vào thừa" bắt nhầm 14 chuỗi đúng rồi phải siết lại.
+3. `lặng` là một từ riêng bên trong `dấu lặng`; khớp không ràng giới từ thì
+   `audit_quality` báo xung đột cho **mọi** chuỗi đúng. Tương tự `Hóa biểu` /
+   `hóa biểu` chỉ khác hoa-thường, và `Over` trong `Cross-Over` khớp `\b` sau
+   dấu gạch nối.
+
+Một bộ dò báo động giả nhiều lần hơn còn tệ hơn không có bộ dò: nó dạy người
+đọc bỏ qua báo cáo.

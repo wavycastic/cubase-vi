@@ -70,24 +70,83 @@ GLOSSARY = {
     'scale':              ['Scale', 'thang', 'thang âm'],
 }
 
+# Some concepts legitimately carry two forms, because the Vietnamese word and
+# the Cubase term are both correct for different things in the same map:
+#   "nốt" in a sentence, "Note" in the note-duration fields
+#   ("Note 1/8, nốt móc đơn" - Note stays English there by request)
+#   "hợp âm" in a sentence, "Chord Track" / "Chord Pad" / "Chord Symbols"
+#   "hệ thống" for the operating system, "dòng nhạc" for a line of the score
+#   "bè" for a musical voice, "Voice" inside "Single Voice"
+# Without this the report is several hundred lines of correct text, which is
+# worse than no report at all: it trains the reader to skip the output.
+BOTH_OK = {
+    'note (music)': {'nốt', 'note'},
+    'chord': {'hợp âm', 'chord'},
+    'system (score)': {'dòng nhạc', 'hệ thống', 'system'},
+    'voice (music)': {'bè', 'voice', 'giọng'},
+    'scale': {'scale', 'thang', 'thang âm'},
+}
+
 violations = collections.defaultdict(list)
+# Two entries have to be dropped before matching, because they are not
+# alternative renderings at all:
+#   "lặng" is a separate word inside "dấu lặng", so a word-boundary match
+#     finds it in every correct value
+#   "Hóa biểu" differs from "hóa biểu" only in case, so matching case-blind
+#     reports every correct value as a conflict
+# Order is preserved: forms[0] is the agreed rendering and is compared against,
+# and a plain set would leave that position up to the hash order.
+def _forms(fs):
+    out = []
+    for f in fs:
+        low = f.lower()
+        if low in out:
+            continue
+        # Drop a form that is a whole word inside a longer one: "lặng" sits
+        # inside "dấu lặng". Keeping both makes every correct value look like
+        # it mixes two renderings, because the shorter one always matches too.
+        if any(g != low and len(g) > len(low)
+               and re.search(r'(?<!\w)' + re.escape(low) + r'(?!\w)', g)
+               for g in (x.lower() for x in fs)):
+            continue
+        out.append(low)
+    return out
+
+
+GLOSSARY = {c: _forms(fs) for c, fs in GLOSSARY.items()}
+
 for k, v in vi.items():
     s = src.get(k, '').lower()
+    lv = v.lower()
     for concept, forms in GLOSSARY.items():
         base = concept.split(' ')[0]
         if base not in s:
             continue
-        present = [f for f in forms if f in v]
-        if len(present) > 1 or (present and present[0] not in forms[:1]):
-            violations[concept].append((k, v, present))
+        present = {f for f in forms
+                   if re.search(r'(?<!\w)' + re.escape(f) + r'(?!\w)', lv)}
+        if not present or present <= BOTH_OK.get(concept, set()):
+            continue
+        # the agreed form is the first; anything else is drift
+        if present - {forms[0]} or len(present) > 1:
+            violations[concept].append((k, v, sorted(present)))
 
 # ---------------------------------------------------------------- 3. reorder
 # "Dấu lặng Beam over", "Mục này thuộc về" - a Vietnamese token, then an English
 # word, then an English function word. Normal Vietnamese never does this.
 REORDER = re.compile(
     r'[àáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđĐ]'
-    r'[^.!?:]{0,40}?\b(over|under|with|for|from|into|through|across|'
-    r'between|above|below|after|before|during|without|within)\b', re.I)
+    r'[^.!?:]{0,40}?(?<![\w-])(over|under|with|for|from|into|through|across|'
+    r'between|above|below|during|without|within)(?![\w-])', re.I)
+# "after" and "before" were dropped from the pattern above: Cubase uses them
+# inside fixed English compound names that are correct in any language,
+# "After Fader Listen", "Click and Hold". They only follow a Vietnamese word
+# here because the rest of the name stays English.
+# A hyphen on either side rules a match out too, because then the word is a
+# compound modifier, not a preposition: "Cross-Over", "Step-In", "Follow-Up".
+REORDER = re.compile(
+    r'[àáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđĐ]'
+    r'[^.!?:]{0,40}?(?<![\w-])(over|under|with|for|from|into|through|across|'
+    r'between|above|below|during|without|within)(?![\w-])', re.I)
 reordered = [k for k, v in vi.items() if REORDER.search(v)]
 
 print(f'strings total                    : {len(vi)}')
