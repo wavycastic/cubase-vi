@@ -1,77 +1,33 @@
 #!/usr/bin/env python3
-import struct, sys, re
+"""List PE resource leaves with their file offsets and sizes.
 
-path = sys.argv[1]
-raw = open(path, 'rb').read()
+    python tools/research/res_names.py <exe> [N]
 
-e_lfanew = struct.unpack_from('<I', raw, 0x3C)[0]
-coff = e_lfanew + 4
-_, nsec, _, _, _, optsz, _ = struct.unpack_from('<HHIIIHH', raw, coff)
-opt = coff + 20
-pe32plus = struct.unpack_from('<H', raw, opt)[0] == 0x20B
-dirs_off = opt + (112 if pe32plus else 96)
-sec_off = opt + optsz
-sections = []
-for i in range(nsec):
-    o = sec_off + i*40
-    name = raw[o:o+8].rstrip(b'\0').decode('latin-1')
-    vsz, va, rsz, ptr = struct.unpack_from('<IIII', raw, o+8)
-    sections.append((name, va, vsz, ptr, rsz))
+Kept as a separate entry point because it is the quickest way to answer "what
+else is embedded in this binary?".  For headers and the data directories use
+pe_info.py instead.
+"""
+import sys
 
-def rva_to_off(rva):
-    for name, va, vsz, ptr, rsz in sections:
-        if va <= rva < va + max(vsz, rsz):
-            return ptr + (rva - va)
-    return None
+import _bootstrap  # noqa: F401
+from _bootstrap import need_argv
 
-rrva, rsize = struct.unpack_from('<II', raw, dirs_off + 2*8)
-rbase = rva_to_off(rrva)
+from cubelib.pe import PE
 
-def rname(raw, nameoff):
-    if nameoff & 0x80000000:
-        o = rbase + (nameoff & 0x7FFFFFFF)
-        ln = struct.unpack_from('<H', raw, o)[0]
-        return raw[o+2:o+2+ln*2].decode('utf-16-le')
-    return None
+need_argv(2, 'res_names.py <exe> [N]')
+pe = PE(sys.argv[1])
+n = int(sys.argv[2]) if len(sys.argv) > 2 and sys.argv[2].isdigit() else 60
 
-TYPES = {1:'CURSOR',2:'BITMAP',3:'ICON',4:'MENU',5:'DIALOG',6:'STRING',7:'FONTDIR',
-         8:'FONT',9:'ACCELERATOR',10:'RCDATA',11:'MESSAGETABLE',12:'GROUP_CURSOR',
-         14:'GROUP_ICON',16:'VERSION',24:'MANIFEST'}
+res = pe.resources()
+print(f'{len(res)} resource leaves in {pe.bin.path}\n')
+print(f'{"label":46} {"type":12} {"file offset":>12} {"size":>12}  head')
+for r in sorted(res, key=lambda r: r.off)[:n]:
+    head = pe.bin.slice(r.off, 24)
+    print(f'  {r.label[:46]:46} {r.type_name:12} 0x{r.off:08X} {r.size:>12,}  {head!r}')
 
-rows = []
-def walk(off, prefix):
-    nnamed, nid = struct.unpack_from('<HH', raw, off+12)
-    for i in range(nnamed+nid):
-        e = off + 16 + i*8
-        no, do = struct.unpack_from('<II', raw, e)
-        tname = rname(raw, no) or TYPES.get(prefix[0] if prefix else 0, f'{prefix[0] if prefix else 0}')
-        if do & 0x80000000:
-            walk(rbase + (do & 0x7FFFFFFF), prefix + [tname])
-        else:
-            drva, dsz, dcp, _ = struct.unpack_from('<IIII', raw, rbase + do)
-            rows.append(('/'.join(map(str,prefix))+('/'+tname if tname else ''), rva_to_off(drva), dsz, tname))
-
-walk(rbase, [])
-print('--- all resources (sorted by file offset) ---')
-for lbl, off, dsz, tname in sorted(rows, key=lambda r: r[1] or 0):
-    head = raw[off:off+48]
-    pv = head[:24]
-    print(f'  {lbl:24} type={tname:12} off=0x{off:X} size={dsz:>10,}  head={pv!r}')
-
-print()
-print('=== hunting for external-language-file support in .rdata/.data ===')
-pats = [b'Translation', b'translation.xml', b'.xml', b'l10n', b'LanguageTable',
-        b'StringTable', b'Localization', b'localization', b'LocalizationFile',
-        b'\\\\lang', b'AppLang', b'UILang']
-for p in pats:
-    idxs, pos = [], 0
-    while len(idxs) < 8:
-        i = raw.find(p, pos)
-        if i < 0: break
-        idxs.append(i); pos = i+1
-    if idxs:
-        print(f'  {p!r}: {len(idxs)} hit(s) -> {[hex(i) for i in idxs[:8]]}')
-        for i in idxs[:3]:
-            seg = raw[max(0,i-70):i+90]
-            txt = ''.join(chr(c) if 32 <= c < 127 else '.' for c in seg)
-            print(f'      {txt}')
+named = [r for r in res if any(isinstance(p, str) for p in r.path)]
+if named:
+    print(f'\nnamed resources ({len(named)}):')
+    for r in sorted(named, key=lambda r: r.off):
+        print(f'  {r.label:40} {r.size:>12,}  at 0x{r.off:08X}')
+pe.close()

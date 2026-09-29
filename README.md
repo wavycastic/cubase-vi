@@ -36,8 +36,8 @@ Gỡ lại: `powershell -File scripts\install.ps1 -Action uninstall`
 |---|---|
 | Chuỗi trong bảng gốc | 10.737 |
 | Ngôn ngữ gốc | 9 (`us de fr es it pt jp zh ru`) |
-| **Đã dịch sang `vi`** | **8.562** |
-| Còn lại | tự động rơi về tiếng Anh — không hiện chữ trống |
+| **Đã dịch sang `vi`** | **10.737 (100% Hoàn tất toàn bộ Cubase 15)** |
+| Còn lại | **0 chuỗi** — Đạt độ phủ 100% toàn bộ phần mềm |
 
 ## Bố cục
 

@@ -1,79 +1,80 @@
 #!/usr/bin/env python3
-"""Find xrefs (RIP-relative lea/mov) from .text to given target file offsets."""
-import struct, sys
+"""Find code references to a data address, verified against real instructions.
 
-path = sys.argv[1]
-raw = open(path, 'rb').read()
-targets = [int(t, 16) for t in sys.argv[2:]]
+    python tools/research/xref.py <exe> <target-offset|VA>
+    python tools/research/xref.py <exe> 0x4FAEBF0 --disasm
+    python tools/research/xref.py <exe> --callers <VA>
 
-e_lfanew = struct.unpack_from('<I', raw, 0x3C)[0]
-coff = e_lfanew + 4
-_, nsec, _, _, _, optsz, _ = struct.unpack_from('<HHIIIHH', raw, coff)
-opt = coff + 20
-imagebase = struct.unpack_from('<Q', raw, opt + 24)[0]
-sec_off = opt + optsz
-sections = []
-for i in range(nsec):
-    o = sec_off + i*40
-    name = raw[o:o+8].rstrip(b'\0').decode('latin-1')
-    vsz, va, rsz, ptr = struct.unpack_from('<IIII', raw, o+8)
-    sections.append((name, va, vsz, ptr, rsz))
+Why this is not a byte scan
+---------------------------
+RIP-relative displacements appear inside immediates and inside other
+instructions' operand bytes, so a naive scan reports plenty of false positives.
+A REX-prefix-only scan goes the other way and misses real references.  This
+tool takes the function list from the exception directory (`.pdata`), prefilters
+cheaply, then confirms every hit with capstone.  Requires capstone.
+"""
+import sys
 
-def off2va(off):
-    for name, va, vsz, ptr, rsz in sections:
-        if ptr <= off < ptr + rsz:
-            return imagebase + va + (off - ptr)
-    return None
+import _bootstrap  # noqa: F401
+from _bootstrap import need_argv, die
 
-def va2off(va):
-    for name, vva, vsz, ptr, rsz in sections:
-        if vva <= va < vva + max(vsz, rsz):
-            return ptr + (va - vva)
-    return None
+from cubelib.pe import PE
+from cubelib.x86 import XrefFinder, Disassembler, MissingCapstone
 
-tvas = {off2va(t): t for t in targets}
-print(f'ImageBase = 0x{imagebase:X}')
-for va, off in tvas.items():
-    print(f'  target fileoff 0x{off:X} -> VA 0x{va:X}')
-print()
+USAGE = ('xref.py <exe> <target-offset|VA> [--disasm] [--func] | '
+         'xref.py <exe> --callers <VA>')
 
-tname = next((n for n, va, vsz, ptr, rsz in sections if n == '.text'), None)
-tva, tptr, trsz = next(((va, ptr, rsz) for n, va, vsz, ptr, rsz in sections if n == '.text'))
-code = raw[tptr:tptr+trsz]
-print(f'scanning .text  {trsz:,} bytes @ file 0x{tptr:X}')
+if len(sys.argv) < 3:
+    die(f'usage: {USAGE}')
+try:
+    from cubelib.x86 import require_capstone
+    require_capstone()
+except MissingCapstone as exc:
+    die(str(exc))
 
-hits = {}
-# lea/mov with RIP-relative: REX.W/REX.R prefix + 8D/8B + modrm(mod=00,rm=101) + disp32
-i = 0
-n = len(code)
-while i < n - 7:
-    b = code[i]
-    is_rex = (b & 0xF0) == 0x40
-    len_prefix = 1 if is_rex else 0
-    op = code[i+len_prefix]
-    if op in (0x8D, 0x8B):
-        modrm = code[i+len_prefix+1]
-        if (modrm & 0xC7) == 0x05:  # mod=00, rm=101 (RIP-relative)
-            disp = struct.unpack_from('<i', code, i+len_prefix+2)[0]
-            rip = (tva + i + len_prefix + 6)
-            tva_r = imagebase + rip + disp
-            for want_va, want_off in tvas.items():
-                if tva_r == want_va:
-                    hits.setdefault(want_off, []).append(tptr + i)
-    i += 1
+pe = PE(sys.argv[1])
+finder = XrefFinder(pe)
 
-for off, addrs in hits.items():
-    print()
-    print(f'=== xrefs to fileoff 0x{off:X} (VA 0x{off2va(off):X}) : {len(addrs)} ===')
-    for a in addrs:
-        # find the containing function start heuristically: scan back for padding/int3 run
-        fstart = a
-        while fstart > tptr and raw[fstart-1] not in (0xCC, 0xC3, 0x90, 0x00):
-            fstart -= 1
-        fstart += 1
-        print(f'  xref @file 0x{a:X}  (VA 0x{off2va(a):X})   ~func start 0x{fstart:X}')
-        seg = raw[fstart:fstart+0x180]
-        for m in __import__('re').finditer(rb'[\x20-\x7e]{4,}', seg):
-            print(f'        str +0x{m.start():03X}: {m.group().decode("latin-1")}')
-        for m in __import__('re').finditer(rb'(?:[\x20-\x7e]\x00){3,}', seg):
-            print(f'        w16 +0x{m.start():03X}: {m.group().decode("utf-16-le")}')
+if '--callers' in sys.argv:
+    i = sys.argv.index('--callers')
+    if i + 1 >= len(sys.argv):
+        die(f'usage: {USAGE}')
+    target = int(sys.argv[i + 1], 16)
+    if target < pe.imagebase:
+        target += pe.imagebase
+    hits = finder.callers(target)
+    print(f'direct callers of 0x{target:X}: {len(hits)}')
+    for h in hits:
+        fr = f'RVA 0x{h.func_rva[0]:X}..0x{h.func_rva[1]:X}' if h.func_rva else '-'
+        print(f'  0x{h.insn_address:X}  {h.insn_mnemonic:6} {h.insn_op_str:20}  {fr}')
+    pe.close()
+    raise SystemExit(0)
+
+value = int(sys.argv[2], 16)
+off, kind = pe.resolve(value)
+if off is None:
+    die(f'0x{value:X} is not inside {sys.argv[1]}')
+rva = pe.off_to_rva(off)
+print(f'target: given 0x{value:X} ({kind}) -> file offset 0x{off:X}, '
+      f'RVA 0x{rva:X}, VA 0x{pe.imagebase + rva:X}')
+print('        content:', pe.bin.slice(off, 48))
+print(f'functions indexed from .pdata: {len(pe.functions()):,}')
+
+hits = finder.find(off)
+print(f'\nverified xrefs: {len(hits)}')
+for h in hits:
+    fr = f'RVA 0x{h.func_rva[0]:X}..0x{h.func_rva[1]:X}' if h.func_rva else 'no .pdata'
+    print(f'  0x{h.insn_address:X}  {h.insn_mnemonic:8} {h.insn_op_str:36}  {fr}')
+
+if '--disasm' in sys.argv:
+    dis = Disassembler(pe)
+    for h in hits:
+        print(f'\n--- function at RVA 0x{h.func_rva[0]:X} ---' if h.func_rva
+              else '\n--- instruction ---')
+        rva0 = h.func_rva[0] if h.func_rva else pe.off_to_rva(h.insn_offset)
+        insns, _fn = dis.function(rva0)
+        for ins in insns:
+            mark = '>>' if ins.address == h.insn_address else '  '
+            print(f'{mark}{ins.format()}')
+
+pe.close()
