@@ -13,13 +13,14 @@ WRITE = '--write' in sys.argv
 sys.path.insert(0, os.path.join(ROOT, 'tools'))
 import glossary_notation
 import glossary_notation2
+import glossary_noteduration
 import glossary_untranslated
 import glossary_reorder
 import glossary_verbs
 
 FIXES = {}
-for mod in (glossary_notation, glossary_notation2, glossary_untranslated,
-            glossary_reorder, glossary_verbs):
+for mod in (glossary_notation, glossary_notation2, glossary_noteduration,
+            glossary_untranslated, glossary_reorder, glossary_verbs):
     for name in dir(mod):
         if name.isupper():
             FIXES.update(getattr(mod, name))
