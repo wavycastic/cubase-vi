@@ -337,6 +337,37 @@ người dùng phải gõ (`Custom`) nằm giữa câu bảo họ gõ. Cùng l�
 `Enter Preset Name` → `Tên Enter Preset`, `Enter Model Name` → `Tên Enter
 Model`, `Enter Punch In Position` → `Nhập Punch trong Position`.
 
+### Một từ tiếng Anh bị đọc thành từ tiếng Anh khác
+
+Nguy hiểm nhất vì **cả hai đều hợp lệ**, nên bộ dò nào cũng im:
+
+| Tiếng Anh | Đọc nhầm thành | Đúng là | Đã dịch sai thành |
+|---|---|---|---|
+| `Half (I-V-I)` | Flat | **nửa** | `Giảm (I-V-I)` |
+| `Ext. %d` | Extend | **External** | `Mở rộng %d` |
+| `Group 1` | (động từ) | danh từ `nhóm` | `Gộp nhóm 1` |
+| `Multi` | Multichannel | **bội** (multi-timbral) | `Đa kênh` |
+| `Flatten` | Flat | làm phẳng | `Làm phẳng` ✅ |
+| `Range` | Row | dải/vùng | `vùng` ✅ |
+
+`Half` và `Flat` lệch nhau **một ký tự**, và bản dịch đang dùng chung một giá
+trị `Giảm` cho cả hai. Khi sửa, tra **từng từ** xem nó là danh từ, động từ, tính
+từ hay viết tắt — hai từ có thể giống nhau 26/27 ký tự mà nghĩa khác hẳn.
+
+### `Group` là danh từ, `Gộp` là động từ
+
+Chín nhãn trong bản dịch cũ ghi `Group ...` thành `Gộp nhóm ...`:
+`Group`, `Group 1..4`, `Group Track`, `Group Tracks`, `Group Channels`,
+`Group Editing`, `Group Track to Selected Tracks...`.
+
+Tất cả đều là **danh từ** — tên của một đối tượng. `Gộp nhóm Track` bảo người
+dùng *hợp nhất*, tức một hành động khác hẳn. Chỗ duy nhất "Group" thật sự là
+động từ thì đã đúng sẵn (`Add Group Track` → `Thêm Group Track`) — nên dạng
+danh từ chưa bao giờ được đối chiếu với nó.
+
+Cùng kiểu: `Event End` → `Event Kết thúc`, `Event Start` → `Event Bắt đầu`,
+`Event Display` → `Event Hiển thị`, `Estimated Pitch` → `Pitch Estimated`.
+
 ### `Deactivate` không phải `Hủy`
 
 `Hủy` là **cancel**, huỷ bỏ việc đang làm. `Deactivate` là **tắt**.
