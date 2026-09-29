@@ -41,7 +41,7 @@ Gỡ lại: `powershell -File scripts\install.ps1 -Action uninstall`
 translations/vi.json          bản dịch hợp nhất - nguồn sự thật duy nhất
 translations/batches/*.json   các lô dịch, gộp bằng tools/merge_maps.py
 translations/unmatched.json   các key đoán sai, đã tách ra (tools/prune_map.py)
-keys/                         sinh ra từ exe (gitignored - bản quyền Steinberg)
+keys/all_strings.tsv          10.737 chuỗi: key <-> tiếng Anh (tham chiếu, đã commit)
 build/                        output (gitignored)
 tools/build.py                pipeline: extract -> list -> merge -> build -> validate
 tools/extract_translation.py  lấy TRANSLATION.XML ra khỏi Cubase15.exe
@@ -70,7 +70,8 @@ powershell -File scripts\install.ps1 -Action install
 ```
 
 Bảng dịch khoá theo **chuỗi tiếng Anh** (`"File": "Tệp"`) vì 97% `String Key`
-trùng bản gốc. `tools/suggest_keys.py` giúp khi bạn đoán sai tên.
+trùng bản gốc. Tra chuỗi cần dịch trong `keys/all_strings.tsv`;
+`tools/suggest_keys.py` giúp khi bạn đoán sai tên.
 
 > JSON không cho key trùng (cái sau ghi đè cái trước, không cảnh báo).
 > Chạy `python tools\merge_maps.py --check` trước khi commit.
@@ -84,6 +85,12 @@ trùng bản gốc. `tools/suggest_keys.py` giúp khi bạn đoán sai tên.
 ## Lưu ý
 
 Bản dịch này là **bổ sung giao diện cho máy của bạn**, không đụng tới bản quyền
-hay cơ chế bảo vệ của Cubase. Nhưng `TRANSLATION.XML` gốc là tài sản của
-Steinberg, nên repo này **không commit** file đó — `tools/build.py` trích lại
-từ exe của bạn khi cần.
+hay cơ chế bảo vệ của Cubase.
+
+`keys/all_strings.tsv` là **nội dung của Steinberg** (trích từ `Cubase15.exe`),
+được commit **có chủ đích** làm bảng tham chiếu. Xem [`NOTICE.md`](NOTICE.md).
+Bản XML gốc 4,65 MB chứa cả 9 bản dịch của họ thì **không** commit —
+`tools/build.py` tái tạo từ bản Cubase trên máy bạn.
+
+Steinberg đã phát hành 9 ngôn ngữ cho Cubase. Nếu họ từng bổ sung tiếng Việt
+chính thức, hãy dùng bản đó.
