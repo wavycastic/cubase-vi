@@ -115,7 +115,14 @@ WORDING = {
     'Attach Channel to Right Edge': 'Gắn Channel vào cạnh phải',
     'Add New Page': 'Thêm Page mới',
     'Add Panel': 'Thêm Panel',
-    'Command': 'Command',
+    # "Command" is "Lệnh". This entry used to say 'Command': 'Command', on the
+    # grounds that it is a Cubase feature name - but its own plural was already
+    # "Lệnh", and its bracketed twin "Command[Key]" is "Lệnh" too. A bare
+    # English label next to two translated ones is the "nửa chừng có một hệ
+    # thống riêng" that AGENT.md section 3 forbids. Fixed here rather than in
+    # the fix_*.py scripts because this module is applied last and would have
+    # undone them.
+    'Command': 'Lệnh',
     'Context Variable': 'Biến ngữ cảnh',
     'Network address invalid or ambiguous.':
         'Địa chỉ mạng không hợp lệ hoặc không xác định.',

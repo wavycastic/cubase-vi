@@ -148,6 +148,32 @@ từng đảo thứ tự 4 chuỗi theo đúng kiểu §2:
 Tương tự, số đứng **trước** danh từ: `100 Events` → `100 Event`, không phải
 `Event 100`; `%d Channels` → `%d Channel`, không phải `Channel %d`.
 
+### Không đảo hai thuật ngữ dễ lẫn của bàn nhạc
+
+| Tiếng Anh | Tiếng Việt | Ghi chú |
+|---|---|---|
+| Beam | **đuôi nốt** | thanh nối ngang các nốt |
+| Stem | **thân nốt** | que nối dọc |
+
+`Flip Stems` từng dịch thành `Lật Đuôi nốt` — lấy nhầm của Beam. Cùng kiểu:
+`Accidental` là **dấu hóa**, không phải `dấu nhấn` (dấu nhấn là dấu nhấn trong từ);
+`Flat` là **giảm** (nửa tông), không phải `phẳng`;
+`Multi` (multi-timbral) là **bội**, không phải `đa kênh` (đa kênh là multichannel).
+
+### Không dịch nửa vế
+
+`Color Space` → `Màu Khoảng trống` đọc thành "khoảng trống". Chính key con của nó,
+`Color Space Management`, lại đúng: `Quản lý không gian màu`.
+
+Một nhãn hoặc một câu phải **dịch trọn** hoặc **giữ trọn bằng tiếng Anh** — không
+để nửa. `Clear All` đã dịch thì `Clear Recent Paths` phải theo; `Multi Track`
+giữ tiếng Anh thì `Multi` cũng phải nhất quán theo nghĩa của nó.
+
+### Thứ tự `%s`
+
+`%s` đi **trước** danh từ HLV: `%s Control` → `Điều khiển %s`, không phải
+`%s Điều khiển`.
+
 ### `Command` và `Key Command` — hai từ, hai nghĩa
 
 | Tiếng Anh | Tiếng Việt | Ví dụ |

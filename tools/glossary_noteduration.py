@@ -54,4 +54,13 @@ WORDING = {
         'Nhóm nốt trong số chỉ nhịp dài có nửa Bar',
     'Groups of Notes in Simple Time Signatures With a Half-Bar':
         'Nhóm nốt trong số chỉ nhịp đơn có nửa Bar',
+    # --- note durations with no denominator ------------------------------
+    # AGENT.md section 4: the note-duration fields keep "Note" in English and
+    # read "Note 1/8". These four keys were left as "Moc 16", which is the
+    # order reversed - the same defect as 163 other strings, but in a value too
+    # short for fix_word_order.py to match on.
+    '8th': 'Note 1/8',
+    '16th': 'Note 1/16',
+    '32th': 'Note 1/32',
+    '64th': 'Note 1/64',
 }
