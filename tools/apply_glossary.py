@@ -19,11 +19,15 @@ import glossary_reorder
 import glossary_verbs
 import glossary_leftover
 import glossary_readability
+import glossary_fragments
+import glossary_termsplit
+import glossary_doubled
 
 FIXES = {}
 for mod in (glossary_notation, glossary_notation2, glossary_noteduration,
             glossary_untranslated, glossary_reorder, glossary_verbs,
-            glossary_leftover, glossary_readability):
+            glossary_leftover, glossary_readability, glossary_fragments,
+            glossary_termsplit, glossary_doubled):
     for name in dir(mod):
         if name.isupper():
             FIXES.update(getattr(mod, name))
