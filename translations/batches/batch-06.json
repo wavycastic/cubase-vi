@@ -124,7 +124,7 @@
   "Increase Section Height": "Tăng chiều cao phần",
   "Indicates if Device Panel is active": "Chỉ báo Bảng thiết bị đang hoạt động",
   "Indicates if Expression Map is active": "Chỉ báo Expression Map đang hoạt động",
-  "Inhibit warning when applying Offline Processes": "Tắt cảnh báo khi áp dụng Offline Process",
+  "Inhibit warning when applying Offline Processes": "Chặn cảnh báo khi áp dụng Offline Process",
   "Input Latency": "Độ trễ đầu vào",
   "Input Phase": "Phase đầu vào",
   "Input Transformer": "Input Transformer",

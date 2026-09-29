@@ -467,6 +467,11 @@ Ghi lại để không lặp lại:
    `audit_quality` báo xung đột cho **mọi** chuỗi đúng. Tương tự `Hóa biểu` /
    `hóa biểu` chỉ khác hoa-thường, và `Over` trong `Cross-Over` khớp `\b` sau
    dấu gạch nối.
+4. `check_style` cấm ngoặc `(...)` ở cuối giá trị, trừ khi key đã có ngoặc. Nó
+   khớp cả khi phần trong ngoặc chỉ là **ký hiệu đơn vị xuất hiện ngay trong
+   key**: `Inhibit Restart ms` → `Thời gian chặn khởi động lại (ms)` bị báo,
+   dù `(ms)` là đơn vị chứ không phải chú thích từ điển. Sửa giá trị, đừng sửa
+   luật: viết `Thời gian chặn khởi động lại, tính bằng ms`.
 
 Một bộ dò báo động giả nhiều lần hơn còn tệ hơn không có bộ dò: nó dạy người
 đọc bỏ qua báo cáo.
