@@ -828,6 +828,75 @@ màn hình.
 `nhấp chuột`, `Hold` → `giữ`. Ngoài ngoặc vuông **không đụng**, nên 5 key cố ý
 giữ `Click` trong văn xuôi vẫn nguyên.
 
+### ⚠️ Lớp "khung" **không cần từ chức năng** — cần một **ĐỘNG TỪ**
+
+```
+Used in Project: %s  ->  Used trong Project: %s
+```
+
+Phân từ quá khứ tiếng Anh đứng **đúng chỗ động từ tiếng Việt phải nằm**, với
+một giới từ tiếng Việt ghép vào sau. Không có từ chức năng nào trong đó — và
+`find_function_words` báo lớp này **sạch** từ đợt 54, đi thẳng qua.
+
+Đây là bài học lần thứ ba trong dự án, và nó tổng quát hoá:
+
+> **Một câu khung không cần từ chức năng để là khung. Nó cần một ĐỘNG TỪ.**
+
+Bộ dò nên thêm danh sách thứ hai — 30+ phân từ quá khứ: `used, selected,
+activated, disabled, enabled, displayed, hidden, opened, closed, created,
+deleted, added, removed, imported, exported, played, stopped, recorded, saved,
+loaded, applied, copied, moved, synced, updated, refreshed, pressed, released,
+dragged, dropped`.
+
+Chạy lại ở ngưỡng **1** thay vì 2 cho ra 72 mục — vì `so, do, in, a` giống
+hệt nhau ở cả hai ngôn ngữ. **Chịu nhiễu một lần** để bắt 2 mục thật:
+
+```
+Global Editing Disabled  ->  Editing Disabled toàn cục
+Global Editing Enabled   ->  Editing Enabled toàn cục
+```
+
+`Editing` là **đúng** (`Warp Editing`, `Group Editing`, `Note Editing Overlay`
+đều giữ, và key thứ ba của chính gia đình này `Global Editing` → `Editing toàn
+cục`). Chỉ **phân từ** còn tiếng Anh. Key thứ tư thì lệch, và nhờ vậy nó lộ ra:
+
+```
+Global Editing (All Tracks)  ->  Chỉnh sửa toàn cục (Tất cả Track)
+```
+
+Cùng lớp đó, ba lỗi trong một câu:
+
+```
+Import dropped File as single Part
+  ->  Import dropped File như single Part
+```
+
+`as` **KHÔNG phải** `như` (`như` = LIKE), và `dropped` + `single` còn tiếng Anh.
+
+### Hình dạng `NHÃN: MỤC` — **chưa ai kiểm tra**
+
+Cách hỏi mới: 1.489 giá trị **không có tiếng Việt** thực ra là gì? 82 giá trị
+có dạng `X: Y`; phần lớn là **tên MIDI CC chính thức** (`CC: BankSelect MSB`,
+`CC: Sostenuto`, `CC: Portamento`) — giữ tiếng Anh là **đúng**, vì đặc tả in
+vậy.
+
+Nhưng 3 gia đình là **mục menu dựng từ `<nhãn>: <mục>`**, mà nhãn bản dịch
+**đã** dịch — người dùng mở menu thấy `Bypass: Sends` cạnh một ô chọn tên
+`Bỏ qua`:
+
+```
+Expand: Cue Sends / Expand: Device Panels   (10 key kia nói "Mở rộng:")
+Source: Cue Sends / Source: Monitor Mix / Source: External Inputs
+                                                    (5 key kia nói "Nguồn:")
+Bypass: Channel Strip / EQs / Inserts / Modulators / Sends
+Bypass: ... on Main Mix                              (nhãn là "Bỏ qua")
+Bypassed  ->  Đang bypass      ← cùng từ, CHỮ THƯỜNG giữa câu tiếng Việt
+```
+
+⚠️ 30 giá trị giữ `Bypass` trong **văn xuôi** là **đúng**, không phải sót:
+`Bypass Insert on/off` **gọi tên một lệnh**, cùng miễn giống `Record Enable` và
+`Monitor`. **Nhãn** thì dịch; **lệnh mà nhãn đó gọi tới** thì không.
+
 ### `nhịp` vs `Beat` vs `phách` — **một từ, ba cách**, và bằng chứng nằm trong một câu
 
 Bằng chứng quyết định là **một giá trị dịch cùng một từ tiếng Anh theo hai

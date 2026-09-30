@@ -63,6 +63,24 @@ will would shall should can could may might must
 each every any some all both either neither
 """.split())
 
+# Past participles are the other half of the same defect, and round 59 turned
+# up one the function-word list had been blind to:
+#
+#     "Used in Project: %s"   ->  "Used trong Project: %s"
+#
+# An English past participle standing exactly where the Vietnamese verb belongs,
+# with a Vietnamese preposition spliced after it. Not a function word by
+# anyone's definition - which is precisely why it survived seventeen rounds. A
+# frame does not need a function word in it to be a frame. It needs a VERB.
+USED = set("""
+used selected activated disabled enabled displayed shown hidden opened closed
+created deleted added removed imported exported played stopped recorded
+bypassed unlinked linked mapped assigned named saved loaded applied toggled
+switched restored replaced copied moved resized reloaded synced updated
+refreshed pressed released dragged dropped
+""".split())
+VERBISH = FUNC | USED
+
 
 TOKEN = re.compile(r"[^\s]+")
 
@@ -91,7 +109,7 @@ rows = []
 for k, v in vi.items():
     if not HAN.search(v):
         continue
-    hit = [w for w in latin_words(strip(v)) if w.lower() in FUNC]
+    hit = [w for w in latin_words(strip(v)) if w.lower() in VERBISH]
     if len(hit) >= MINF:
         rows.append((len(hit), k, v, hit))
 
