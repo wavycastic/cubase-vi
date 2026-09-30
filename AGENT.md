@@ -1455,6 +1455,34 @@ tìm ra nhiều lớp lỗi sai lệch chuyên ngành và dịch máy thô mà k
    - nó đang được dùng trong một Pool khác → nó đang dùng trong Pool khác.
 
 
+### Đợt 77: Quét thủ công chuỗi bị động — sửa 54 câu đang được/sẽ được/không hoạt động
+
+1. **inactive dịch sai ngữ cảnh (13 chuỗi):**
+   - Inactive Version/Project (chưa bật, không dùng) bị dịch cứng không hoạt động:
+     Version không hoạt động → Version không dùng; Project không hoạt động → Project chưa bật;
+     Cycle không hoạt động → Cycle tắt; Remove Inactive → Gỡ mục không dùng.
+   - Inactive Note Event Intensity (Note Event Intensity không hoạt động — đọc như tính năng bị hỏng)
+     → Độ đậm Note Event chưa chọn (đối chiếu DE Intensitaet inaktiver Noten-Events).
+   - Đĩa... đang không hoạt động bình thường → Đĩa này chạy không bình thường.
+
+2. **đang được/sẽ được → câu chủ động (29 chuỗi):**
+   - đang được gán/dùng/gửi → đang gán/dùng/gửi: Expression Map đang gán cho các Track sau;
+     Bus đang dùng trong Project! Xóa luôn?; Tên file này đã có Video dùng.
+   - Không xóa được Pattern vì... đang được dùng bởi... → ...vì... Pattern Event... đang dùng nó.
+   - sẽ được Bounce/chuyển/giữ/lấy → sẽ Bounce/chuyển/giữ/lấy: Audio Event xung đột sẽ Bounce;
+     Nếu khóa, tên... sẽ lấy từ...; Preset sẽ về mặc định; Mọi chỉnh sửa sẽ Freeze!
+   - Brickwall Limiter sẽ được dùng để tuân theo... → Brickwall Limiter sẽ giữ mức True Peak tối đa này.
+   - Với mỗi giá trị duy nhất... một Marker Track sẽ được tạo → Mỗi giá trị duy nhất... sẽ tạo một Marker Track.
+   - File External sẽ được sao chép → File External sẽ sao chép.
+
+3. **Từ đơn lẻ:**
+   - dấu bình hủy bỏ (Cancellation Naturals) → dấu bình khử.
+   - đã bị loại bỏ → đã bỏ; trong khi đang ghi âm → khi đang ghi.
+   - đã có sẵn kết nối → đã có kết nối (2 chuỗi Modulator).
+   - audio stream hiện có → Audio Stream; Giữ các Note hiện có → Giữ Note hiện có.
+   - Không Import được Script. Đã có Script cho... (giữ đủ 3 câu như bản gốc để qua bộ dò dropped-sentences).
+
+
 ### Cặp `[Key]` — bản dịch **giống hệt** bản gốc, trừ **tên phím**
 dịch làm **ba** kiểu khác nhau:
 
