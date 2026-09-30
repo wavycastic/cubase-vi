@@ -35,10 +35,16 @@ run([T('tools', 'prune_map.py'), '--dry-run'], 'check every map key exists in Cu
 run([T('tools', 'check_style.py')], 'enforce hybrid style (AGENT.md)')
 run([T('tools', 'check_punctuation.py')], 'check ? ! ; ... line breaks edge spaces')
 run([T('tools', 'build_translation.py'), BASE, OUT, MAP], 'build Vietnamese translation.xml')
-# a second target: the same file with the eight unused languages removed,
-# 5,328,470 -> 1,449,424 bytes. Cubase reads it correctly, so this is what
-# install.ps1 deploys by default; the full file above is still built, and is
-# the fallback if a future Cubase ever wants its own shape back.
+# Assert the whole premise mechanically: the built file is the original plus
+# <vi>, and removing the injected lines gives the original back byte for byte.
+# install.ps1 used to claim this in prose; the claim is now checked.
+run([T('tools', 'check_translation_build.py')], 'prove the build is original + vi')
+# a second target: the same file with the eight unused languages removed.
+# install.ps1 deploys this one by default.  Note that "Cubase reads it
+# correctly" is a claim about the *file* - see docs/RESEARCH.md; nothing in the
+# repo records the full variant ever being tried at runtime, and the parser
+# carries no language table (see RESEARCH.md on translator.cpp), so there is no
+# mechanism by which ten blocks would read worse than two.
 run([T('tools', 'strip_languages.py'), OUT, T('build', 'translation_vi_en.xml')],
     'build the English + Vietnamese only variant')
 run([T('tools', 'validate_translation.py'), OUT], 'validate output')

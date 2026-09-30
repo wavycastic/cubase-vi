@@ -8,10 +8,11 @@
 Why this exists
 ---------------
 `deobf_str.py` needs the seed, the key parts and the length typed in by hand,
-which is fine for the one string you already know about and useless for the
-3,965 sites in `Cubase15.exe` that use the same scheme.  The shape is regular
-enough to recognise mechanically.  A decoder site looks like this (real bytes
-from `0x1421F5FC0`):
+which is fine for the one string you already know about and useless for the rest
+of `Cubase15.exe`: 3,965 places contain the LCG constant, but only a fraction of
+those decode a string (the sweep below finds 281, all `__FILE__` paths).  The
+shape is regular enough to recognise mechanically.  A decoder site looks like
+this (real bytes from `0x1421F5FC0`):
 
     mov  ecx, 0xDC1BE0D5                 ; seed
     mov  dword [rbp - 0x49], ecx         ; spill of the seed, NOT key material
@@ -28,14 +29,18 @@ from `0x1421F5FC0`):
       imul  ecx, ecx, 0xBC8F                  ; <- the LCG the tool replays
 
 So: seed = the `mov ecx, imm32`, key = every stack write ordered by its
-displacement, key base = the displacement in the loop's `xor`, length = the
-`mov r9d, imm32` (or the span the writes cover).  The seed spill uses opcode
-`89` (`mov r/m, reg`) and is therefore never mistaken for key material, which
-uses `c7` / `c6` / `66 0f 7f`.
+displacement, key base = the lowest displacement written, length = the span those
+writes cover - which equals the `mov r9d, imm32` loop bound in every site checked
+(61 = 0x3D here), so the bound does not have to be read separately.  The seed
+spill uses opcode `89` (`mov r/m, reg`) and is therefore never mistaken for key
+material, which uses `c7` / `c6` / `66 0f 7f`.
 
 A candidate is only reported when the decoded bytes are printable ASCII, so the
 scanner can be pointed at a whole section without hand-filtering: real strings
-decode, and everything else is dropped.
+decode, and everything else is dropped.  Note what that costs: the filter also
+drops short strings and any string that decodes to non-ASCII, so a hit count is
+a lower bound.  Sweeping `.text` of `Cubase15.exe` yields 281 strings, all of them
+`__FILE__` paths from assert/log macros.
 """
 import argparse
 import sys

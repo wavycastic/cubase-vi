@@ -148,6 +148,7 @@ chạy script tự động hoá trong một session có input desktop thật.
 | `strgrep.py` | quét chuỗi theo regex trong toàn bộ exe (ASCII/UTF-16), in offset |
 | `ptr.py` | đọc con trỏ tại một VA, ghi chú nó trỏ vào hàm nào / chuỗi nào |
 | `deobf_str.py` | giải mã chuỗi Steinberg bị obfuscate bằng LCG |
+| `deobf_scan.py` | dò theo hình dạng để giải mã **hàng loạt** chuỗi obfuscate, không cần gõ seed/key; chỉ báo cáo khi ra chữ in được |
 
 Tất cả dùng chung `tools/cubelib/`. Dùng lại:
 ```powershell
@@ -468,3 +469,62 @@ Tôi đã chuẩn hoá file thành CRLF theo con số đó. Đọc blob bằng `
 mới thấy bản thân file là LF, và đã trả lại LF. **Đo một blob bằng `subprocess`,
 không bao giờ qua shell pipe** — cùng loại bẫy với `FORBIDDEN` ở trên: cái đo
 chạy không báo lỗi, chỉ cho kết quả sai.
+
+#### `translator.cpp` không biết ngôn ngữ nào tồn tại
+
+Mục *Bảng ngôn ngữ* trên ghi "thêm `<language key="vi">` là đủ (giả định… **chưa
+xác minh được**)". Cái *chưa xác minh* đó là giới hạn **runtime** — không click
+được vào Preferences. Nhưng phần quan trọng thì trả lời được bằng **tĩnh**, và
+kết quả mạnh hơn hẳn một giả định.
+
+Pool chuỗi của `lib.frame-base\source\language\translator.cpp` nằm trong
+1.640 byte, **34 chuỗi**, kẹp giữa hai chuỗi duy nhất trong toàn file:
+
+```
+file 0x06595528 .. 0x06595B90   (VA 0x146597128 .. 0x146597790)
+```
+
+Hai móc phải **duy nhất** mới đáng tin: `translation.xml` xuất hiện đúng 1 lần;
+`encoding="utf-8"` thì 11 lần nên phải lấy lần gần nhất sau móc đầu. Một lần
+thử trước đã dùng `data.find(b'language')` — chuỗi đó xuất hiện nhiều, `find`
+trả về chỗ không liên quan, "vùng dữ liệu" nuốt cả file, và báo ra 148 mã
+ngôn ngữ. **Kết quả âm tính chỉ có giá trị khi vùng đo đúng.**
+
+Kết quả, trên đúng vùng đó:
+
+| | |
+|---|---|
+| mã ngôn ngữ 2 ký tự (`us`…`ru`, `vi`) | **0** — không có mã nào, ở bất kỳ kiểu mã hoá nào, kể cả đứng riêng |
+| tên ngôn ngữ (`English`…`Vietnamese`) | **0** |
+
+Đối chiếu: cùng phép thử trên **toàn file** thì `English` UTF-16 có 2 hit. Nên
+phép thử bắt được thứ cần bắt.
+
+⇒ **`translator.cpp` không có bảng ngôn ngữ nào.** Nó không thể rẽ nhánh
+`if (code == "de")`. Mọi mã nó xử lý đều phải đến từ `<LanguageTable>` của chính
+file.
+
+Và các chuỗi lỗi của nó cho thấy máy trạng thái, không chỉ tên field:
+
+```
+The language code is not set! Can't read a language name yet!
+The language is not set!
+The language tag requires a single key/value pair!
+The string tag requires a single 'key' attribute with value!
+```
+
+"Language **code**" và "**language**" là hai trạng thái **khác nhau**, và code
+phải có trước rồi tên mới đọc được. Nghĩa là một ngôn ngữ được **nhận diện bằng
+chuỗi code**, không phải bằng vị trí.
+
+**Còn chưa chứng minh:** phía *tra cứu* — lúc cần chuỗi cho một ngôn ngữ, nó
+chọn con nào của `<String>`. Chọn theo code hay theo thứ tự vị trí. Nếu theo vị
+trí với một mảng cứng 9 phần tử thì `vi` ở vị trí 10 là ngoài phạm vi. Đây mới
+là chỗ cần dựng `disasm` theo xref từ `language` (VA `0x146597338`), chưa làm.
+
+**Và vẫn chưa xác minh:** Cubase có thực sự hiện tiếng Việt hay không. Không có
+gì trong repo ghi lại một lần quan sát nào. `install.ps1` viết "Cubase reads it
+correctly" nhưng lý do đưa ra là `"verified on 10,737 entries, no <us> and no
+<vi> lost"` — đó là lời tuyên bố về **file**, không phải về Cubase. Nên câu
+"vì vậy `en` là mặc định" **không có căn cứ runtime**; và vì parser không mang
+bảng ngôn ngữ, cũng không có cơ chế nào để mười khối lại đọc tệ hơn hai khối.

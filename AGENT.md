@@ -190,11 +190,23 @@ python tools\fix_mojibake.py
 python tools\audit_clarity.py           # [A] dài  [B] khó đọc
 python tools\audit_outlier.py           # chuỗi lạc khỏi gia đình thuật ngữ
 python tools\tests\run.py               # 146 test: bất biến + bộ dò
+python tools\check_translation_build.py # build\translation_vi.xml = bản gốc + <vi>
 python tools\score_instruments.py check # Score Editor: trùng key + 4 bất biến
 python tools\build.py                   # sinh build/translation_vi.xml + validate
 python tools\score_instruments.py build # sinh build/instrumentnames_vi.xml
 pwsh -File scripts\install.ps1 -Action install
 ```
+
+**`check_translation_build.py` giữ đúng tiền đề của cả dự án.** Nó chứng minh
+bằng cơ chế, không phải bằng lời: file build **bỏ các dòng `<vi>` đi thì ra
+đúng bằng `keys\translation_original.xml`, từng byte**; 10.737 entry, mỗi entry
+đúng 10 khối `<us>…<ru><vi>`; không `<us>…<ru>` nào bị đổi; mọi `<vi>` bằng
+đúng `vi.json`; và dòng `<vi>` thụt lùi **đúng bằng 9 anh em** nó.
+
+Bản cũ viết thẳng `\t\t` trong `build_translation.py`, nên `<vi>` lệch 1 tab so với
+9 anh em, và `<language key="vi">` lệch 1 tab theo hướng ngược lại — `<vi>` nhìn
+như anh em của `</String>` chứ không phải con của nó. XML không quan tâm, nhưng
+diff 10.737 dòng thì có. Nay thụt lùi lấy từ chính file.
 
 **5 luật cứng của `check_style.py`**: (1) cấm ngoặc chú thích cuối trừ khi key gốc có;
 (2) cấm dịch thuần Việt thuật ngữ §1 — nay **64 mẫu** trong `terms_do_not_translate.json`;

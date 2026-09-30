@@ -272,6 +272,11 @@ else                          → tạo đối tượng 0x28 byte               
   `MAudioCollector::FlatSliceIterator` của StMedia (**chưa xác minh** — tên lớp nằm
   ở khối `.rdata` khác nên chỉ suy từ vị trí và hành vi).
 
+> **Đã sửa ở §14** (vòng RE thứ hai): đối tượng 0x70 byte **không phải**
+> `MAudioCollector::FlatSliceIterator` mà là **`AudioImageFile`** — tức là chính
+> **file `.peak`**, không phải file âm thanh. Vtable `0x145FFADC0` có
+> `isKindOf("AudioImageAccessor")`; xem §14.1 và §14.3.
+
 Nghĩa là: **thu nhỏ thì đọc ảnh đã dựng sẵn; phóng to thì đọc file**. Ngưỡng mặc
 định 8192 nghĩa là một cột pixel ở mức thu nhỏ còn tối đa 8192 frame — nếu
 Audio Image có độ phân giải cao hơn thì ngưỡng do accessor báo.
@@ -448,8 +453,9 @@ Chưa sửa gì trong `translations/` — nghiên cứu này chỉ để dùng s
 | | |
 |---|---|
 | `strgrep.py` | quét **hình dạng** chuỗi trong toàn bộ exe (ASCII hoặc UTF-16LE), in offset để nối tiếp vào `xref.py`. `binfind.py` chỉ tìm đúng một chuỗi; cái này dùng để liệt kê cả nhóm, ví dụ mọi tên lớp có `Wave` |
-| `ptr.py` | đọc con trỏ tại một VA và ghi chú từng con trỏ trỏ vào đâu: nằm trong `.pdata` không, chuỗi gì, hay header PE. Đây là công cụ đi từ "tên lớp" tới "danh sách hàm" |
+| `ptr.py` | đọc con trỏ tại một VA và ghi chú từng con trỏ trỏ vào đâu: nằm trong `.pdata` không, chuỗi gì, hay header PE. Đây là công cụ đi từ "tên lớp" tới "danh sách hàm". Cần `--va` khi đưa vào một file offset đã ghi trong tài liệu này (bẫy 6) |
 | `deobf_str.py` | giải mã chuỗi Steinberg bị obfuscate bằng LCG (`state * 0xBC8F`) |
+| `deobf_scan.py` | dò theo **hình dạng** để giải mã hàng loạt chuỗi obfuscate, không cần gõ seed/key. Quét cả `.text` ra 281 chuỗi ở 36 file nguồn — xem §14.7. Lọc theo "chữ in được" nên con số là **cận dưới**: chuỗi quá ngắn hoặc không phải ASCII đều bị bỏ |
 
 ```powershell
 python tools\research\strgrep.py "E:\Steinberg\Cubase 15\Cubase15.exe" "AudioImage" 
@@ -482,6 +488,22 @@ python tools\research\deobf_str.py "E:\Steinberg\Cubase 15\Cubase15.exe" 0xDC1BE
    `2^31`. Viết bằng `%` cho ra chuỗi sai.
 5. **Immediate trong key phải little endian.** `mov dword [rbp-0x45], 0xC869C191`
    nghĩa là byte `91 C1 69 C8`.
+6. **Vị trí chuỗi trong tài liệu này là *file offset*, không phải VA.** Vtable thì
+   phải tra bằng VA. `PE.resolve` ưu tiên file offset nên đưa VA vào là đọc
+   nhầm byte tại offset đó — `ptr.py` đã có `--va` (giống `disasm2.py`).
+7. **Tên lớp dài hơn 15 byte thì vtable không còn ở `+0x10`.** Quy tắc "tên rồi
+   vtable" chỉ đúng với tên ≤ 15 byte: `StMedia::AudioImageColumnHandler` dài 33
+   byte, vtable lệch `+0x28`, và bản ở `+0x10` thuộc lớp cha. Phải **đếm chứng rồi
+   mới cộng**, và kiểm bằng `getClassName` (hàm 7 byte trả về tên) cho khỏi phải
+   đoán.
+8. **Capstone xếp operand theo thứ tự nguồn, không theo operand `mov` của
+   Intel.** `movdqa xmm0, [rip+X]` ra `[reg, mem]` còn `movdqa [rbp+d], xmm0` ra
+   `[mem, reg]` — cùng mnemonic, hai chiều ngược nhau. Bộ lọc "operand 0 là
+   memory" sẽ bỏ sót một nửa site nếu viết theo cảm tính.
+9. **Chuỗi `PEAK` trong exe là của `PEAK_LEVEL`, không phải chữ ký file `.peak`.**
+   Quét `PEAK` ra `0x05FF95E2`, ngay cạnh `BEXT/BWF_MAX_TRUE_PEAK_LEVEL` — đó là
+   chunk BWF. Chữ ký `.peak` chỉ nằm trong lệnh đăng ký loại file, dưới dạng
+   immediate `0x5045414B`.
 
 ---
 
@@ -565,15 +587,249 @@ Bài học chung: bộ tự kiểm phải kiểm **điều không được đổ
 
 ---
 
+## 14. Vòng RE thứ hai: hai lớp đọc dữ liệu, và `.peak` đọc thế nào
+
+Vòng trước dừng ở "0x70 byte là gì?". Vòng này trả lời được câu đó, và đọc
+được khoảng một nửa định dạng `.peak`.
+
+### 14.1 Quy tắc "tên lớp → vtable", và bốn lớp trong khối AudioImage
+
+Trong khối `.rdata` của AudioImage, bố cục lặp lại đúng hoàn toàn:
+
+```
+<chuỗi tên lớp + NUL> + padding tới 8 byte  →  vtable chính   (14 slot, 0x70 byte)
+                                             →  vtable giao diện (6 slot, 0x30 byte)
+```
+
+Bốn lớp, toạ độ là **VA** (cột offset ở §2 là file offset — loại khác, xem bẫy 6
+ở §12):
+
+| lớp | tên (VA) | vtable chính | vtable giao diện 6 slot |
+|---|---|---|---|
+| `AudioImageCache` | `0x145FFAC20` | `0x145FFAC30` | `0x145FFACA0` |
+| `AudioImageCacheAccessor` | `0x145FFACD0` | `0x145FFACE0` | `0x145FFAD50` |
+| `AudioImageFile` | `0x145FFADB0` | `0x145FFADC0` | `0x145FFAE30` |
+| `AudioImageAccessor` | `0x145FFAE60` | `0x145FFAE70` | — |
+
+Cách kiểm chứng không phải đoán: `+0x30` của vtable chính là một hàm 7 byte
+trả về **tên của vtable giao diện**, và `+0x38` là `isKindOf` với đúng tên đó.
+
+```
+0x1421F67B0  lea rax, ["AudioImageAccessor"]        ; AudioImageFile   -> +0x30
+0x1421F67F0  lea rax, ["AudioImageCacheAccessor"]  ; AudioImageCache  -> +0x30
+0x1421F6850  isKindOf("AudioImageAccessor")         ; AudioImageFile   -> +0x38
+0x1421F6990  isKindOf("AudioImageAccessor")         ; AudioImageCache  -> +0x38
+```
+
+Hệ quả trực tiếp: **đối tượng 0x70 byte là `AudioImageFile`** — ctor `0x1421F4EE0`
+gán vtable `0x145FFADC0`, và destructor `0x1421F6120` gọi `free` với đúng `0x70`.
+Giả định cũ (`MAudioCollector::FlatSliceIterator`) **sai**.
+
+### 14.2 Giao diện 6 slot — chính là "iterator" mà §3 dùng
+
+Cả hai lớp cài cùng một bộ 6 hàm qua vtable thứ hai:
+
+| slot | ý nghĩa | `AudioImageFile` | `AudioImageCache` |
+|---|---|---|---|
+| `+0x18` | số bản ghi trong lát | `0x1421F4C00` | `0x1421F12F0` (thunk) |
+| `+0x20` | lấy 1 cặp, trả bool | `0x1421F4C20` | `0x1421F1310` (thunk) |
+| `+0x28` | lấy cả khoảng | `0x1421F4E30` | `0x1421F1330` (thunk) |
+
+Ba thunk của `AudioImageCache` chỉ là `mov rcx,[rcx+0x10]; add rcx,0x30;
+jmp [vtable+N]` — tức **đẩy việc cho `AudioImageCacheAccessor`**, khung 0x28 byte
+không tự tính gì.
+
+> Đối tượng trả về là **con trỏ tới sub-object thứ hai** (`đối tượng + 0x10`), nên
+> mọi lệnh đọc phải dùng `obj + 0x10` làm `this`. Dùng `obj` là lệch 0x10 byte:
+> đọc vtable ở chỗ con trỏ buffer và hiểu nhầm mọi thứ sau đó.
+
+### 14.3 Bố cục `AudioImageFile` (0x70 byte)
+
+| offset | vai trò (suy từ cách dùng, tên trường là suy đoán) |
+|---|---|
+| `+0x00` | vptr `AudioImageFile`; `+0x08` = 1 (mã loại) |
+| `+0x10` | vptr `AudioImageAccessor` — **con trỏ được trả về** |
+| `+0x18` | con trỏ buffer đang giữ |
+| `+0x20..+0x3F` | handle 32 byte, đăng ký vào pool `0x14770BEF0` với `r8d = 0x8000` |
+| `+0x40` | ảnh: `+0x28` = offset byte đầu dữ liệu, `+0x30` = số bản ghi |
+| `+0x48` | nguồn byte: sub-object `+0x10`, `vfunc+0x18` = seek, `vfunc+0x08` = đọc |
+| `+0x50` | thành phần thứ ba (addRef, sub-object `+0x10`) |
+| `+0x58` | byte cờ: cửa sổ trong bộ nhớ có hợp lệ không |
+| `+0x60`, `+0x68` | chỉ số bản ghi đầu / cuối của cửa sổ đang giữ |
+
+Ctor (`0x1421F4EE0`) nhận 3 tham chiếu và gọi `vfunc+8` (addRef) trên cả ba;
+`0x1421F3650` và `0x1421F33F0` đều truyền vào từ `[ảnh + 0x48]`.
+
+### 14.4 Bản ghi trong `.peak`: 8 byte, hai số thực **không âm**
+
+`AudioImageFile::getPair` (`0x1421F4C20`, 516 byte) cho biết cách đọc:
+
+```
+index >= [ảnh + 0x30]                      -> trả false
+seek( [ảnh + 0x28] + index * 8 )           -> vfunc+0x18 trên sub +0x10
+đọc ( (len & ~15) * 8 + 0x80 ) byte        -> vfunc+0x08, vào [obj + 0x18]
+```
+
+Ba điều đáng ghi:
+
+1. **Bản ghi = 8 byte = 2 × float32.** Chỉ số nhân với 8, đọc cả khối, không có
+   bước giải mã nào — nên đây **không phải** số mẫu thô của file WAV.
+2. **Có 128 byte dự phòng** và làm tròn xuống bội số **16 bản ghi**
+   (`and eax, 0xFFFFFFF0` rồi `*8 + 0x80`).
+3. Khi lệch khỏi cửa sổ, nó **căn chỉnh xuống**: `r15 = (index / bytesĐọcĐược) *
+   bytesĐọcĐược`, rồi seek tới `offset + r15*8` — nghĩa là nó đọc theo **đơn vị
+   cửa sổ**, không đọc lẻ từng bản ghi.
+
+`getRange` (`0x1421F4E30`) gộp nhiều bản ghi, và đây là điểm sửa một hiểu lầm ở
+§3.4:
+
+```
+[out] = 0
+mỗi bản ghi, index += stride:
+    out.f0 = max(out.f0, rec.f0)
+    out.f1 = max(out.f1, rec.f1)
+```
+
+**Hai phép lấy MAX, khởi điểm 0** — không phải min/max. Nếu bản ghi chứa
+`(min, max)` như §3.4 giả định thì một tín hiệu toàn âm sẽ ra đúng 0, mất hết đỉnh
+dưới. Suy ra mỗi bản ghi là **hai số không âm**: đỉnh trên và độ lớn đỉnh dưới.
+Đó cũng là cách nhiều định dạng peak lưu, và giải thích vì sao phép gộp là max.
+
+Vì `stride` = số kênh và chỉ số chạy `y0*channels + kênh` (§3.4), bố cục là:
+
+```
+mỗi cột:  lặp kênh:  8 byte = (float32 đỉnh trên, float32 |đỉnh dưới|)
+```
+
+Tức **xen kẽ theo kênh**, không phải kênh nằm cạnh nhau. Muốn chốt chắc còn cần
+một file `.peak` thật — xem mục *Chưa làm*.
+
+### 14.5 Ngưỡng 8192 nghĩa là gì, và nhánh phóng sâu đọc bằng gì
+
+`0x1421F3650` chỉ có **một** caller: `0x141E9C4B0`, nằm trong hàm dựng cột
+`0x141E9C340`. Nhánh `framesPerPixel < 1.0` gọi `0x141E9D4C0` (vẽ bằng số mẫu
+thật) **không đi qua đây** — nó dùng đối tượng đọc khác, chưa định danh được.
+`MAudioCollector::FlatSliceIterator` vẫn là ứng viên hợp lý cho *nhánh đó*, và
+không phải cho đối tượng 0x70 byte.
+
+Vậy ngưỡng 8192 là độ phân giải của chính file `.peak`:
+
+| mức phóng | đối tượng đọc | nguồn |
+|---|---|---|
+| `fpp < 1` | chưa rõ | số mẫu thật |
+| `1 ≤ fpp < 8192` | `AudioImageFile` (0x70) | cột trong file `.peak` |
+| `fpp ≥ 8192` | `AudioImageCache` (0x28) | cache trong RAM |
+
+### 14.6 File `.peak` nằm ở đâu — đã rõ cơ chế, còn thiếu tên file
+
+Chuỗi `peak` (UTF-16, `0x145FFA9F8`) và `com.steinberg.peakfile` (`0x145FFA980`)
+chỉ có **một** chỗ dùng: đăng ký loại file `0x14161AF40`. Bảng đăng ký nằm ở
+`.data` tại `0x14770BE30` và có đúng **hai** tham chiếu: chỗ đăng ký, và
+`0x1421F1F59`.
+
+Nơi thứ hai nằm trong hàm `0x1421F1DD0`, và cho thấy cơ chế dựng tên:
+
+```
+0x1421F1EE5  lea rdx, [L"%02d"]              ; 0x145F7EA28
+0x1421F1EF0  format([rbp-0x20], L"%02d", abs(n))     ; n từ 0x1421F66E0 / 0x1421F6540
+0x1421F1F03  nối chuỗi đó vào tên sẵn có ([rbp-0x50])
+0x1421F1F17  new 0xE8 byte                    ; đối tượng tài liệu
+0x1421F1F4E  khởi tạo(..., tên, ...)          ; 0x1445caa20
+0x1421F1F63  vfunc+0xF0(0x14770BE30)          ; gắn vào bảng loại file .peak
+0x1421F1F71  vfunc+0xF8(0)
+0x1421F1F7F  vfunc+0x188(0)
+0x1421F1F8B  vfunc+0xD0(0)
+```
+
+Nghĩa là: **tên file `.peak` không có trong exe dưới dạng chuỗi.** Nó được ghép
+lúc chạy từ tên sẵn có (lấy từ đường dẫn file WAV, qua `FNPath` ở `0x1421F1E1B`)
+cộng thêm một số `%02d`, rồi đuôi lấy từ bảng loại file. Chuỗi `L"%02d"` cho thấy
+tên có **hậu tố đánh số 2 chữ số** — nhiều khả năng dùng để tách ảnh khi file
+dài. Chưa truy được con số đó là số kênh, số phần hay số thứ tự.
+
+Trước đây mục này bị chặn ở bẫy 2 (§12) vì bảng đăng ký nằm trong `.data`.
+Không còn bị chặn: `xref.py --va` xem được, chỉ là mất hơn một phút.
+
+### 14.7 Công cụ mới: giải mã tự động chuỗi obfuscate
+
+`deobf_str.py` cần người dùng tự gõ seed + key + độ dài. Site giải mã trong exe
+có hình dạng cố định, nên `tools/research/deobf_scan.py` dò theo hình dạng:
+
+- chỉ `mov ecx, imm32` mới mở đầu một site (opcode `B9`, một byte) — lọc trước;
+- key = mọi lệnh ghi xuống `[rbp/rsp + disp]`, **sắp theo độ lệch**; lệnh spill
+  seed dùng opcode `89` nên không bao giờ lẫn vào key (key dùng `c7` / `c6` /
+  `66 0f 7f`);
+- độ dài = khoảng các lệnh ghi phủ, và trùng khớp `mov r9d, imm32` ở mọi site đã
+  xem;
+- **chỉ báo cáo khi giải mã ra chữ in được** — nên quét cả section mà không
+  phải lọc tay: site thật ra chữ, site đọc lệch thì ra rác.
+
+Quét toàn `.text` + `IPPCODE` (`0x140001000..0x145C32600`): **281 chuỗi**, ở
+**36 file nguồn** khác nhau — toàn bộ là đường dẫn `__FILE__` trong macro
+assert/log:
+
+```
+D:\T1\work\40ff4699062de924\lego\source\audiofile\aimage.cpp
+D:\T1\work\40ff4699062de924\lego\source\project\parrange.cpp
+D:\T1\work\40ff4699062de924\lib.frame-gui\source\geditor.cpp
+D:\T1\work\40ff4699062de924\lib.frame-io\source\ffilesys.cpp
+D:\T1\work\40ff4699062de924\skinedit\source\program\pnodeattribs.cpp
+```
+
+Hai kết quả đáng dùng:
+
+1. **Trong toàn bộ exe không có chuỗi obfuscate nào chứa `peak` / `image` /
+   `wave` / `column`** (trừ đúng hai bản `aimage.cpp`). Cùng với §14.6, điều này
+   khẳng định tên file `.peak` **không** nằm trong exe dưới bất kỳ dạng nào.
+2. Cây nguồn nội bộ lộ ra tên dự án `lego` và các thư viện `lib.frame-gui`,
+   `lib.frame-io`, `skinedit` — hữu ích khi cần đoán tên biến.
+
+Con số 3.965 ghi ở §6.1 là số chỗ có **thuật toán** (đếm `imul … 0xBC8F`), phần
+lớn không phải chuỗi — 281 là số chuỗi thật sự giải mã được, và là **cận dưới**,
+vì bộ lọc bỏ cả chuỗi quá ngắn lẫn chuỗi không phải ASCII.
+
+### 14.8 Phụ lục: `StMedia::AudioImageColumnHandler`
+
+Lớp phía StMedia phụ trách đọc/ghi phần cột. Chuỗi tên ở file offset `0x62F6B80`
+(VA `0x1462F8780`) dài **33 byte**, nên vtable của nó không nằm ở `+0x10` như
+các lớp trên — xem bẫy 6.
+
+| | |
+|---|---|
+| tên (VA) | `0x1462F8780` — `StMedia::AudioImageColumnHandler` |
+| vtable **của chính nó** | `0x1462F8618` |
+| `getClassName` | `0x14394ADB0` (trả về đúng tên trên) |
+| `isKindOf` | `0x14394B0F0` (so với `StMedia::AttributeHandler`, `CmObject`, `FObject`) |
+| lớp cha | `StMedia::MarkerListAttributeHandler` — vtable `0x1462F87A8` |
+
+Cách tìm vtable đúng mà không phải đoán: `isKindOf` ghi đè của lớp con xuất hiện
+trong `.rdata` **đúng một lần** (VA `0x1462F8650`), nên vtable phải bắt đầu tại
+`0x1462F8650 - 0x38`. Ngược lại, `isKindOf` của lớp cha cũng chỉ xuất hiện một
+lần, ở `0x1462F87E0` — tách được hai vtable mà không cần đoán.
+
+Nghĩa là `.peak` là một file **thuộc khung attribute của StMedia** (cùng khung với
+`StdAttributeHandler`, `MediaListDefaults`), và phần cột là một attribute đọc/gộp
+qua các handler đó. Đó là lý do cấu trúc bên trong không giống WAV.
+
+---
+
 ## Chưa làm / hướng tiếp
 
-1. Chưa đọc được **định dạng bên trong `.peak`** (header, số cột, cách scale).
-   `StMedia::AudioImageColumnHandler` (`0x062F6B80`) và vtable của `AudioImageFile`
-   (`0x145FFADC0`) là chỗ đáng vào. Trên máy này không có file `.peak` nào để đối
-   chiếu — cần một project Cubase thật.
-2. Chưa truy được **file `.peak` nằm ở đâu**: cùng thư mục với file WAV, hay thư
-   mục project. Bị chặn ở bẫy 2 (bảng đăng ký nằm trong BSS).
-3. Chưa xác minh đối tượng 0x70 byte là `MAudioCollector::FlatSliceIterator`.
+1. Chưa đọc được **phần đầu file `.peak`** (header: số cột, frames mỗi cột, cách
+   scale). Đã biết phần **dữ liệu** là bản ghi 8 byte × 2 float không âm, xen kẽ
+   theo kênh (§14.4), và biết nó nằm sau một header vì offset dữ liệu là
+   `[ảnh + 0x28]` — nhưng **chưa biết header gồm những gì**. Đáng vào:
+   `StMedia::AudioImageColumnHandler` (vtable `0x1462F8618`, xem §14.8) và bên ghi
+   là `0x1421F1DD0`. Trên máy này không có file `.peak` nào để đối chiếu — cần
+   một project Cubase thật.
+2. **Tên file `.peak`**: đã rõ cơ chế ghép tên (§14.6) nhưng chưa biết hậu tố
+   `%02d` là số gì, và chưa xác nhận tên có cùng thư mục với file WAV hay không.
+   Bước tiếp theo: đọc `0x1421F66E0` / `0x1421F6540` (hàm sinh con số) và
+   `0x1445caa20` (khởi tạo tài liệu).
+3. ~~Chưa xác minh đối tượng 0x70 byte là `MAudioCollector::FlatSliceIterator`~~
+   — **đã đóng ở §14.1**: đối tượng đó là `AudioImageFile`, tức file `.peak`.
+   `MAudioCollector::FlatSliceIterator` còn là ứng viên cho **nhánh `fpp < 1`**
+   (vẽ bằng số mẫu thật), chưa truy.
 4. Chưa rõ hằng `3.0` trong `0x141E9D4C0` chặn cái gì.
 5. Chỗ đọc pref `Show Waveforms` / `Wave Brightness` / `Wave Outline Intensity`
    lúc vẽ — mỗi id chỉ có **một** xref, đều trong hàm dựng trang Preferences
