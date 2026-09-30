@@ -72,6 +72,32 @@
     "Thiết lập (typo)": ["\\bthiết lật\\b"],
     "Quantize hiển thị": ["\\bhiển thị quantize\\b"],
 
+    "_comment_outlier": "--- vong 85: 1 chuoi lech ra khoi gia dinh cua no ---",
+    "Ambisonics": ["\\bambisonic\\b(?!s)"],
+    "Q-Factor": ["\\bhệ số q\\b"],
+    "Direct Monitoring": ["monitoring trực tiếp"],
+    "Latch Buffer": ["bộ đệm latch"],
+    "Summing": ["cộng dồn"],
+    "Chunk": ["khối dữ liệu"],
+    "Post": ["xử lý hậu kỳ"],
+    "Meter": ["đo hiệu năng"],
+    "Monitor": ["theo dõi hiệu năng"],
+    "Chain": ["chuỗi tín hiệu"],
+    "Catch Range": ["\\bdải bắt\\b"],
+    "Subsection": ["khu vực cha"],
+    "Serial": ["cổng nối tiếp"],
+    "Trim": ["cắt note expression"],
+    "Folding": ["\\bgập track\\b"],
+
+    "_comment_outlier_why": [
+      "Moi mau o tren BAN VAO DUNG MOT CHUOI trong 10.737 - cai do moi duoc cam.",
+      "Khong phai vi mau sai, ma vi cau se chan ca nhung chuoi DUNG cung dung tu",
+      "do. 'thẻ' bat 13 chuoi trong do 'Thiet lap the' (Tab) la dung; 'vung' bat",
+      "213 chuoi, da phan lon la 'vung chon' dung. AGENT.md §7: bo do bao dong",
+      "gia nhieu lan con te hon khong co bo do. 8 mau con lai duoc SUA CHUOI,",
+      "khong duoc thanh cau - xem fix_reading85.py."
+    ],
+
     "_comment_conditional": "--- chi sai khi NGUON khop 'src' ---",
     "Bypass": [{"vi": "\\bbỏ qua\\b", "src": "\\bbypass\\b"}],
     "Cycle": [{"vi": "\\blặp\\b", "src": "\\bcycle\\b"}]

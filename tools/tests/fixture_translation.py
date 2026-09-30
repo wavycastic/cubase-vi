@@ -62,6 +62,25 @@ TERMS_BAD = [
     ('Erase Tool', 'Xóa công cụ'),
     ('Surface Editor', 'Trình sửa bề mặt'),
     ('Quantize hiển thị', 'Hiển thị Quantize'),
+
+    # --- round 85: one string left the family of 20 or more. The pattern is
+    # only added because the bad rendering was the ONLY rendering of that
+    # phrase in 10,737 keys - see terms_do_not_translate.json, _comment_outlier
+    ('Ambisonics', 'Định dạng file Ambisonic'),
+    ('Q-Factor', 'Hệ số Q'),
+    ('Direct Monitoring', 'Monitoring trực tiếp'),
+    ('Latch Buffer', 'Bộ đệm Latch'),
+    ('Summing', 'Direct Routing (Cộng dồn)'),
+    ('Chunk', 'Khối dữ liệu Broadcast Wave'),
+    ('Post', 'Đang chạy Script xử lý hậu kỳ'),
+    ('Meter', 'Đo hiệu năng Audio'),
+    ('Monitor', 'Theo dõi hiệu năng Audio'),
+    ('Chain', 'Kéo đổi thứ tự Modulator trong chuỗi tín hiệu'),
+    ('Catch Range', 'Quantize trong dải bắt'),
+    ('Subsection', 'Gán khu vực con vào khu vực cha'),
+    ('Serial', 'Cổng nối tiếp 9-Pin'),
+    ('Trim', 'Cắt Note Expression theo độ dài nốt'),
+    ('Folding', 'Gập Track'),
 ]
 
 # --- correct values that a sloppier pattern would flag
@@ -79,6 +98,23 @@ TERMS_GOOD = [
     'Ảnh Video dài hơn Clip',
     'Nốt trùng ở hai bè',
     'Preset âm thanh đã lưu',
+    # round 85 patterns must stay narrow. Each of these was the reason a
+    # similar-looking pattern was NOT added: the Vietnamese word is correct
+    # somewhere else in the map, so a pattern on the bare word would block it.
+    'Mở Ambisonics Decoder',          # must not read as "Ambisonic" + typo
+    'Thiết lập thẻ',                  # "thẻ" = Tab, correct
+    'Áp dụng hợp âm vào vùng chọn',    # "vùng chọn" = selection, correct
+    'Xóa tất cả bộ đệm',              # "bộ đệm" without Latch, correct
+    'Phần đệm',                       # padding, correct
+    'Khối',                           # Blocks, correct
+    'Track Folding: Bật Group Channel',
+    'Hiện Direct Monitoring',
+    'Bật/Tắt Catch Range',
+    'Gán Section cho Subsection',
+    'Cổng Parallel 9-Pin',            # Serial's opposite; pattern is exact
+    'Trim the beginning',             # Trim as a verb, correct
+    'Chunk nhớ',                      # Cache noun, not Broadcast Wave Chunk
+    'Q-Factor của EQ Band 1',
     # 'bỏ qua' and 'lặp' are correct for Ignore/Skip/Repeat - see CONDITIONAL
     'Bỏ qua các hàng đầu tiên',
     'Lặp lại Loop',
