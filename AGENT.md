@@ -615,6 +615,43 @@ The search returned no results              ->  search returned no results
 Mất mạo từ `The` → **hết tiếng Việt**. Bộ dò "fully untranslated prose" hỏi
 "có tiếng Việt không", mà `a` và `the` chính là toàn bộ chênh lệch.
 
+### Lớp "mất vế": **7 lần trên 7, mất đúng vế có ĐIỀU KIỆN**
+
+Đợt 32, 38, 38, 40, 44, 45, 45 — bảy lần phát hiện bằng tay, và **cả bảy** mất
+đúng mệnh đề có *điều kiện* hoặc *cái giá*:
+
+```
+"... but requires you to estimate the pickup value."
+"This has no effect for bar numbers centered on the bar."
+"If this option is set to show a cautionary either with or without
+ parentheses, then other cautionary accidentals ... are suppressed."
+"Please note that this conversion might lead to clipping!"
+"However, this also increases the power consumption of the computer. If power
+ consumption is a concern, ... Further information ..."
+"For support information, please contact the plug-in vendor."
+"... and use the 'Convert Z-Axis Pan Automation of Selected Tracks' function
+ if needed."
+```
+
+Không phải ngẫu nhiên: tiếng Anh **nói luật trước, nói ngoại lệ sau**, nên vế sau
+trông như *chú thích* — và vế sau là thứ bị bỏ.
+
+Nên có bộ dò: `tools/find_dropped_sentences.py` — đếm số câu (`.` `!` `?`) của
+giá trị so với nguồn.
+
+**Ba lần phải sửa bộ đếm mới ra bảy lỗi thật** — tỉ lệ bình thường:
+
+1. coi `\n` là cuối câu → **27** chuỗi báo mất 1 câu, vì mọi giá trị nhiều dòng
+   đều kết thúc bằng nó;
+2. viết tắt `\\b[A-Z][a-z]{0,4}\\.` → **nuốt mất dấu chấm** của mọi từ viết hoa
+   ngắn, khiến 9 câu `Cannot add more tracks` **đầy đủ** bị báo mất câu;
+3. **key dài bị cắt cụt** trong `all_strings.tsv`, nên đếm trong key là đếm một
+   *tiền tố*. Bản tiếng Anh đầy đủ nằm ở **key của dòng khác** — và hai dòng
+   có thể trùng tiền tố 60 ký tự, nên phải yêu cầu **đúng một** ứng viên.
+
+Còn sót: chuỗi mà tiền tố key trùng với anh em — hai trong ba lỗi ở đợt này do
+tìm **tay** khi kiểm tra đầu ra của bộ dò.
+
 ### `Material` = `chất liệu` — **không phải** `tư liệu`
 
 `tư liệu` = *documents* (từ thư viện). `chất liệu` = *material*, và nó phủ **cả

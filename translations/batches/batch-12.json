@@ -1159,7 +1159,7 @@
   "WARNING: Cannot import video files!": "CẢNH BÁO: Không thể Import file Video!",
   "Walker 4-shape Noteheads": "Đầu nốt Walker 4-shape",
   "Walker 7-shape Noteheads": "Đầu nốt Walker 7-shape",
-  "Warning: Sample rate does not match external word clock.": "Cảnh báo: Sample Rate không khớp với Word Clock ngoài.",
+  "Warning: Sample rate does not match external word clock.": "Cảnh báo: Sample Rate không khớp với Word Clock External.",
   "Warning: You cannot undo this operation!\\nOffline process histories will be removed.\\nAll edits will be frozen!": "Cảnh báo: Bạn không thể hoàn tác thao tác này!\\nLịch sử xử lý Offline sẽ bị xóa.\\nTất cả chỉnh sửa sẽ được Freeze!",
   "Warning: You cannot undo this!": "Cảnh báo: Bạn không thể hoàn tác thao tác này!",
   "Warp Changes Bypass on/off": "Bật/Tắt Warp Changes Bypass",
