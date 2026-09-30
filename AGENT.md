@@ -208,6 +208,11 @@ không phải newline thật. Bộ dò placeholder phải khớp cả `%1.0f` v�
       **trước với sau** trên cùng một cách đếm.
     - Cùng lớp với `score.FORBIDDEN` là `dict` khoá **số** còn test tra `c` là
       **ký tự** → không bao giờ khớp, `check_text` trả về chuỗi có byte NUL.
+    - **Biến thể phân biệt hoa/thường — đã dính 4 lần** (đợt 95, 104 ×2). Kim
+      tìm chuỗi viết **thường** không khớp giá trị bắt đầu bằng chữ **Hoa**.
+    - **Cạm bẫy kèm theo:** `.lower()` **không bỏ dấu**. "lượt" là **một** ký tự
+      (`ự` U+1EE3), không phải hai. Viết kim ASCII `luot` thì **không bao giờ
+      khớp** "lượt". Đúng phải là: **kim tiếng Việt + `.lower()` cả hai bên**.
 
 ## 9. Quy trình kiểm tra
 
