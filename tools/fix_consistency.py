@@ -12,6 +12,7 @@ Legitimate differences that are intentionally preserved:
 import json, re, os, glob, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, 'tools'))
 BATCH_DIR = os.path.join(ROOT, 'translations', 'batches')
 WRITE = '--write' in sys.argv
 
@@ -48,7 +49,7 @@ for line in open(os.path.join(ROOT, 'keys', 'all_strings.tsv'),
         k, u = line.split('\t', 1)
         src[k] = u
 
-PLACEHOLDER = re.compile(r'%(?:\.\d+)?[a-zA-Z%]|%l|\{[a-zA-Z0-9_]*\}')
+from cubelib.placeholders import PLACEHOLDER  # one pattern; see cubelib/placeholders.py
 vi = json.load(open(os.path.join(ROOT, 'translations', 'vi.json'), encoding='utf-8'))
 
 real = {k: v for k, v in FIXES.items() if k in src}

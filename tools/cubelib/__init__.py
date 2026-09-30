@@ -14,5 +14,5 @@ optional extra:
 
     pip install -r requirements-dev.txt
 """
-__all__ = ['binary', 'pe', 'x86', 'qm', 'srf', 'cubase']
-__version__ = '1.0.0'
+__all__ = ['binary', 'pe', 'x86', 'qm', 'srf', 'cubase', 'placeholders']
+__version__ = '1.1.0'

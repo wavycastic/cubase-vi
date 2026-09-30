@@ -1,0 +1,98 @@
+{
+  "_doc": [
+    "Bang thuat ngu KHONG duoc dich - dung boi check_style.py.",
+    "",
+    "Moi muc la mot mau sai cu the, KHONG phai bang 'Anh -> Viet'.",
+    "Ly do: thu can BIET lai mot ban dich sai, khong phai sua mot ban",
+    "dich dung. Gia tri 'term' chi de bao cao cho nguoi doc hieu vi sao.",
+    "",
+    "Chon mau rat hanh ky: chi nhung cum CHAC CHAN sai. Mot tu don co",
+    "nghia binh thuong (vd 'duy nhat', 'dinh vi') se bao dong gia o rat nhieu",
+    "chuoi dung - AGENT.md: 'mot bo do bao dong gia nhieu lan con te hon",
+    "khong co bo do'.",
+    "",
+    "Moi regex deu phai khop ca cum, khong khop tung tu. Duoi day khong",
+    "con muc nao chua duoc test tren ban dich hien tai."
+  ],
+
+  "forbidden": {
+    "Automation": [
+      "\\btự động hóa\\b"
+    ],
+    "Track": [
+      "\\brãnh\\b"
+    ],
+    "Clip": [
+      "\\bđoạn cắt\\b"
+    ],
+    "Bounce": [
+      "\\bnảy\\b"
+    ],
+    "Freeze": [
+      "\\bđóng băng\\b"
+    ],
+    "Quantize": [
+      "\\blượng tử hóa\\b"
+    ],
+    "Mixer": [
+      "\\bbộ trộn âm thanh\\b",
+      "\\bmixer âm thanh\\b"
+    ],
+    "Fader": [
+      "\\bcần trượt\\b",
+      "\\bcần chỉnh âm lượng\\b"
+    ],
+    "Tempo": [
+      "\\bnhịp độ\\b"
+    ],
+    "Grid": [
+      "\\blưới nhịp\\b",
+      "\\blưới\\b(?=\\s*(?:để|tới|vào))"
+    ],
+    "Warp": [
+      "\\bbẻ cong\\b"
+    ],
+    "Render": [
+      "\\bkết xuất\\b"
+    ],
+    "Plug-in": [
+      "\\bphần cắm\\b",
+      "\\bphần mềm cắm\\b"
+    ],
+    "Metronome": [
+      "\\bmáy đếm nhịp\\b"
+    ],
+    "Transport": [
+      "\\bbộ vận chuyển\\b"
+    ],
+    "Marker": [
+      "\\bdấu đánh dấu\\b"
+    ],
+    "Locator": [
+      "\\bđịnh vị vị trí\\b"
+    ],
+    "Time Signature": [
+      "\\bkhóa nhịp\\b"
+    ],
+    "Rest": [
+      "\\bnghỉ\\b(?=\\s*nốt)"
+    ],
+    "Clef": [
+      "\\bkhoá nhạc\\b",
+      "\\bkhóa nốt\\b"
+    ],
+    "Crossfade": [
+      "\\bchuyển tiếp mượt\\b"
+    ],
+    "Locator pair": [
+      "\\bhai định vị\\b"
+    ]
+  },
+
+  "_not_in_forbidden_because_ambiguous": [
+    "duy nhất / định vị / lặng / ghi / lưu - la tu Viet Nam binh thuong,",
+    "khop o nhieu chuoi DUNG. Danh vao day se sinh bao dong gia.",
+    "AGENT.md §7: 'lặng' nam trong 'dau lang', 'Over' trong 'Cross-Over'",
+    "khop \\b sau dau gach noi."
+  ]
+}

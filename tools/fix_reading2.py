@@ -12,6 +12,7 @@ modifier stayed English are wrong.
 import json, re, os, glob, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, 'tools'))
 BATCH_DIR = os.path.join(ROOT, 'translations', 'batches')
 WRITE = '--write' in sys.argv
 
@@ -90,7 +91,7 @@ for line in open(os.path.join(ROOT, 'keys', 'all_strings.tsv'),
 
 vi = json.load(open(os.path.join(ROOT, 'translations', 'vi.json'),
                     encoding='utf-8'))
-PLACEHOLDER = re.compile(r'%(?:\.\d+)?[a-zA-Z%]|%l')
+from cubelib.placeholders import PLACEHOLDER  # one pattern; see cubelib/placeholders.py
 
 real = {k: v for k, v in WORDING.items() if k in src}
 print(f'defined : {len(WORDING)}   real keys : {len(real)}')

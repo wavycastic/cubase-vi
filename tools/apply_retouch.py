@@ -30,7 +30,7 @@ for line in open(TSV, encoding='utf-8').read().splitlines()[1:]:
         k, u = line.split('\t', 1)
         src[k] = u
 
-PLACEHOLDER = re.compile(r'%(?:\.\d+)?[a-zA-Z%]|%l|\{[a-zA-Z0-9_]*\}')
+from cubelib.placeholders import PLACEHOLDER
 FORBIDDEN_PARENS = re.compile(r'\s*\([^()]+\)\s*$')
 FORBIDDEN_TERMS = (r'tự động hóa', r'\brãnh\b', r'đoạn cắt', r'\bnảy\b',
                    r'đóng băng', r'lượng tử hóa')

@@ -40,7 +40,7 @@ for line in open(os.path.join(ROOT, 'keys', 'all_strings.tsv'),
         k, u = line.split('\t', 1)
         src[k] = u
 
-PLACEHOLDER = re.compile(r'%(?:\.\d+)?[a-zA-Z%]|%l')
+from cubelib.placeholders import PLACEHOLDER
 
 unknown = sorted(k for k in FIXES if k not in src)
 known = {k: v for k, v in FIXES.items() if k in src}

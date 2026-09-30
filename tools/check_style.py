@@ -24,6 +24,9 @@ Exit code 0 = clean, 1 = violations found.
 """
 import json, os, re, sys
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from cubelib.placeholders import PLACEHOLDER  # one pattern, seven call sites
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 T = lambda *p: os.path.join(ROOT, *p)
 TSV, MAP = T('keys', 'all_strings.tsv'), T('translations', 'vi.json')
@@ -41,15 +44,20 @@ for line in open(TSV, encoding='utf-8').read().splitlines()[1:]:
 m = json.load(open(MAP, encoding='utf-8'))
 
 FORBIDDEN_PARENS = re.compile(r'\s*\([^()]+\)\s*$')
+
+# The DAW terms that must stay English live in terms_do_not_translate.json,
+# not here. They used to be six hardcoded regexes in this file while AGENT.md
+# §2 listed about seventy - so sixty-four terms were taught and none of them
+# enforced. tools/tests/test_translation.py tests the filter in both
+# directions: 18 known-bad values it must catch, 13 correct values it must
+# leave alone.
+_spec = json.load(open(T('terms_do_not_translate.json'), encoding='utf-8'))
 FORBIDDEN_TRANSLATIONS = {
-    r'\btự động hóa\b': 'Automation',
-    r'\brãnh\b': 'Track',
-    r'\bđoạn cắt\b': 'Clip',
-    r'\bnảy\b': 'Bounce',
-    r'\bđóng băng\b': 'Freeze',
-    r'\blượng tử hóa\b': 'Quantize',
+    re.compile(p, re.I): term
+    for term, pats in _spec['forbidden'].items()
+    if not term.startswith('_')
+    for p in pats
 }
-PLACEHOLDER = re.compile(r'%(?:\.\d+)?[a-zA-Z%]|\{[a-zA-Z0-9_]*\}')
 
 errors, warns = [], []
 
@@ -69,9 +77,8 @@ for key, val in sorted(m.items()):
                 continue
 
     # Rule 2: No awkward literal Vietnamese translations of standard DAW terms
-    val_lower = val.lower()
     for pattern, term in FORBIDDEN_TRANSLATIONS.items():
-        if re.search(pattern, val_lower, re.IGNORECASE):
+        if pattern.search(val):
             errors.append((key, val, f'awkward translation of DAW term: keep {term!r} in English'))
 
     # Rule 3: Placeholders must match
