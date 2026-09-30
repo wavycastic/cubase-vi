@@ -1527,6 +1527,36 @@ tìm ra nhiều lớp lỗi sai lệch chuyên ngành và dịch máy thô mà k
    để giữ nhất quán thuật ngữ toàn dự án.
 
 
+### Đợt 79: 5 subagent quét vét — sửa 98 câu bị động/Vui lòng/Thực hiện còn sót
+
+1. **Vét bị động (28 chuỗi):** Đã đặt lại mọi kết nối Side-Chain; Các Sound Slot sau đang dùng;
+   Preset lưu các cổng thiết bị đang bận; Cổng này đang bận!; Tên này trùng;
+   Chuyển định dạng thời gian thành Bars+Beats (sửa luôn Bar+Beat thiếu s);
+   (do %s dùng); Không chọn Track nào để Export; Ghi mọi nốt vào cùng một Part;
+   Chưa lưu Project; Export Project thành...; Đổi tham số đích; Mục yêu thích này thêm rồi!
+
+2. **Vui lòng dài → câu lệnh gọn (23 chuỗi):** Không đọc được file CSV. Kiểm tra dấu phân cách.
+   Lỗi gần vị trí này; Chọn một Project. Nếu không có Project trực tuyến, không tham gia được;
+   Kích hoạt lại Plug-in thất bại giữ giọng nhẹ (Không kích hoạt lại được...);
+   Thiết lập trang này sắp bỏ; Chưa đặt tên. Nhập tên; Chọn Audio Track/Event/Track hoặc Project;
+   Dải Export trống; Tên vừa nhập không hợp lệ; Project đã chuyển tới vị trí chỉ đọc! Chọn...
+
+3. **Thực hiện/thao tác thừa (18 chuỗi):** Thực hiện Audio Export → Export Audio;
+   Thực hiện Export các Event đã chọn → Export các Event đã chọn;
+   Thực hiện các hành động → Chạy Action; Lỗi: %s...; Không đổi được Track đã khóa;
+   Đĩa còn lại... Cần khoảng...; Không đủ dung lượng đĩa!; Không được phép.;
+   Làm hỏng dữ liệu VariAudio (bỏ Thao tác này sẽ); Không hoàn tác được!
+
+4. **Tàn dư transport/mixer/media/ui (29 chuỗi):** Sao chép/Dán Automation... (Dải Locator);
+   Mỗi Cycle tạo Part mới và phát lại tất cả; Điểm bắt đầu Project Preview đặt tại con trỏ Project;
+   Tempo Event tạo tới điểm... Dùng Smooth Tempo nếu Tempo đoạn nhạc ổn định;
+   Bật để gửi lệnh ghi tới RS422 Out (bỏ tùy chọn này, ghi âm → ghi);
+   Bypass Channel Strip mọi Channel đang hiện; Tạo file Audio từ nhiều Track...;
+   Không mở được file để đọc. File đang mở ở chương trình khác không?;
+   Điều chỉnh cài đặt Project hay cho Project chạy ở Sample Rate khác?;
+   Nhấp đúp đổi tên Link Group ([SHIFT] + nhấp đúp mở...).
+
+
 ### Cặp `[Key]` — bản dịch **giống hệt** bản gốc, trừ **tên phím**
 dịch làm **ba** kiểu khác nhau:
 
