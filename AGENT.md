@@ -1265,6 +1265,79 @@ tìm ra nhiều lớp lỗi sai lệch chuyên ngành và dịch máy thô mà k
     - `Temporary Link Mode...` đổi "tham số đã chạm" thành `tham số vừa điều chỉnh`.
 
 
+### ⚠️ Đợt 73: Quét thủ công liên miền — sửa 287 chuỗi, xóa bỏ "Hòa tan Part", sửa lỗi gõ "Thiết lật" và chuẩn hóa DAW
+
+1. **Thảm họa dịch máy `Dissolve Part` thành "Hòa tan Part" (3 chuỗi):**
+   Trong Cubase, `Dissolve Part` là thao tác phân rã Part MIDI (thành từng nốt/channel) hoặc rã Audio Part thành các Event trên Lane. Bản dịch cũ dịch máy thành: "Hòa tan Part", "Hòa tan Audio Part", "Hòa tan Note Expression" (như hòa tan đường vào nước!).
+   Sửa thành: **`Rã Part`**, **`Rã Audio Part`**, **`Rã Note Expression`**.
+
+2. **Khắc phục hàng loạt lỗi gõ phím `Thiết lật` thay vì `Thiết lập` (7 chuỗi):**
+   Các menu và hộp thoại quan trọng bị gõ sai chính tả ngớ ngẩn:
+   - `Project Colors Setup...` → `Thiết lập màu Project...` (trước gõ nhầm: "Thiết lật màu...")
+   - `Project Synchronization Setup...` → `Thiết lập đồng bộ Project...` (trước gõ nhầm: "Thiết lật đồng bộ...")
+   - `Set up Lane Controls` → `Thiết lập điều khiển Lane` (trước gõ: "Thiết lật...")
+   - `Set up Sections` → `Thiết lập các phần` (trước gõ: "Thiết lật...")
+   - `Set up Status Line` → `Thiết lập Status Line` (trước gõ: "Thiết lật...")
+   - `Set up Tabs` → `Thiết lập thẻ` (trước gõ: "Thiết lật...")
+
+3. **`Stereo Flip` bị dịch ngược trật tự từ (1 chuỗi):**
+   `Stereo Flip` (đảo vị trí hai kênh trái/phải L-R trong menu Audio Process) bị dịch là "Stereo Lật".
+   Sửa thành: **`Đảo kênh Stereo`**.
+
+4. **`Medium` (phương tiện lưu trữ / Media) bị dịch nhầm thành "Trung bình" (4 chuỗi):**
+   Trong OMF/AAF và Pool, `Medium` là vật mang/file media (`Medium importieren` / `Importer un média`).
+   Bản dịch cũ nhầm từ đồng âm medium (low/medium/high) thành: "Import Trung bình", "Import Trung bình...", "LỖI: Không thể liên kết Medium OMF!".
+   Sửa thành: **`Import Media`**, **`Import Media...`**, **`LỖI: Không thể liên kết Media OMF!`**, **`Đổi tên Media`**.
+
+5. **Các cụm từ bị dịch ngược và dính chuỗi tiếng Anh thô:**
+   - `Media Destination Path` bị dịch là: "Media Đích đến Đường dẫn" → **`Đường dẫn đích của Media`**.
+   - `Reference Media Files` bị dịch là: "File Reference Media" → **`Các file Media tham chiếu`**.
+   - `On Import Audio Files` bị dịch là: "File On Import Audio" → **`Khi Import file Audio`**.
+   - `Subfolder Next to Exported File` bị dịch là: "Subfolder bên cạnh File Exported" → **`Thư mục con bên cạnh file Export`**.
+   - `in the project by clicking it` bị bỏ nguyên văn tiếng Anh: "in the project theo clicking it" → **`trong Project bằng cách nhấp chuột`**.
+   - `in the project via right-click` → **`trong Project bằng cách nhấp chuột phải`**.
+   - `Restore Factory Presets` bị nuốt mất động từ: "Factory Preset" → **`Khôi phục Preset Factory`**.
+   - `Click during Count-In` bị dịch thành: "Nhấp trong lúc Count-In" (nhầm Metronome Click thành nhấp chuột) → **`Click trong lúc Count-In`**.
+
+6. **Bảng màu và công cụ nổi (Palette, Zoom, Tools):**
+   - `Transpose Palette` bị dịch thành "Transpose bảng màu" (nhầm floating palette thành color palette!) → **`Bảng Transpose`**.
+   - `Zoom Palette` bị dịch thành "Bảng màu Zoom" → **`Bảng Zoom`**.
+   - `Zoom 4 Tracks`, `Zoom 8 Tracks`, `Zoom N Tracks` bị dịch nhầm thành số thứ tự Track: "Zoom Track 4", "Zoom Track 8", "Zoom Track N" → **`Zoom 4 Track`**, **`Zoom 8 Track`**, **`Zoom N Track`**.
+   - `Select Tool` bị dịch thành động từ: "Chọn công cụ" → **`Công cụ chọn`**.
+   - `Erase Tool` bị dịch ngược thành: "Xóa công cụ" (như xóa mất tool) → **`Công cụ xóa`**.
+
+7. **Hợp âm treo `Suspended` bị dịch thành "hợp âm treo cấp..." (10 chuỗi):**
+   Trong âm nhạc hiện đại, nhạc sĩ Việt Nam luôn gọi là hợp âm Sus4, Sus2:
+   - `Apply/Insert suspended fourth chord` → **`Áp dụng/Chèn hợp âm Sus4`** (trước dịch: "hợp âm treo cấp 4").
+   - `Apply/Insert suspended second chord` → **`Áp dụng/Chèn hợp âm Sus2`** (trước dịch: "hợp âm treo cấp 2").
+   - `Apply diminished 7th chord` → **`Áp dụng hợp âm 7 giảm`** (trước dịch: "hợp âm giảm cấp 7").
+   - `Apply half-diminished 7th chord` → **`Áp dụng hợp âm 7 nửa giảm`** (trước dịch: "hợp âm nửa giảm cấp 7").
+
+8. **Toàn bộ họ dữ liệu và thuật ngữ Tempo:**
+   - `Tempo out of Range!` bị dịch nửa nạc nửa mỡ: "Tempo out của Range!" → **`Tempo nằm ngoài phạm vi!`**.
+   - Các lệnh thao tác dữ liệu bị đảo ngược thành danh từ:
+     `Stretch Tempo Data` ("Stretch Tempo Dữ liệu") → **`Kéo giãn dữ liệu Tempo`**;
+     `Stretch Controller Data` ("Dữ liệu Controller co giãn") → **`Kéo giãn dữ liệu Controller`**;
+     `Scale Tempo/Controller/Automation Data` → **`Co giãn dữ liệu Tempo/Controller/Automation`**;
+     `Thin Out Data` ("Dữ liệu Thin Out") → **`Lược bớt dữ liệu`**.
+   - `Tempo Recording` ("Tempo Đang ghi") → **`Ghi Tempo`**.
+   - `Tap Tempo - Display only` ("Chỉ Tap Tempo - Display") → **`Tap Tempo - Chỉ hiển thị`**.
+   - `Visible Tempo Lower/Upper Limit` ("đang hiện Tempo Lower Limit") → **`Giới hạn dưới/trên của Tempo đang hiện`**.
+   - `Smooth Tempo` ("Mượt Tempo") → **`Làm mượt Tempo`**.
+   - `Project Logical Editor` ("Logical Editor của Project") → đồng bộ về **`Project Logical Editor`**.
+
+9. **Chuẩn hóa thiết bị 9-Pin RS422 (9 chuỗi):**
+   Chu���n kết nối điều khiển băng từ chuyên nghiệp Sony 9-Pin P2 bị dịch thành "thiết bị 9 chân" (như sinh vật 9 chân!).
+   Đồng bộ toàn bộ về: **`Thiết bị 9-Pin`**, **`Cổng nối tiếp 9-Pin`**, **`Dùng thiết bị 9-Pin 1 cho Machine Control`**.
+
+10. **Đồng bộ hóa các thanh công cụ và định dạng:**
+    - `Info Line` đồng bộ giữ nguyên **`Info Line`** (thay vì "Dòng thông tin").
+    - `Status Line` đồng bộ giữ nguyên **`Status Line`** (thay vì "Thanh trạng thái").
+    - `Overview Line` giữ nguyên **`Overview Line`** (thay vì "Dòng tổng quan").
+    - `Time Format` sửa lỗi đảo từ: "Thời gian Định dạng" → **`Định dạng thời gian`**; `Ruler Time/Display Format` → **`Định dạng thời gian/hiển thị của Ruler`**.
+    - Loại bỏ các từ lặp chú thích: `Skins` ("Giao diện Skin") → **`Skin`**, `Theme` ("Giao diện Theme") → **`Theme`**, `This Computer` ("Computer này") → **`Máy tính này`**.
+    - Thay thế chữ "thất bại" nặng nề trong thông báo hệ thống thành câu tự nhiên lịch sự: `Không th�� tự động lưu vì Project bị hỏng...`, `Chuyển đổi không thành công!`, `Không thể tạo/xóa cơ sở dữ liệu...`.
+
 ### Cặp `[Key]` — bản dịch **giống hệt** bản gốc, trừ **tên phím**
 dịch làm **ba** kiểu khác nhau:
 
