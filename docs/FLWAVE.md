@@ -1275,13 +1275,71 @@ Tức nó là **số phần / cờ**, và 1 nghĩa là "một path". Số điể
    lớp tô khác dùng lại đúng lệnh này — nên **phải lọc theo §12.3**. Hook chỗ
    gọi thì chính xác hơn nhưng phải làm 4 hook.
 
-### 12.6 Trình tự nên làm
+### 12.6 Đi tận chỗ ghi pixel — và tại sao không có lệnh đó
 
-1. Dò `0x141EA7840` (rasteriser) để tìm **chỗ ghi pixel** — đó là nơi duy nhất màu
-   chạm vào bộ đệm. Mọi thứ "đổi màu" đều phải đi từ đó ngược lên.
-2. Bật hook `0x141E9AD10` chỉ để **đếm và ghi lại 6 tham số** ra file, đối chiếu 4
+Câu hỏi tự nhiên: chỗ ghi pixel nằm ở đâu. Câu trả lời: **không tồn tại trong
+`Cubase15.exe`** — và đây là kết quả, không phải chỗ chưa dò.
+
+Đo bằng cách liệt kê **mọi** lệnh ghi bộ nhớ có đích không phải `rbp`/`rsp`, trong
+cả hai hàm:
+
+| hàm | kích thước | lệnh ghi ra ngoài stack |
+|---|---|---|
+| `0x141EA7840` rasteriser | 1.844 byte, khung `0x3328` | **đúng một**: `0x141EA7A87` `mov [rcx],eax` + `0x141EA7A89` `movss [rcx+4],xmm0` |
+| `0x141E9D010` flush | 756 byte | **không có** |
+
+Lệnh duy nhất kia ghi 8 byte — một đỉnh (x nguyên, y thực) — vào bảng cạnh. Tức
+`0x141EA7840` **không** tô, nó chỉ dựng bảng cạnh trong 13 KB stack của chính nó.
+
+Lời gọi cuối cùng là **gọi ảo**:
+
+```
+0x141E9D04F  test byte ptr [r8 + 0xB0], 1        ; style, bit 0
+0x141E9D066  lea  rdx, [r8 + 0x50]               ; &style->paint
+0x141E9D074  call 0x144A958D0                    ; dựng paint 13 byte từ đó
+0x141E9D05C  mov  rax, [rcx]                     ; vtable của thiết bị
+0x141E9D05F  mov  rbx, [rax + 0x80]
+0x141E9D081  call rbx                            ; <-- chạm framebuffer
+```
+
+`0x144A958D0` chỉ 59 byte: chép 8 byte đầu của `style+0x50` vào `local+0`, ghi
+`1` vào `local+8`, ghi cờ vào `local+0xC`. Rồi đưa `&local` cho
+`device->vfunc+0x80`.
+
+Nên chuỗi thật là:
+
+```
+0x141E9AD10   lệnh tô
+ ├─ 0x141EA58C0  dựng path từ mảng điểm
+ ├─ 0x141EA7840  dựng bảng cạnh (stack 13 KB)      <- không tô
+ ├─ 0x141E9D010  dựng paint từ style+0x50
+ │    └─ device->vfunc+0x80(device, &paint)        <- LỜI GỌI CUỐI
+ └─ 0x141EA7F80  cắt / kiểm tra
+```
+
+**Hệ quả thực tế:** đừng tìm lệnh ghi pixel nữa — không có. Muốn biết chỗ ghi thật
+thì phải biết lớp thiết bị nào cài `vfunc+0x80`, và cái đó **chỉ biết lúc chạy**.
+Đúng công cụ cho việc đó là bộ dò đã có sẵn: `hook/waveprobe.c` (phần đầu file ghi
+rõ: gắn hook vào mọi hàm có prologue 15 byte an toàn rồi xem cái nào chạy khi
+Cubase vẽ dải sóng). Đó là cách duy nhất đóng được nốt câu hỏi này.
+
+**Chỗ hook thực dụng** do đó là hai chỗ tra tĩnh được:
+
+| chỗ | sửa được gì |
+|---|---|
+| `0x141E9AD10` vào hàm | mảng điểm (hình dạng) + các trường của style |
+| `0x141E9D010` vào hàm | `style+0x50` — thứ sắp được đưa cho thiết bị |
+
+Với màu, `style+0x50` là ứng viên đầu tiên: nó là thứ duy nhất đi thẳng tay vào
+lời gọi cuối.
+
+### 12.7 Trình tự nên làm
+
+1. Bật hook `0x141E9AD10` **chỉ để đếm và ghi lại 6 tham số** ra file, đối chiếu 4
    lần gọi bằng bộ lọc §12.3. Chưa sửa gì.
-3. Chỉ thay màu (rẻ, ít rủi ro). Xác nhận bằng cách đếm số lần tô trên một event.
+2. In ra `style+0x50` (8 byte) cùng `+0x90`, `+0x98`, `+0xA8`, `+0xB0` cho vài event
+   khác nhau, xem cái nào đổi theo màu track. Đó là ứng viên màu.
+3. Chỉ thay màu. Xác nhận bằng cách đếm số lần tô trên một event.
 4. Mới động tới hình dạng.
 
 Bỏ qua bướp 1–2 thì mọi thứ vẽ sau đó đều sai, mà lỗi loại này Cubase không báo

@@ -1,6 +1,6 @@
 {
   "     -> Change the instrument configuration before reloading this setup.": "     -> Thay đổi cấu hình nhạc cụ trước khi tải lại thiết lập này.",
-  "\"Pitch Visibility: Select Next Option\" not possible because there are no note events in the editor": "Không thể \"Hiển thị Pitch: Chọn tùy chọn kế tiếp\" vì Editor không có Note Event nào",
+  "\"Pitch Visibility: Select Next Option\" not possible because there are no note events in the editor": "\"Hiển thị Pitch: Chọn tùy chọn kế tiếp\" không khả dụng vì Editor không có Note Event nào",
   "%s Function": "Chức năng %s",
   "%s Open Document Options": "Tùy chọn mở tài liệu %s",
   "%s Properties": "Thuộc tính %s",

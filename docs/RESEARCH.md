@@ -177,6 +177,21 @@ Ngoài ra: `.qm` dùng **độ dài block big-endian** (đọc little-endian ra 
 lý nhưng trông hợp lý), và có bản ghi với `len = 0xFFFFFFFF` làm sentinel —
 parser phải clamp chứ không tin độ dài, nếu không mất sạch mọi message phía sau.
 
+3. **Tên file trong `tools/research/` có thể che mất module của thư viện chuẩn.**
+   Chạy `python tools\research\foo.py` đặt chính thư mục đó lên `sys.path[0]`,
+   trước thư viện chuẩn — nên một file tên `dis.py` ăn mất `import dis` của mọi
+   thứ. Triệu chứng **không phải** "thiếu module" mà là lỗi import vòng trông như
+   `cubelib` hỏng:
+
+   ```
+   cubelib.pe -> dataclasses -> inspect -> import dis
+              -> tools/research/dis.py -> cubelib.pe (dở dang) -> ImportError
+   ```
+
+   `tools/research/_bootstrap.py` nay nạp sẵn bản stdlib cho mọi tên bị che, nên
+   cả thư mục miễn nhiễm. Nhưng cách sửa đúng vẫn là **đổi tên file** — bảo vệ của
+   bootstrap chỉ có tác dụng với script nào `import _bootstrap`.
+
 ## Bản vá ghi đè
 
 `tools/build_translation.py` chèn ngay trước `</String>`:
