@@ -140,7 +140,7 @@
   "Are you sure you want to reset this section?": "Bạn có chắc muốn đặt lại phần này không?",
   "As incoming MIDI Channels seem to be rotating, you should consider to create and use a Note Expression Input Device": "Vì các MIDI Channel đầu vào dường như đang luân phiên, bạn nên cân nhắc tạo và dùng một thiết bị Note Expression đầu vào",
   "Assign Stave and Voice": "Gán khuông nhạc và bè",
-  "Assign from MIDI Input": "Gán từ đầu vào MIDI",
+  "Assign from MIDI Input": "Gán từ MIDI Input",
   "Assign selected map to active track\\nUse [Click + Hold] or [ALT + Click] to deactivate.": "Gán Map đã chọn cho Track đang hoạt động\\nDùng [nhấp chuột + giữ] hoặc [ALT + nhấp chuột] để tắt.",
   "Assign selected map to active track\\nUse [Click + Hold] or [ALT + Click] to follow map selection permanently.": "Gán Map đã chọn cho Track đang hoạt động\\nDùng [nhấp chuột + giữ] hoặc [ALT + nhấp chuột] để bám theo lựa chọn Map vĩnh viễn.",
   "Assign the columns to marker attributes:": "Gán các cột cho thuộc tính Marker:",

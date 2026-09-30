@@ -847,6 +847,57 @@ SENT = re.compile(r'[.!?](?=[\s"\')\]\\]|$)')      # ← thêm  \\
 Bài học chung với lỗi `[Ā-ỿ]` và lỗi tách từ: **ký tự đại diện phải được kiểm
 bằng một giá trị biết đúng**, và giá trị biết đúng ở đây là chuỗi có `\n` thật.
 
+### `MIDI Input` / `MIDI Output` — **nhãn có tiếng Anh thì cả gia đình theo**
+
+Cả hai là **nhãn** trong bản dịch, và hai gia đình **không thống nhất**:
+
+```
+MIDI Input                ->  MIDI Input        ← nhãn: tiếng Anh
+MIDI Inputs               ->  Đầu vào MIDI
+All MIDI Inputs           ->  Tất cả đầu vào MIDI
+Activate MIDI Input       ->  Bật đầu vào MIDI
+Scanning MIDI Inputs      ->  Đang quét MIDI Input   ← tiếng Anh
+Select MIDI Input Port    ->  Chọn MIDI Input Port   ← tiếng Anh
+```
+
+8 theo một hướng, 3 theo hướng kia, và **nhãn làm người phân xử**. Luật của
+dự án: *tên nhãn in ra thì câu văn xuôi cũng dùng tên đó* — cùng luật đã ra
+`Add Voice` (đợt 53) và `Start` ngay cạnh nó.
+
+Và một cái còn **trái quyết định đợt 52**:
+
+```
+Deactivate External MIDI Inputs  ->  Tắt đầu vào MIDI ngoài
+```
+
+Đợt 52 chốt `External` là **thuật ngữ giữ tiếng Anh** (6 nhãn) sau khi sửa 7
+giá trị văn xuôi từng dịch nó. `ngoài` = *outside* — **nghĩa đối lập**, và đúng
+thứ đợt 52 đi tìm.
+
+### Câu văn xuôi **MÔ TẢ** mục thay vì **GỌI TÊN** nó
+
+```
+Show Previous Page   ->  Hiện Page liền trước      ← GỌI TÊN
+Show Next Page       ->  Hiện trang kế tiếp         ← MÔ TẢ
+Show Next Meter Page ->  Hiện trang Meter kế tiếp
+```
+
+Người đọc **không khớp được** với mục menu ngay phía trên. Cùng dạng với
+`Thêm số chỉ nhịp hiển thị` của đợt 55.
+
+### Bộ dò tự bắt được giá trị tôi bỏ sót
+
+Sau khi viết bảng `WORDING` của đợt 64, chạy `find_quoted_names` thì nó báo:
+
+```
+WRONG FORM  label 'All MIDI Inputs' is 'Tất cả MIDI Input'
+  in "In 'All MIDI Inputs'"
+     VI quotes ['Tất cả đầu vào MIDI']
+```
+
+Câu văn xuôi **trích nhãn**, mà nhãn vừa đổi ngay dưới tay nó. Đây đúng là việc
+bộ dò sinh ra để làm — **chạy lại bộ dò sau khi ghi**, đừng tin lần chạy trước.
+
 ### Cảnh báo: **đừng viết bản sửa bằng thứ không dùng**
 
 Đợt 63 viết `Chèn **bản ghi** hồi tố MIDI vào Editor` trong khi chính bản dịch
