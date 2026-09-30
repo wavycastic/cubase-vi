@@ -243,6 +243,13 @@ python tools\score_instruments.py build # sinh build/instrumentnames_vi.xml
 pwsh -File scripts\install.ps1 -Action install
 ```
 
+**Trước khi điều tra một cụm đang lệch, đọc `docs/OPEN_QUESTIONS.md`.** Năm cụm
+(`Filter`, `Template`, `Audio Performance`, tên nhạc cụ, `Auto X`) đã bị điều tra
+lại từ 5 vòng khác nhau mỗi lần đều dừng ở "không đủ bằng chứng". File đó ghi
+bằng chứng **một lần** và điều kiện để xoá một mục. Đừng đo lại.
+Một mục chỉ được xoá khi có (a) nhóm anh em buộc phải theo một hướng, hoặc
+(b) **người dùng quyết**. Tỉ lệ 51/49 không phải (b).
+
 **`check_translation_build.py` giữ đúng tiền đề của cả dự án.** Nó chứng minh
 bằng cơ chế, không phải bằng lời: file build **bỏ các dòng `<vi>` đi thì ra
 đúng bằng `keys\translation_original.xml`, từng byte**; 10.737 entry, mỗi entry
