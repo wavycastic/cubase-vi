@@ -828,6 +828,55 @@ màn hình.
 `nhấp chuột`, `Hold` → `giữ`. Ngoài ngoặc vuông **không đụng**, nên 5 key cố ý
 giữ `Click` trong văn xuôi vẫn nguyên.
 
+### Câu 2: **"đếm từ lặp" quá rộng — cần cụm từ lặp, ngăn cách bởi liên từ**
+
+```
+Flatten (with Options & Preferences)
+  ->  Làm phẳng (với Tùy chọn & Tùy chọn)
+```
+
+Hai lần thử đều **quá rộng** vì cùng một lý do: lặp chỉ có nghĩa khi hai nửa
+**đặt đối lập nhau**, và **liên từ** là thứ làm điều đó:
+
+```
+tools/find_repeated_word.py            381 mục  ← gần như toàn bộ nhiễu
+tools/find_repeated_vietnamese.py      297 mục  ← cùng vấn đề
+tools/find_collapsed_phrase.py           4 mục  ← đúng
+```
+
+Điều kiện còn làm nó **chính xác**: **tiếng Anh phải có HAI TỪ KHÁC NHAU** ở
+chỗ đó. Nếu tiếng Anh cũng lặp từ, lặp đó là **có chủ đích** (cấu trúc song
+song) và giá trị đúng. Một điều kiện đó tách được lỗi ra khỏi mọi lặp hợp lệ.
+
+### Cơ chế chung của **11 lần "đọc một từ thành một từ khác"**
+
+```
+Subfolder Next to Exported File
+  ->  Subfolder Next vào File Exported
+```
+
+Hai mươi lăm key anh em đọc `Next X` là `X kế tiếp`. Key này đọc nó là
+`Next vào` — và **bằng chứng** là nó là **giá trị duy nhất** trong bản dịch bắt
+đầu bằng chữ `Next` rồi đi tiếp tiếng Việt. (`Next[Key]` → `Phím Next` nên giữ
+chữ `Next` **không phải** lỗi.)
+
+Cơ chế chung, viết ra **một lần cho cả 11 lần**:
+
+> Một từ tiếng Anh đứng **cạnh** một từ tiếng Anh khác trong bảng cài đặt sẽ bị
+> đọc thành **hàng xóm** của nó.
+
+Và từ bị đọc sai **luôn** là từ mà **nhãn riêng của nó đã tồn tại** ở đâu đó
+trong bản dịch. `Next` có 25 key nói `kế tiếp`, nên `Next to` bị đọc thành
+`Next` + gì đó, và `to` thành `vào` — **INTO** — đúng cái bạn có khi dịch từng
+nửa của cụm hai từ **riêng lẻ**.
+
+Cách sửa: **đọc cả cụm, đừng đọc từ**.
+
+⚠️ Còn 3 mục `find_collapsed_phrase` báo là **hợp lệ**: `thư mục` nằm trong
+`thư mục con`, `Tên Track` nằm trong `tên Track Version`. Bộ dò báo vì nó đếm
+một cụm **bên trong** cụm dài hơn — đó là **giá của phép thử cơ học**, và 3 mục
+đó đọc lên là **tiếng Việt đúng**.
+
 ### Một từ tiếng Anh lặp **hai lần** trong cùng một giá trị
 
 ```
