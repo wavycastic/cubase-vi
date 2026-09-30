@@ -155,10 +155,29 @@ Tương tự, số đứng **trước** danh từ: `100 Events` → `100 Event`,
 | Beam | **đuôi nốt** | thanh nối ngang các nốt |
 | Stem | **thân nốt** | que nối dọc |
 
-`Flip Stems` từng dịch thành `Lật Đuôi nốt` — lấy nhầm của Beam. Cùng kiểu:
-`Accidental` là **dấu hóa**, không phải `dấu nhấn` (dấu nhấn là dấu nhấn trong từ);
-`Flat` là **giảm** (nửa tông), không phải `phẳng`;
-`Multi` (multi-timbral) là **bội**, không phải `đa kênh` (đa kênh là multichannel).
+**Bài học đắt nhất của toàn bộ dự án.** `Flip Stems` từng dịch thành `Lật Đuôi
+nốt` — lấy nhầm của Beam. Đợt 12 sửa nó thành `Lật thân nốt`; đợt 18 sửa
+`Force Stems Down`; đợt 23 sửa `Slashes (with stems)`. Cả ba **đúng**.
+
+Và ba key gốc vẫn ghi **ngược**:
+
+```
+Stem      ->  Đuôi nốt
+Stem Down ->  Đuôi nốt Xuống
+Stem Up   ->  Đuôi nốt Lên
+```
+
+Tức là bản dịch có **hai tên cho cùng một đối tượng âm nhạc**: `thân nốt` ở
+câu, `đuôi nốt` ở danh từ. Sửa 3/5 mà không liệt kê cả họ.
+
+Bài học: **tra bằng TỪ, không tra bằng key.** Ở đây mẫu là chữ `Stem`, không
+phải chuỗi cụ thể. Mỗi khi dịch một mệnh đề chứa một thuật ngữ, phải
+`grep` thuật ngữ đó trong `translations/vi.json` và sửa **mọi** chỗ khớp.
+
+Cùng kiểu: `Accidental` là **dấu hóa**, không phải `dấu nhấn` (dấu nhấn là dấu
+nhấn trong từ); `Flat` là **giảm** (nửa tông), không phải `phẳng`;
+`Multi` (multi-timbral) là **bội**, không phải `đa kênh` (đa kênh là
+multichannel).
 
 ### Không dịch nửa vế
 
