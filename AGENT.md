@@ -456,6 +456,27 @@ không phải *word*. Bốn key `Word Clock` kia đều đúng — chỉ key k�
 `Output` bị chọn nhầm nghĩa. Cùng lớp với `Replace Search String` →
 `Dây đàn` (đợt 29).
 
+### `Duration` là **thời lượng**, không phải `trường độ`
+
+`trường độ` = **ngành/khoa** (một môn học, một khoa). Không phải độ dài.
+
+8 chuỗi từng ghi `trường độ`:
+
+```
+- Maximum project duration for sample-precise object positions exceeded
+  ->  Đã vượt quá trường độ tối đa của Project cho vị trí đối tượng ...
+The Cautionary Accidentals options only apply when the Common Practice
+accidental duration rule is used...
+  ->  ... khi dùng quy tắc trường độ dấu hóa Thực hành chung
+```
+
+Lỗi này vào bản dịch bằng đường rất hiển nhiên: trong bảng cài đặt, `Duration`
+đứng cạnh `Field`, và một lượt dịch nào đó đã đọc **hàng xóm** thay vì đọc
+**từ**. Cùng cơ chế với `Word Clock` → `Từ`.
+
+Bài học: trong bảng cài đặt, hai từ tiếng Anh đứng cạnh nhau thì **nguy hiểm
+gấp đôi** — phải dịch từng từ một, không đọc cả cụm.
+
 ### Bốn lần "đọc một từ thành một từ khác"
 
 `Half` → `Giảm` (flat) · `Ext.` → `Mở rộng` (extend) · `String` → `Dây đàn`
