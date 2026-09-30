@@ -40,7 +40,7 @@
   "AES17 (+3dB)": "AES17 (+3dB)",
   "ASIO Sample Rate:": "Sample Rate ASIO:",
   "ASIO-Guard:": "ASIO-Guard:",
-  "Activate Tempo Track (use [CTRL + click] to open project tempo track editor)": "Bật Tempo Track (dùng [CTRL + click] để mở Editor Tempo Track của Project)",
+  "Activate Tempo Track (use [CTRL + click] to open project tempo track editor)": "Bật Tempo Track (dùng [CTRL + nhấp chuột] để mở Editor Tempo Track của Project)",
   "Activate/Deactivate Side-Chaining (Press [Alt] to open Set up Side-Chain Routing)": "Bật/Tắt Side-Chaining (Nhấn [Alt] để mở thiết lập Side-Chain Routing)",
   "Activated Marker Track: %s": "Đã kích hoạt Marker Track: %s",
   "Activated: %s": "Đã kích hoạt: %s",

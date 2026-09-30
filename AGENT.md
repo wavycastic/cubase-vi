@@ -787,6 +787,47 @@ program version.
 Tiếng Anh chịu được (chỉ từ hạn định đứng sau danh từ). Tiếng Việt phải **tách**:
 `chứa dữ liệu '%s' **mà** phiên bản chương trình này không hỗ trợ`.
 
+### Bộ dò thứ ba trong dự án: **từ chức năng tiếng Anh**
+
+```
+tools/find_function_words.py
+```
+
+Lớp "khung" là **một câu tiếng Anh có giới từ tiếng Việt chèn vào**:
+
+```
+Notes cho Which Accidentals Have Already Been Stated Within the Bar
+Press up vào 5 keys vào Gán remote keys vào subsections
+```
+
+Mỗi câu đều mang **từ chức năng** — `the, is, that, have, been, up, to, in`.
+Trong bản dịch đúng, những từ đó chỉ xuất hiện **trong** ngoặc kép, **trong**
+ngoặc vuông, trong đường dẫn menu, hoặc trong thuật ngữ DAW. Ngoài ra chúng là
+**một câu chưa bao giờ được dịch**.
+
+Bộ dò: xoá mọi đoạn trong ngoặc kép / vuông / `>` / `%s`, rồi đếm từ chức năng
+tiếng Anh còn lại. **≥ 2 là khung** — và danh sách **rất ngắn**.
+
+⚠️ Cách tách từ cũng vỡ lần thứ hai: dùng lớp ký tự `[A-Za-z]` thì `của` bị
+cắt thành `a` (ký tự `a` nằm **giữa** hai ký tự không ASCII), và mọi mảnh vỡ
+đó đều **trông như mạo từ tiếng Anh**. Đúng cách: **một từ là một token mà
+MỌI ký tự đều là ASCII**.
+
+Kết quả: **1 mục, và cả 1 đều giả** (`Read All` / `Write All` là tên chế độ).
+Cùng với `find_english_frame` và `find_english_opening`, lớp "khung" được
+xác nhận **sạch hoàn toàn** trên **cả nhãn ngắn lẫn câu dài**.
+
+### `[X + Click]` vs `[X + nhấp chuột]` — chia đôi, không theo luật nào
+
+26 key nói `[CTRL + click]`, 26 key nói `[CTRL + nhấp chuột]`, và cách chia
+**không theo luật nào** — nó theo **đợt nào chạm tới key đó**. Đợt 33, 34, 46, 49
+mỗi đợt sửa được vài key rồi dừng, mỗi lần lấy đúng những key đang hiện trên
+màn hình.
+
+Đợt 54 **sinh** thay đổi thay vì viết tay: trong ngoặc vuông, `click`/`Click` →
+`nhấp chuột`, `Hold` → `giữ`. Ngoài ngoặc vuông **không đụng**, nên 5 key cố ý
+giữ `Click` trong văn xuôi vẫn nguyên.
+
 ### ⚠️ `[Ā-ỿ]` **SAI** — lớp ký tự tiếng Việt bị thiếu một nửa
 
 ```
