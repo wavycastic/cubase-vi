@@ -1056,8 +1056,6 @@ Kết quả: `? ! ; ...` và khoảng trắng **đã sạch sẵn** — một k�
 khi đã có ai đó kiểm**. Còn **số dòng mới** thì chưa ai kiểm, và đó **chính là**
 chỗ lỗi nằm.
 
-### Cặp `[Key]` — bản dịch **giống hệt** bản gốc, trừ **tên phím**
-
 ### ⚠️ Đợt 70: Quét thủ công liên miền — phát hiện 69 lỗi đọc khó hiểu và sai thuật ngữ
 
 Đọc tay liên miền (`media`, `general`, `mixer`, `transport`, `music-theory`, `notation`)
@@ -1121,7 +1119,70 @@ tìm ra nhiều lớp lỗi sai lệch chuyên ngành và dịch máy thô mà k
     - `Vẻ ngoài văn bản...` → `Kiểu hiển thị văn bản...`
     - `MIDI Input`: tránh lặp giới từ "từ mọi MIDI đầu vào vào Track đã chọn" → `từ tất cả MIDI Input vào Track đã chọn`.
 
-10 nhãn có bản song sinh `[Key]` (cùng tiếng Anh, đánh dấu là phím tắt). Bản
+### ⚠️ Đợt 71: Quét thủ công liên miền — sửa 98 chuỗi sai thuật ngữ, lỗi đảo chữ và phép gán
+
+1. **`Chord Symbol` bị dịch thành "Hóa biểu" (9 chuỗi):**
+   Một Chord Symbol (C, Dm, G7) là **Ký hiệu hợp âm** ghi trên khuông nhạc. Bản dịch cũ
+   dịch nhầm thành "Hóa biểu" (Key Signature). Trong khi Key Signature đã được chuẩn hóa
+   là "Hóa âm", thì `Chord Symbol` lại chiếm giữ từ "Hóa biểu" (`Show Chord Symbols` →
+   `Hiện hóa biểu`, `Chord Symbols Preset` → `Preset hóa biểu`). Sửa toàn bộ thành
+   **`Ký hiệu hợp âm`**.
+
+2. **`System Exclusive` trong MIDI bị dịch thành "Dòng nhạc độc quyền" (1 chuỗi):**
+   SysEx (System Exclusive trong MIDI) bị dịch thành "Dòng nhạc độc quyền" do người dịch
+   nhầm "System" trong ký âm (dòng nhạc) với "System" trong MIDI. Đã trả về đúng
+   thuật ngữ kỹ thuật: **`System Exclusive`**.
+
+3. **Dấu phân giải extractor lộ vào giá trị và lỗi `Arrow[Key] phải`:**
+   - `Right Arrow[Key]` bị dịch thành `Arrow[Key] phải` (lộ nguyên tag `[Key]`). Sửa: `Phím mũi tên phải`.
+   - `General [Metronom Setup]` → `Chung` (bỏ tag extractor `[Metronom Setup]`).
+   - `Bass 2[vocal]` → `Bass 2` (bỏ tag extractor `[vocal]`).
+   - `[Transition Soft]` → `Mềm` (US là `Soft`, không có ngoặc vuông).
+   - `[Mixer Track Number]` → `Số Track` (US là `Track Number`, không có ngoặc vuông).
+   - `[Track Type: Group]` → `Group` (US là `Group`, không có ngoặc vuông).
+
+4. **Xóa bỏ thuật ngữ lập trình "phép gán" (23 chuỗi):**
+   Giao diện gán phím, điều khiển, hợp âm trên pad (`assignment`) bị dịch thành "phép gán"
+   (toán tử gán trong lập trình tin học). Thay bằng tiếng Việt tự nhiên: `mục gán`,
+   `thiết lập gán`, `hợp âm đã gán`, `phím đã gán`.
+
+5. **Lệnh bị đảo lộn và thông báo splash screen kỳ quặc (9 chuỗi):**
+   - `Process All Selected Events` bị dịch thành `Event Process All Selected` → `Xử lý tất cả Event đã chọn`.
+   - `Process Logical Preset` bị dịch thành `Preset Process Logical` → `Xử lý Logical Preset`.
+   - `Process Project Logical Editor` bị mất động từ Process → `Xử lý Project Logical Editor`.
+   - `Include Audio Events` bị dịch thành `Event Include Audio` → `Bao gồm Audio Event`.
+   - `Include MIDI Channel` để nguyên tiếng Anh → `Bao gồm MIDI Channel`.
+   - `Using Track Preset...` bị dịch thành `Preset Using Track...` → `Dùng Track Preset...`.
+   - Splash screen lúc nạp project: `Reading Project File` bị dịch thành `File Reading Project` → `Đang đọc file Project`.
+   - Splash screen: `Writing Project Information...` bị dịch thành `Thông tin Writing Project...` → `Đang ghi thông tin Project...`.
+   - `Locate Track File` bị dịch thành `File Locate Track` → `Định vị file Track`.
+
+6. **Các lệnh `Range to ...` bị dịch thành "Vùng vào..." (6 chuỗi):**
+   `Range to Next Event`, `Range to Previous Hitpoint`, v.v. bị dịch thô: "Vùng vào Event kế tiếp",
+   "Vùng vào Next Audio Segment". Chuẩn hóa thành: **`Vùng chọn tới Event kế tiếp`**,
+   **`Vùng chọn tới Hitpoint liền trước`**, **`Vùng chọn tới Audio Segment kế tiếp`**.
+
+7. **Chuẩn hóa các lệnh `Zoom to ...` thành `Zoom tới ...` (5 chuỗi):**
+   `Zoom to Event`, `Zoom to Locators`, `Zoom to Selection` bị dịch thành "Zoom theo...".
+   Đổi về chuẩn AGENT.md: `Zoom tới Event`, `Zoom tới Locator`, `Zoom tới vùng chọn`.
+
+8. **Đồng bộ tên các Editor (11 chuỗi):**
+   - `Plug-in Editors "Always on Top"` bị dịch thành "Trình sửa Plug-in..." → `Plug-in Editor "Luôn ở trên cùng"`.
+   - `MIDI Hex Editor`, `MIDI SysEx Editor`, `Patch Bank Editor` bỏ chữ "Trình sửa...".
+   - `Tempo Track Editor` bị đảo chữ thành "Editor Tempo Track" → `Tempo Track Editor`.
+   - `Click Pattern Editor` bị đảo chữ thành "Editor Click Pattern" → `Click Pattern Editor`.
+   - `Open Sample/Pattern Editor in Window` bị đảo chữ → `Mở Sample/Pattern Editor trong Window`.
+
+9. **Thuật ngữ âm nhạc và câu thoại:**
+   - `Unslashed Grace Note` bị dịch thành "Nốt lạc không gạch chéo" → `Nốt Grace không có gạch chéo`.
+   - `Dynamic Velocity` bị dịch thành "Động lực Velocity" → `Dynamic Velocity`.
+   - `Toggle Enharmonic Spelling` → `Đổi cách ghi nốt đồng âm`.
+   - `lead sheet` bị dịch thành "bản tổng phổ chép tay" (full score) → `bản lead sheet chép tay`.
+   - `Solo (Solo Defeat with...)` bị dịch là "Bỏ Solo" → `Solo Defeat`.
+   - `Enter Locator Range Duration` để nguyên tiếng Anh → `Nhập thời lượng dải Locator`.
+   - Hộp thoại Safe Mode xóa Preferences: tránh nói lặp "Tùy chọn này xóa các tùy chọn..." → `Tùy chọn này xóa toàn bộ Preferences...`.
+
+### Cặp `[Key]` — bản dịch **giống hệt** bản gốc, trừ **tên phím**
 dịch làm **ba** kiểu khác nhau:
 
 ```

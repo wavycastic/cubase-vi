@@ -144,7 +144,7 @@
   "Nudge Cursor Left": "Nhích Cursor sang trái",
   "Nudge Cursor Right": "Nhích Cursor sang phải",
   "Open Arranger Editor": "Mở Arranger Editor",
-  "Open Audio Connections...": "Mở kết nối Audio...",
+  "Open Audio Connections...": "Mở Audio Connections...",
   "Open Automation Panel": "Mở Bảng Automation",
   "Open Drum Editor": "Mở Drum Editor",
   "Open In-Place Editor": "Mở In-Place Editor",
@@ -167,7 +167,7 @@
   "Prepare Archive...": "Chuẩn bị lưu trữ...",
   "Read Automation": "Đọc Automation",
   "Remove All": "Gỡ bỏ tất cả",
-  "Remove All Assignments": "Gỡ bỏ tất cả phép gán",
+  "Remove All Assignments": "Gỡ bỏ tất cả mục gán",
   "Remove All Connections": "Gỡ bỏ tất cả kết nối",
   "Remove Missing Files": "Gỡ bỏ file bị thiếu",
   "Remove Unused Media": "Gỡ bỏ Media không dùng",
@@ -210,8 +210,8 @@
   "Zoom Tracks 4 Rows": "Zoom Track 4 hàng",
   "Zoom Tracks Exclusive": "Zoom Track độc quyền",
   "Zoom Tracks N Rows": "Zoom Track N hàng",
-  "Zoom to Event": "Zoom theo Event",
-  "Zoom to Locators": "Zoom theo Locator",
-  "Zoom to Selection": "Zoom theo vùng chọn",
-  "Zoom to Selection Horizontally": "Zoom theo vùng chọn theo chiều ngang"
+  "Zoom to Event": "Zoom tới Event",
+  "Zoom to Locators": "Zoom tới Locator",
+  "Zoom to Selection": "Zoom tới vùng chọn",
+  "Zoom to Selection Horizontally": "Zoom tới vùng chọn theo chiều ngang"
 }
