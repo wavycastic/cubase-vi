@@ -1416,6 +1416,45 @@ tìm ra nhiều lớp lỗi sai lệch chuyên ngành và dịch máy thô mà k
    - Quay về vị trí bắt đầu khi dừng đã bật/tắt (đồng bộ tên tùy chọn, 3 chuỗi).
 
 
+### Đợt 76: Quét thủ công project/network, music-theory, media — sửa 79 chuỗi rườm rà
+
+1. **Câu project/network viết gọn (20 chuỗi):**
+   - Thêm/Gỡ người dùng đã chọn... → Thêm/Gỡ User đã chọn... (Permission Preset).
+   - Không thể kết nối lại... → Không kết nối lại được...; Một bản sao độc lập đã được tạo → Đã tạo bản sao độc lập.
+   - Project đang hoạt động → Project đang bật; Tiến trình các lần truyền mạng đang hoạt động → Tiến trình truyền mạng đang chạy.
+   - Kho lưu trữ Script đã được import... → Kho Script đã Import...
+   - Có thể do vấn đề về quyền ghi → Có thể do không có quyền ghi (2 chuỗi).
+   - khởi tạo lại chương trình → đặt lại chương trình về cài đặt Factory; sẽ bị gỡ bỏ → sẽ mất.
+   - Không thể đổi Timebase vì có các bản sao... → Không đổi được Timebase vì Track khác đang dùng...
+   - Thường do quản trị mạng cấp; Không tải được Track vào Project đã chia sẻ.
+
+2. **Câu music-theory dễ đọc (30 chuỗi):**
+   - Dấu hóa chỉ áp dụng... nốt được biến đổi... → Dấu hóa chỉ tính cho một nốt... nốt đã đổi dấu...
+   - Áp dụng hợp âm đang có hiệu lực trên Chord Track → Áp dụng hợp âm Chord Track đang dùng.
+   - MIDI Channel... dường như đang luân phiên... cân nhắc → MIDI Channel... cứ đổi vòng... nên...
+   - Đầu ra được gửi tới tất cả... đặt thành Chord Pad → Đầu ra gửi tới mọi... có Input Routing là Chord Pad.
+   - như định nghĩa trong cài đặt Instrument → đã đặt trong cài đặt Instrument.
+   - được bật và giả định... được đặt thành... sẽ tạo ra... theo sau bởi... → bật... đặt thành... sẽ tạo... rồi...
+   - Chuyển nốt cao thứ hai... xuống thấp hơn một quãng tám → Đưa nốt... xuống một quãng tám (3 chuỗi).
+   - Track đó không thể hiển thị hay sửa → Track đó không hiện hay sửa được.
+   - Không thể sửa VariAudio... → Không sửa được VariAudio...; Không áp được Voicing...
+   - Nốt đủ điều kiện hiện... sau một nốt đồng âm tương đương → Nốt được hiện dấu hóa nhắc lại sau nốt đồng âm.
+   - Để lưu Project như hiện tại... các phiên bản chương trình → Để giữ nguyên Project... bản chương trình.
+
+3. **Câu media/ASIO gọn (29 chuỗi):**
+   - Đã xảy ra lỗi file trong khi Bounce! Thao tác đã phải bị hủy → Lỗi file khi Bounce! Thao tác đã bị hủy!
+   - Đã xảy ra sự cố khi truy cập file sau → Không mở được file sau.
+   - Ngưỡng cho phép đo Loudness → Ngưỡng đo Loudness (sửa sai nghĩa threshold, 2 chuỗi).
+   - Đây là cài đặt được khuyến nghị cho hiệu năng... tối ưu... mang lại → Đây là cài đặt khuyên dùng để xử lý Audio hiệu quả...
+   - File Project này chứa các Channel Surround mà phiên bản chương trình này... được chuyển thành → File này có Channel Surround mà phiên bản này... chuyển thành.
+   - Dùng card Audio ASIO thích hợp → card Audio ASIO tương thích.
+   - Bạn không thể áp Preset... mà không làm mất các chỉnh sửa → Không áp được Preset... mà không mất sửa đổi.
+   - Bạn không thể Freeze Track... bạn có thể dùng... Để giảm tải CPU → Không Freeze được Track... Muốn nhẹ CPU, dùng...
+   - Không Freeze được nhạc cụ đang tắt (was: một nhạc cụ không hoạt động).
+   - Đoạn Audio Power Scheme viết lại gọn: tối ưu điện Windows... Nhưng máy sẽ tốn điện hơn... Nếu ngại tốn điện...
+   - nó đang được dùng trong một Pool khác → nó đang dùng trong Pool khác.
+
+
 ### Cặp `[Key]` — bản dịch **giống hệt** bản gốc, trừ **tên phím**
 dịch làm **ba** kiểu khác nhau:
 
