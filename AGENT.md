@@ -828,6 +828,46 @@ màn hình.
 `nhấp chuột`, `Hold` → `giữ`. Ngoài ngoặc vuông **không đụng**, nên 5 key cố ý
 giữ `Click` trong văn xuôi vẫn nguyên.
 
+### Bộ dò báo 126 lần trong khi lỗi chỉ có **4** — và bài học
+
+```
+CC: Attack Time  ->  Thời gian CC: Attack
+```
+
+Từ tiếng Việt chạy lên **đầu câu**, tiền tố tiếng Anh đứng yên — nên **tên
+nhãn nằm sau thứ nó đang gán nhãn**. Người đọc được biết "thời gian gì" trước
+khi biết "control nào".
+
+Đây là lớp "trật tự từ" mà `audit_quality` dò từ sớm — và nó không bắt được,
+vì bộ dò đó tìm **giới từ**, còn đây là **cụm danh từ**. Trật tự là trật tự;
+bộ dò hơi hẹp về cái gì được phép trật tự.
+
+Gia đình cho thấy hình dáng **đúng** (9 anh em đã đúng):
+
+```
+CC: Data Decrement  ->  CC: Giảm dữ liệu
+CC: Gen Purp 1      ->  CC: Mục đích chung 1
+CC: Portamento Time ->  Thời gian CC: Portamento     ← ngược lại
+```
+
+```
+tools/find_misplaced_prefix.py
+```
+
+⚠️ **Bản đầu tiên báo 126, và gần như toàn bộ là đúng:**
+
+```
+Drum Editor: Bật/tắt hiện độ dài nốt     ← câu có dấu hai chấm
+Chuyển tiếp EQ/Filter: Quick              ← nhãn nằm trong câu
+Không thể sửa VariAudio: không phát hiện   ← dấu hai chấm CÂU
+```
+
+Phép thử **vừa đủ vừa cần**: **key phải bắt đầu bằng đúng tiền tố đó** — không
+thì không có gì để phàn nàn. Rồi còn **4**, và cả 4 cùng một lỗi.
+
+> Bản đầu báo 126 dạy mình **phớt lờ** công cụ. Bản đầu báo 4 dạy mình **hình
+> dáng của lỗi**.
+
 ### ⚠️ Lớp "khung" **không cần từ chức năng** — cần một **ĐỘNG TỪ**
 
 ```
