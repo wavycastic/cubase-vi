@@ -146,6 +146,33 @@ def patch_payload(payload, changes):
     return COLOR.sub(repl, payload), hits
 
 
+def compress_to(payload, target):
+    """zlib-compress `payload` to exactly `target` bytes, or None.
+
+    A patch that changes the compressed length shifts every member after it, and
+    the trailing lookup table then records offsets that are out of date.  That
+    table may well be read at run time - nobody has verified - so the cheap way
+    to remove the whole question is to make the patch **length preserving**: pad
+    the payload with insignificant XML whitespace until deflate lands on exactly
+    the original stored size.
+
+    Returns None when no padding in `MAX_PAD` bytes reaches the target, which
+    means the edit genuinely changed the compressed size and the caller has to
+    decide whether that is acceptable.
+    """
+    level = 9
+    for pad in range(MAX_PAD + 1):
+        blob = zlib.compress(payload + (b' ' * pad), level)
+        if len(blob) == target:
+            return blob
+        if len(blob) > target and pad:
+            return None            # overshot: more padding only grows it
+    return None
+
+
+MAX_PAD = 4096
+
+
 def cmd_set(a):
     changes = {}
     for item in a.assign:
@@ -164,7 +191,18 @@ def cmd_set(a):
         if kind in ('xml', 'skin') and is_text(payload):
             new, hits = patch_payload(payload, changes)
             if hits:
-                blob = zlib.compress(new, 9)
+                blob = None
+                if a.keep_size:
+                    blob = compress_to(new, len(stored))
+                    if blob is None:
+                        raise SystemExit(
+                            f'--keep-size: khong ninh khong cua member #{i} ve '
+                            f'{len(stored)} byte (ban goc {len(payload):,} byte '
+                            f'payload). Cau lenh nay bao dam moi gia tri da doi '
+                            f'seu lech het so byte, nen dung khi muon ghi de '
+                            f'truc tiep skin.srf.')
+                if blob is None:
+                    blob = zlib.compress(new, 9)
                 out += sep + blob
                 changed.append((i, hits, len(stored), len(blob)))
                 continue
@@ -234,6 +272,11 @@ def main():
     p.add_argument('-o', '--out', required=True)
     p.add_argument('--check-index', action='store_true',
                    help='report where the members end after patching')
+    p.add_argument('--keep-size', action='store_true',
+                   help='fail unless every patched member compresses back to '
+                        'its original byte count, so no offset in the trailing '
+                        'table goes stale (pads the payload with XML whitespace '
+                        'to hit the size exactly)')
     p.add_argument('assign', nargs='+', metavar='name=value')
     p.set_defaults(func=cmd_set)
 

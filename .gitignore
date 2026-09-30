@@ -15,6 +15,16 @@ __pycache__/
 .venv/
 venv/
 
+# MSVC build output. hook/build.bat compiles these next to the sources; only
+# the sources belong in git.
+*.obj
+*.dll
+*.exp
+*.lib
+*.pdb
+*.ilk
+hook/build/
+
 # Editors / OS
 .vscode/
 .idea/

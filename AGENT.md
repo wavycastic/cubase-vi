@@ -189,8 +189,10 @@ python tools\check_duplicate_keys.py
 python tools\fix_mojibake.py
 python tools\audit_clarity.py           # [A] dài  [B] khó đọc
 python tools\audit_outlier.py           # chuỗi lạc khỏi gia đình thuật ngữ
-python tools\tests\run.py               # 90 test: bất biến + bộ dò
+python tools\tests\run.py               # 146 test: bất biến + bộ dò
+python tools\score_instruments.py check # Score Editor: trùng key + 4 bất biến
 python tools\build.py                   # sinh build/translation_vi.xml + validate
+python tools\score_instruments.py build # sinh build/instrumentnames_vi.xml
 pwsh -File scripts\install.ps1 -Action install
 ```
 
@@ -198,3 +200,114 @@ pwsh -File scripts\install.ps1 -Action install
 (2) cấm dịch thuần Việt thuật ngữ §1 — nay **64 mẫu** trong `terms_do_not_translate.json`;
 (3) placeholder phải khớp; (4) giá trị không rỗng; (5) cấm `[RM]`. Luật 5 **duy nhất
 không mang tính thẩm mỹ** — nó ngăn chữ lên màn hình.
+
+## 10. Score Editor — bộ luật đặt tên nhạc cụ
+
+Score Editor là `ScoringEngine.dll` (lõi Dorico), **không** dùng `translation.xml`.
+Nó tự lấy chuỗi từ `Components\ScoringEngine\l10n\`. Hai loại file, hai quy trình:
+
+| file | công cụ | quy trình |
+| --- | --- | --- |
+| `instrumentnames_vi.xml` | `tools/score_instruments.py` | `import` → 5 vòng `fix_scoreNN.py` → `build` |
+| `strings_vi.qm` | `tools/score_strings.py` | chưa làm |
+
+`instrumentnames_en.xml` có 624 entity và **1.126 chuỗi phân biệt** trong 3.115 ô
+(`uiName`, `singularFullName`, `singularShortName`, `pluralFullName`,
+`pluralShortName`). Chỉ 5 ô đó được dịch; `<name>`, `<gender>`,
+`<inheritanceMask>`, `<parentEntityID>` **giữ nguyên ở mọi ngôn ngữ**. Viết bằng
+**cắt chuỗi**, không re-serialise: file dùng CRLF, tab, `<?xml version="1.0" ?>`
+(có khoảng trắng trước `?>`), `<x/>` cho ô rỗng, và entity `aluphone` xếp
+`<name>` **trước** `<entityID>`.
+
+### 6 luật — lấy từ 9 catalogue Steinberg, không phải từ khẩu vị
+
+`instrumentnames_ja.xml` và `instrumentnames_de.xml` đã phải trả lời đúng câu hỏi
+này, và chúng **thống nhất trên từng chuỗi**. Đọc cột `ja=` / `de=` của
+`tools/tests` hay file gốc rồi làm theo:
+
+1. **Tên riêng không dịch; tính ngữ mô tả thì dịch.** `Banjo`, `Charango`,
+   `Cuatro`, `Alphorn`, `Cimbasso`, `Didgeridoo`, `Bansuri`, `Guitarrón`,
+   `Wagner Tuba` giữ nguyên. Còn `Acoustic`, `Electric`, `Fretless`,
+   `Classical`, `Jazz`, `Steel-string`, `Semi-acoustic`, `Resonator` và tên nước
+   thì dịch: `Electric Guitar` → **`Guitar điện`**, `Classical Guitar` →
+   **`Guitar cổ điển`**, `Resonator Guitar` → **`Guitar cộng hưởng`**.
+
+2. **Chữ viết tắt không bao giờ đổi.** ~130/320 chuỗi của `brass`+`wind` là chữ
+   viết tắt, và cả 9 catalogue đều giữ nguyên: `Tbn`, `Tpt`, `V. Tbn.`,
+   `Cbsn`, `Min-bsn`, `Ac. B. Gtr`, `Ban.`, `Dul.`. Chúng là nhãn cố định cho cột
+   tên bè trong bản nhạc — dài thêm là vỡ bố cục. **Số nhiều của chữ viết tắt thì
+   rút gọn**: `Ac. B. Gtrs` → `Ac. B. Gtr`.
+
+3. **Tiếng Việt không có số nhiều, nên số nhiều lấy đúng từ của số ít.** `Pianos` →
+   `Piano`, `Mezzo-sopranos` → `Mezzo-soprano`, `Basses` → `Bass`, `Cajons` →
+   `Cajon`. `check_consistency` kiểm: có key số ít thì hai giá trị phải bằng nhau.
+
+4. **Từ bên trong ngoặc thì dịch, viết hoa chữ đầu, giữ ngoặc.** Đây là khuôn mẫu
+   mà 40 chuỗi seed đã viết ra: `Bongo (High)` → `Bongo (Cao)`, `Tenor Drum
+   (Medium-high)` → `Trống Tenor (Trung bình cao)`, `Tabla baya (larger)` →
+   `Tabla baya (Lớn hơn)`. Nhưng `(Quinto)`, `(Requinto)`, `(Super Tumba)`,
+   `(pedal)` **giữ** — đó là tên của biến thể, không phải thanh bậc.
+
+5. **Thanh bậc đã là mượn ngữ thì giữ nguyên chỗ nó đứng.** `Alto Balalaika`,
+   `Bass Balalaika`, `Contrabass Balalaika`, `Prima/Secunda Balalaika`,
+   `Piccolo Domra`, `Tenor Lute`, `Tenor Banjo`, `Horn (alto)`, `Horn (basso)`.
+   Đức dịch giữ nó ở đầu (`Alt-Balalaika`, `Kontrabass-Balalaika`), Nhật cũng vậy
+   (アルト + バラライカ). Không engine nào dịch cả, nên ta cũng không.
+
+6. **Tên miền dịch khi tiếng Việt có từ thật.** Bảng chính đã quyết: `Brass` →
+   `Bộ đồng`, `Wind` → `Gió`, `Keyboard` → `Bàn phím`, `Voice` → `Bè`, `Triangle`
+   → `Tam giác`, `Whistle` → `Còi`; nhưng giữ `Percussion`, `Drum`, `Snare`,
+   `Tambourine` — vì tiếng Việt không có từ nào dùng được cho chúng. Vì vậy
+   `Strings` → `Bộ dây`, `Woodwind` → `Bộ gió`, còn `Drum Set` → `Drum Set`.
+
+### Tiếng Anh lọt là hợp lệ, và đó là điểm cần nói rõ
+
+**591 / 1.126 chuỗi (52%) giữ nguyên tiếng Anh** — và đây là kết quả đúng, không
+phải chỗ sót. Người Việt gọi "guitar", "piano", "kora", "cổ điển" chứ không gọi
+"đàn ghi-ta". Bảng chính đã chốt sẵn 146 chuỗi theo đúng cách đó
+(`tools/score_instruments.py import` nhập 88 chuỗi có sẵn + 58 chuỗi trùng).
+
+Vì thế **đừng** dùng `find_leftover_english.py` vào `translations/score/`, và
+**đừng** ép mọi giá trị khác tiếng Anh. Trái lại là sai: `Snare` → `Trống Snare`?
+Không — `Snare` giữ nguyên, còn `Side Drum` → `Trống phụ` là đúng, vì "snare" không
+có từ Việt còn "drum phụ" thì có.
+
+### Bốn bất biến của `check_consistency`
+
+`python tools\score_instruments.py check` dừng ngay khi lỗi:
+
+1. Giá trị không rỗng, không ký tự điều khiển, không U+FFFD, không khoảng trắng
+   đầu/cuối. **Ngoại lệ**: map giống hệt thì miễn — vài ô gốc mang khoảng trắng
+   cuối (`<O. M. >`) và giữ nguyên là câu trả lời đúng.
+2. Mọi key phải có thật trong `instrumentnames_en.xml` — lỗi gõ trong batch không
+   được lọt.
+3. Giá trị chỉ được **ngắn hơn** key bằng đúng đuôi số nhiều (`s`/`es`/`n`).
+   `Agogôs` → `Agogô` hợp lệ, `Charangos` → `Charang` là bậy.
+4. Số nhiều đã dịch phải khớp số ít. Map **giống hệt** được miễn: số nhiều tiếng
+   Anh giữ nguyên tiếng Anh không phải chỗ lệch của ta. Ngoại lệ có tên:
+   `Voice`/`Voices` — một dòng hát vs cả phần bè.
+
+### Lỗi tìm ra khi làm Score Editor
+
+Chi tiết ở `docs/RESEARCH.md`. Hai lỗi **trong file của Steinberg**:
+
+- 8/8 file không-Anh giữ entity `instrumentname.pitchedpercussion.aluphone` ở
+  `kEnglish`; file Đức còn thêm `marching.snare.drum.rim`. Cùng cái entity mang
+  `<customVariantString/>` mà Steinberg thêm tay vào bản tiếng Anh rồi copy sang
+  các bản dịch mà quên dán nhãn lại.
+- `<language>` xuất hiện **625 lần** (một ở đầu, 624 ở entity), và 5 ô tên rỗng
+  (`cajon.low` mất short/plural, `clarinet.contra.alto.eflat` mất plural).
+
+`tools/score_instruments.py build` ghi **đồng nhất** cả 625 marker thành
+`kVietnamese` và liệt kê `mis_tagged`, để lỗi của nguồn không bị sao chép.
+
+Hai lỗi **trong code của chính repo này**, do `tools/tests/test_score.py` phát hiện
+— đúng loại lỗi mà §3 cảnh báo, nên ghi lại ở đây:
+
+- `score.FORBIDDEN` là `dict.fromkeys` của **số**, còn chỗ kiểm tra lại tra
+  `c in FORBIDDEN` với `c` là **ký tự**. Khớp không bao giờ xảy ra, nên
+  `check_text` vẫy về một chuỗi có byte NUL. Bộ dò mới bắt được.
+  Nay là `frozenset` ký tự.
+- `source_strings` đếm `uiName` và `singularFullName` là hai người dùng, nên
+  `--status` báo đội gấp đôi số bè mỗi chuỗi tiết kiệm được. Nay khử trùng
+  theo entity.

@@ -168,9 +168,12 @@ def main():
     for i, (o, n) in enumerate(zip(old_lines, new_lines)):
         if o == n:
             continue
+        # Dong duoc phep doi khi va chi khi no la `<int .../>` co ten trong
+        # `touched`, va ten do giong nhau o hai phia. Gia tri **phai** doi —
+        # day la ca doi duoc yeu cau, nen khong so sanh no.
         om, nm_ = int_re.search(o), int_re.search(n)
         if not om or not nm_ or om.group(1) not in touched \
-                or om.group(1) != nm_.group(1) or om.group(2) != nm_.group(2):
+                or om.group(1) != nm_.group(1):
             shutil.copy2(backup, path)
             raise SystemExit(f'FAIL: dong {i + 1} doi khong mong doi:\n'
                              f'  - {o.strip()}\n  + {n.strip()}\n'

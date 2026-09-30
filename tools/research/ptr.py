@@ -3,6 +3,7 @@
 
     python tools/research/ptr.py <exe> <addr> [--count 8] [--data]
     python tools/research/ptr.py Cubase15.exe 0x14772F640 --count 4
+    python tools/research/ptr.py Cubase15.exe 0x062F6B90 --va
 
 Why this exists
 ---------------
@@ -18,6 +19,12 @@ Output per slot:
   * a VA outside the image  -> printed raw, so shared/other-module pointers
     are visible instead of being silently dropped
   * with `--data`, the ASCII/UTF-16LE string at the target, when there is one
+
+`PE.resolve` prefers file offsets, so a VA below the file size is read as an
+offset and prints the *bytes at that offset* as though they were pointers.
+Any RVA in a section that starts at a low raw pointer falls into that trap, and
+`docs/WAVEFORM.md` quotes string positions as file offsets, so pass `--va` when
+converting one of those into a vtable address.
 """
 import argparse
 import struct
@@ -58,13 +65,18 @@ def main():
     ap.add_argument('exe')
     ap.add_argument('addr')
     ap.add_argument('-n', '--count', type=int, default=8)
+    ap.add_argument('--va', action='store_true',
+                    help='treat ADDR as a VA, not a file offset')
     ap.add_argument('--data', action='store_true',
                     help='also show the string / bytes at each target')
     a = ap.parse_args()
 
     pe = PE(a.exe)
     value = int(a.addr, 16)
-    off, kind = pe.resolve(value)
+    if a.va:
+        off, kind = pe.va_to_off(value), 'va'
+    else:
+        off, kind = pe.resolve(value)
     if off is None:
         die(f'{a.addr} is not inside {a.exe}')
 

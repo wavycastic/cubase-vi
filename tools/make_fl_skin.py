@@ -36,10 +36,20 @@ SOURCE = CUBASE_SKINS / 'skin.srf'
 DEFAULT_OUT = CUBASE_SKINS / 'fl-wave.srf'
 
 # (ten, sat cua mau nen, lightness cua mau nen)
+#
+# Huong mac dinh da doi: nen event PHAI TOI chu khong phai sang. Dinh huong
+# truoc day ("nen sang -> song noi bat") sai, vi:
+#   - `eventBackDefault` la nen cua event, khong phai mau cua song (song lay
+#     mau track, xem docs/WAVEFORM.md §8)
+#   - nen sang lam do chong mat voi song, nhin nho hon chu khong dep hon
+# Nen toi moi la noi day mau song len, giong look cua FL Studio.
 LEVELS = {
-    'nhe':  (25, 88),
-    'vua':  (80, 100),
-    'manh': (150, 105),
+    'toi':   (30, 30),    # nen toi dam, gan look FL: mau song noi bat len
+    'toi_vua': (45, 45),  # toi nhung con thay mau xanh cua Cubase
+    'goc':   (20, 70),    # bang dung skin goc
+    'nhe':   (25, 88),
+    'vua':   (80, 100),
+    'manh':  (150, 105),
 }
 HUE = 210
 
@@ -69,6 +79,11 @@ def main():
     ap.add_argument('--install', action='store_true',
                     help='sao luu skin.srf roi GHI DE no bang ban moi '
                          '(Cubase 15 khong hien skin tach rieng trong danh sach)')
+    ap.add_argument('--allow-resize', action='store_true',
+                    help='cho phep ban va doi do dai nen. KHONG dung khi ghi de: '
+                         'bang tra 49.865 byte cuoi file ghi offset cua tung '
+                         'member, nen doi do sai byte se lam Cubase doc sai '
+                         'bang va crash (da xay ra mot lan)')
     a = ap.parse_args()
 
     if not SOURCE.exists():
@@ -90,6 +105,8 @@ def main():
 
     args = [sys.executable, str(Path(__file__).with_name('skin_edit.py')),
             'set', str(SOURCE), '-o', str(a.out), '--check-index']
+    if a.install and not a.allow_resize:
+        args.append('--keep-size')
     for name, val in changes.items():
         args.append(f'{name}={val}')
     subprocess.run(args, check=True)
