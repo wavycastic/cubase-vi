@@ -437,7 +437,7 @@
   "Expand Tree": "Mở rộng cây",
   "Expand: Device Panels": "Mở rộng: Device Panels",
   "Export All to One File": "Export tất cả vào một file",
-  "Export Muted Events with Volume -inf dB": "Export Event bị Mute với Volume -inf dB",
+  "Export Muted Events with Volume -inf dB": "Export Event bị Mute với Volume -∞ dB",
   "Export Table of Key Commands as CSV File": "Export bảng phím tắt thành file CSV",
   "Export all used attributes": "Export tất cả thuộc tính đã dùng",
   "Export is not possible with an empty project.": "Không thể Export với một Project trống.",

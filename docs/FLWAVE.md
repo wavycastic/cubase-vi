@@ -1145,10 +1145,144 @@ phụ thuộc bản dịch đang nạp, và đổi bản dịch có thể làm m
 - Muốn mạnh hơn hoặc dịu hơn: `python tools\make_fl_skin.py --level manh --install`
   (lần sau nó sẽ tự tạo thêm một bản sao lưu nữa).
 - Chưa đối chiếu bằng ảnh thật, vì Cubase không chạy được tự động trên máy này
-  (xem `docs/RESEARCH.md`). Phần còn lại của tính năng — **màu theo băng** — vẫn
-  cần DLL hook `0x141E9E140` với thuật toán ở §8.8.
+  (xem `docs/RESEARCH.md`). Phần còn lại của tính năng — **màu theo băng** — cần
+  DLL hook, và **§12** ghi lại chỗ hook đúng (không phải `0x141E9E140` như dòng
+  này từng nói).
+
+Ghi chú về phía FL: `WaveformColouring.vmt[0x20](rcx=analyser, rdx=range, r8,
+r9=bool, &obj[0x20])` ghi ra 6 float = **2 màu, mỗi màu RGB** — đây là công thức
+băng→màu thật của FL. Nó được gọi qua vtable nên không tra được bằng xref tĩnh; phải
+đi qua bảng tra "tên → hàm" (`RVA 0x26EA70`), mà bảng đó khoá theo id/hash chứ
+không theo tên.
 
 `WaveformColouring.vmt[0x20](rcx=analyser, rdx=range, r8, r9=bool, &obj[0x20])` —
 ghi ra 6 float = **2 màu, mỗi màu RGB**. Đây là công thức băng→màu thật. Nó được
 gọi qua vtable nên không tra được bằng xref tĩnh; phải đi qua bảng tra "tên → hàm"
 (`RVA 0x26EA70`), mà bảng đó khoá theo id/hash chứ không theo tên.
+
+---
+
+## 12. Chuỗi tô dải sóng của Cubase — và chỗ hook đúng
+
+§11.4 từng nói còn cần hook `0x141E9E140`. **Chỗ đó sai**: đó là *hàm vẽ*, hook vào
+đó thì chỉ đếm được lời gọi, không sửa được gì. Vòng này dò lại từ đầu và tìm
+được lệnh tô thật.
+
+### 12.1 Chuỗi đầy đủ
+
+```
+0x141E9B6F0  điều phối            chọn thuật toán theo framesPerPixel   (§3 WAVEFORM.md)
+0x141E9C340  gom min/max          ra mảng 8 byte / cột
+0x141E9E140  hàm vẽ event         quy đổi sang toạ độ màn hình, rồi gọi lệnh tô 4 lần
+0x141E9AD10  LỆNH TÔ             dựng path rồi rasterise 2 lần          <-- chỗ hook
+0x141EA8150  hỏi pen + style     lấy trục, số điểm, biên
+0x141EA58C0  dựng path           đọc mảng điểm, tạo đa giác
+0x141EA7840  RASTERISER           1.844 byte, khung stack 0x3328         <-- nơi ghi pixel
+0x141EA7F80  cắt / kiểm tra      đọc [style + 0x90] so 0
+```
+
+Điểm mấu chốt ở `0x141EA7840`: khung stack **0x3328 byte (13 KB)** và thân hàm
+1.844 byte. Đó **không** phải lời gọi GDI/Direct2D — **Cubase tự rasterise** dải
+sóng trong phần mềm. Nghĩa là màu cuối cùng được ghi bên trong hàm này, không đi
+qua hệ đồ hoạ.
+
+### 12.2 Chữ ký của `0x141E9AD10` — đã đặt tên được cả 6 tham số
+
+Frame của `0x141E9E140` **không** dùng frame pointer chuẩn:
+
+```
+mov  rax, rsp
+mov  [rax+8], rcx      ; arg1
+mov  [rax+0x10], rdx   ; arg2
+mov  [rax+0x18], r8    ; arg3
+mov  [rax+0x20], r9    ; arg4
+push rbp,rbx,rsi,rdi,r12,r13,r14,r15          ; 8 lần
+lea  rbp, [rax - 0x138]
+sub  rsp, 0x1f8
+```
+
+Nên tham số của chính nó nằm ở `rbp + 0x140` trở đi — 8 tham số:
+
+| rbp | tham số | tên tìm được | bằng chứng |
+|---|---|---|---|
+| `+0x140` | arg1 | thiết bị vẽ | hàm tự deref `[rcx+0x18]` rồi gọi `vfunc+0x38` |
+| `+0x148` | arg2 | — | truyền làm `this` cho `0x141EA3DC0` |
+| `+0x150` | arg3 | bút / ngữ cảnh vẽ | `0x141EA8150(pen, style, …)` |
+| `+0x158` | arg4 | **đối tượng style** | có bitfield ở `+0xB0` |
+| `+0x160` | arg5 | **mảng đích** (y toạ độ màn hình) | vòng lặp ghi `[rbx]`, `[rbx+4]`, `rbx += 8` |
+| `+0x168` | arg6 | **mảng nguồn** (min/max thô) | vòng lặp đọc `[rdi]`, `[rdi+4]`, `rdi += 8` |
+
+Và `0x141E9AD10` nhận:
+
+| tham số | nội dung |
+|---|---|
+| `rcx` | thiết bị vẽ |
+| `rdx` | ngữ cảnh nét |
+| `r8` | bút / ngữ cảnh |
+| `r9` | **mảng điểm** — chỗ sửa được hình dạng |
+| `[rsp+0x20]` (arg5) | **cờ, luôn = 1** |
+| `[rsp+0x28]` (arg6) | **đối tượng style** — chỗ sửa được màu |
+
+Đối tượng style đọc được ở: `+0x90` (double), `+0x98` (double, truyền vào
+`0x141EA58C0`), `+0xA8` (con trỏ, so với null), `+0xB0` (bitfield).
+
+### 12.3 Bốn lần gọi — phân biệt bằng gì
+
+Cả bốn đều truyền `arg5 = 1`, cùng `arg1/arg2/arg3`. Chúng khác ở **arg4** và
+**arg6**:
+
+| chỗ gọi | arg4 (mảng điểm) | arg6 (style) |
+|---|---|---|
+| `0x141E9E44C` | `rbx` = mảng đích (arg5) | `[rbp+0x158]` — **style gốc, chưa sửa** |
+| `0x141E9E4BC` | `[rsp+0x38]` = mảng đích | `&[rbp-0x10]` — bản sao đã sửa |
+| `0x141E9E649` | `[rbp+0x160]` = mảng đích | `&[rbp-0x10]` |
+| `0x141E9E75A` | `[rbp+0x168]` = **mảng nguồn** | `&[rbp-0x10]` |
+
+Bản sao ở `[rbp-0x10]` do `0x141EA23D0(&local, [rbp+0x158])` dựng ra, gọi trước
+chỗ 2, 3, 4. Bit 7 của `style->0xB0` chọn giữa chỗ 1 và chỗ 2
+(`shr eax,7; test al,1` ở `0x141E9E41A`).
+
+**Cách lọc đáng tin cậy:** chỗ 1 là chỗ dùng **đúng con trỏ style mà hàm vẽ nhận
+vào**. Nên:
+
+> Ghi lại `arg4` (r9) của `0x141E9E140` khi vào hàm — thứ đã hook sẵn — rồi trong
+> hook của `0x141E9AD10` so `arg6` với giá trị đó. Khớp ⇒ đây là lớt dải sóng
+> chính. Không cần đoán theo địa chỉ stack.
+
+### 12.4 Đính chính: `arg5` **không** phải số cột
+
+Tôi đoán `arg5` là số cột. Sai. Cả bốn chỗ gọi đều truyền `1`, và hàm dùng nó
+để tính kích thước buffer nội bộ:
+
+```
+esi = arg5
+eax = esi + 0xA          ; +10
+lea rsi, [rax*8]         ; (arg5 + 10) * 8 byte
+memset(buf, 0, rsi)      ; 0x144CF0872
+```
+
+Tức nó là **số phần / cờ**, và 1 nghĩa là "một path". Số điểm thật lấy từ
+`0x141EA8150(pen, style, &out)` — hỏi pen ra, rồi đưa vào `0x141EA58C0` qua
+`r8d`/`r9d`. Nếu hook muốn biết có bao nhiêu điểm thì phải đọc kết quả của
+`0x141EA8150`, không phải đếm mảng.
+
+### 12.5 Vì sao hook `0x141E9AD10` thay vì `0x141E9E140`
+
+1. `0x141E9E140` tự tính rồi tự tô — muốn đổi kết quả thì phải làm lại 1.765 byte.
+2. `0x141E9AD10` **nhận thẳng mảng điểm** (hình dạng) và **đối tượng style**
+   (màu). Sửa trước khi tô thì xong.
+3. Nó có 7 caller, còn 3 caller kia (`0x1E9A790`, `0x1E9AAA0`, `0x1E9B100`) là các
+   lớp tô khác dùng lại đúng lệnh này — nên **phải lọc theo §12.3**. Hook chỗ
+   gọi thì chính xác hơn nhưng phải làm 4 hook.
+
+### 12.6 Trình tự nên làm
+
+1. Dò `0x141EA7840` (rasteriser) để tìm **chỗ ghi pixel** — đó là nơi duy nhất màu
+   chạm vào bộ đệm. Mọi thứ "đổi màu" đều phải đi từ đó ngược lên.
+2. Bật hook `0x141E9AD10` chỉ để **đếm và ghi lại 6 tham số** ra file, đối chiếu 4
+   lần gọi bằng bộ lọc §12.3. Chưa sửa gì.
+3. Chỉ thay màu (rẻ, ít rủi ro). Xác nhận bằng cách đếm số lần tô trên một event.
+4. Mới động tới hình dạng.
+
+Bỏ qua bướp 1–2 thì mọi thứ vẽ sau đó đều sai, mà lỗi loại này Cubase không báo
+gì — chỉ vẽ ra sai màu, rất khó phát hiện là do hook.
