@@ -898,6 +898,24 @@ WRONG FORM  label 'All MIDI Inputs' is 'Tất cả MIDI Input'
 Câu văn xuôi **trích nhãn**, mà nhãn vừa đổi ngay dưới tay nó. Đây đúng là việc
 bộ dò sinh ra để làm — **chạy lại bộ dò sau khi ghi**, đừng tin lần chạy trước.
 
+### `Insert` — **danh từ** và **động từ**, cùng một chữ
+
+Cùng dạng với `String` (đợt 29) và `Notation` (đợt 55):
+
+```
+Insert           ->  Chèn          ← ĐỘNG TỪ, như một mục menu
+Inserts          ->  Inserts        ← DANH TỪ
+Insert Effect    ->  Hiệu ứng Insert
+```
+
+93 giá trị dùng `Insert` như **danh từ** (`Bật Insert`, `Xóa Insert`,
+`Sao chép Insert`, `Bypass Insert`, `Enable Insert Slot by Number`), và `Insert`
+đứng trần trong MixConsole là **tiêu đề mục**, không phải động từ → `Insert`.
+
+Động từ thì giữ `Chèn` đúng chỗ tiếng Anh là động từ: `Chèn Bar`, `Chèn Velocity`,
+`Chèn MIDI Event`, `Chèn Note`, `Chèn Text`, `Chèn Layer`, `Chèn Silence`. Cụm
+danh từ cũng đúng: `Độ dài chèn`, `Loại chèn`.
+
 ### Cảnh báo: **đừng viết bản sửa bằng thứ không dùng**
 
 Đợt 63 viết `Chèn **bản ghi** hồi tố MIDI vào Editor` trong khi chính bản dịch
