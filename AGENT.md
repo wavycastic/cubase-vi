@@ -1338,6 +1338,45 @@ tìm ra nhiều lớp lỗi sai lệch chuyên ngành và dịch máy thô mà k
     - Loại bỏ các từ lặp chú thích: `Skins` ("Giao diện Skin") → **`Skin`**, `Theme` ("Giao diện Theme") → **`Theme`**, `This Computer` ("Computer này") → **`Máy tính này`**.
     - Thay thế chữ "thất bại" nặng nề trong thông báo hệ thống thành câu tự nhiên lịch sự: `Không th�� tự động lưu vì Project bị hỏng...`, `Chuyển đổi không thành công!`, `Không thể tạo/xóa cơ sở dữ liệu...`.
 
+### Đợt 74: Quét thủ công liên miền — sửa 143 chuỗi khó đọc, thống nhất Driver Audio và từ ngữ đời thường
+
+1. **Thống nhất `Driver Audio` thay vì "trình điều khiển Audio" (10 chuỗi):**
+   Người dùng Việt Nam trong phòng thu luôn nói Driver ASIO, Driver Audio, card đồ họa — không ai nói "trình điều khiển".
+   Đồng bộ toàn bộ: `audio drivers` → **`Driver Audio`**, `ASIO driver` → **`Driver ASIO`**,
+   `driver control panel` → **`bảng điều khiển Driver`**, `graphics card driver` → **`Driver card đồ họa`**.
+   Câu dài được viết lại gọn: *"Không tải được Driver Audio. Hãy kiểm tra thiết bị Audio đã cắm đúng vào máy chưa."*
+
+2. **Xóa bỏ "chất liệu Audio" dịch máy của `audio material` (10 chuỗi):**
+   `audio material` (đoạn âm thanh gốc mà các Event cùng tham chiếu) bị dịch máy thành "chất liệu Audio" (như chất liệu vải!).
+   Sửa thành **`đoạn Audio gốc` / `đoạn Audio` / `đoạn nhạc`**: *"Bạn có muốn sửa tất cả Event cùng dùng một đoạn Audio gốc không?"*,
+   *"Dùng chức năng Smooth Tempo nếu Tempo của đoạn nhạc là ổn định."*
+
+3. **`Chế độ sửa` → `Chế độ Edit` (15 chuỗi):**
+   `Clip/Part Editing Mode` là tên chế độ trong Cubase, giữ nguyên **`Chế độ Edit Clip`**, **`Chế độ Edit Part`**,
+   **`Chế độ Edit Part/Clip`**, *"Chế độ Edit: Sửa một hoặc nhiều mục."*
+
+4. **Câu trợ giúp MIDI Remote viết lại bằng tiếng người (3 chuỗi):**
+   - `Sends a new value... abrupt` → *"Gửi giá trị mới tới chức năng %s ngay khi bạn xoay nút. Giá trị có thể bị nhảy đột ngột."*
+   - `Picks up on the value... estimate the pickup value` → *"Nhận giá trị của chức năng %s khi nút xoay tới đúng giá trị đó. Giá trị đổi mượt hơn nhưng bạn phải tự dò đúng vị trí."*
+   - `Compares the value... tiệm cận` → *"So sánh giá trị của chức năng %s với giá trị nút xoay, rồi đưa hai giá trị lại gần nhau một cách mượt mà..."*
+
+5. **Từ ngữ kỹ thuật gây hiểu nhầm:**
+   - `mapped` ("được ánh xạ tới") → **`được gán vào`**; `Action Mapping` → **`Gán hành động`**; `Mapped Ports` → **`Cổng đã gán`**.
+   - `Local` ("cục bộ") → giữ **`Local`** (`Ổ đĩa Local`, `Loop Local`, `thư mục Local`) hoặc **`trên máy này`** cho câu dài;
+     `Playback Toggle triggers Local Preview` (*"Chuyển đổi phát lại kích hoạt nghe thử cục bộ"*) → **`Bật/tắt nghe thử tại chỗ`**.
+   - `Octave Offset` ("Lệch quãng tám") → **`Độ lệch Octave`** (4 chuỗi).
+   - `license` ("bản quyền") → **`License`** cho mọi câu về kích hoạt (`License dùng thử`, `License hết hạn`), giữ nguyên `Bản quyền` cho trường metadata Copyright.
+   - `Log Messages` ("Ghi nhật ký thông điệp") → **`Thông điệp Log`**; `Logging` → **`Tạo Log`**.
+   - `Intelligibility` ("Khả năng nghe rõ") → **`Độ rõ tiếng`** (8 chuỗi: `Độ rõ tiếng trung bình`, `Bật đo độ rõ tiếng`...).
+   - `Modifier Keys` ("phím bổ trợ") → **`phím Modifier`**; `remote keys` ("phím từ xa") → **`phím Remote`**;
+     `sections/subsections` ("phân đoạn/phần con") → **`khu vực/khu vực con`**; `position message` ("thông điệp") → **`bản tin vị trí`**.
+   - `...shows usage` ("Menu ngữ cảnh hiện cách dùng") → **`Chuột phải xem chi tiết`**.
+   - `The slots are being discarded` ("đang bị loại bỏ") → **`sẽ bị bỏ`** (6 chuỗi).
+   - `are loaded` ("được nạp") → **`tải`**; `clipping` ("làm âm thanh bị cắt") → **`vỡ tiếng`**.
+   - `Respect Maximum Duration` ("Tôn trọng thời lượng") → **`Giữ đúng thời lượng`**; `bar offset` ("độ lệch Bar") → **`Bar Offset`**;
+     `system` (thiết bị đồng bộ) bị dịch "hệ thống/khởi động lại hệ thống" → **viết lại theo nghĩa khởi động thiết bị**.
+
+
 ### Cặp `[Key]` — bản dịch **giống hệt** bản gốc, trừ **tên phím**
 dịch làm **ba** kiểu khác nhau:
 
