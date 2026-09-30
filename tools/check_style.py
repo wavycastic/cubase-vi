@@ -51,13 +51,26 @@ FORBIDDEN_PARENS = re.compile(r'\s*\([^()]+\)\s*$')
 # enforced. tools/tests/test_translation.py tests the filter in both
 # directions: 18 known-bad values it must catch, 13 correct values it must
 # leave alone.
-_spec = json.load(open(T('terms_do_not_translate.json'), encoding='utf-8'))
-FORBIDDEN_TRANSLATIONS = {
-    re.compile(p, re.I): term
-    for term, pats in _spec['forbidden'].items()
-    if not term.startswith('_')
-    for p in pats
-}
+#
+# Some rules are conditional on the SOURCE. `Bypass -> bỏ qua` is wrong (13
+# strings fixed in round 72), but `Ignore -> bỏ qua` is correct and there are
+# 23 such strings. A rule with no source test would block all 23.
+_rules = None
+
+
+def _forbidden(src_text, val):
+    global _rules
+    if _rules is None:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        import termspec
+        _rules = termspec.rules_for_style()
+    hits = []
+    for rx_src, rx_vi, term in _rules:
+        if rx_src is not None and not rx_src.search(src_text):
+            continue
+        if rx_vi.search(val):
+            hits.append(term)
+    return hits
 
 errors, warns = [], []
 
@@ -77,9 +90,8 @@ for key, val in sorted(m.items()):
                 continue
 
     # Rule 2: No awkward literal Vietnamese translations of standard DAW terms
-    for pattern, term in FORBIDDEN_TRANSLATIONS.items():
-        if pattern.search(val):
-            errors.append((key, val, f'awkward translation of DAW term: keep {term!r} in English'))
+    for term in _forbidden(src.get(key, ''), val):
+        errors.append((key, val, f'awkward translation of DAW term: keep {term!r} in English'))
 
     # Rule 3: Placeholders must match
     if key in src:

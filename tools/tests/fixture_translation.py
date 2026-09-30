@@ -36,6 +36,32 @@ TERMS_BAD = [
     ('Mixer', 'Bộ trộn âm thanh của bạn'),
     ('Fader', 'Cần trượt của Channel 1'),
     ('Crossfade', 'Tạo chuyển tiếp mượt giữa hai đoạn'),
+
+    # --- round 84: recovered from AGENT.md.bak, the 2,442-line original. The
+    # 199-line compression kept the rules and dropped the evidence, so these
+    # mistranslations had been fixed once and were unguarded ever since.
+    ('Duration', 'Thời gian trường độ của Note'),
+    ('Pick-up', 'Đặt điểm lấy đà'),
+    ('Scaling', 'Thay đổi thu phóng giao diện'),
+    ('Mouse Wheel', 'Dùng cuộn chuột để Zoom'),
+    ('Notehead', 'Chọn đầu nối khác'),
+    ('Retrospective Record', 'Ghi hồi tố'),
+    ('Material', 'Thư viện tư liệu'),
+    ('Word Clock', 'Đồng hồ từ đầu ra'),
+    ('extension (file)', 'Phần mở rộng File không hợp lệ'),
+    ('file dialog', 'Mở hộp thoại file'),
+    ('Snap Point', 'Chọn điểm bắt dính'),
+    ('Dynamic Velocity', 'Động lực Velocity'),
+    ('Pitch Shift', 'Dịch cao độ của Audio'),
+    ('Mute', 'Tắt tiếng Channel'),
+    ('Dissolve Part', 'Hòa tan Part'),
+    ('Assistant', 'Trợ lý Scale'),
+    ('Note On', 'Bật Note'),
+    ('On Velocity', 'Bật Velocity'),
+    ('Off Velocity', 'Tắt Velocity'),
+    ('Erase Tool', 'Xóa công cụ'),
+    ('Surface Editor', 'Trình sửa bề mặt'),
+    ('Quantize hiển thị', 'Hiển thị Quantize'),
 ]
 
 # --- correct values that a sloppier pattern would flag
@@ -53,6 +79,31 @@ TERMS_GOOD = [
     'Ảnh Video dài hơn Clip',
     'Nốt trùng ở hai bè',
     'Preset âm thanh đã lưu',
+    # 'bỏ qua' and 'lặp' are correct for Ignore/Skip/Repeat - see CONDITIONAL
+    'Bỏ qua các hàng đầu tiên',
+    'Lặp lại Loop',
+    'Region lặp lại Bar',
+]
+
+# --- round 84: rules that are wrong only for some sources. 13 Bypass strings
+# were fixed to stop saying "Bỏ qua" (round 72), but 23 Ignore/Skip/Discard
+# strings legitimately say "Bỏ qua", and 18 Repeat strings say "lặp lại".
+# A pattern with no source test would block every one of them - AGENT.md §7,
+# a detector that cries wolf stops being read.
+#
+# (source, value, term that must fire)
+CONDITIONAL = [
+    ('Bypass Insert', 'Bỏ qua Insert', 'Bypass'),
+    ('Bypass EQ of all Channels', 'Bỏ qua EQ của tất cả Channel', 'Bypass'),
+    # same word, different source term: must NOT fire
+    ('Ignore First Rows', 'Bỏ qua các hàng đầu tiên', None),
+    ('Skip', 'Bỏ qua', None),
+    ('Discard', 'Bỏ qua', None),
+    ('Cycle Marker', 'Marker Lặp', 'Cycle'),
+    ('Cycle Activation via Marker', 'Bật Cycle bằng Marker', None),  # keeps Cycle
+    ('Repeat', 'Lặp lại', None),
+    ('Bar Repeat Region', 'Region lặp lại Bar', None),
+    ('Repeat Forever', 'Lặp vô hạn', None),
 ]
 
 # --- every placeholder shape that actually occurs in all_strings.tsv, with the
@@ -74,19 +125,16 @@ FRAMES_BAD = [
 
 
 def load():
-    """Return [(term, compiled_regex)] for the forbidden-translation filter."""
-    import json
-    import re
-    # tests/ -> tools/ -> repo root
-    root = os.path.dirname(os.path.dirname(os.path.dirname(
-        os.path.abspath(__file__))))
-    spec = json.load(
-        open(os.path.join(root, 'terms_do_not_translate.json'),
-             encoding='utf-8'))
-    out = []
-    for term, pats in spec['forbidden'].items():
-        if term.startswith('_'):
-            continue
-        for p in pats:
-            out.append((term, re.compile(p, re.I)))
-    return out
+    """Return [(term, compiled_regex)] - rules that hold in every context.
+
+    Uses tools/termspec.py, so the tests and check_style.py read the same
+    spec. Conditional rules (those with a `src` partner) are excluded here:
+    they cannot be tested without a source string. test_translation.py tests
+    those separately against real (src, val) pairs.
+    """
+    import sys
+    tools = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    if tools not in sys.path:
+        sys.path.insert(0, tools)
+    import termspec
+    return termspec.rules_for_tests()

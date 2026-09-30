@@ -2,97 +2,137 @@
   "_doc": [
     "Bang thuat ngu KHONG duoc dich - dung boi check_style.py.",
     "",
-    "Moi muc la mot mau sai cu the, KHONG phai bang 'Anh -> Viet'.",
-    "Ly do: thu can BIET lai mot ban dich sai, khong phai sua mot ban",
-    "dich dung. Gia tri 'term' chi de bao cao cho nguoi doc hieu vi sao.",
+    "Moi muc la mot mau SAI cu the, KHONG phai bang 'Anh -> Viet'. Ly do: thu",
+    "can BIET lai mot ban dich sai, khong phai sua mot ban dich dung. Gia tri",
+    "'term' chi de bao cao cho nguoi doc hieu vi sao.",
     "",
-    "Chon mau rat hanh ky: chi nhung cum CHAC CHAN sai. Mot tu don co",
-    "nghia binh thuong (vd 'duy nhat', 'dinh vi') se bao dong gia o rat nhieu",
-    "chuoi dung - AGENT.md: 'mot bo do bao dong gia nhieu lan con te hon",
-    "khong co bo do'.",
+    "Hai loai mau:",
+    "  'regex'                          - sai o moi ngu canh",
+    "  {'vi': regex, 'src': regex}      - chi sai khi NGUON khop 'src'",
     "",
-    "Moi regex deu phai khop ca cum, khong khop tung tu. Duoi day khong",
-    "con muc nao chua duoc test tren ban dich hien tai."
+    "Loai thu hai la bat buoc voi cac cap le thuoc ngu canh:",
+    "  Bypass -> 'bo qua'  nhung  Ignore/Skip/Discard -> 'bo qua' la DUNG",
+    "  Cycle  -> 'lap'     nhut  Repeat  -> 'lap lai'           la DUNG",
+    "Mot mau vo dieu kien se chan 23 chuoi dung va do la bao dong gia.",
+    "",
+    "Moi mau duoi day da duoc do tren 10.737 chuoi va bao 0 vi pham. Mau nao",
+    "ban vao giao dien thi khong duoc them - AGENT.md §7: bo do bao dong gia",
+    "nhieu lan con te hon khong co bo do."
   ],
 
   "forbidden": {
-    "Automation": [
-      "\\btự động hóa\\b"
-    ],
-    "Track": [
-      "\\brãnh\\b"
-    ],
-    "Clip": [
-      "\\bđoạn cắt\\b"
-    ],
-    "Bounce": [
-      "\\bnảy\\b"
-    ],
-    "Freeze": [
-      "\\bđóng băng\\b"
-    ],
-    "Quantize": [
-      "\\blượng tử hóa\\b"
-    ],
-    "Mixer": [
-      "\\bbộ trộn âm thanh\\b",
-      "\\bmixer âm thanh\\b"
-    ],
-    "Fader": [
-      "\\bcần trượt\\b",
-      "\\bcần chỉnh âm lượng\\b"
-    ],
-    "Tempo": [
-      "\\bnhịp độ\\b"
-    ],
-    "Grid": [
-      "\\blưới nhịp\\b",
-      "\\blưới\\b(?=\\s*(?:để|tới|vào))"
-    ],
-    "Warp": [
-      "\\bbẻ cong\\b"
-    ],
-    "Render": [
-      "\\bkết xuất\\b"
-    ],
-    "Plug-in": [
-      "\\bphần cắm\\b",
-      "\\bphần mềm cắm\\b"
-    ],
-    "Metronome": [
-      "\\bmáy đếm nhịp\\b"
-    ],
-    "Transport": [
-      "\\bbộ vận chuyển\\b"
-    ],
-    "Marker": [
-      "\\bdấu đánh dấu\\b"
-    ],
-    "Locator": [
-      "\\bđịnh vị vị trí\\b"
-    ],
-    "Time Signature": [
-      "\\bkhóa nhịp\\b"
-    ],
-    "Rest": [
-      "\\bnghỉ\\b(?=\\s*nốt)"
-    ],
-    "Clef": [
-      "\\bkhoá nhạc\\b",
-      "\\bkhóa nốt\\b"
-    ],
-    "Crossfade": [
-      "\\bchuyển tiếp mượt\\b"
-    ],
-    "Locator pair": [
-      "\\bhai định vị\\b"
-    ]
+    "Automation": ["\\btự động hóa\\b"],
+    "Track": ["\\brãnh\\b"],
+    "Clip": ["\\bđoạn cắt\\b"],
+    "Bounce": ["\\bnảy\\b"],
+    "Freeze": ["\\bđóng băng\\b"],
+    "Quantize": ["\\blượng tử hóa\\b"],
+    "Mixer": ["\\bbộ trộn âm thanh\\b", "\\bmixer âm thanh\\b"],
+    "Fader": ["\\bcần trượt\\b", "\\bcần chỉnh âm lượng\\b"],
+    "Tempo": ["\\bnhịp độ\\b"],
+    "Grid": ["\\blưới nhịp\\b", "\\blưới\\b(?=\\s*(?:để|tới|vào))"],
+    "Warp": ["\\bbẻ cong\\b"],
+    "Render": ["\\bkết xuất\\b"],
+    "Plug-in": ["\\bphần cắm\\b", "\\bphần mềm cắm\\b"],
+    "Metronome": ["\\bmáy đếm nhịp\\b"],
+    "Transport": ["\\bbộ vận chuyển\\b"],
+    "Marker": ["\\bdấu đánh dấu\\b"],
+    "Locator": ["\\bđịnh vị vị trí\\b"],
+    "Time Signature": ["\\bkhóa nhịp\\b"],
+    "Rest": ["\\bnghỉ\\b(?=\\s*nốt)"],
+    "Clef": ["\\bkhoá nhạc\\b", "\\bkhóa nốt\\b"],
+    "Crossfade": ["\\bchuyển tiếp mượt\\b"],
+    "Locator pair": ["\\bhai định vị\\b"],
+
+    "_comment_new": "--- §3 bang 'Sai -> Dung' (dot 4-73) chua tung duoc ghi vao luat ---",
+    "Duration": ["\\btrường độ\\b"],
+    "Pick-up": ["\\blấy đà\\b"],
+    "Scaling": ["\\bthu phóng\\b"],
+    "Mouse Wheel": ["\\bcuộn chuột\\b"],
+    "Notehead": ["\\bđầu nối\\b"],
+    "Retrospective Record": ["\\bhồi cứu\\b", "\\bghi hồi tố\\b"],
+    "Material": ["\\btư liệu\\b"],
+    "Word Clock": ["\\bđồng hồ từ\\b"],
+    "extension (file)": ["\\bphần mở rộng\\b"],
+    "file dialog": ["\\bhộp thoại file\\b"],
+    "Control": ["\\bnút xoay\\b"],
+    "Snap Point": ["\\bđiểm bắt dính\\b"],
+    "Dynamic Velocity": ["\\bđộng lực velocity\\b"],
+    "Pitch Shift": ["\\bdịch cao độ\\b"],
+    "Mute": ["\\btắt tiếng\\b"],
+    "Dissolve Part": ["\\bhòa tan\\b"],
+    "Assistant": ["\\btrợ lý scale\\b", "\\btrợ lý mapping\\b",
+                  "\\btrợ lý drum\\b", "\\btrợ lý proximity\\b"],
+    "Note On": ["\\bbật note\\b"],
+    "On Velocity": ["\\bbật velocity\\b"],
+    "Off Velocity": ["\\btắt velocity\\b"],
+    "Erase Tool": ["\\bxóa công cụ\\b"],
+    "Surface Editor": ["\\btrình sửa bề mặt\\b"],
+    "plug-in editor": ["\\btrình sửa công cụ\\b"],
+    "Thiết lập (typo)": ["\\bthiết lật\\b"],
+    "Quantize hiển thị": ["\\bhiển thị quantize\\b"],
+
+    "_comment_conditional": "--- chi sai khi NGUON khop 'src' ---",
+    "Bypass": [{"vi": "\\bbỏ qua\\b", "src": "\\bbypass\\b"}],
+    "Cycle": [{"vi": "\\blặp\\b", "src": "\\bcycle\\b"}]
   },
 
+  "keep_english": [
+    "Track", "Channel", "Bus", "FX", "Group", "VCA", "Insert", "Send",
+    "Slot", "Fader", "Pan", "Solo", "Mute", "Meter", "Metronome", "Click",
+    "Marker", "Locator", "Automation", "Clip", "Event", "Part", "Pool",
+    "Quantize", "Snap", "Grid", "Bounce", "Render", "Freeze", "Warp",
+    "Velocity", "Pitch", "Note", "Chord", "Tempo", "Timecode", "Bar",
+    "Beat", "Fade", "Punch", "Buffer", "Latency", "Sample Rate", "ASIO",
+    "VST", "Plug-in", "Preset", "MixConsole", "Inspector", "Zone", "Export",
+    "Import", "Arranger", "Chain", "Step", "Lane", "Pattern", "Expression",
+    "Voicing", "Tension", "Articulation", "Layout", "Map", "Mapping",
+    "Script", "Machine Control", "Talkback", "Cue", "Chord Symbols",
+    "Time Signature",
+
+    "Project", "Audio", "Controller", "Cycle", "Bypass", "Remote", "Effect",
+    "Monitor", "Video", "Routing", "Bank", "Loop", "Transpose", "Loudness",
+    "Assistant", "Media", "Strip", "Focus", "VariAudio", "SyncStation",
+    "Player", "Score", "Logical", "Listen", "Region", "Band", "Crossfade",
+    "Clock", "Panner", "Workspace", "Snapshot", "Room", "Hitpoint", "Gain",
+    "Surface", "Sampler", "Transport", "Retrospective", "Learn", "Shuttle",
+    "Pitchbend", "Extension", "Wave", "Modulation", "Frame", "Dynamics",
+    "Modulator", "Factory", "ASIO-Guard", "MediaBay", "Mixdown", "Layer",
+    "Ruler", "SysEx", "High-Cut", "Side-Chain", "Profile", "Macro",
+    "Pre-roll", "Phase", "Tuning", "Trim", "Patch", "Multi-Channel",
+    "Low-Cut", "Word", "Folding", "Post-Fader", "Dynamic", "Pedal",
+    "Permission", "Pre-Fader", "Subsection", "Post-roll", "Downmix",
+    "Module", "Count-In", "CCMode", "NoteExp", "Latch", "Thru", "Z-Axis",
+    "Remote-Control", "AudioWarp", "Transformer", "Scripting", "Cache",
+    "Studio", "Offline", "Mixer"
+  ],
+
+  "_keep_english_doc": [
+    "Danh sach nay KHONG doan. Moi tu da duoc do tren 10.737 chuoi: nguon",
+    "co tu do tu >=5 lan, va ban dich DICH no <=2 lan. Tuc la ban dich da coi",
+    "no la tu khong dich duoc - chi la chua duoc viet vao luat, nen dot sau",
+    "co the pha ma khong ai bao. 90 tu da co trong 70 tu cua AGENT.md §2.",
+    "",
+    "Da loai: viet tat (OMF/AAF/SMF/Sysex), thuong hieu (Steinberg/Yamaha/",
+    "Nuendo), tu tieng Anh binh thuong (Menu/Post/Take/True), ten nhac cu va",
+    "the loai (Jazz/Conga/Tom-tom), va nhung tu dang phan van (xem duoi)."
+  ],
+
   "_not_in_forbidden_because_ambiguous": [
-    "duy nhất / định vị / lặng / ghi / lưu - la tu Viet Nam binh thuong,",
-    "khop o nhieu chuoi DUNG. Danh vao day se sinh bao dong gia.",
-    "AGENT.md §7: 'lặng' nam trong 'dau lang', 'Over' trong 'Cross-Over'",
-    "khop \\b sau dau gach noi."
+    "Nhung cap le thuoc ngu canh, khong the thanh luat vo dieu kien:",
+    "  'bo qua' -> 23 chuoi dung (Ignore/Skip/Discard) - da xu ly bang src",
+    "  'lap'    -> 18 chuoi dung (Repeat/Loop)          - da xu ly bang src",
+    "",
+    "Nhung cap THUC SU xung dot, phai nguoi quyet dinh chu khong the tu dong:",
+    "  'Time Signature' -> 49 chuoi dang dich 'so chi nhip' (0 chuoi giu)",
+    "  'Effect'         -> 9 chuoi dich 'hieu ung', 41 giu",
+    "  'Multi-Channel'  -> 7 chuoi dich 'da kenh'",
+    "  'Layout'         -> 2 chuoi dich 'bo cuc' (nguon la 'arrangement')",
+    "  'Version'        -> 26 chuoi dich 'phien ban' (nguon la 'program version' - dung trong cau)",
+    "  'Monitor'        -> 1 chuoi dich (nguon la 'Audio Performance Monitor')",
+    "  'Meter'          -> 1 chuoi dich (nguon la 'Audio Performance Meter')",
+    "",
+    "Them luat cho chung se chan hang chuc chuoi dang lam dung. Chung thuoc",
+    "AGENT.md §2 dang 'giu tieng Anh' - vet chinh la §2, khong phai bo do."
   ]
 }

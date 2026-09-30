@@ -34,7 +34,7 @@ for p in (ROOT, TOOLS, HERE):
         sys.path.insert(0, p)
 
 from fixture_translation import (TERMS_BAD, TERMS_GOOD, FRAMES_BAD,
-                                 PLACEHOLDERS_SEEN, load)
+                                 CONDITIONAL, PLACEHOLDERS_SEEN, load)
 
 MAP = os.path.join(ROOT, 'translations', 'vi.json')
 TSV = os.path.join(ROOT, 'keys', 'all_strings.tsv')
@@ -196,14 +196,68 @@ class TestForbiddenTranslations(unittest.TestCase):
         self.assertEqual(hits, [], f'{len(hits)} violation(s) in vi.json')
 
     def test_pattern_count_matches_declared(self):
-        """Guards the load() filter against a spec that gained a '_' key."""
+        """Guards the load() filter against a spec that gained a '_' key.
+
+        Only unconditional patterns, because load() returns only those; the
+        conditional ones are tested in TestConditionalRules.
+        """
         spec = json.load(open(os.path.join(ROOT,
                                            'terms_do_not_translate.json'),
                               encoding='utf-8'))
-        declared = sum(len(p) for t, p in spec['forbidden'].items()
-                       if not t.startswith('_'))
+        declared = sum(1 for t, pats in spec['forbidden'].items()
+                       if not t.startswith('_')
+                       for p in pats if isinstance(p, str))
         self.assertEqual(len(self.pats), declared,
-                         'a forbidden entry was added without a pattern')
+                         'an unconditional forbidden entry was not loaded')
+
+
+class TestConditionalRules(unittest.TestCase):
+    """Rules that are wrong only for some sources.
+
+    `Bypass -> bỏ qua` is wrong; `Ignore -> bỏ qua` is right. The map has 13
+    of the first (fixed in round 72) and 23 of the second. A pattern with no
+    source test would block all 36 - and a detector that cries wolf is worse
+    than no detector (AGENT.md §7).
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        import termspec
+        cls.termspec = termspec
+
+    def test_fires_when_the_source_requires_it(self):
+        for src_text, value, term in CONDITIONAL:
+            if term is None:
+                continue
+            with self.subTest(src=src_text, value=value):
+                hits = [t for t, _ in self.termspec.check(src_text, value)]
+                self.assertIn(term, hits,
+                              f'{value!r} for source {src_text!r} should '
+                              f'have been caught as {term}')
+
+    def test_silent_on_the_same_word_used_correctly(self):
+        """The half that matters: 'bỏ qua' is the right word for Ignore."""
+        for src_text, value, term in CONDITIONAL:
+            if term is not None:
+                continue
+            with self.subTest(src=src_text, value=value):
+                hits = [t for t, _ in self.termspec.check(src_text, value)]
+                self.assertEqual(hits, [],
+                                 f'{value!r} for source {src_text!r} is '
+                                 f'correct but was flagged as {hits}')
+
+    def test_silent_on_the_real_map(self):
+        """Every (source, value) pair in vi.json, with its real source."""
+        vi, src = _load()
+        hits = []
+        for k, v in vi.items():
+            if k not in src:
+                continue
+            found = self.termspec.check(src[k], v)
+            if found:
+                hits.append((k, v, found))
+        self.assertEqual(hits, [],
+                         f'{len(hits)} conditional violation(s) in vi.json')
 
 
 class TestEnglishFrame(unittest.TestCase):
