@@ -325,6 +325,39 @@ thành "công cụ chọn", tức là **một menu khác**.
 lan sang chỗ thứ hai**. Một quy tắc đã nghĩ ra thì phải tra cả họ, không chỉ
 chỗ vừa gặp.
 
+### `Signature` và `Expression` — hai từ dễ lẫn, đã lẫn ba lần
+
+| Tiếng Anh | Tiếng Việt |
+|---|---|
+| `Key Signature` | **số chỉ nhịp** |
+| `Expression` | **hóa biểu** |
+
+`SMF: Key signature` → `SMF: Hóa biểu` (đợt 22) và `Sign.` → `Hóa biểu` (đợt 23).
+Hai viết tắt của hai từ khác nhau, cùng đều thành `hóa biểu`. Chính bên cạnh,
+`Signature` → `Số chỉ nhịp` lại **đúng**.
+
+### `Set up X` — dịch cả tiền tố rồi bỏ mặc danh từ
+
+Họ `Set up ...` có 20 nhãn, và 13 cái dịch `Set up` thành `Thiết lập` rồi **bỏ
+đối tượng**:
+
+```
+Set up Attribute Columns  ->  Thiết lập Attribute Columns
+Set up Cell Layout        ->  Thiết lập Cell Layout
+Set up Items              ->  Thiết lập Items
+Set up Status Line        ->  Thiết lập Status Line
+Set up Tabs               ->  Thiết lập Tabs
+```
+
+Tệ hơn họ `No ...`: ở đây nửa tiếng Việt **đã có** nên nhìn như đã dịch. Kiểm
+`toàn câu có tiếng Việt` sẽ bỏ sót, phải đọc phần sau tiền tố.
+
+### `Doubles` là Note *trùng*, không phải nốt *lặp đôi*
+
+`Delete Doubles` → `Xóa Note trùng` (đúng) nhưng `Skip Doubles` →
+`Bỏ qua nốt lặp đôi` (sai) — cách hai trăm key. `Doubles` là nốt lặp do ghi
+trùng, không phải nốt dài gấp đôi.
+
 ### Khung tiếng Việt bọc một mệnh đề tiếng Anh
 
 Lớp lớn nhất mà **không bộ dò nào bắt được**: dịch từng từ theo thứ tự, xong
