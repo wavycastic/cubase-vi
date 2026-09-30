@@ -828,7 +828,20 @@ màn hình.
 `nhấp chuột`, `Hold` → `giữ`. Ngoài ngoặc vuông **không đụng**, nên 5 key cố ý
 giữ `Click` trong văn xuôi vẫn nguyên.
 
-### Câu 2: **"đếm từ lặp" quá rộng — cần cụm từ lặp, ngăn cách bởi liên từ**
+### Cảnh báo: **đừng viết bản sửa bằng thứ không dùng**
+
+Đợt 63 viết `Chèn **bản ghi** hồi tố MIDI vào Editor` trong khi chính bản dịch
+đó đang **xoá** `bản ghi hồi tố` ở 3 key khác để gộp về `ghi hồi tố`. Tức là vòng
+`--write` đầu tiên **tạo ra chính lỗi mà nó đi sửa**. Bắt được bằng cách đếm lại
+sau khi ghi:
+
+```
+ban ghi hoi to con lai: 1     ← chính key vừa viết
+```
+
+**Luôn đếm lại từ mình vừa xoá, sau khi ghi.**
+
+### Câu 3: **"đếm từ lặp" quá rộng — cần cụm từ lặp, ngăn cách bởi liên từ**
 
 ```
 Flatten (with Options & Preferences)
