@@ -524,6 +524,51 @@ changes, but requires you to estimate the pickup value.
 
 Mất đúng vế nói **cái giá** của tính năng. Khi đọc câu dài, phải đếm vế.
 
+### `Mouse Wheel` là **con lăn chuột**, không phải `cuộn chuột`
+
+`cuộn` = *scroll* (hành động cuộn). `con lăn chuột` = *mouse wheel* (cái thiết
+bị). Sáu key họ Pad đều ghi `cuộn chuột`:
+
+```
+Fewer Tensions ([ALT] - mouse wheel on pad)   ->  Ít Tension hơn ([ALT] - cuộn chuột trên pad)
+Next Voicing (mouse wheel on pad)             ->  Voicing kế tiếp (cuộn chuột trên pad)
+Transpose Up ([SHIFT] - mouse wheel on pad)   ->  Transpose lên ([SHIFT] - cuộn chuột trên pad)
+```
+
+Cả hai từ **đều đã có trong bản dịch** và cả hai đều **đúng ở key khác**:
+`Scroll to Selected Channel` → `Cuộn tới Channel đã chọn` (đúng — key đó
+thật sự về cuộn), `Use Mouse Wheel for Event Volume and Fades` → `Dùng con lăn
+chuột...` (đúng). Họ Pad chọn nhầm.
+
+**Bài học:** khi một từ tiếng Việt có **hai từ tiếng Anh về nó**, phải tra cả
+hai nghĩa trong bản dịch trước — `cuộn`/`lăn`, `ngoài`/`External`,
+`chuỗi`/`dây đàn`, `từ`/`Word Clock`.
+
+### `Write Protection` = `bảo vệ ghi`, **kể cả nhãn** — không chỉ câu
+
+Đợt 31 chốt `Write Protection` = `bảo vệ ghi` vì hai câu anh em đã dùng từ đó.
+Nhưng 4 key còn giữ `chống ghi`, trong đó có **chính nhãn mà các câu sinh ra**:
+
+```
+Write protection (a checkmark in this column prevents an entry from being
+overwritten)
+  ->  Chống ghi (dấu tích ở cột này ngăn mục không bị ghi đè)
+```
+
+Sửa câu mà không sửa nhãn là **chính là** cách mà phần tách này sinh ra.
+
+### `số` (một con số) khác `số lượng` (một lượng)
+
+Câu báo giới hạn không cần *lượng*:
+
+```
+Cannot add more tracks. The audio track count is at the limit.
+  ->  Không thể thêm Track. Số lượng Audio Track đã đạt giới hạn.
+```
+
+Đợt 32 sửa 7 trong 9 câu `Cannot add more tracks` và **bỏ sót 4** — chính là
+4 câu còn lại. Sửa *một câu đại diện* của họ rồi dừng là sai; phải đếm hết.
+
 ### Bốn lần "đọc một từ thành một từ khác"
 
 `Half` → `Giảm` (flat) · `Ext.` → `Mở rộng` (extend) · `String` → `Dây đàn`
