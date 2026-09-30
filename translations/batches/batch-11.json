@@ -1053,7 +1053,7 @@
   "Voicings": "Voicings",
   "Voicings cannot be applied. Too many notes found for at least one chord.": "Không thể áp dụng Voicing. Tìm thấy quá nhiều nốt trong ít nhất một hợp âm.",
   "Volume Controller Curve": "Đường cong Controller âm lượng",
-  "Warn if real time mixdown is required in order to include external plug-in.": "Cảnh báo nếu cần Mixdown thời gian thực để gộp Plug-in bên ngoài.",
+  "Warn if real time mixdown is required in order to include external plug-in.": "Cảnh báo nếu cần Mixdown thời gian thực để gộp Plug-in External.",
   "Warning: A control with the defined MIDI message already exists. Please change the MIDI message settings of one of the controls.": "Cảnh báo: Điều khiển với thông điệp MIDI đã định nghĩa đã tồn tại. Vui lòng đổi cài đặt thông điệp MIDI của một trong các điều khiển.",
   "Warning: Channel settings or automation of selected tracks are not equal.\\n\\nDo you want to continue?": "Cảnh báo: Cài đặt Channel hoặc Automation của các Track đã chọn không bằng nhau.\\n\\nBạn có muốn tiếp tục không?",
   "Warp Samples": "Warp Sample",

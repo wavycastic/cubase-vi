@@ -1179,7 +1179,7 @@
   "You cannot edit multiple maps": "Bạn không thể chỉnh sửa nhiều Map cùng lúc",
   "You cannot freeze an inactive instrument!": "Bạn không thể Freeze một nhạc cụ không hoạt động!",
   "You cannot remove the root note.": "Bạn không thể gỡ bỏ nốt gốc (Root).",
-  "You have modified the timecode offset. Do you want keep the project content at its timecode positions?": "Bạn đã sửa đổi Offset Timecode. Bạn có muốn giữ nội dung Project tại vị trí Timecode không?",
+  "You have modified the timecode offset. Do you want keep the project content at its timecode positions?": "Bạn đã sửa đổi độ lệch Timecode. Bạn có muốn giữ nội dung Project tại vị trí Timecode không?",
   "Zoom Menu": "Zoom Menu",
   "Zoom Tool Standard Mode: Horizontal Zooming Only": "Chế độ tiêu chuẩn của công cụ Zoom: chỉ Zoom ngang",
   "dB": "dB",
