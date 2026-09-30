@@ -477,6 +477,53 @@ Lỗi này vào bản dịch bằng đường rất hiển nhiên: trong bảng 
 Bài học: trong bảng cài đặt, hai từ tiếng Anh đứng cạnh nhau thì **nguy hiểm
 gấp đôi** — phải dịch từng từ một, không đọc cả cụm.
 
+### `External` là **thuật ngữ**, không phải `bên ngoài`
+
+`bên ngoài` = *outside* — nghĩa **đối lập**. `External` giữ tiếng Anh ở ~40 key
+khác. Bốn câu trong **cùng một bảng** đọc sai:
+
+```
+External plug-in is used. Freezing will be done in real time.
+  ->  Plug-in bên ngoài đang được dùng. ...
+External files will be copied into the working directory!
+  ->  Các file bên ngoài sẽ được sao chép vào thư mục làm việc!
+External sync cannot be activated because Nuendo is the timecode master.
+  ->  Đồng bộ bên ngoài không thể kích hoạt vì Nuendo là Timecode Master.
+Do Not Connect Input/Output Busses When Loading External Projects
+  ->  ... Khi tải Project bên ngoài
+```
+
+Bốn key **cùng họ**, **cùng bảng cài đặt** — nên nếu đã quyết định `External`
+thì phải tra **toàn bộ họ**, không dừng ở key đang sửa. Đây là họ thứ sáu
+dính lỗi "đọc một từ thành một từ khác".
+
+### Câu tiếng Việt chỉ có **một** từ tiếng Việt
+
+Lớp lỗi riêng của *câu dài* (nhãn ngắn không có):
+
+```
+Click 'Start' to scan for unreferenced files
+  ->  Click 'Start' vào scan cho unreferenced files
+Found participants without master: %s. Try to reconnect?
+  ->  Found participants without master: %s. Try vào reconnect?
+IP Conflict with client: %s - set client state to logged off.
+  ->  IP Conflict với client: %s - set client state vào logged off
+```
+
+Từ tiếng Việt duy nhất là **giới từ `vào` / `với`** — thứ không đứng một mình
+trong câu. Hai câu kia gần như **thuần tiếng Anh**. `audit_leak` không bắt vì
+câu *có* chữ Hán.
+
+Và câu dài hay bị **cắt mất vế sau**:
+
+```
+Picks up on the value of the %s function ... This results in smooth value
+changes, but requires you to estimate the pickup value.
+  ->  ... Điều này giúp thay đổi giá trị mượt mà hơn.
+```
+
+Mất đúng vế nói **cái giá** của tính năng. Khi đọc câu dài, phải đếm vế.
+
 ### Bốn lần "đọc một từ thành một từ khác"
 
 `Half` → `Giảm` (flat) · `Ext.` → `Mở rộng` (extend) · `String` → `Dây đàn`
