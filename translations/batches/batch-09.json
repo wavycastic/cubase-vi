@@ -865,7 +865,7 @@
   "Real Time Algorithm has been deactivated because pitch or stretch factor lies outside the limits of the current preset.": "Real Time Algorithm đã bị tắt vì Pitch hoặc hệ số co giãn nằm ngoài giới hạn của Preset hiện tại.",
   "Recall Device State": "Gọi lại trạng thái Device",
   "Recall Settings": "Cài đặt Recall",
-  "Record Destination when track is enabled for both part record and automation write": "Ghi vào đích khi Track được bật cho cả ghi Part và ghi Automation",
+  "Record Destination when track is enabled for both part record and automation write": "Đích ghi khi Track được bật cho cả ghi Part và ghi Automation",
   "Record Enable On/Off": "Bật/Tắt ghi",
   "Record Enable/Monitor": "Bật ghi/Monitor",
   "Record In Editor": "Ghi trong Editor",
