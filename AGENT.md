@@ -898,6 +898,58 @@ WRONG FORM  label 'All MIDI Inputs' is 'Tất cả MIDI Input'
 Câu văn xuôi **trích nhãn**, mà nhãn vừa đổi ngay dưới tay nó. Đây đúng là việc
 bộ dò sinh ra để làm — **chạy lại bộ dò sau khi ghi**, đừng tin lần chạy trước.
 
+### ⚠️⚠️ `[RM]` **KHÔNG** được nằm trong giá trị — nó sẽ **hiện lên màn hình**
+
+Đợt 66. Đây là lỗi **chức năng**, không phải lỗi văn bản.
+
+Cubase tạo một bản sao thứ hai của một nhãn cho chế độ read-mode và đặt tên
+nó là `X[RM]`. Hai bản đó là **hai thẻ `<String>` riêng**, **cùng tiếng Anh**,
+và nhãn `[RM]` chỉ nằm trong **thuộc tính `Key`**.
+
+Điều khẳng định không phải lập luận mà là **file gốc**: cả **TÁM** nhà cung cấp
+dịch cặp đó **giống hệt nhau**, và **không ai** đặt nhãn vào giá trị.
+
+```
+Keep History        de "Verlauf speichern"   fr "Garder historique"
+Keep History[RM]    de "Verlauf speichern"   fr "Garder historique"
+
+Stacked             ru "Накопление дублей"
+Stacked[RM]         ru "С накоплением"
+```
+
+**11/15** giá trị `[RM]` mang nhãn → chuỗi `[RM]` sẽ được **vẽ lên màn hình**
+cạnh 11 nhãn ở chế độ read-mode. **Không bộ dò nào bắt được**: `[RM]` là văn bản
+hợp lệ, và giá trị chứa nó vốn dĩ là một bản dịch tốt.
+
+**Bây giờ đã có LUẬT CỨNG thứ 5 trong `check_style.py`** — và nó là luật duy
+nhất trong 5 luật **không mang tính thẩm mỹ**:
+
+```python
+# Rule 5: the "[RM]" marker names the KEY, not the text.
+if '[RM]' in val:
+    errors.append((key, val, 'the [RM] read-mode marker belongs to the key, ...'))
+```
+
+⚠️ **Công cụ tôi viết lần đầu đã mã hoá một GUESS**, rồi 11 giá trị **làm theo
+quy tắc sai đó**. Nó có một câu chuyện nghe rất hợp lý ("giá trị = giá trị gốc +
+nhãn để phân biệt"). Bài học: **công cụ mã hoá điều mình đoán thì tệ hơn không
+có công cụ** — và ở đây còn tệ hơn, vì nó **tạo ra** 11 lỗi chứ không chỉ bỏ sót.
+
+Luật thật: **giá trị của `X[RM]` phải BẰNG giá trị của `X`, không có nhãn.**
+
+```
+tools/find_rm_mismatch.py     ← đã viết lại theo luật thật (so BẰNG, không so hình dạng)
+tools/find_near_duplicate_keys.py   ← gom key chỉ khác hoa/thường hoặc khoảng trắng
+```
+
+Hai cặp còn **khác cả cách diễn đạt** — đúng lỗi, và chỉ thấy được vì so
+**bằng** chứ không so hình dạng:
+
+```
+Keep History[RM]  ->  Giữ History[RM]     ← History chưa dịch
+New Parts[RM]     ->  Tạo Parts[RM]       ← đọc khác hẳn, cùng một tiếng Anh
+```
+
 ### `Insert` — **danh từ** và **động từ**, cùng một chữ
 
 Cùng dạng với `String` (đợt 29) và `Notation` (đợt 55):

@@ -9,6 +9,15 @@ Rules:
      Snap, Grid, Bounce, Render, Freeze, Warp, ASIO, VST, MIDI...) must stay in English.
   3. %-placeholders (%s, %d, %.3f, etc.) must survive intact.
   4. No empty values.
+  5. No value may contain the "[RM]" marker.
+
+Rule 5 is rule 6 of a family of four, and it is the only one that is not about
+style. Cubase's extractor makes a second copy of a label for its read-mode
+display and names it "X[RM]"; the two keys are separate <String> entries with the
+same English, and every one of the eight vendors translates them IDENTICALLY and
+with no marker in the value. So the marker belongs to the KEY and to nothing
+else. Round 66 found eleven values carrying it, which means the word "[RM]" would
+have been drawn on screen next to the label in read mode.
 
 Usage:  python tools/check_style.py [--verbose]
 Exit code 0 = clean, 1 = violations found.
@@ -71,6 +80,13 @@ for key, val in sorted(m.items()):
         got = sorted(PLACEHOLDER.findall(val))
         if want != got:
             errors.append((key, val, f'placeholder mismatch: source has {want}, translation has {got}'))
+
+    # Rule 5: the "[RM]" marker names the KEY, not the text. It is in the
+    # <String Key=...> attribute of a second entry for read mode; the eight
+    # vendors all leave it out of the value, so it would be drawn on screen.
+    if '[RM]' in val:
+        errors.append((key, val, 'the [RM] read-mode marker belongs to the key, '
+                                 'never to the translated text'))
 
 print(f'style check: {len(m)} entries in {os.path.relpath(MAP, ROOT)}')
 
