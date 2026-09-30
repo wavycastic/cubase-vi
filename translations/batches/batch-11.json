@@ -846,7 +846,7 @@
   "Stereo Flip": "Đảo kênh Stereo",
   "Stretch Controller Data": "Kéo giãn dữ liệu Controller",
   "Stretch Tempo Data": "Kéo giãn dữ liệu Tempo",
-  "Stretch or pitch factor out of range! Use real time preset instead.": "Hệ số co giãn hoặc Pitch vượt ngoài phạm vi! Hãy dùng Preset thời gian thực để thay thế.",
+  "Stretch or pitch factor out of range! Use real time preset instead.": "Hệ số co giãn hoặc Pitch vượt phạm vi! Dùng Preset thời gian thực.",
   "String": "String",
   "Strip Effects": "Hiệu ứng của Strip",
   "Strip Modules": "Strip Module",
