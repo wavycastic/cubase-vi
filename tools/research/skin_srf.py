@@ -68,7 +68,7 @@ def main():
 
     dims = srf.image_dimensions()
     if dims:
-        print(f'\nimage sizes (most common):')
+        print('\nimage sizes (most common):')
         for (w, h), n in dims.most_common(10):
             print(f'  {n:>4} x  {w}x{h}')
 

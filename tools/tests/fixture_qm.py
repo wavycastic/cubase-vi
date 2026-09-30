@@ -58,7 +58,8 @@ def catalogue(messages, context='TestDialog', slots=None, raw_messages=None):
 
     lrelease sizes the hash table at exactly twice the number of entries, with
     a single empty slot - which is what lets the reader sanity-check that it
-    recovered everything.
+    recovered everything.  The Contexts block is the raw locale name with no
+    length prefix, matching what the real Steinberg catalogues contain.
     """
     if raw_messages is not None:
         msg_block = raw_messages
@@ -70,10 +71,9 @@ def catalogue(messages, context='TestDialog', slots=None, raw_messages=None):
         slots = 2 * len(messages)
     hashes = b''.join(struct.pack('>I', i + 1) for i in range(len(messages)))
     hashes += b'\x00\x00\x00\x00' * (slots - len(messages))
-    ctx = utf16('en_US') if context else b''
     out = MAGIC
-    if ctx:
-        out += block(0x2F, struct.pack('>H', len(ctx) // 2) + ctx)
+    if context:
+        out += block(0x2F, context.encode('utf-8'))
     out += block(0x42, hashes)
     out += block(0x69, msg_block)
     return out

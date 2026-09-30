@@ -35,13 +35,18 @@ TAG_SKIP = frozenset((TAG_OBSOLETE1, TAG_COMMENT, TAG_OBSOLETE2))
 TAG_UTF16 = frozenset((TAG_SOURCE16, TAG_TRANSLATION, TAG_CONTEXT16))
 
 BLOCK_CONTEXTS = 0x2F
+# Observed: the first block of every Steinberg catalogue is tagged 0xA7
+# (0x27 after masking the endianness bit) and holds the locale name, e.g.
+# "en_US".  Stock Qt uses 0x2F for this block.  Accept both.
+BLOCK_CONTEXTS_ALT = 0x27
 BLOCK_HASHES = 0x42
 BLOCK_MESSAGES = 0x69
 BLOCK_NUMERUS = 0x88
 BLOCK_DEPENDENCIES = 0x96
 
-BLOCK_NAMES = {BLOCK_CONTEXTS: 'Contexts', BLOCK_HASHES: 'Hashes',
-               BLOCK_MESSAGES: 'Messages', BLOCK_NUMERUS: 'NumerusRules',
+BLOCK_NAMES = {BLOCK_CONTEXTS: 'Contexts', BLOCK_CONTEXTS_ALT: 'Contexts',
+               BLOCK_HASHES: 'Hashes', BLOCK_MESSAGES: 'Messages',
+               BLOCK_NUMERUS: 'NumerusRules',
                BLOCK_DEPENDENCIES: 'Dependencies'}
 
 
@@ -131,18 +136,30 @@ class QM:
     # -- introspection -----------------------------------------------------
     @property
     def contexts(self):
-        blob = self.blocks.get(BLOCK_CONTEXTS)
+        """The Contexts block, which holds the locale name(s).
+
+        With a single context the block is the raw locale string and nothing
+        else - no length prefix.  Multi-context catalogues frame each entry
+        with a 2-byte length, so try that first and fall back.
+        """
+        blob = None
+        for tag in (BLOCK_CONTEXTS, BLOCK_CONTEXTS_ALT):
+            if tag in self.blocks:
+                blob = self.blocks[tag]
+                break
         if not blob:
             return []
         out, i = [], 0
         while i + 2 <= len(blob):
-            n = _u16be(blob, i)          # length in UTF-16 code units
-            s = blob[i + 2:i + 2 + 2 * n]
-            if len(s) < 2 * n:
+            n = _u16be(blob, i)
+            if n == 0 or i + 2 + 2 * n > len(blob):
                 break
-            out.append(decode_utf16(s))
+            out.append(decode_utf16(blob[i + 2:i + 2 + 2 * n]))
             i += 2 + 2 * n
-        return out
+        if i == len(blob) and out:
+            return out
+        # single unframed locale name
+        return [decode_8bit(blob)]
 
     @property
     def hash_slots(self):

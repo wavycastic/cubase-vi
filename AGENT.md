@@ -524,6 +524,42 @@ changes, but requires you to estimate the pickup value.
 
 Mất đúng vế nói **cái giá** của tính năng. Khi đọc câu dài, phải đếm vế.
 
+### Lớp lớn nhất: **khung tiếng Anh, chỉ chèn giới từ tiếng Việt**
+
+Đây là lớp lỗi mà **không bộ dò nào bắt được**, vì câu *có* tiếng Việt:
+
+```
+Notes for Which Accidentals Have Already Been Stated Within the Bar
+  ->  Notes cho Which Accidentals Have Already Been Stated Within the Bar
+Primary type is used for the main chord symbol
+  ->  Primary type is used cho the main chord symbol
+Press up to 5 keys to assign remote keys to subsections
+  ->  Press up vào 5 keys vào Gán remote keys vào subsections
+```
+
+Câu tiếng Anh **đứng nguyên còn nguyên**; người dịch chỉ thay **đúng chỗ
+giới từ tiếng Anh** bằng giới từ tiếng Việt rồi cho là xong. Không có gì bị
+dịch sai — **không có gì được dịch**.
+
+Cách phát hiện: `tools/find_english_frame.py` — một giá trị mang **4 từ tiếng
+Anh liên tiếp** xuất hiện nguyên văn trong chính nguồn của nó thì đã bị *chú
+thích*, chứ không phải *dịch*. Ngưỡng 4 vì thuật ngữ DAW tạo ra rất nhiều cụm
+2–3 từ vô hại. `tools/dump_frames.py` in ra để đọc tay. `tools/
+find_thin_vietnamese.py` là tỉ lệ Latin/Han — nó phát hiện ra lớp này.
+
+Sau 2 đợt: 142 → 94, và **24 mục còn lại ở ngưỡng 5 đều đúng** (tên tính năng
+trong ngoặc kép, đường dẫn menu, chuỗi định dạng).
+
+Ngoài ra, cùng đợt quét ra hai thứ mà `audit_quality` báo 0:
+
+```
+The application was terminated unexpectedly  ->  application was terminated unexpectedly
+The search returned no results              ->  search returned no results
+```
+
+Mất mạo từ `The` → **hết tiếng Việt**. Bộ dò "fully untranslated prose" hỏi
+"có tiếng Việt không", mà `a` và `the` chính là toàn bộ chênh lệch.
+
 ### `Mouse Wheel` là **con lăn chuột**, không phải `cuộn chuột`
 
 `cuộn` = *scroll* (hành động cuộn). `con lăn chuột` = *mouse wheel* (cái thiết

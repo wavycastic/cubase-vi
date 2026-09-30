@@ -12,6 +12,7 @@ Vietnamese pipeline keeps working while the theme changes around it.
 """
 import struct
 import zlib
+from collections import Counter
 from dataclasses import dataclass, field
 
 SRF_MAGIC = b'Steinberg Resource File'
@@ -52,18 +53,26 @@ class Member:
 
 def _classify(blob):
     head = blob[:8]
-    if blob[:5] == b'<skin':
-        return KIND_SKIN, ''
     if head[:4] == b'\x89PNG':
         return KIND_PNG, ''
     if head[:2] == b'BM':
         return KIND_BMP, ''
-    # BITMAPINFOHEADER: biSize == 40 (0x28) with no file header.
+    # A bare DIB: BITMAPINFOHEADER with biSize == 40 and no file header.
     if len(blob) >= 4 and struct.unpack_from('<I', blob, 0)[0] == 40:
         return KIND_DIB, ''
-    if blob[:5] == b'<svg ' or blob[:4] == b'<svg':
-        return KIND_SVG, ''
-    if blob[:1] == b'<':
+    # The skin chunks are XML but may open with comments, a blank line or a
+    # BOM, so classify on the first non-whitespace character.
+    text = blob.lstrip(b'\xef\xbb\xbf \t\r\n')
+    if text[:1] == b'<':
+        if text[:5] == b'<skin':
+            return KIND_SKIN, ''
+        if text[:4] == b'<svg':
+            return KIND_SVG, ''
+        if text[:5] == b'<?xml':
+            return KIND_XML, ''
+        # A comment-only fragment is still part of the skin description
+        if text[:4] == b'<!--':
+            return KIND_XML, ''
         return KIND_XML, ''
     return KIND_OTHER, head[:8].hex(' ')
 
@@ -155,7 +164,8 @@ class SRF:
         return [m for m in self if m.kind in (KIND_PNG, KIND_BMP, KIND_DIB)]
 
     def image_dimensions(self):
-        out = {}
+        """Counter of (width, height) -> number of images."""
+        out = Counter()
         for m in self.images():
             if m.kind == KIND_PNG:
                 wh = png_size(m.payload)
@@ -163,8 +173,7 @@ class SRF:
                 wh = bmp_size(m.payload)
             else:
                 wh = dib_size(m.payload)
-            if wh:
-                out.setdefault(wh, 0)
+            if wh and wh[0] and wh[1]:
                 out[wh] += 1
         return out
 

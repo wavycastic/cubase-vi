@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Find code references to a data address, verified against real instructions.
 
-    python tools/research/xref.py <exe> <target-offset|VA>
-    python tools/research/xref.py <exe> 0x4FAEBF0 --disasm
+    python tools/research/xref.py <exe> <target-offset|VA> [--disasm]
+    python tools/research/xref.py <exe> --va <target-VA>
     python tools/research/xref.py <exe> --callers <VA>
 
 Why this is not a byte scan
@@ -12,6 +12,12 @@ instructions' operand bytes, so a naive scan reports plenty of false positives.
 A REX-prefix-only scan goes the other way and misses real references.  This
 tool takes the function list from the exception directory (`.pdata`), prefilters
 cheaply, then confirms every hit with capstone.  Requires capstone.
+
+Use `--va` for targets in `.bss`.  Anything with no raw bytes on disk has no
+file offset, and `PE.resolve` cannot produce one, so the default offset-based
+mode simply cannot see it.  Variables in `.bss` are exactly the interesting
+ones - in `FLEngine_x64.dll` the `ColorfulWaves` setting lives at VA
+`0x13AEAA8`, and `--va` is what finds its two readers.  Requires capstone.
 """
 import sys
 
@@ -22,6 +28,7 @@ from cubelib.pe import PE
 from cubelib.x86 import XrefFinder, Disassembler, MissingCapstone
 
 USAGE = ('xref.py <exe> <target-offset|VA> [--disasm] [--func] | '
+         'xref.py <exe> --va <target-VA> | '
          'xref.py <exe> --callers <VA>')
 
 if len(sys.argv) < 3:
@@ -50,7 +57,26 @@ if '--callers' in sys.argv:
     pe.close()
     raise SystemExit(0)
 
-value = int(sys.argv[2], 16)
+value = int(next(a for a in sys.argv[2:] if not a.startswith('--')), 16)
+if '--va' in sys.argv:
+    # A VA works even when the target has no bytes on disk (.bss), which is
+    # where setting variables live.  Verify it is at least a plausible VA.
+    target = value if value >= pe.imagebase else value + pe.imagebase
+    hits = finder.find_va(target)
+    print(f'target VA 0x{target:X} (RVA 0x{target - pe.imagebase:X})')
+    sec = next((s for s in pe.sections
+                if s.contains_rva(target - pe.imagebase)), None)
+    print(f'        section: {sec.name if sec else "none (unmapped)"}'
+          f'{"  - no raw bytes, offset mode could not see this" if sec and not sec.raw_size else ""}')
+    print(f'functions indexed from .pdata: {len(pe.functions()):,}')
+    print(f'\nverified xrefs: {len(hits)}')
+    for h in hits:
+        fr = (f'RVA 0x{h.func_rva[0]:X}..0x{h.func_rva[1]:X}'
+              if h.func_rva else 'no .pdata')
+        print(f'  0x{h.insn_address:X}  {h.insn_mnemonic:8} {h.insn_op_str:36}  {fr}')
+    pe.close()
+    raise SystemExit(0)
+
 off, kind = pe.resolve(value)
 if off is None:
     die(f'0x{value:X} is not inside {sys.argv[1]}')

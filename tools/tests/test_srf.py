@@ -76,12 +76,14 @@ class TestSRF(unittest.TestCase):
         self.assertEqual(m[1].payload, XML)
         self.assertEqual(m[5].payload, SVG)
 
-    def test_offsets_are_contiguous(self):
-        expect = len(HEADER)
+    def test_offsets_account_for_the_name_line(self):
+        # every member is preceded by the leftover /Thumbs.db name line, so
+        # bodies are 12 bytes apart, not back to back
+        expect = len(HEADER) + len(NAME)
         for mem in self.srf:
             self.assertEqual(mem.offset, expect)
-            expect += mem.stored_size
-        self.assertEqual(expect, self.srf.trailing_offset)
+            expect += mem.stored_size + len(NAME)
+        self.assertEqual(expect - len(NAME), self.srf.trailing_offset)
 
     def test_len_and_iter(self):
         self.assertEqual(len(self.srf), 6)
@@ -97,15 +99,18 @@ class TestSRF(unittest.TestCase):
         self.assertEqual(dims.get((86, 60)), 1)
 
     def test_images_helper(self):
-        self.assertEqual(len(self.srf.images()), 4)      # 2 png + 1 dib
+        # 2 PNG + 1 DIB; the SVG is vector art and counted separately
+        self.assertEqual(len(self.srf.images()), 3)
+        self.assertEqual(len(self.srf.by_kind(KIND_SVG)), 1)
 
     def test_by_kind(self):
         self.assertEqual(len(self.srf.by_kind(KIND_PNG)), 2)
 
     def test_summary_reports_coverage(self):
         s = self.srf.summary()
-        self.assertIn('ZZZZZ'.strip(), s)   # trailing bytes are mentioned
-        self.assertIn('members', s)
+        self.assertIn('6 members', s)
+        self.assertIn('5 trailing bytes', s)
+        self.assertIn('accounted for', s)
 
     def test_names_from_trailing_table(self):
         self.assertIn('ZZZZ', ' '.join(self.srf.names()))
@@ -115,7 +120,8 @@ class TestSRFEmpty(unittest.TestCase):
     def test_header_only(self):
         srf = SRF(HEADER)
         self.assertEqual(len(srf), 0)
-        self.assertEqual(srf.trailing, b'')
+        # the CRLF that ends the header line is left over, not a member
+        self.assertEqual(srf.trailing, b'\r\n')
 
     def test_stops_at_unrecognised_data(self):
         srf = SRF(HEADER + b'\x11\x22\x33\x44' * 8)

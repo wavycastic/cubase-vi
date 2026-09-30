@@ -114,13 +114,13 @@ class Binary:
         return m.group().decode() if m else None
 
     def strings_ascii(self, lo, hi, minlen=4):
-        return [(lo + m.start(), m.group().decode('latin-1'))
+        return [(m.start(), m.group().decode('latin-1'))
                 for m in _ASCII_RUN.finditer(self.data, lo, hi)
                 if len(m.group()) >= minlen]
 
     def strings_utf16(self, lo, hi, minlen=3):
         pat = re.compile(rb'(?:[\x20-\x7e]\x00){%d,}' % minlen)
-        return [(lo + m.start(), m.group().decode('utf-16-le'))
+        return [(m.start(), m.group().decode('utf-16-le'))
                 for m in pat.finditer(self.data, lo, hi)]
 
     # -- display -----------------------------------------------------------

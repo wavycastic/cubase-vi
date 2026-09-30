@@ -73,35 +73,45 @@ def build():
     rdata[wide_off:wide_off + len(wide)] = wide
 
     # ---- text: three functions
-    # func A references the ASCII string and the wide string, then calls func C
+    # Displacements are computed from the address of the *following*
+    # instruction, which is what RIP-relative addressing is relative to.
+    def va(rva):
+        return IMAGE_BASE + rva
+
     fA_rva = 0x1000
     fB_rva = 0x1020
     fC_rva = 0x1040
-    fA = lea_rax(rdata_va + hello_off, text_va + 0x1007) + \
-        lea_rcx(rdata_va + wide_off, text_va + 0x100E) + \
-        call_va(text_va + fC_rva, text_va + 0x1013) + \
-        b'\xC3'
-    fA = fA.ljust(0x20, b'\xCC')
-    assert len(fA) == 0x20, len(fA)
+    SIZE = 0x20
 
-    # func B: a bare lea with NO REX prefix on the opcode would be wrong, but a
-    # 3-operand form without REX still exercises the non-REX path:
-    #   8D 05 <disp32>  lea eax, [rip+disp]   (no REX.W)
-    fB = b'\x8D\x05' + struct.pack('<i', rdata_va + hello_off - (text_va + fB_rva + 6)) + b'\xC3'
-    fB = fB.ljust(0x20, b'\xCC')
-    assert len(fB) == 0x20
+    leaA_rva = fA_rva                      # 48 8D 05 disp32 -> 7 bytes
+    leaW_rva = leaA_rva + 7                # 48 8D 0D disp32 -> 7 bytes
+    call_rva = leaW_rva + 7                # E8 rel32        -> 5 bytes
+
+    fA = lea_rax(rdata_va + hello_off, va(leaA_rva + 7))
+    fA += lea_rcx(rdata_va + wide_off, va(leaW_rva + 7))
+    fA += call_va(va(fC_rva), va(call_rva + 5))
+    fA += b'\xC3'
+    fA = fA.ljust(SIZE, b'\xCC')
+    assert len(fA) == SIZE
+
+    # func B: the same reference through a NON-REX encoding
+    #   8D 05 <disp32>  lea eax, [rip+disp]
+    fB = b'\x8D\x05' + struct.pack(
+        '<i', (rdata_va + hello_off) - va(fB_rva + 6)) + b'\xC3'
+    fB = fB.ljust(SIZE, b'\xCC')
+    assert len(fB) == SIZE
 
     # func C: no references at all
     fC = b'\x31\xC0\xC3'          # xor eax, eax ; ret
-    fC = fC.ljust(0x20, b'\xCC')
-    assert len(fC) == 0x20
+    fC = fC.ljust(SIZE, b'\xCC')
+    assert len(fC) == SIZE
 
     text = fA + fB + fC
     text = text.ljust(SECTIONS[0][2], b'\xCC')
 
     # ---- pdata: three RUNTIME_FUNCTION entries, lives in .rdata
     pdata_off = 0x200
-    pdata = b''.join(struct.pack('<III', rva, rva + 0x20, 0)
+    pdata = b''.join(struct.pack('<III', rva, rva + SIZE, 0)
                      for rva in (fA_rva, fB_rva, fC_rva))
     rdata[pdata_off:pdata_off + len(pdata)] = pdata
 

@@ -2,7 +2,7 @@
 """Inspect the Score Editor's own localisation tree.
 
     python tools/research/scoring_l10n.py
-    python tools/research/scoring_l10n.py --install "E:\Steinberg\Cubase 15"
+    python tools/research/scoring_l10n.py --install "E:/Steinberg/Cubase 15"
     python tools/research/scoring_l10n.py --diff en de
 
 Why this exists
@@ -50,10 +50,8 @@ def instrument_file(path):
 
 
 def catalogue(path):
-    try:
-        return QM.load(path)
-    except (QMError, OSError) as exc:
-        return {'error': str(exc)}
+    """Return the QM, or raise.  Callers decide how loud a failure is."""
+    return QM.load(path)
 
 
 def main():
@@ -97,9 +95,10 @@ def main():
     print(f'\ncatalogues ({len(qm_files)}):')
     print(f'  {"file":24} {"size":>10} {"contexts":>9} {"implied":>8} {"parsed":>7}')
     for f in qm_files:
-        qm = catalogue(os.path.join(l10n, f))
-        if 'error' in qm:
-            print(f'  {f:24} ERROR {qm["error"]}')
+        try:
+            qm = catalogue(os.path.join(l10n, f))
+        except (QMError, OSError) as exc:
+            print(f'  {f:24} ERROR {exc}')
             continue
         exp = qm.expected_messages
         flag = '' if qm.complete else '  <-- incomplete'

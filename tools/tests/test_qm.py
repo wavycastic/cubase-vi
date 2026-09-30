@@ -46,11 +46,31 @@ class TestQM(unittest.TestCase):
 
     def test_roundtrip_wide(self):
         pairs = [('Close', 'Đóng'), ('Version', 'Phiên bản'), ('Add', 'Thêm')]
-        qm = QM.loads(fixture_qm.catalogue(pairs))
+        qm = QM.loads(fixture_qm.catalogue(pairs, context='vi_VN'))
         self.assertTrue(qm.complete, 'hash table implies more messages than parsed')
         got = {m.source: m.translation for m in qm.messages if m.source}
         self.assertEqual(got, dict(pairs))
+        self.assertEqual(qm.contexts, ['vi_VN'])
+
+    def test_contexts_block_is_unframed_8bit(self):
+        # Steinberg's catalogues store the locale as raw bytes with no length
+        # prefix, so the reader must not assume one
+        blob = fixture_qm.catalogue([('a', 'b')], context='en_US')
+        i = blob.find(b'en_US')
+        self.assertGreater(i, 0)
+        qm = QM.loads(blob)
         self.assertEqual(qm.contexts, ['en_US'])
+
+    def test_contexts_block_with_length_prefix(self):
+        # Some catalogues frame each context with a 2-byte code-unit count
+        # followed by UTF-16BE.  Build one directly rather than splicing, so
+        # the block length stays correct.
+        raw = fixture_qm.message('a', 'b', 'D')
+        framed = struct.pack('>H', 5) + 'en_US'.encode('utf-16-be')
+        out = fixture_qm.MAGIC + fixture_qm.block(0x2F, framed)
+        out += fixture_qm.block(0x42, struct.pack('>I', 1))
+        out += fixture_qm.block(0x69, raw)
+        self.assertEqual(QM.loads(out).contexts, ['en_US'])
 
     def test_roundtrip_8bit_source_and_context(self):
         # Real catalogues carry the source and context as 8-bit tags (6 and 7)
