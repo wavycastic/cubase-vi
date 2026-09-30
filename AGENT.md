@@ -971,16 +971,37 @@ tools/strip_languages.py     ← xoá phần tử ngôn ngữ, rồi cả dòng 
                                <LanguageTable> để file thật sự chỉ có hai
 ```
 
-⚠️ **Vì sao ban đầu KHÔNG cho làm mặc định:** file gốc có **đúng chín phần tử
-ngôn ngữ ở cả 10.737 mục** — không mục nào thiếu một cái. Nghĩa là bản hai ngôn
-ngữ là **hình dạng Cubase chưa từng nhận**, và tôi **không có cách nào biết
-trước**. Nên ban đầu nó là **lựa chọn**, và đường quay lui phải sẵn sàng **trước
-khi** mở Cubase:
+⚠️ **Lập luận tôi từng dùng để do dự — SAI, đã sửa.** Tôi từng viết: *"file gốc
+có đúng chín phần tử ngôn ngữ ở cả 10.737 mục, nên bản hai ngôn ngữ là hình dạng
+Cubase chưa từng nhận"*. Cả hai vế đều đúng, nhưng **kết luận không follow**.
+
+```
+đều có 9 ngôn ngữ ở mọi mục
+  → mô tả ĐIỀU STEINBERG CHỌN ĐỂ GỬI
+  → KHÔNG phải điều Cubase BẮT BUỘC
+```
+
+Tôi lấy **một dữ kiện về lựa chọn của nhà cung cấp** rồi dùng nó làm **luận lý về
+yêu cầu của bộ phân tích cú pháp**. Hai thứ khác nhau.
+
+Và bằng chứng còn nghiêng **ngược lại**: bảng dịch được thiết kế để **thêm** ngôn
+ngữ mà **không cần sửa file** — `<LanguageTable>` cộng phần tử ngôn ngữ trong từng
+`<String>`. Đó **chính là** nền tảng của cả dự án này: tôi thêm `<vi>` vào file
+Steinberg gửi. **Xoá** là thay đổi **nhỏ hơn** thao tác **thêm** đã được chứng minh
+là chạy được.
+
+Nên đúng ra phải viết: **"chưa ai thử, nên thử"** — và cái thử đó rẻ: một lần
+khởi động lại Cubase. Tôi đã dựng sẵn đường quay lui rồi, nên phần **cẩn trọng ấy
+vô hại**. Nhưng **lý do** tôi đưa ra thì sai, và nó đã được viết vào đây — nên phải
+sửa, kẻo lần sau (hoặc người sau) tin vào nó rồi tự dè chừng những thứ vốn vô hại.
+
+Đường quay lui vẫn giữ nguyên, và vẫn đáng giữ:
 
 - `install.ps1` ghi `.bak` cạnh mọi file nó ghi đè; `-Action uninstall` khôi phục
 - `keys/translation_original.xml` là **nguồn** của cả hai bản, và nằm trong git
 
-**Đã kiểm chứng trên chính file đã cài** (không phải trên bản build):
+**Đã kiểm chứng trên chính file đã cài** (không phải trên bản build), **và người
+dùng đã xác nhận Cubase hiển thị đúng**:
 
 ```
 String entries 10.737   <vi> 10.737 (thiếu 0)   <us> 10.737
