@@ -59,6 +59,10 @@ tools/worklist.py             danh sách chuỗi chưa dịch, ưu tiên theo nh
 tools/suggest_keys.py         gợi ý key thật khi tên bạn đoán không khớp
 tools/check_dups.py           phát hiện key trùng trong JSON
 tools/check_style.py          cưỡng chế AGENT.md: mỗi giá trị phải là "<Vi> (<key>)" hoặc đúng key
+tools/audit_clarity.py        tìm chỗ DÀI và chỗ KHÓ ĐỌC (vòng 81 trở đi)
+tools/audit_bloat.py          tìm chỗ tiếng Việt dài hơn tiếng Anh không cần thiết
+tools/cubelib/                thư viện dùng chung cho toàn bộ công cụ
+tools/tests/                  test cho cubelib (chạy được, không cần Cubase)
 tools/research/               công cụ RE dùng để tìm ra cơ chế (xem RESEARCH.md)
 scripts/install.ps1           install / uninstall / status
 ```
@@ -75,6 +79,25 @@ python tools\build.py                     # build lại
 powershell -File scripts\install.ps1 -Action install
 ```
 
+## Rà lại độ dễ đọc
+
+Độ phủ 100% không có nghĩa là dễ đọc. Hai loại lỗi hay gặp nhất:
+
+```powershell
+python tools\audit_clarity.py             # [A] dài, [B] khó đọc
+python tools\audit_clarity.py --list A    # xem chuỗi dài nhất
+python tools\audit_clarity.py --list B    # xem chỗ khó đọc nhất
+python tools\audit_bloat.py               # VI dài hơn EN không cần thiết
+```
+
+- **[A] Dài** — quá ~78 ký tự thì nhãn Cubase bị xuống dòng hoặc cắt.
+- **[B] Khó đọc** — tiếng Việt đúng ngữ pháp nhưng nhiều danh từ dính liền
+  nhau, hoặc còn tiếng Anh trần. Hai loại lỗi này **không sai**, chỉ mệt mắt,
+  nên phải đọc tay chứ audit tự động không bắt được.
+
+Sửa xong thì ghi vào một script `fix_readingNN.py` (mẫu: `fix_reading81.py`)
+để có thể chạy lại và xem trước thay đổi.
+
 Bảng dịch khoá theo **chuỗi tiếng Anh** (`"File": "Tệp"`) vì 97% `String Key`
 trùng bản gốc. Tra chuỗi cần dịch trong `keys/all_strings.tsv`;
 `tools/suggest_keys.py` giúp khi bạn đoán sai tên.
@@ -82,10 +105,38 @@ trùng bản gốc. Tra chuỗi cần dịch trong `keys/all_strings.tsv`;
 > JSON không cho key trùng (cái sau ghi đè cái trước, không cảnh báo).
 > Chạy `python tools\merge_maps.py --check` trước khi commit.
 
+## Toolchain RE
+
+Mọi công cụ nghiên cứu dùng chung `tools/cubelib/`:
+
+| | |
+|---|---|
+| `cubelib/binary.py` | mmap, tìm chuỗi mọi encoding, hexdump |
+| `cubelib/pe.py` | PE32/PE32+: section, RVA↔offset, resource, **`.pdata` = biên hàm thật** |
+| `cubelib/x86.py` | disasm theo biên hàm + xref đã verify bằng capstone |
+| `cubelib/qm.py` | đọc catalogue Qt `.qm` (Score Editor) |
+| `cubelib/srf.py` | giải nén `skin.srf` (toàn bộ theme Cubase) |
+| `cubelib/cubase.py` | đường dẫn Cubase, ngôn ngữ, tên resource |
+
+```powershell
+python tools\research\pe_info.py "E:\Steinberg\Cubase 15\Cubase15.exe" --find TRANSLATION.XML
+python tools\research\xref.py ScoringEngine.dll 0x4FAEBF0
+python tools\research\qm_dump.py "...\ScoringEngine\l10n"
+python tools\research\skin_srf.py "...\Skins\skin.srf" --templates
+python tools\research\scoring_l10n.py --diff en de
+```
+
+**Xref đã verify.** Bản cũ quét byte thô nên vừa bỏ sót (chỉ nhận REX prefix)
+vừa báo nhầm. Bản này lấy danh sách hàm từ `.pdata`, lọc thô rồi để capstone
+xác nhận từng hit — `ScoringEngine.dll` có 346.830 hàm, quét mất vài giây.
+
 ## Yêu cầu
 
-- Python 3.10+ (chỉ dùng thư viện chuẩn)
-- `tools/research/disasm.py` cần `pip install capstone` — chỉ dùng khi nghiên cứu lại
+- Python 3.10+
+- **Pipeline dịch: chỉ thư viện chuẩn.** Không cần cài gì thêm.
+- **Công cụ RE:** `pip install -r requirements-dev.txt` (capstone). Thiếu thì các
+  script đó in hướng dẫn cài, phần còn lại vẫn chạy.
+- Test: `python tools\tests\run.py` — 70 test, **không cần Cubase, không cần capstone**
 - Cubase phải **đóng hẳn** trước khi deploy
 
 ## Lưu ý
