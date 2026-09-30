@@ -188,7 +188,7 @@
   "Cannot add more tracks. The MIDI track count is at the limit.": "Không thêm được Track. Số MIDI Track đã đạt giới hạn.",
   "Cannot add more tracks. The VCA track count is at the limit.": "Không thêm được Track. Số VCA Track đã đạt giới hạn.",
   "Cannot add more tracks. The audio track count is at the limit.": "Không thêm được Track. Số Audio Track đã đạt giới hạn.",
-  "Cannot add more tracks. The chord track count is at the limit.": "Không thêm được Track. Chord Track đã đạt giới hạn.",
+  "Cannot add more tracks. The chord track count is at the limit.": "Không thêm được Track. Số Chord Track đã đạt giới hạn.",
   "Cannot add more tracks. The effect track count is at the limit.": "Không thêm được Track. Số Effect Track đã đạt giới hạn.",
   "Cannot add more tracks. The group track count is at the limit.": "Không thêm được Track. Số Group Track đã đạt giới hạn.",
   "Cannot add more tracks. The instrument track count is at the limit.": "Không thêm được Track. Số Instrument Track đã đạt giới hạn.",
