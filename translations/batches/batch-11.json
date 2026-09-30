@@ -760,7 +760,7 @@
   "Score Dynamic": "Động lực trong Score",
   "Score Editor Operation": "Thao tác Score Editor",
   "Scores...": "Score...",
-  "Script Archive has been imported, but included user mappings had to be skipped due to an error.": "Kho lưu trữ Script đã được Import, nhưng các Mapping của người dùng bị bỏ qua do có lỗi.",
+  "Script Archive has been imported, but included user mappings had to be skipped due to an error.": "Kho lưu trữ Script đã được import, nhưng các Mapping người dùng bị bỏ qua do có lỗi.",
   "Script Messages": "Thông điệp Script",
   "Script Path": "Đường dẫn Script",
   "Script could not be imported. A Script for %s - %s already exists. Use the 'Delete Script' button first.": "Không thể import Script. Một Script cho %s - %s đã tồn tại. Vui lòng dùng nút 'Xóa Script' trước.",

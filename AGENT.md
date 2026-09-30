@@ -720,6 +720,37 @@ tiếng Anh chưa dịch. Đợt 46 thấy hai key vi phạm:
 
 Phải khớp **đúng chữ trên bảng điều khiển**, nếu không người dùng tìm không thấy.
 
+## Mốc: đã đọc tay **toàn bộ** 10.737 chuỗi
+
+| Miền | Nhãn ngắn | Câu dài | Ghi chú |
+|---|---|---|---|
+| `general` | 6.834 | 499 | đợt 19, 31–37 |
+| `notation` | — | 56 | đợt 38 |
+| `music-theory` | — | 100 | đợt 39, 40 |
+| `media` | — | 205 | đợt 41–44 |
+| `mixer` | — | 103 | đợt 46, 47 |
+| `transport` | — | 96 | đợt 49 |
+| `ui` | — | 49 | đợt 50 |
+| `project` | — | 30 | đợt 51 |
+
+Đợt 51 (`project`) chỉ có **6 sửa** — ngắn nhất trong 51 đợt. Nguyên nhân nằm
+ngay trong chuỗi: miền `project` toàn câu ngắn, công thức, về quyền và mạng, **ít
+từ để sai**; và phần lớn chúng **chưa từng bị một lượt dịch tệ đụng vào**.
+
+**Hệ quả quan trọng:** rủi ro còn lại **không phân bổ đều**. Miền đáng đọc lại
+là miền có **văn xuôi dài** (`media`, `notation`, `general`) — không phải các hộp
+thoại xác nhận.
+
+Bộ dò hiện có (tất cả chạy sạch trừ 1 báo động giả đã biết):
+
+```
+tools/find_english_frame.py      4+ từ tiếng Anh nguyên văn từ nguồn   -> 84 (đều đúng)
+tools/find_english_opening.py    câu bắt đầu bằng động từ tiếng Anh    -> 24 (đều nhãn)
+tools/find_dropped_sentences.py  ít câu hơn nguồn                       ->  1 (giả)
+tools/find_quoted_names.py       tên trong ngoặc kép lệch nhãn         ->  0
+tools/find_thin_vietnamese.py    tỉ lệ Latin/Han cao                    -> dẫn đường
+```
+
 ### `Material` = `chất liệu` — **không phải** `tư liệu`
 
 `tư liệu` = *documents* (từ thư viện). `chất liệu` = *material*, và nó phủ **cả

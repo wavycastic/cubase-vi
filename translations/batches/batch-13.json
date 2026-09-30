@@ -886,7 +886,7 @@
   "Network Collaboration activated, or network configuration changed.\\n\\nMultiple network interfaces found, please select:": "Đã kích hoạt cộng tác mạng, hoặc cấu hình mạng đã đổi.\\n\\nTìm thấy nhiều giao diện mạng, vui lòng chọn:",
   "Network Drive": "Ổ đĩa mạng",
   "Network Drives": "Các ổ đĩa mạng",
-  "Network address invalid or ambiguous.": "Địa chỉ mạng không hợp lệ hoặc không xác định.",
+  "Network address invalid or ambiguous.": "Địa chỉ mạng không hợp lệ hoặc không rõ ràng.",
   "Never": "Không bao giờ",
   "New (1)": "Mới (1)",
   "New Pattern Created ( %d/%d )": "Đã tạo Pattern mới ( %d/%d )",
