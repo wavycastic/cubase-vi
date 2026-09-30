@@ -652,6 +652,49 @@ giá trị so với nguồn.
 Còn sót: chuỗi mà tiền tố key trùng với anh em — hai trong ba lỗi ở đợt này do
 tìm **tay** khi kiểm tra đầu ra của bộ dò.
 
+### Tên trong ngoặc kép phải khớp **bản dịch của nhãn**
+
+Không phải "tên trong ngoặc kép giữ tiếng Anh" — đó là **phiên bản sai đầu tiên**,
+và nó sai 4 vòng liên tiếp (đợt 45, 46, 47 đều sửa theo nó rồi lại hỏng).
+
+**Luật đúng: tên trong ngoặc kép phải khớp đúng những gì nhãn của nó dịch ra.**
+
+Vì Cubase đã Việt hoá thì **menu hiện tên đã Việt hoá**, nên trích tên tiếng
+Anh cũng sai, y như trích một chuỗi tiếng Việt mà menu không có:
+
+```
+'Part Editing Mode'   nhãn dịch là "Chế độ sửa Part"  ->  trích 'Chế độ sửa Part'  ĐÚNG
+'Z-Axis Pan'          KHÔNG có nhãn tên đó              ->  giữ tiếng Anh          ĐÚNG
+```
+
+Cả hai đều đúng, và **chỉ tra nhãn** mới phân biệt được.
+
+Bộ dò: `tools/find_quoted_names.py` — với mỗi tên trong ngoặc kép, tra nhãn có
+tên tiếng Anh **đúng bằng** tên đó, đọc bản dịch nhãn, rồi so. Sửa:
+`tools/fix_quoted_names.py` — **sinh bản thay từ bản dịch của chính nhãn**, không
+viết tay 41 dòng. 41 dòng viết tay là 41 cơ hội sai, và bảng đó sẽ chứa **bản
+sao thứ hai của bộ thuật ngữ** — đó chính là cách `Key Signature | hóa biểu` xảy ra.
+
+**Ngoại lệ: tên nút / giá trị dropdown** giữ tiếng Anh vì đó là **chữ in trên
+nút**:
+
+```
+Record Enable   nhãn dịch là "Bật ghi"
+Activate "Record Enable" or "Monitor" ...
+  ->  Bật "Bật ghi" hoặc "Monitor"      ← "bật bật ghi", vô nghĩa
+```
+
+Nên: `Record Enable`, `Monitor`, `Solo`, `Read`, `Write`, `Any` — giữ tiếng Anh.
+Còn `Save` thì **không** — Cubase hiện `Lưu`, nên phải trích `'Lưu'`.
+
+Bộ dò cũng phát hiện được **3 nhãn còn sót tiếng Anh** (vì nó tra nhãn):
+
+```
+Hide Key Signatures  ->  Ẩn Key Signatures      (anh em "Hide Clefs" là "Ẩn khóa nhạc")
+Hook Only            ->  Chỉ Hook
+Search for File      ->  Search cho File
+```
+
 ### `Retrospective Record` = `ghi hồi tố` — **không phải** `hồi cứu`
 
 `hồi cứu` = *recovery* (hộp đen máy bay, xem lại video). `hồi tố` = *retroactive*
