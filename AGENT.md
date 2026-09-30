@@ -171,6 +171,27 @@ không phải newline thật. Bộ dò placeholder phải khớp cả `%1.0f` v�
 9. Lỗi đảo trong câu dài, cách diễn đạt khó đọc, mất câu, sai nghĩa chỉ lộ ra khi **đọc
    thật**. Đọc tay là bước cuối: `read_long.py` / `sample_domain.py <miền> <bắt đầu>`.
 
+10. **ĐỪNG dùng số liệu thay cho việc đọc. Hai vòng đã làm sai theo đúng cách đó.**
+    - Đợt 88 lọc bằng *tỉ lệ số từ*, ra 380 chuỗi "dài". **Sai**: 3.234 chuỗi có
+      nguồn ≥ 25 ký tự thì trung vị bản dịch **ngắn hơn 2 ký tự**, lệch dài nhất
+      `+21c`, và **không chuỗi nào dài hơn 30 ký tự**. `audit_clarity.py` báo giá
+      trị dài nhất 328c và *in ra trông dài hơn tiếng Anh* — nhưng nó **cắt cụt**
+      chuỗi Anh: nguồn dài 371c, tức bản dịch **ngắn hơn 43c**. Cả hai đúng, một
+      cái hiển thị sai. Lặp từ: 9 chuỗi cả bản dịch.
+    - Đợt 89 đo tiếp, giả thuyết thứ hai: *mất ngữ cảnh vì key chỉ là chuỗi
+      Anh*. **Cũng sai**: 83 chuỗi Anh dùng ở nhiều hơn một entry, và **không
+      chuỗi nào** khác vai trò. Không có chỗ nào mất ngữ cảnh để lo.
+    - Cái thật, và chỉ lộ ra khi **đặt hai chuỗi cạnh nhau**:
+      `Import Audio File → 'Import file Audio'` cạnh
+      `Import Audio Files → 'Import File Audio'` — lệch hoa/thường, mỗi cái
+      rời ra đều đọc được. Đợt 89 sửa 8 chuỗi thuộc loại này.
+    - **Cơ:** key là *chuỗi tiếng Anh*, không id, không đường dẫn, không vai trò.
+      Nên **gia đình = các chuỗi cùng nói một thứ**, và cách tìem gần nhất là
+      **từ đầu tiên**. Dùng `tools/family.py <từ>`.
+    - Khi đọc: `Channel` và `Channel ` là **hai key khác nhau**, giữ khoảng trắng
+      là đúng. `Db` cạnh `dB` là **chính Steinberg viết**, không phải việc của
+      ta. `DRY`/`Dry`, `OFFLINE`/`Offline` đã khác nhau ở tiếng Anh gốc.
+
 ## 9. Quy trình kiểm tra
 
 Dừng ngay khi một bước báo lỗi.
@@ -190,6 +211,9 @@ python tools\fix_mojibake.py
 python tools\audit_clarity.py           # [A] dài  [B] khó đọc
 python tools\audit_outlier.py           # chuỗi lạc khỏi gia đình thuật ngữ
 python tools\tests\run.py               # 146 test: bất biến + bộ dò
+python tools\family.py <từ>            # đọc cả gia đình chuỗi cùng từ đầu
+python tools\family.py -a              # nhóm còn dùng hai kiểu ghi (chốt hồi quy)
+python tools\read_long.py <miền> <bắt đầu>  # đọc tay: câu dài, chỗ vướng nằm ở đây
 python tools\check_translation_build.py # build\translation_vi.xml = bản gốc + <vi>
 python tools\score_instruments.py check # Score Editor: trùng key + 4 bất biến
 python tools\build.py                   # sinh build/translation_vi.xml + validate
