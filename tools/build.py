@@ -33,6 +33,7 @@ run([T('tools', 'list_strings.py'), BASE, TSV], 'list all strings')
 run([T('tools', 'merge_maps.py'), '--check'], 'check translation maps')
 run([T('tools', 'prune_map.py'), '--dry-run'], 'check every map key exists in Cubase')
 run([T('tools', 'check_style.py')], 'enforce hybrid style (AGENT.md)')
+run([T('tools', 'check_punctuation.py')], 'check ? ! ; ... line breaks edge spaces')
 run([T('tools', 'build_translation.py'), BASE, OUT, MAP], 'build Vietnamese translation.xml')
 run([T('tools', 'validate_translation.py'), OUT], 'validate output')
 

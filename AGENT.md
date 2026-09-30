@@ -950,6 +950,45 @@ Keep History[RM]  ->  Giữ History[RM]     ← History chưa dịch
 New Parts[RM]     ->  Tạo Parts[RM]       ← đọc khác hẳn, cùng một tiếng Anh
 ```
 
+### ⚠️ Sáu thứ phải giữ nguyên 100% — trước đây **chỉ kiểm 1**
+
+Yêu cầu dự án ghi rõ: *"bảo toàn 100% placeholder, dấu hai chấm, `?`/`!`/`.`, dấu
+ba chấm, **số dòng mới**, **khoảng trắng đầu/cuối**"*. Sáu thứ. `check_style.py`
+kiểm **một** (placeholder). Và nó phát hiện ra:
+
+```
+EN  "...unstable state after crashing \nand saving might lead to corrupted
+      files. \nThe original file will be left untouched. \n..."
+VI  "...không ổn định sau khi bị sự cố. \nFile gốc sẽ được giữ nguyên. \n..."
+```
+
+**Bốn dòng thành ba.** Mất trọn `and saving might lead to corrupted files` — tức
+hộp thoại bảo "chương trình đã sự cố, file gốc giữ nguyên, hãy khởi động lại" và
+**không hề nhắc rằng CHÍNH VIỆC LƯU mới làm hỏng file**. Vế duy nhất giải thích
+vì sao phải cẩn thận là vế biến mất.
+
+Đây là lần thứ **bảy** của lớp lỗi **bền nhất** của dự án, và mẫu **chưa bao giờ
+đổi**: thứ mất đi **luôn là HẬU QUẢ**.
+
+```
+đợt 44   3/5, gồm "dùng nhiều điện hơn"
+đợt 69   "and saving might lead to corrupted files"
+```
+
+Và nó sống sót 68 đợt + 6 bộ dò vì **tất cả đều đếm CÂU**, mà một câu kết thúc
+*bên trong* câu khác thì không phải là câu bị mất. `find_dropped_sentences` tìm
+giá trị có **ít dấu chấm hơn** — giá trị này có **đúng ba dấu chấm** như bản gốc,
+vì vế bị mất nằm **giữa** một câu mà dấu chấm vẫn cùng sống sót với phần còn lại.
+
+```
+tools/check_punctuation.py     ← ĐÃ NỐI VÀO build.py
+```
+
+Bốn dấu + số dòng + khoảng trắng đầu/cuối. Chạy trên 10.737 giá trị dưới 1 giây.
+Kết quả: `? ! ; ...` và khoảng trắng **đã sạch sẵn** — một kết quả **chỉ có nghĩa
+khi đã có ai đó kiểm**. Còn **số dòng mới** thì chưa ai kiểm, và đó **chính là**
+chỗ lỗi nằm.
+
 ### Cặp `[Key]` — bản dịch **giống hệt** bản gốc, trừ **tên phím**
 
 10 nhãn có bản song sinh `[Key]` (cùng tiếng Anh, đánh dấu là phím tắt). Bản
