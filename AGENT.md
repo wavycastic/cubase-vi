@@ -828,6 +828,25 @@ màn hình.
 `nhấp chuột`, `Hold` → `giữ`. Ngoài ngoặc vuông **không đụng**, nên 5 key cố ý
 giữ `Click` trong văn xuôi vẫn nguyên.
 
+### ⚠️ Cubase lưu xuống dòng bằng **`\n` hai ký tự**, không phải newline thật
+
+Bộ dò `find_dropped_sentences` báo:
+
+```
+-1  (2 -> 1)  'Are you sure you want to delete the snapshot? \nYou cannot undo this.'
+   VI 'Bạn có chắc muốn xóa Snapshot này không?\nBạn không thể hoàn tác thao tác này.'
+```
+
+Cả **hai câu đều còn**. Bộ dò đếm sai vì lớp ký tự sau dấu câu là
+`[\s"')\]]` — **không có `\`**. Sau `?` là `\`, nên câu đó không được tính.
+
+```python
+SENT = re.compile(r'[.!?](?=[\s"\')\]\\]|$)')      # ← thêm  \\
+```
+
+Bài học chung với lỗi `[Ā-ỿ]` và lỗi tách từ: **ký tự đại diện phải được kiểm
+bằng một giá trị biết đúng**, và giá trị biết đúng ở đây là chuỗi có `\n` thật.
+
 ### Cảnh báo: **đừng viết bản sửa bằng thứ không dùng**
 
 Đợt 63 viết `Chèn **bản ghi** hồi tố MIDI vào Editor` trong khi chính bản dịch

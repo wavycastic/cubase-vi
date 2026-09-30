@@ -75,7 +75,13 @@ vi = json.load(open(os.path.join(ROOT, 'translations', 'vi.json'),
 ABBR = re.compile(
     r'(?:\b[A-Z]\.|\b(?:Mr|Mrs|Ms|Dr|Prof|vs|etc|Inc|Ltd|No|approx|cf|ca'
     r'|incl|excl)\.|\b(?:e\.g|i\.e)\.)(?=[,\s)\]]|$)')
-SENT = re.compile(r'[.!?](?=[\s"\')\]]|$)')
+# A sentence ends at . ! or ?, and the character after it may be whitespace, a
+# closing bracket, a quote, OR A BACKSLASH - because Cubase stores its line
+# breaks as the two-character sequence \n, not as a newline. Round 64: the
+# backslash was missing from the class, so every value ending a line with "?"
+# counted one sentence too few, and the tool reported a dropped sentence for a
+# value that has both of its sentences.
+SENT = re.compile(r'[.!?](?=[\s"\')\]\\]|$)')
 
 
 def count(t):
