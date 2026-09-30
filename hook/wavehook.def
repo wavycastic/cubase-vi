@@ -14,6 +14,9 @@ EXPORTS
     WaveHook_IsInstalled
     WaveDrawHook_C
     WaveDrawHook
+    WaveProbe_DumpCount
+    WaveProbe_ReadFile
+    WaveProbe_Enable
     WaveDrawTrampoline
     WaveDrawTrampolineVA
     WaveDrawResumeVA

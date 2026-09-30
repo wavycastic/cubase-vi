@@ -43,7 +43,23 @@ extern void *WaveDrawResumeVA;       /* trampoline nhay ve day    */
 __declspec(dllexport) int  WaveHook_Install(void);
 __declspec(dllexport) int  WaveHook_Remove(void);
 __declspec(dllexport) int  WaveHook_IsInstalled(void);
-__declspec(dllexport) void WaveDrawHook_C(void);
+
+/* tham so 1 = thiet bi ve (arg1 cua ham ve cua Cubase) */
+__declspec(dllexport) void WaveDrawHook_C(void *dev);
+
+/* Do dai vtable can xuat cho probe. 0xC0 = 24 slot: vua dat hon
+ * slot +0x80 ma `0x141E9D010` goi, vua vua het cac slot danh tieng
+ * (QueryInterface / AddRef / Release) o dau bang. */
+#define WAVE_PROBE_SLOTS      24
+#define WAVE_PROBE_MAXTEXT    32768
+
+/* Ket qua probe, do chinh DLL ghi ra file de khong phai doi giao thuc
+ * cua injector. Doc bang `WaveProbe_ReadFile`. */
+__declspec(dllexport) int  WaveProbe_DumpCount(void);
+__declspec(dllexport) int  WaveProbe_ReadFile(char *buf, int len);
+
+/* Bat/tat viec ghi dump. Mac dinh bat. */
+__declspec(dllexport) void WaveProbe_Enable(int on);
 
 /* Danh sach RVA cho `WaveProbe_InstallAll`. So phan tu va danh sach phai
  * cung mot khoi: `CreateRemoteThread` chi truyen duoc MOT tham so, nen

@@ -25,6 +25,7 @@ Vi sao phai can than
 """
 import argparse
 import ctypes
+import os
 import struct
 import sys
 import time
@@ -402,6 +403,23 @@ def call_export(func, expect=None):
         k32.CloseHandle(h)
 
 
+def probe():
+    """In ket qua probe device ma DLL da ghi ra file.
+
+    DLL tu ghi `%TEMP%\\waveprobe.txt` ngay trong lan ve dau tien, nen lenh
+    nay chi doc lai - khong can goi ham nao co hai tham so, va khong can
+    sua byte nao trong tien trinh Cubase dang chay.
+    """
+    path = Path(os.environ.get('TEMP', '.')) / 'waveprobe.txt'
+    if not path.exists():
+        say(f'Chua co {path}.')
+        say('Nghia la hook chua chay lan nao - Cubase chua ve duong song.')
+        say('Hay mo mot project co audio trong Project Window roi chay lai.')
+        return
+    say(f'--- {path} ---')
+    say(path.read_text(errors='replace'))
+
+
 def status():
     check_bitness()
     pid = find_cubase_pid()
@@ -572,7 +590,8 @@ def main():
         description=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument('cmd', choices=['load', 'unload', 'status', 'calls',
-                                    'probe', 'probecount', 'proberemove'])
+                                    'probe', 'probecount', 'proberemove',
+                                    'devdump'])
     ap.add_argument('--dll', help='duong dan DLL thay the (mac dinh '
                                   'hook/wavehook.dll). Dung khi ban cu dang '
                                   'nap trong Cubase nen khong ghi de duoc.')
@@ -596,6 +615,8 @@ def main():
         status()
     elif a.cmd == 'calls':
         calls()
+    elif a.cmd == 'devdump':
+        probe()
     elif a.cmd == 'probe':
         probe_install()
     elif a.cmd == 'probecount':

@@ -9,6 +9,21 @@
  */
 #include "wavehook.h"
 
+#include <stdarg.h>
+#include <stdio.h>
+#include <string.h>
+
+/* --- phan probe (dinh nghia cuoi file) ---------------------------------
+ *
+ * Bien phai khai bao O DAY chu khong phai ngay tren ham dung: ham ve goi
+ * `probe_device` truoc khi phan dinh nghia cua no duoc bien dich. */
+static void probe_device(void *dev);
+
+static volatile LONG g_probeOn = 1;
+static volatile LONG g_probeDone = 0;
+static char           g_probeText[WAVE_PROBE_MAXTEXT];
+static volatile LONG  g_probeLen = 0;
+
 /* 15 byte dau ham ve song trong Cubase15.exe 15.0.30: 4 lenh chi doi
  * thoat so. Neu Cubase update va cac byte doi, ta bao loi va tu choi ghi
  * de - thay vi ghi de vao ham la khac. */
@@ -303,7 +318,7 @@ int WaveHook_IsInstalled(void)
  *
  * Tham so truyen tu wavehook.asm, giu nguyen toan bo thanh ghi phia truoc.
  */
-void __cdecl WaveDrawHook_C(void)
+void __cdecl WaveDrawHook_C(void *dev)
 {
     InterlockedIncrement(&g_callCount);
 
@@ -311,4 +326,192 @@ void __cdecl WaveDrawHook_C(void)
      * FL giu trang thai giua cac cot trong MOT chuoi, nen phan bien ranh
      * giua cac chuoi la canh. Xem docs/FLWAVE.md §9.11. */
     WaveColour_Reset(&g_state);
+
+    /* Device la arg1 cua ham ve, va cung chinh la arg1 ma no truyen cho
+     * lenh to `0x141E9AD10` - nen day la device ma `0x141E9D010` se goi
+     * `vfunc+0x80`. Xem docs/FLWAVE.md §12. */
+    if (dev != NULL && g_probeOn)
+        probe_device(dev);
 }
+
+/* ---------------------------------------------------------------------
+ * Probe: xuat vtable va cac truong cua device
+ * ---------------------------------------------------------------------
+ *
+ * Chi mot lan. Ly do ghi ngay trong ham ve: ham nay chay tren luong cua
+ * Cubase, nen moi thao tac I/O deu ton thoi gian ma luong do phai dung.
+ * Ghi MOT lan thoi la du.
+ *
+ * Moi doc deu boc trong `__try`. Con tro mau co the chua khoi tao, va mot
+ * loi doc se lam Cubase crash - cai gia tai mot loi so 13 cua §13.1 cua
+ * docs/WAVEFORM.md da xay ra. Do la ly do bao ve o day khong phai
+ * phong tranh ma la bat buoc.
+ */
+
+void WaveProbe_Enable(int on)
+{
+    g_probeOn = on ? 1 : 0;
+    if (!on)
+        InterlockedExchange(&g_probeDone, 0);   /* cho phep dump lai lan sau */
+}
+
+int WaveProbe_DumpCount(void)
+{
+    return (int)g_probeLen;
+}
+
+int WaveProbe_ReadFile(char *buf, int len)
+{
+    int n = (int)g_probeLen;
+    if (buf == NULL || len <= 0)
+        return n;
+    if (n > len)
+        n = len;
+    CopyMemory(buf, g_probeText, (SIZE_T)n);
+    return n;
+}
+
+/* Ten module chua dia chi nay, hay "-" neu khong do duoc.
+ *
+ * `GetModuleHandleExW` voi FROM_ADDRESS|UNCHANGED_REFCOUNT: khong tang bien
+ * dem, khong nap them module, chi hoi "dia chi nay thuoc module nao". */
+static void module_of(void *p, char *out, int len)
+{
+    HMODULE h;
+    WCHAR   path[MAX_PATH];
+    char   *cut;
+    size_t  n;
+
+    if (len < 2)
+        return;
+    out[0] = '-';
+    out[1] = 0;
+    if (p == NULL)
+        return;
+    if (!GetModuleHandleExW(0x00000004 /* FROM_ADDRESS */ |
+                           0x00000002 /* UNCHANGED_REFCOUNT */,
+                           (LPCWSTR)p, &h))
+        return;
+    if (GetModuleFileNameW(h, path, MAX_PATH) == 0)
+        return;
+    {
+        int i;
+        for (i = 0; path[i] && i + 1 < len; i++)
+            out[i] = (char)path[i];
+        out[i] = 0;
+    }
+    /* Chi giu ten file, bo duong dan cho dong. */
+    cut = strrchr(out, '\\');
+    if (cut != NULL && cut[1] != 0) {
+        char keep[MAX_PATH];
+        n = strlen(cut + 1);
+        if (n >= (size_t)len)
+            n = (size_t)len - 1;
+        CopyMemory(keep, cut + 1, n);
+        keep[n] = 0;
+        CopyMemory(out, keep, n + 1);
+    }
+}
+
+/* Ghi buffer dump xuong file, de injector khong phai phai gọi ham co hai
+ * tham so.
+ *
+ * Ly do: `CreateRemoteThread` chi truyen duoc MOT tham so, nen khong goi duoc
+ * `WaveProbe_ReadFile(buf, len)` tu ben ngoai. Day la cung gioi han ma
+ * `WaveProbe_InstallAll` da phai de doi kieu de xu ly (xem wavehook.h).
+ * Ghi file thi injector chi can doc, khong can thao tac bo dem nao. */
+static void probe_flush_file(void)
+{
+    WCHAR  path[MAX_PATH];
+    HANDLE f;
+    DWORD  n = (DWORD)g_probeLen;
+
+    if (n == 0 || n > WAVE_PROBE_MAXTEXT)
+        return;
+    if (GetEnvironmentVariableW(L"TEMP", path, MAX_PATH) == 0)
+        return;
+    {
+        int i, j = 0;
+        for (i = 0; path[i] && j + 12 < MAX_PATH; i++) {
+            if (path[i] == L'\\' && path[i + 1] == 0)
+                break;
+            path[j++] = path[i];
+        }
+        CopyMemory(path + j, L"\\waveprobe.txt", 14 * sizeof(WCHAR));
+    }
+    f = CreateFileW(path, GENERIC_WRITE, FILE_SHARE_READ, NULL,
+                    CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+    if (f == INVALID_HANDLE_VALUE)
+        return;
+    WriteFile(f, g_probeText, n, &n, NULL);
+    CloseHandle(f);
+}
+
+/* Ghi mot dong vao buffer, tu cat khi qua. */
+static void emit(const char *fmt, ...)
+{
+    char    line[512];
+    va_list ap;
+    int     n;
+    LONG    at = g_probeLen;
+
+    if (at < 0 || at >= WAVE_PROBE_MAXTEXT - 2)
+        return;
+    va_start(ap, fmt);
+    n = _vsnprintf_s(line, sizeof line, _TRUNCATE, fmt, ap);
+    va_end(ap);
+    if (n < 0)
+        return;
+    if (at + n + 2 > WAVE_PROBE_MAXTEXT)
+        n = WAVE_PROBE_MAXTEXT - 2 - (int)at;
+    if (n <= 0)
+        return;
+    CopyMemory(g_probeText + at, line, (SIZE_T)n);
+    g_probeText[at + n]     = '\r';
+    g_probeText[at + n + 1] = '\n';
+    InterlockedExchange(&g_probeLen, at + n + 2);
+}
+
+static void probe_device(void *dev)
+{
+    unsigned char **vt;
+    char             mod[MAX_PATH];
+    HMODULE          base;
+    int              i;
+
+    if (InterlockedCompareExchange(&g_probeDone, 1, 0) != 0)
+        return;                                  /* da dump xong */
+
+    base = GetModuleHandleW(L"Cubase15.exe");
+    __try {
+        emit("=== probe device: ham ve Cubase15.exe ===\r\n");
+        emit("device      = %p\r\n", dev);
+        vt = *(unsigned char ***)dev;
+        emit("vtable      = %p\r\n", (void *)vt);
+        if (base != NULL)
+            emit("byte dau tai image base = %02X\r\n",
+                 (unsigned int)((unsigned char *)base)[0]);
+        emit("\r\n--- vtable, %d slot dau ---\r\n", WAVE_PROBE_SLOTS);
+        for (i = 0; i < WAVE_PROBE_SLOTS; i++) {
+            void *fn = (void *)vt[i];
+            module_of(fn, mod, (int)sizeof mod);
+            emit("  +0x%02X  %p  %s\r\n", i * 8, fn, mod);
+        }
+        emit("\r\n--- truong cua device ---\r\n");
+        for (i = 1; i <= 8; i++) {
+            unsigned char *f = (unsigned char *)dev + i * 8;
+            void *p = NULL;
+            CopyMemory(&p, f, sizeof p);
+            module_of(p, mod, (int)sizeof mod);
+            emit("  +0x%02X  %p  %s\r\n", i * 8, p, mod);
+        }
+        emit("\r\n--- de doc ---\r\n");
+        emit("+0x80 la slot ma 0x141E9D010 goi de cham framebuffer\r\n");
+        emit("module = DLL chua con tro; '-' la chua noi duoc\r\n");
+    } __except (EXCEPTION_EXECUTE_HANDLER) {
+        emit("\r\n!! doc that bai, exception 0x%08X\r\n",
+             (unsigned int)GetExceptionCode());
+    }
+    probe_flush_file();
+}
+

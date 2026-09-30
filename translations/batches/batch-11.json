@@ -145,7 +145,7 @@
   "All settings from source will be transferred to new tracks (incl. automation). Audio file is dry on hard disk.": "Mọi cài đặt từ nguồn chuyển sang Track mới (gồm Automation). File Audio ở dạng Dry trên đĩa.",
   "Allows you to specify a range in the source project to be imported": "Chọn vùng trong Project nguồn để Import",
   "Allows you to toggle the state of the mapped function. If the hardware control or the %s function are in toggle mode, use the jump mode instead.": "Đổi trạng thái của chức năng đã Mapping. Nếu điều khiển phần cứng hoặc chức năng %s ở chế độ Bật/Tắt, hãy dùng chế độ Jump.",
-  "Altered Jazz": "Jazz biến âm",
+  "Altered Jazz": "Altered Jazz",
   "Alternate Tempo": "Tempo thay thế",
   "Alternative": "Thay thế",
   "Alternative Key Sets": "Các bộ Key Set thay thế",

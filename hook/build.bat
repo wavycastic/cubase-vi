@@ -132,7 +132,7 @@ if not exist %OUT% (
 
 REM Kiem tra DLL co that su co cac ham can dung truoc khi tay vao may cua
 REM nguoi dung. Thieu export thi injector se load duoc nhung goi that bai.
-for %%E in (WaveHook_Install WaveHook_InstallAt WaveHook_Remove WaveDrawHook WaveDrawTrampoline WaveDrawTrampolineVA WaveDrawResumeVA WaveProbe_InstallAll WaveProbe_RemoveAll WaveProbe_Count WaveProbeCommon WaveProbeTrampVA g_probeCount g_probeArg0) do (
+for %%E in (WaveHook_Install WaveHook_InstallAt WaveHook_Remove WaveDrawHook WaveDrawTrampoline WaveDrawTrampolineVA WaveDrawResumeVA WaveProbe_InstallAll WaveProbe_RemoveAll WaveProbe_Count WaveProbeCommon WaveProbeTrampVA WaveProbe_DumpCount WaveProbe_ReadFile WaveProbe_Enable g_probeCount g_probeArg0) do (
     dumpbin /exports %OUT% | find "%%E" >nul
     if errorlevel 1 (
         echo LOI: thieu export %%E
