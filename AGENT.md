@@ -828,6 +828,48 @@ màn hình.
 `nhấp chuột`, `Hold` → `giữ`. Ngoài ngoặc vuông **không đụng**, nên 5 key cố ý
 giữ `Click` trong văn xuôi vẫn nguyên.
 
+### Một từ tiếng Anh lặp **hai lần** trong cùng một giá trị
+
+```
+Flatten (with Options & Preferences)
+  ->  Làm phẳng (với Tùy chọn & Tùy chọn)
+```
+
+`Options` và `Preferences` là **hai mục menu khác nhau** — một cái là hộp thoại,
+một cái là tab bên trong — nhưng bản dịch gộp thành một. Đọc lên là **stutter**,
+và người dùng **không biết dấu ngoặc trỏ vào cái nào**. Tab Fix tên là
+`Options`, nên:
+
+```
+Làm phẳng (với Tùy chọn & Tùy chỉnh)
+```
+
+⚠️ **Không bộ dò nào bắt được** — cần **hai key để so sánh** (xem
+`find_duplicate_values.py`). Nhưng lớp "một từ tiếng Anh xuất hiện 2+ lần
+**không liên tiếp**" thì dò được ngay:
+
+```
+Version 3 (skin tag + templates tag)
+  ->  Version 3 (thẻ Skin + thẻ Template)
+```
+
+Cả hai `tag` đều thành `thẻ` trong một danh sách hai phần tử. Mà đây là **tên
+thẻ file** — key manifest của Cubase, do **phần mềm khác** in ra. Nên:
+
+```
+Version 3 (skin tag + template tag)
+```
+
+Cùng luật với *button face*: **tên do chương trình khác in thì in y nguyên**.
+
+### `Template` — 6 giá trị `Template` vs 11 giá trị `mẫu`
+
+Trong panel mạng / phân quyền (đúng miền `project`), `Template` là **một file
+trên server** → `mẫu`. Nhưng gia đình ở menu media và đĩa lại giữ tiếng Anh.
+**Không có ranh giới nào** ngoài việc mỗi key nằm ở bảng nào. Đợt 61 chốt:
+`mẫu` là từ đúng, `Template` chỉ giữ khi nó nằm trong **tên riêng** — và chỉ có
+một key vậy (`Load SyncStation Template`, vì đó là sản phẩm của Steinberg).
+
 ### Bộ dò báo 126 lần trong khi lỗi chỉ có **4** — và bài học
 
 ```
