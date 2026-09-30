@@ -226,7 +226,7 @@
   "Reconnect all Projects?": "Kết nối lại tất cả Project?",
   "Record in Editor (Suspended)": "Ghi âm trong Editor (Tạm dừng)",
   "Record-Enable allows MIDI Thru": "Bật ghi cho phép MIDI Thru",
-  "Record: Start at Cursor/Left Locator/Selection": "Ghi: Bắt đầu tại Con trỏ/Locator trái/Vùng chọn",
+  "Record: Start at Cursor/Left Locator/Selection": "Ghi: Bắt đầu tại con trỏ/Locator trái/vùng chọn",
   "Recording Error: ASIO driver is not running.": "Lỗi ghi âm: Driver ASIO đang không chạy.",
   "Recording Error: Audio drop out detected.": "Lỗi ghi âm: Phát hiện mất tín hiệu Audio.",
   "Recording Error: Disk write error.": "Lỗi ghi âm: Lỗi ghi đĩa.",

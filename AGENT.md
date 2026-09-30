@@ -1557,6 +1557,36 @@ tìm ra nhiều lớp lỗi sai lệch chuyên ngành và dịch máy thô mà k
    Nhấp đúp đổi tên Link Group ([SHIFT] + nhấp đúp mở...).
 
 
+### Đợt 80: Duyệt thủ công không lọc transport/mixer/media/general — sửa 107 chuỗi lệch ngữ cảnh
+
+1. **Bắt lỗi detector bỏ sót:**
+   - Đoạn Audio đã chọn (r75) bị mất: key The selected AUDIO material là key khác với The selected material
+     → Đoạn Audio đã chọn không phù hợp để nhận diện Tempo.
+   - Quote Insert as Linear Recording (Chèn dạng bản ghi tuyến tính) lệch nhãn
+     (Chèn dưới dạng bản ghi tuyến tính) → đồng bộ cả họ về ghi tuyến tính (4 chuỗi).
+   - Tempo/Signature Track ghi Bar+Beat thiếu s so với gốc Bars+Beats → sửa.
+
+2. **Nhất quán cặp song sinh:** Toggle/Deactivated Cycle theo nhảy tới Marker (theo Activated r78);
+   Link con trỏ Editor + 2 câu trích (theo Link Panner/Link Group giữ Link);
+   Channel nối tới (bỏ được); Pre-Inserts/Post-Fader theo bản Post đã sửa;
+   Combine Linked Channels theo Connected (Channel đã nối);
+   Di chuyển → Chuyển (Move Selected Tracks/Channels x4, Move Selected Tracks);
+   Không thể thêm Track → Không thêm được Track (7 loại Track + MixConsole Snapshot);
+   Audio Channels/Channel Audio → Audio Channel; nhạc cụ ngoài/External → External Instrument.
+
+3. **Câu general dài:** Track chống ghi (was: đang bị bảo vệ ghi); Track đang ghi (was: đang ghi âm);
+   chưa kết nối nhạc cụ tương thích nào; không hỗ trợ Clip (bỏ được);
+   công cụ Draw → Công cụ Draw (khớp nhãn); Script Controller trùng tên;
+   Bật MIDI Machine Control/Remote (bỏ Kích hoạt/điều khiển từ xa);
+   Track mới thêm loại này hiện chưa hiển thị; Source Track sẽ ẩn;
+   Tự động xử lý chồng lấn (was: giải quyết va chạm); đường tín hiệu (was: đường truyền tín hiệu);
+   Chuyển sang cài đặt Project; Không tạo được thư mục Clip Packages trong...;
+   Nối mọi đầu ra Word Clock (khi khớp tần số); Nghe Channel Surround qua Channel Front;
+   Thu gọn file (was: Thu nhỏ); vị trí trống (was: khả dụng) x4;
+   Tên như nhúng trong Media (was: Medium); Tác vụ sẽ không chạy;
+   Controller đang cắm (was: đang kết nối/script thường); Các nốt gửi sớm hơn để bù...
+
+
 ### Cặp `[Key]` — bản dịch **giống hệt** bản gốc, trừ **tên phím**
 dịch làm **ba** kiểu khác nhau:
 
