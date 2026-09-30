@@ -1483,6 +1483,50 @@ tìm ra nhiều lớp lỗi sai lệch chuyên ngành và dịch máy thô mà k
    - Không Import được Script. Đã có Script cho... (giữ đủ 3 câu như bản gốc để qua bộ dò dropped-sentences).
 
 
+### Đợt 78: 5 subagent quét song song 5 miền — sửa 132 chuỗi, giữ nhãn Send/Insert Anh
+
+1. **Transport (22 chuỗi):** định vị tới Marker → nhảy tới Marker (3 chuỗi Cycle/Locator);
+   Nhấp ghi âm lại... dọn dẹp... bản ghi → Nhấp nút ghi lần nữa... bỏ bản đang ghi và ghi lại từ đầu;
+   Chế độ ghi đã được đổi thành → đã đổi thành; Tempo ở dạng Ramp → Tempo chạy dốc;
+   MIDI mới ghi tự Quantize theo Quantize hiện tại; Đặt vùng chọn theo dải Locator hiện tại.
+
+2. **Mixer (37 chuỗi):** nhãn Send/Insert dịch động từ gây khó hiểu → giữ Anh:
+   Gửi 1-4 → Send 1-4; Chèn 1 → Insert 1; Gửi on/off → Bật/Tắt Send; Âm lượng Send → Send Volume;
+   Chèn → Insert (Channel Latency Overview); Hiệu ứng Insert → Insert Effect;
+   Channel hàng loạt → Channel Batch; Track VCA → VCA Track (đồng bộ số ít);
+   Nơi nhận của Channel → Đích Channel; Channel đã được liên kết → đã liên kết;
+   Panner MixConvert... Âm thanh... sẽ khác → Project có thể nghe khác;
+   Không đọc được cấu trúc VST Parameters... Ngữ cảnh (was: phân tích... Context);
+   Control Room đang bị tắt! Bạn có muốn bật nó không? → Control Room đang tắt! Bật lên không?
+
+3. **Media (27 chuỗi):** sai độ dài; tham chiếu Media không tìm được; Bit Rate của Project sai;
+   Mức Disk Cache (was: Tải Disk Cache — Load là mức tải); Audio không Slice được;
+   Không trích được Audio Stream; Giữ cố định xử lý thời gian thực (Flatten, đồng bộ Make Permanent);
+   Export Audio thời gian thực bị quá giờ; File OMF đã chạm giới hạn 2GB...;
+   Không hoàn tác được... Lịch sử xử lý Offline sẽ mất... (was: sẽ bị xóa).
+
+4. **Music-theory/Notation (19 chuỗi):** Cho phép hợp âm 4 nốt (was: 4-Note Chords);
+   nốt 7 trưởng và nốt tăng 5 → nốt 5 tăng (2 chuỗi); & Next Chord trước (nhãn vỡ) → Chord liền trước & kế tiếp;
+   Đặt nốt gốc (Root) → Đặt Root Note; Không gỡ được Root Note (bỏ ngoặc gloss);
+   Phím này đã gán... Gán lại không? Gán cũ sẽ mất; Ký âm Pitch (was: Ký âm cao độ);
+   Dùng gom nhóm Note Common Time (đồng bộ Note Grouping); Gõ tên hợp âm rồi nhấn [Tab]...;
+   Kiểu hiển thị Ruler đã đổi... Cần kiểu này để làm nổi bật Pattern Click Metronome.
+
+5. **UI/Project/General (27 chuỗi):** Track đang hoạt động → Track đang bật (Map, link group);
+   Nhấp một tham số trong Project để gán đích (was: bằng cách... của bạn);
+   Cut, Delete, Draw và Paste không thêm được vào Favorite;
+   Chế độ đặt: Thêm điều khiển vào Surface (bỏ của bạn);
+   Thuật toán đã tự chuyển sang Standard Solo vì cần sửa VariAudio;
+   Phải dừng dời (was: dừng dịch chuyển); Gói Clip... vì Project chưa bật;
+   Đã dùng làm phím tắt (bỏ được); Bàn phím ảo đã lọc (was: trên màn hình...);
+   Nhấn phím Modifier + nhấp chuột để mở thanh công cụ cố định (was: + click... dạng...).
+
+6. **Bài học:** đề xuất đổi tên trong ngoặc thành Anh (Edit Solo) bị bộ dò quoted-names bắt
+   vì nhãn gốc là Sửa Solo — tên trong ngoặc phải khớp nhãn của chính nó, đã hoàn lại.
+   Đề xuất Vùng Locator thay Dải Locator, Tham số Automation của..., Nhấn [Tab]... bị loại
+   để giữ nhất quán thuật ngữ toàn dự án.
+
+
 ### Cặp `[Key]` — bản dịch **giống hệt** bản gốc, trừ **tên phím**
 dịch làm **ba** kiểu khác nhau:
 
