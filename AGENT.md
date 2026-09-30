@@ -111,7 +111,7 @@ Bàn nhạc không nằm trong bảng §3, nên dùng thuật ngữ âm nhạc t
 | Beam | đuôi nốt |
 | Stem / Stemlet | thân nốt / thân nốt nhỏ |
 | Barline | vạch nhịp |
-| Key Signature | **số chỉ nhịp** |
+| Key Signature | **hóa âm** |
 | Time Signature | **số chỉ nhịp** |
 | Chord Symbols | hóa biểu |
 | Voice | bè |
@@ -828,7 +828,70 @@ màn hình.
 `nhấp chuột`, `Hold` → `giữ`. Ngoài ngoặc vuông **không đụng**, nên 5 key cố ý
 giữ `Click` trong văn xuôi vẫn nguyên.
 
-### ⚠️ `[Ā-ỿ]` **SAI** — lớp ký tự tiếng Việt bị thiếu một nửa
+### Hai menu item **trùng chữ** — bảng luật có dòng *không thể đúng*
+
+```
+Add Key Signature      ->  Thêm số chỉ nhịp
+Add Time Signature     ->  Thêm số chỉ nhịp        ← GIỐNG HỆT NHAU
+Add Displayed Key Signature  ->  Thêm số chỉ nhịp hiển thị
+Add Displayed Time Signature ->  Thêm số chỉ nhịp hiển thị
+Key Signatures / Time Signature / Time Signatures  ->  Số chỉ nhịp
+Cautionary Key Signature at End of System
+Cautionary Time Signature at End of System          ->  Số chỉ nhịp nhắc lại...
+```
+
+**5 cặp.** Người dùng không phân biệt được, mở nhầm mục, và **không nơi nào ghi
+lý do**.
+
+**Không bộ dò nào bắt được — và lý do là cấu trúc:** mọi bộ dò làm việc trên
+*từng giá trị một*. Hai giá trị **hoàn hảo riêng lẻ** vẫn pass. Nên bộ dò mới
+so **giữa các key**:
+
+```
+tools/find_duplicate_values.py
+```
+
+Báo **172** va chạm, phần lớn **hợp lệ** — Cubase thật sự dịch `Bypass`,
+`Discard`, `Ignore`, `Skip` giống nhau, và nửa danh sách là số ít/số nhiều của
+cùng một từ. Cặp đáng xem là cặp mà **hai key khác nhau về chữ**.
+
+**Nguyên nhân nằm ở bảng.** §4 cho cả hai cùng một từ `số chỉ nhịp` (vì có
+nguồn tiếng Việt dịch như vậy). Trong **câu** thì được, trong **menu** thì
+vô dụng. Đây là kiểu lỗi thứ ba của bảng:
+
+1. đợt 22 — bảng **sai**: `Key Signature | hóa biểu`
+2. đợt 39 — bảng **đúng**, 7 key **trôi khỏi** nó
+3. đợt 55 — bảng có dòng **không thể đúng**: menu cần hai mục khác nhau mà
+   bảng cho một tên
+
+Nên:
+
+```
+Key Signature   ->  hóa âm
+Time Signature  ->  số chỉ nhịp
+```
+
+`hóa âm` là thuật ngữ chuẩn ("hóa âm Sol", "hóa âm thứ"). Nó **gần hình** với
+`hóa biểu` (chord symbols), và hai thứ **trông giống nhau** trên trang: một hàng
+ký tự ở đầu khuông, một hàng dấu hóa, một hàng tên hợp âm. Đó là vấn đề
+**tài liệu**, không phải vấn đề dịch — nên đã ghi ở đây.
+
+13 key được viết lại bằng cách **thay thế thuật ngữ**, không gõ tay: cả 13 đều
+nói `số chỉ nhịp` cho `Key Signature` và **không key nào** nhắc tới
+`Time Signature`, nên phép thay không thể chạm nhầm.
+
+### `Notation`: một từ tiếng Anh, **hai nghĩa** trong một bảng
+
+```
+Notation of Short-Long-Short Patterns  ->  Ký âm các Pattern ngắn-dài-ngắn
+Notation Settings / Notation only / For Notation  ->  giữ tiếng Anh
+```
+
+`Notation` = **ký âm** (nghĩa thường) và = **tính năng** của Cubase (giữ
+tiếng Anh). Đợt 38 đã sửa một key, hai key này sót. Giống lỗi `String` của
+đợt 29.
+
+### `[Ā-ỿ]` **SAI** — lớp ký tự tiếng Việt bị thiếu một nửa
 
 ```
 HAN = re.compile(r'[Ā-ỿ]')      # ← U+0100 … U+1EF9
