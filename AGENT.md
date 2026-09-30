@@ -1377,6 +1377,45 @@ tìm ra nhiều lớp lỗi sai lệch chuyên ngành và dịch máy thô mà k
      `system` (thiết bị đồng bộ) bị dịch "hệ thống/khởi động lại hệ thống" → **viết lại theo nghĩa khởi động thiết bị**.
 
 
+### Đợt 75: Quét thủ công câu dài — sửa 177 chuỗi bị động, rườm rà thành tiếng Việt đời thường
+
+1. **Bỏ câu bị động kiểu dịch máy (hơn 40 chuỗi):**
+   - Nó đã được tự động thay bằng... → Nó đã tự thay bằng... (3 chuỗi Plug-in/MixConvert).
+   - Không thể tạo kết nối vì... không thể được Modulation → Không tạo được kết nối vì Plug-in VST 2 không nhận Modulation (4 chuỗi).
+   - Hãy đảm bảo gán một đích thuộc Channel này → Hãy gán đích khác trong Channel này.
+   - File mang tên... đã tồn tại... Không thể thay thế → File tên... đã có trong Pool. Không thay thế được.
+   - Bản sao lưu... sẽ được đổi tên thành → sẽ đổi tên thành; Dữ liệu bị bỏ thay vì đang bị loại bỏ.
+   - Yêu cầu dữ liệu cấu hình thất bại → Không lấy được dữ liệu cấu hình.
+
+2. **Từ ngữ sai nghĩa, thừa chữ:**
+   - chất liệu Audio đã chọn (sót đợt 74) → Đoạn đã chọn (tempo detection).
+   - làm mất hiệu lực → làm hỏng (VariAudio, Z-Axis Pan — 4 chuỗi).
+   - Sửa nhóm có thể thất bại → Sửa nhóm có thể lỗi; export → Export.
+   - Thư mục Project chỉ cho phép đọc → Thư mục Project chỉ đọc; Nó chỉ đọc → Nó đang ở chế độ chỉ đọc.
+   - Chuyển ... thành vĩnh viễn (Make Permanent) → Giữ cố định... (6 chuỗi).
+   - mục yêu thích đã định nghĩa (Defined Favorite) → Favorite đã đặt.
+   - Tái sử dụng (Reuse) → Dùng lại; âm thanh có sẵn/trước đó → Audio có sẵn/trước đó.
+   - audio stream viết thường → Audio Stream; hộp thoại file → cửa sổ duyệt file.
+   - Hiện phần mở rộng File → Hiện đuôi File; bằng công cụ vẽ Draw → bằng công cụ Draw.
+   - không khớp bộ lọc → không khớp với bộ lọc; đặt cổng MIDI dùng bên dưới → chọn cổng MIDI bên dưới.
+   - khi phần mềm này là trung tâm của bạn → khi phần mềm này là trung tâm.
+   - Dịch vụ Video không phản hồi. Đang chờ dịch vụ Video... → Đang chờ....
+   - File đang chống ghi nên không thay thế được!; Tên vừa nhập không phải tên file hợp lệ.
+   - File gốc nghe khác với Clip đã chỉnh sửa; vẫn trỏ về file AAF gốc; sẽ gộp vào file OMF.
+   - Đường dẫn tài liệu là → Đường dẫn file là; hai bản có thể không tương thích hẳn.
+   - chương trình chập chờn sau khi crash... Hãy khởi động lại chương trình sau bước này!
+
+3. **Câu Transport/Tempo gọn hơn:**
+   - Ghi âm bắt đầu tại... → Bắt đầu ghi tại...; Gõ tiếp để đặt Tempo; Không gõ được khi đang ghi.
+   - Chế độ Start đã được đổi thành → Chế độ Start đã đổi thành (4 chuỗi).
+   - Dải Locator bị ngược / chưa đặt; Tempo nhận diện nằm ngoài dải Tempo hợp lệ.
+   - File đã Render gồm cài đặt Channel, Group Channel, Send Effect và Master Bus (bỏ lặp cài đặt, 3 chuỗi).
+   - Track đặt MIDI Channel là Any không dùng được Ramp/Đường cong.
+   - Bạn phải khởi động lại ứng dụng (giọng ra lệnh) → Cần khởi động lại ứng dụng (5 chuỗi).
+   - Dùng mức Click Pattern Metronome... (sửa đảo từ); Chế độ Zoom chuẩn: chỉ Zoom ngang.
+   - Quay về vị trí bắt đầu khi dừng đã bật/tắt (đồng bộ tên tùy chọn, 3 chuỗi).
+
+
 ### Cặp `[Key]` — bản dịch **giống hệt** bản gốc, trừ **tên phím**
 dịch làm **ba** kiểu khác nhau:
 
