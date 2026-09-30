@@ -28,7 +28,15 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MINLEN = int(sys.argv[1]) if len(sys.argv) > 1 else 45
 TOP = int(sys.argv[2]) if len(sys.argv) > 2 else 80
 
-HAN = re.compile(r'[Ā-ỿ]')
+# A VIETNAMESE LETTER, spelled with escapes on purpose. The obvious
+# [A-ỿ] is U+0100 to U+1EF9, and it is WRONG: Vietnamese keeps its most
+# common letters - a, a, e, e, o, o, u, u, d and their tone marks - in
+# U+00C0 to U+00FF, which is BELOW the start of that range. So a value
+# written entirely with those letters, like "Thêm bè", tested as NOT
+# Vietnamese, and eight detectors built on this test were quietly looking
+# at a subset of the map. Found in round 53, by a value that should have
+# been reported and was not.
+HAN = re.compile(r'[\u00c0-\u024f\u1e00-\u1eff]')
 LATIN_WORD = re.compile(r'[A-Za-z]{2,}')
 # terms that are legitimately kept in English and carry no Vietnamese with them
 KEEP = {

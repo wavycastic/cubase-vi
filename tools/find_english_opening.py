@@ -36,7 +36,15 @@ for line in open(os.path.join(ROOT, 'keys', 'all_strings.tsv'),
 vi = json.load(open(os.path.join(ROOT, 'translations', 'vi.json'),
                     encoding='utf-8'))
 
-HAN = re.compile(r'[Ā-ỿ]')
+# A VIETNAMESE LETTER, spelled with escapes on purpose. The obvious
+# [A-ỿ] is U+0100 to U+1EF9, and it is WRONG: Vietnamese keeps its most
+# common letters - a, a, e, e, o, o, u, u, d and their tone marks - in
+# U+00C0 to U+00FF, which is BELOW the start of that range. So a value
+# written entirely with those letters, like "Thêm bè", tested as NOT
+# Vietnamese, and eight detectors built on this test were quietly looking
+# at a subset of the map. Found in round 53, by a value that should have
+# been reported and was not.
+HAN = re.compile(r'[\u00c0-\u024f\u1e00-\u1eff]')
 # a leading English word that is a verb form, so a frame rather than a label
 OPEN = re.compile(
     r'^(?:[A-Z][a-z]+ing|[A-Z][a-z]+ed|'

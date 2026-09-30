@@ -33,15 +33,38 @@ import json, re, sys, os
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 src = {}
+longest = {}
 for line in open(os.path.join(ROOT, 'keys', 'all_strings.tsv'),
                  encoding='utf-8').read().splitlines()[1:]:
     if '\t' in line:
         k, u = line.split('\t', 1)
         src[k] = u
+        # Cubase truncates the long keys, and column 2 is truncated with them -
+        # which CUTS A QUOTE IN HALF and makes the two sides disagree. The
+        # untruncated text is another row's key, so prefer it when there is
+        # exactly one candidate.
+        longest.setdefault(k[:60], []).append(k)
+
+
+def full(k):
+    cand = longest.get(k[:60], [])
+    if len(cand) == 1 and len(cand[0]) > len(k):
+        return cand[0]
+    return src.get(k, '')
+
+
 vi = json.load(open(os.path.join(ROOT, 'translations', 'vi.json'),
                     encoding='utf-8'))
 
-HAN = re.compile(r'[Ā-ỿ]')
+# A VIETNAMESE LETTER, spelled with escapes on purpose. The obvious
+# [A-ỿ] is U+0100 to U+1EF9, and it is WRONG: Vietnamese keeps its most
+# common letters - a, a, e, e, o, o, u, u, d and their tone marks - in
+# U+00C0 to U+00FF, which is BELOW the start of that range. So a value
+# written entirely with those letters, like "Thêm bè", tested as NOT
+# Vietnamese, and eight detectors built on this test were quietly looking
+# at a subset of the map. Found in round 53, by a value that should have
+# been reported and was not.
+HAN = re.compile(r'[\u00c0-\u024f\u1e00-\u1eff]')
 # names that are button faces or dropdown values rather than menu commands, and
 # are therefore named by what is printed on them in every language. Round 48
 # found that matching the label blindly gives "Bat \"Bat ghi\" hoac \"Monitor\""
@@ -60,7 +83,7 @@ def clean(s):
 
 rows = []
 for k, v in vi.items():
-    en = src.get(k, '')
+    en = full(k)
     if not en:
         continue
     a = {clean(m.group(1) or m.group(2)) for m in Q.finditer(en)}

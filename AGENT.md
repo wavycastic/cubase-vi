@@ -787,6 +787,69 @@ program version.
 Tiếng Anh chịu được (chỉ từ hạn định đứng sau danh từ). Tiếng Việt phải **tách**:
 `chứa dữ liệu '%s' **mà** phiên bản chương trình này không hỗ trợ`.
 
+### ⚠️ `[Ā-ỿ]` **SAI** — lớp ký tự tiếng Việt bị thiếu một nửa
+
+```
+HAN = re.compile(r'[Ā-ỿ]')      # ← U+0100 … U+1EF9
+```
+
+Tiếng Việt giữ **phần lớn chữ cái thường dùng** ở **U+00C0 … U+00FF**
+(`à á ả ã ạ ă â è é ê ì í ò ó ô ơ ù ú ư đ` và các dấu thanh) — **nằm DƯỚI**
+đầu khoảng trên. Nên:
+
+```
+'Thêm bè'   →  HAN.search() = False      ← KHÔNG có tiếng Việt?!
+```
+
+**9 công cụ dò** đã âm thầm chỉ xem **một phần** bản dịch suốt 17 đợt. Lộ ra
+vì một giá trị **đáng lẽ phải được báo mà không được**:
+
+```
+"Select which notes are used for 'Randomize', 'Create Variation' and 'Add Voice'"
+  ->  "... 'Ngẫu nhiên hóa', 'Tạo Variation' và 'Add Voice'"
+```
+
+Nhãn `Add Voice` dịch là `Thêm bè`; bộ dò báo **0** sai lệch suốt 4 đợt.
+
+Đây là lỗi bộ dò thứ hai, và lỗi này **đáng xấu hổ hơn**: lỗi đầu (key bị cắt)
+ít nhất còn có chú thích trung thực. Cả hai đều **vô hình** — bộ dò báo thiếu
+**giống hệt** bộ dò không có gì để báo, và các đợt 36–52 đều đọc "0" là tin tốt.
+
+Đã sửa bằng **mã thoát** ở cả 9 chỗ:
+
+```python
+HAN = re.compile(r'[\u00c0-\u024f\u1e00-\u1eff]')
+```
+
+Sửa xong, chạy lại toàn bộ thì ra thêm **4** tên trong ngoặc kép sai ngay.
+
+**Bài học chung:** *"bộ dò báo 0"* và *"bộ dò hỏng"* trông **giống nhau**. Phải
+**thử biết đúng một giá trị** vào bộ dò trước khi tin kết quả của nó.
+
+### Bảng thuật ngữ §4 — **kiểm tra bằng máy**, đừng đọc bằng mắt
+
+```
+tools/audit_glossary.py
+```
+
+§4 là thứ **duy nhất** ở đây không thể hỏng một cách vô tình, và nó **đã sai
+hai lần**: `Key Signature | hóa biểu` (đợt 22, lan ra 8 chuỗi) và
+`Chord Symbols | hóa biểu` (đợt 39, 7 key đã trôi khỏi nó). Nên nó đáng được
+**kiểm tra**, không đáng được **đọc lại**.
+
+Đợt 53 lộ tiếp **2 dòng sai theo đúng kiểu đó** — bảng đúng, vài key viết sau
+không đọc bảng:
+
+```
+Add Key Signature            ->  Thêm Key Signature        (16 key kia là số chỉ nhịp)
+Show Key Signatures          ->  Hiện Key Signature
+Maximum Number of Rhythm Dots Allowed in Compound Beats
+                            ->  Số dấu chấm nhịp tối đa  (đợt 30b bỏ sót 2)
+```
+
+Hai mục "còn lại" của `Voice` (`voice-leading`, `tenor voice`, `Single Voice`) và
+65 mục của `Note` (`3-Note Chords` → `Hợp âm 3 nốt`) là **nghĩa khác** — đúng.
+
 ### `Mouse Wheel` là **con lăn chuột**, không phải `cuộn chuột`
 
 `cuộn` = *scroll* (hành động cuộn). `con lăn chuột` = *mouse wheel* (cái thiết
