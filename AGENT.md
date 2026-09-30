@@ -950,6 +950,66 @@ Keep History[RM]  ->  Giữ History[RM]     ← History chưa dịch
 New Parts[RM]     ->  Tạo Parts[RM]       ← đọc khác hẳn, cùng một tiếng Anh
 ```
 
+### Dấu phân giải của extractor **KHÔNG** được in lên màn hình
+
+Khi hai nhãn chia sẻ cùng một tiếng Anh, extractor gắn một **dấu hiệu vào
+KEY**: `[Key]`, `[Mouse]`, `{{Noun}}`, `[RM]`, `[direction of a stem]`.
+
+**Cubase tra bản dịch theo `Key`, KHÔNG theo `<us>`** — và điều này **không phải
+giả định**, vì các nhà cung cấp cũng làm vậy, và vài người còn cho hai key
+**hai bản dịch khác nhau cho cùng một tiếng Anh** để chứng minh:
+
+```
+Direction [direction of a stem]           de "Richtung"
+Direction [musical performance direction] de "Spielanweisung"
+
+Copy          de "Kopieren"      (động từ)
+Copy{{Noun}}  de "Kopie"         (danh từ)
+
+Height        de "Height"
+Height[Page Height] de "Höhe"
+```
+
+Nên dấu hiệu **dành cho extractor, không dành cho ai khác**. Bản dịch nào lặp
+lại nó là **in ghi chú riêng của extractor lên màn hình người dùng**:
+
+```
+Link [short, verb]                ->  Liên kết [ngắn, động từ]
+Direction [direction of a stem]   ->  Direction [hướng của thân nốt]
+Panner [Channel Latency Overview] ->  Panner [Tổng quan độ trễ Channel]
+View Mode: Fill View              ->  Chế độ xem: Fill View[Score View Option]
+```
+
+Đợt 67 sửa 7 giá trị. Đây là **luật 1 của AGENT.md** — cấm đuôi ngoặc chú
+thích — nhưng luật 1 **không bắt được**, vì nó **bỏ qua** mọi giá trị mà KEY có
+ngoặc. Cái khiên đó **đúng** cho ngoặc có sẵn trong tiếng Anh nguồn và **sai** cho
+ngoặc extractor tự chế.
+
+```
+tools/find_gloss_in_value.py
+```
+
+⚠️ **Bẫy `[Ā-ỿ]` lại xuất hiện, trong một file mới.** Lớp ký tự `[A-Za-zÀ-ỹ]` =
+U+00C0–U+01FF, **bỏ sót mọi dấu thanh tiếng Việt**:
+
+```
+[A-Za-zÀ-ỹ] cho chữ cái   ->  59 mục, tất cả đều là giá trị ĐÚNG
+"tối đa 4 từ"            ->  3 mục   (vì "hướng của thân nốt" cũng 4 từ)
+"có nối +  hoặc 1 từ"    ->  7 mục, tất cả đều thật   ← ĐÚNG
+```
+
+Một chord phím sau đợt 54 là **danh sách nối bằng `+`** hoặc **một từ đơn** —
+đó là toàn bộ phép thử. Phải **gọi tên** `nhấp chuột`, vì nó là **hai từ không
+có nối** (đợt 54 đặt cụm hai từ vào trong ngoặc).
+
+⚠️ Nhưng **dấu ở ĐẦU** giá trị thì **đúng** — đó là dấu đang **được dịch**, và
+dịch nó là đúng việc:
+
+```
+[Mixer Track Number] -> [Số Track MixConsole]
+[Track Type: Group]  -> [Loại Track: Group]
+```
+
 ### `Insert` — **danh từ** và **động từ**, cùng một chữ
 
 Cùng dạng với `String` (đợt 29) và `Notation` (đợt 55):

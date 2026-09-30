@@ -239,7 +239,7 @@
   "Device failed to open!": "Không thể mở Device!",
   "Dialogue-gated loudness measurement according to ITU-R BS.1770": "Đo Loudness theo hội thoại, tuân theo ITU-R BS.1770",
   "Direct Routing Bypass on/off.\\nReset with [CTRL + click].": "Bật/tắt Bypass Direct Routing.\\nĐặt lại bằng [CTRL + nhấp chuột].",
-  "Direction [direction of a stem]": "Direction [hướng của thân nốt]",
+  "Direction [direction of a stem]": "Hướng của thân nốt",
   "Disable/Enable Track": "Tắt/Bật Track",
   "Disables hardware acceleration for video encoding.": "Tắt tăng tốc phần cứng cho việc mã hoá Video.",
   "Disarm All Audio Tracks": "Track Disarm All Audio",
