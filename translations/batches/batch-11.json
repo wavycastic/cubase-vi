@@ -363,12 +363,12 @@
   "Draw": "Vẽ",
   "Drive": "Ổ đĩa",
   "Drop Frames": "Thả các Frame",
-  "Drum": "Trống",
+  "Drum": "Drum",
   "Drum Machine": "Drum Machine",
   "Drum Map": "Drum Map",
   "Drum Maps": "Các Drum Map",
   "Drum Sound": "Âm thanh Drum",
-  "Drums": "Trống",
+  "Drums": "Drums",
   "Dynamic": "Động lực",
   "Dynamic Velocity": "Động lực Velocity",
   "Editor History": "Lịch sử chỉnh sửa",
@@ -1090,6 +1090,6 @@
   "You should save the project now!\\nFile references in the stored version have become invalid!": "Bạn nên lưu Project ngay!\\nTham chiếu file trong phiên bản đã lưu đã trở nên không hợp lệ!",
   "Your changes will be lost and you will have to re-analyse this audio.": "Các thay đổi của bạn sẽ bị mất và bạn sẽ phải phân tích lại đoạn Audio này.",
   "Your local user name is already used by another computer on the network. The network will be reset.": "Tên người dùng cục bộ của bạn đã được dùng bởi máy tính khác trong mạng. Mạng sẽ được đặt lại.",
-  "Zoom Palette": "Zoom Bảng màu",
+  "Zoom Palette": "Bảng màu Zoom",
   "it is used in another Pool and it has more than one edit version!": "nó đang được dùng trong một Pool khác và có nhiều hơn một phiên bản chỉnh sửa!"
 }

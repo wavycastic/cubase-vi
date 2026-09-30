@@ -1453,7 +1453,7 @@
   "You can add cues on the 'Control Room' tab in the 'Audio Connections' window.": "Bạn có thể thêm Cue trên thẻ 'Control Room' trong cửa sổ 'Audio Connections'.",
   "You can change your driver selection and settings at any time in the Studio Setup dialog (Studio menu > Studio Setup) in the VST Audio System section.": "Bạn có thể thay đổi lựa chọn trình điều khiển và cài đặt bất kỳ lúc nào trong hộp thoại Thiết lập Studio (menu Studio > Thiết lập Studio) ở phần VST Audio System.",
   "You cannot move events in front of the project start time.": "Bạn không thể di chuyển Event ra phía trước thời điểm bắt đầu Project.",
-  "Zoom In On Waveform Vertically": "Phóng vào dạng sóng theo chiều dọc",
+  "Zoom In On Waveform Vertically": "Phóng to dạng sóng theo chiều dọc",
   "Zoom Mode has been changed for Definition editing.": "Zoom Mode đã được thay đổi cho việc sửa Definition.",
   "Zoom Out Of Waveform Vertically": "Thu nhỏ dạng sóng theo chiều dọc",
   "Zoom while Locating in Time Scale": "Zoom khi định vị trong Time Scale",
