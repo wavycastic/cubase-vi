@@ -1058,6 +1058,69 @@ chỗ lỗi nằm.
 
 ### Cặp `[Key]` — bản dịch **giống hệt** bản gốc, trừ **tên phím**
 
+### ⚠️ Đợt 70: Quét thủ công liên miền — phát hiện 69 lỗi đọc khó hiểu và sai thuật ngữ
+
+Đọc tay liên miền (`media`, `general`, `mixer`, `transport`, `music-theory`, `notation`)
+tìm ra nhiều lớp lỗi sai lệch chuyên ngành và dịch máy thô mà không bộ dò nào bắt được:
+
+1. **`Warp Marker` (không dùng `Warp Tab`):**
+   Steinberg giữ key nội bộ `Warp Tab` từ bản Cubase cũ, nhưng chuỗi tiếng Anh hiển thị
+   trên màn hình và cả 8 ngôn ngữ hãng dịch đều là `Warp Marker` (German: `Warp-Marker`,
+   French: `Marqueurs Warp`). Bản dịch cũ dịch mù theo key thành "Warp Tab", thậm chí cả
+   những key mà US ghi rõ `Warp Markers` (`Warp Markers` → `Warp Tabs`, `Copy Warp Markers...`
+   → `Sao chép Warp Tab...`). Đã đồng bộ toàn bộ về **`Warp Marker`**.
+
+2. **`Slice[QP]` và thuật ngữ cắt lát Audio:**
+   `Slice[QP]` bị dịch chập tautology thành `Cắt lát Slice` (ghép cả từ dịch lẫn từ gốc).
+   Thao tác slice audio tại hitpoint bị dịch thô như làm bếp ("cắt lát", "lát cắt Hitpoint").
+   Chuẩn hóa: `Slice[QP]` → `Cắt Slice`, `Slice Hitpoint`, `cắt thành Slice`.
+
+3. **`Pull` / `Pull Factor` / `Pull-up/Pull-down` trong hậu kỳ phim:**
+   Thuật ngữ chuẩn telecine/đổi frame rate video (+/-0.1% clock audio). Cả Đức và Pháp đều
+   giữ nguyên tiếng Anh (`Audio Pull-up/Pull-down`, `Pull Factor`, `Pull-Up/Down`). Bản dịch
+   cũ dịch thành "kéo lên/kéo xuống Audio", "hệ số kéo", "kéo Word Clock", "kéo lên/xuống của Nuendo".
+   Đã trả lại đúng thuật ngữ: `Audio Pull-up/Pull-down`, `Pull Factor`, `HW Pull Up/Down`, `Pull Word Clock`.
+
+4. **Nốt đen (Crotchet) bị dịch thành "nốt cường" (7 chuỗi):**
+   Trong ký âm tiếng Anh (Anh), `Crotchet` là nốt đen (quarter note). Bản dịch cũ dịch thành
+   "nốt cường" ở 7 chuỗi ký âm — một từ hoàn toàn không tồn tại trong nhạc lý. Sửa toàn bộ
+   thành **`Note 1/4 (nốt đen)`**. Tương tự, `1/2 Note (Minim)` bị dịch thành "nốt bán" → sửa
+   thành **`Note 1/2 (nốt trắng)`**.
+
+5. **Enharmonic (đồng âm) bị dịch thành "cảm điệu":**
+   `Enharmonics from Chord Track`, `Toggle Enharmonic Spelling`, `Enharmonically Equivalent Note`
+   bị dịch thành "bộ cảm điệu", "chính tả cảm điệu", "nốt cảm điệu". Trong nhạc lý, enharmonic
+   là **nốt đồng âm** (như C# và Db). Sửa thành: `Nốt đồng âm`, `Chính tả Enharmonic`.
+
+6. **`Rehearsal Mark` bị dịch thành "Dấu tập dượt":**
+   Rehearsal Mark là ký hiệu đoạn (A, B, C...) trong tổng phổ âm nhạc. Bản dịch cũ dịch thành
+   "dấu tập dượt" (thậm chí `Yamaha Rehearsal Mark` → `Dấu tập dượt Yamaha`). Sửa thành
+   **`Rehearsal Mark`** và **`Yamaha Rehearsal Mark`**.
+
+7. **`MIDI Controller Surface Editor` bị dịch thành "Trình sửa bề mặt":**
+   Control Surface là bề mặt điều khiển / giao diện điều khiển phần cứng của MIDI controller.
+   Không dịch thành "bề mặt" (như mặt bàn hay bề mặt da). Chuẩn hóa: `MIDI Controller Surface Editor`
+   và `Surface Editor`.
+
+8. **Nút `Start` bị dịch thành `Phát` (Play):**
+   Trong hộp thoại quét file thiếu: `Click 'Start' to scan for unreferenced files` bị dịch thành
+   "Nhấp 'Phát' để quét...", và key `Start` đơn lẻ bị dịch thành "Phát". Trong cả 8 ngôn ngữ,
+   Start là Démarrer, Iniciar, Avvia, 开始. Nút Start phải là **`Bắt đầu`**.
+
+9. **Lỗi nhạc lý "a change of key" thành "đổi số chỉ nhịp":**
+   Quy tắc dấu hóa: dấu hóa có hiệu lực trong bar hoặc cho tới khi đổi giọng/hóa âm (`a change of key`),
+   bản dịch cũ dịch thành "cho tới khi đổi số chỉ nhịp" (change of time signature). Sửa thành **`đổi hóa âm`**.
+
+10. **Loudness Gating bị dịch thành "cổng thoại" / "cổng chương trình":**
+    `dialog-gated` và `program-gated` (đo loudness kích hoạt theo thoại / theo chương trình)
+    bị dịch thành "cổng thoại" và "cổng chương trình". Chuẩn hóa thành `theo hội thoại` và `theo Program`.
+
+11. **Typo và câu què:**
+    - `trực tuyếp` → `trực tuyến` ("Trong trường hợp không có Project nào trực tuyến...")
+    - `...Hãy dùng Preset thời gian thực thay vì.` → `...để thay thế.`
+    - `Vẻ ngoài văn bản...` → `Kiểu hiển thị văn bản...`
+    - `MIDI Input`: tránh lặp giới từ "từ mọi MIDI đầu vào vào Track đã chọn" → `từ tất cả MIDI Input vào Track đã chọn`.
+
 10 nhãn có bản song sinh `[Key]` (cùng tiếng Anh, đánh dấu là phím tắt). Bản
 dịch làm **ba** kiểu khác nhau:
 
