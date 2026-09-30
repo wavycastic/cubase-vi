@@ -147,7 +147,15 @@ REORDER = re.compile(
     r'[àáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđĐ]'
     r'[^.!?:]{0,40}?(?<![\w-])(over|under|with|for|from|into|through|across|'
     r'between|above|below|during|without|within)(?![\w-])', re.I)
-reordered = [k for k, v in vi.items() if REORDER.search(v)]
+# A quoted feature name is a proper noun and stays in English, so an English
+# preposition inside one is not a reordering:
+#     'Maximum Duration for Rhythmic Slashes' -> "... 'Maximum Duration for
+#     Rhythmic Slashes' duoc dat thanh ..."
+# The "for" there belongs to the name, not to the sentence. Round 39 hit this
+# with two values that were correct.
+QUOTED = re.compile(r'"[^"]*"|\'[^\']*\'')
+reordered = [k for k, v in vi.items()
+             if REORDER.search(QUOTED.sub(' ', v))]
 
 print(f'strings total                    : {len(vi)}')
 print(f'with any Vietnamese             : {sum(1 for v in vi.values() if has_viet(v))}')

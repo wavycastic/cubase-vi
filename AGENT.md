@@ -524,6 +524,61 @@ changes, but requires you to estimate the pickup value.
 
 Mất đúng vế nói **cái giá** của tính năng. Khi đọc câu dài, phải đếm vế.
 
+### Bảng luật **đúng** mà bản dịch vẫn trôi — `Chord Symbols`
+
+Lỗi `Key Signature | hóa biểu` (mục trên) là **bảng sai**. Đợt 39 tìm ra
+**chiều ngược lại**: bảng **đúng**, bản dịch **trôi**.
+
+```
+Chord Symbol    ->  Ký hiệu hợp âm
+Chord Symbols   ->  Ký hiệu hợp âm
+Show Chord Symbols
+                 ->  Hiện Chord Symbols          ← cả hai cách trong cùng họ
+```
+
+Bảng §4 ghi `Chord Symbols | hóa biểu` từ lâu, nhưng 7 key chọn cách thứ hai.
+Không ai đối chiếu chúng với bảng. Tệ hơn: 2 key khác **đưa nhầm từ ngược
+chiều** — cụm tiếng Anh `the key signature` lại ra `hóa biểu`.
+
+Nên từ nay: thấy một thuật ngữ trong chuỗi mới thì `grep` **từ đó**, không
+grep key. Từ đó có mặt ở cả hai hướng.
+
+### *"hợp âm X với nốt N"* ≠ *"hợp âm X cấp N"* — 16 key sai nhạc lý
+
+```
+Apply major chord with a 7 to selection
+  ->  Áp dụng hợp âm trưởng cấp 7 vào vùng chọn
+```
+
+`hợp âm trưởng cấp 7` = Cmaj7. *"hợp âm trưởng với nốt 7"* = C + G — **hợp âm
+cấp 7 chi phối**, hợp âm khác. Tiếng Anh nói hợp âm được **dựng từ nốt gốc rồi
+thêm nốt**; tiếng Việt lại **đặt tên một loại hợp âm**. Khác hẳn.
+
+Từ `với` chính là từ nói *nốt được cộng thêm*. Mất nó là đổi hợp âm:
+
+| Tiếng Anh | Đúng |
+|---|---|
+| major chord **with a** 7 | hợp âm trưởng **với nốt** 7 |
+| minor chord **with a** 6 | hợp âm thứ **với nốt** 6 |
+| major chord **with a** major 7 | hợp âm trưởng **với nốt** 7 trưởng |
+| suspended 4th chord **with a** 7 | hợp âm treo 4 **với nốt** 7 |
+
+Còn `diminished 7th chord` / `half-diminished 7th chord` thì **giữ** `cấp N` —
+đó mới là tên loại hợp âm.
+
+### `Octave` = `quãng tám` trong câu, giữ `Octave` ở nhãn
+
+25 key. 12 key dùng nó **như từ tiếng Anh** trong câu: `một octave`,
+`cao hơn 1 octave`. Nhãn thì giữ: `Octave Line`, `Octave Symbol`,
+`Octave Indicator` là **tên riêng của Cubase**.
+
+### Bộ dò `reordered preposition` phải **bỏ qua ngoặc kép**
+
+Đợt 39 có hai giá trị **đúng** bị báo động: chữ `for` nằm trong *tên tính năng
+trong ngoặc kép* `"Maximum Duration for Rhythmic Slashes"`. Tên tính năng là
+**danh từ riêng**, tiếng Anh giữ nguyên; `for` thuộc về cái tên, không thuộc
+về câu. Đã vá `audit_quality.py` để xoá đoạn trong ngoặc kép trước khi dò.
+
 ### Lớp lớn nhất: **khung tiếng Anh, chỉ chèn giới từ tiếng Việt**
 
 Đây là lớp lỗi mà **không bộ dò nào bắt được**, vì câu *có* tiếng Việt:
