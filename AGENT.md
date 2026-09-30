@@ -615,6 +615,42 @@ The search returned no results              ->  search returned no results
 Mất mạo từ `The` → **hết tiếng Việt**. Bộ dò "fully untranslated prose" hỏi
 "có tiếng Việt không", mà `a` và `the` chính là toàn bộ chênh lệch.
 
+### `Material` = `chất liệu` — **không phải** `tư liệu`
+
+`tư liệu` = *documents* (từ thư viện). `chất liệu` = *material*, và nó phủ **cả
+hai** nghĩa: `chất liệu Audio` (audio material) và `chất liệu đơn âm`
+(monophonic material). 9 key, một từ.
+
+Đây chính là lỗi `String` của đợt 29 (MIDI string, dây đàn, chuỗi) — **một từ
+tiếng Anh, đọc thành hai từ tiếng Anh khác**. Nó cứ tái diễn vì mỗi key mới
+trông như một quyết định mới.
+
+**Một danh từ tiếng Anh — một danh từ tiếng Việt.** Quyết định một lần, áp
+dụng khắp nơi. Đây là lý do phải `grep` **từ** chứ không `grep` key.
+
+### Câu tiếng Việt thiếu **dấu trạng ngữ** (`được`)
+
+```
+"... a parameter of a VST 2 plug-in cannot be modulated."
+  ->  "... tham số của Plug-in VST 2 không thể Modulation."
+```
+
+Tiếng Việt cần `được`: **X không thể *được* Modulation**. Thiếu nó thì câu
+đọc thành *"tham số đó không phải là Modulation"* — nghĩa **đảo ngược**. Cùng lỗi
+với `có thể Automation` → phải là `có thể **nhận** Automation`.
+
+### Quan hệ từ dồn lên danh từ — 6 chuỗi trong một họ
+
+```
+The project file contains '%s' data which is not supported by this
+program version.
+  ->  File Project chứa dữ liệu '%s' không được phiên bản chương trình
+      này hỗ trợ.
+```
+
+Tiếng Anh chịu được (chỉ từ hạn định đứng sau danh từ). Tiếng Việt phải **tách**:
+`chứa dữ liệu '%s' **mà** phiên bản chương trình này không hỗ trợ`.
+
 ### `Mouse Wheel` là **con lăn chuột**, không phải `cuộn chuột`
 
 `cuộn` = *scroll* (hành động cuộn). `con lăn chuột` = *mouse wheel* (cái thiết

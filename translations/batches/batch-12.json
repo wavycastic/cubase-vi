@@ -964,7 +964,7 @@
   "The Sampler Track component is not installed. Please re-install the application.": "Thành phần Sampler Track chưa được cài đặt. Vui lòng cài lại ứng dụng.",
   "The Studio can only have one \"%s\"!": "Studio chỉ có thể có một \"%s\"!",
   "The application was terminated unexpectedly": "Ứng dụng đã kết thúc đột ngột",
-  "The audio material is not overlapping.": "Tư liệu Audio không bị chồng lấn.",
+  "The audio material is not overlapping.": "Chất liệu Audio không bị chồng lấn.",
   "The audio tempo cannot be changed!": "Không thể thay đổi Tempo của Audio!",
   "The component could not be terminated!": "Không thể kết thúc thành phần!",
   "The current chain contains no items. Add some items and then try again.": "Chain hiện tại không có mục nào. Hãy thêm một vài mục rồi thử lại.",
