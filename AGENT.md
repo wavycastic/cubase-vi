@@ -950,6 +950,52 @@ Keep History[RM]  ->  Giữ History[RM]     ← History chưa dịch
 New Parts[RM]     ->  Tạo Parts[RM]       ← đọc khác hẳn, cùng một tiếng Anh
 ```
 
+### File Cubase đang chạy: **chỉ `us` + `vi`**, 1.449.424 byte
+
+```
+full    5.328.470 byte     ← vẫn build, làm đường quay lui
+en      1.449.424 byte     ← MẶC ĐỊNH, đang cài   (27%)
+```
+
+Cubase chứa **chín ngôn ngữ** cho cả 10.737 chuỗi; tám ngôn ngữ không dùng
+chiếm **82%** phần chữ:
+
+```
+ru 544.420   jp 534.556   fr 471.434   it 470.224
+es 447.688   pt 443.998   de 433.529   zh 361.083      byte
+us 379.104   vi 443.091                                byte
+```
+
+```
+tools/strip_languages.py     ← xoá phần tử ngôn ngữ, rồi cả dòng trong
+                               <LanguageTable> để file thật sự chỉ có hai
+```
+
+⚠️ **Vì sao ban đầu KHÔNG cho làm mặc định:** file gốc có **đúng chín phần tử
+ngôn ngữ ở cả 10.737 mục** — không mục nào thiếu một cái. Nghĩa là bản hai ngôn
+ngữ là **hình dạng Cubase chưa từng nhận**, và tôi **không có cách nào biết
+trước**. Nên ban đầu nó là **lựa chọn**, và đường quay lui phải sẵn sàng **trước
+khi** mở Cubase:
+
+- `install.ps1` ghi `.bak` cạnh mọi file nó ghi đè; `-Action uninstall` khôi phục
+- `keys/translation_original.xml` là **nguồn** của cả hai bản, và nằm trong git
+
+**Đã kiểm chứng trên chính file đã cài** (không phải trên bản build):
+
+```
+String entries 10.737   <vi> 10.737 (thiếu 0)   <us> 10.737
+ngôn ngữ còn lại: không còn
+LanguageTable : English, Vietnamese
+XML well-formed: YES
+KHÁC translations/vi.json: 0 giá trị      ← dòng quan trọng nhất
+```
+
+Dòng cuối chứng minh việc cắt tám ngôn ngữ **không làm hỏng một chữ tiếng Việt
+nào**. Và Cubase đọc nó bình thường → nay là mặc định.
+
+⚠️ **PowerShell báo `String: 0` là SAI — đừng tin nó.** `.String` trùng tên với
+kiểu `System.String`, nên property đó trả về rỗng. Dùng Python để kiểm.
+
 ### ⚠️ Sáu thứ phải giữ nguyên 100% — trước đây **chỉ kiểm 1**
 
 Yêu cầu dự án ghi rõ: *"bảo toàn 100% placeholder, dấu hai chấm, `?`/`!`/`.`, dấu

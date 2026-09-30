@@ -36,8 +36,9 @@ run([T('tools', 'check_style.py')], 'enforce hybrid style (AGENT.md)')
 run([T('tools', 'check_punctuation.py')], 'check ? ! ; ... line breaks edge spaces')
 run([T('tools', 'build_translation.py'), BASE, OUT, MAP], 'build Vietnamese translation.xml')
 # a second target: the same file with the eight unused languages removed,
-# 5,328,470 -> ~1,449,000 bytes. Opt-in at install time; the full file above is
-# still the default, and the original is still the source both are built from.
+# 5,328,470 -> 1,449,424 bytes. Cubase reads it correctly, so this is what
+# install.ps1 deploys by default; the full file above is still built, and is
+# the fallback if a future Cubase ever wants its own shape back.
 run([T('tools', 'strip_languages.py'), OUT, T('build', 'translation_vi_en.xml')],
     'build the English + Vietnamese only variant')
 run([T('tools', 'validate_translation.py'), OUT], 'validate output')

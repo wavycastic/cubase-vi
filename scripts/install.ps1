@@ -16,30 +16,34 @@
   install | uninstall | status
 
 .PARAMETER Variant
+  en     - English and Vietnamese only.  THE DEFAULT, and the one in use.
   full   - the whole translation.xml, all nine languages plus Vietnamese
-  en     - English and Vietnamese only, about a quarter of the size
 
-  Both are built by tools\build.py. The full one is the default because it is
-  the file shape Cubase ships: the original has all nine language elements in
-  all 10,737 entries, so a reduced file is a shape Cubase has never been handed.
-  Install it only if the size matters to you, and keep this in mind:
+  Both are built by tools\build.py and both are kept. The default is "en"
+  because Cubase reads it correctly - verified on 10,737 entries, no <us> and no
+  <vi> lost, and not one Vietnamese value differing from the map - and it is
+  1,449,424 bytes against 5,328,470.
+
+  "full" is the file shape Steinberg ships: the original has all nine language
+  elements in all 10,737 entries, so it is worth keeping as the fallback.
 
     - install.ps1 writes a .bak beside every file it overwrites
     - -Action uninstall puts the .bak back
-    - keys\translation_original.xml is the source both are built from, and is in git
+    - keys\translation_original.xml is the source both are built from, and is
+      in git
 
 .EXAMPLE
   powershell -File scripts\install.ps1 -Action install
 
 .EXAMPLE
-  powershell -File scripts\install.ps1 -Action install -Variant en
+  powershell -File scripts\install.ps1 -Action install -Variant full
 #>
 [CmdletBinding()]
 param(
   [ValidateSet('install', 'uninstall', 'status')]
   [string]$Action = 'status',
-  [ValidateSet('full', 'en')]
-  [string]$Variant = 'full',
+  [ValidateSet('en', 'full')]
+  [string]$Variant = 'en',
   [string]$CubaseDir = 'E:\Steinberg\Cubase 15',
   [string]$Built = ''
 )
