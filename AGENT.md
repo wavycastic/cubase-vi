@@ -950,6 +950,52 @@ Keep History[RM]  ->  Giữ History[RM]     ← History chưa dịch
 New Parts[RM]     ->  Tạo Parts[RM]       ← đọc khác hẳn, cùng một tiếng Anh
 ```
 
+### Cặp `[Key]` — bản dịch **giống hệt** bản gốc, trừ **tên phím**
+
+10 nhãn có bản song sinh `[Key]` (cùng tiếng Anh, đánh dấu là phím tắt). Bản
+dịch làm **ba** kiểu khác nhau:
+
+```
+Clear[Key] -> Clear      End[Key] -> Kết thúc    Help[Key] -> Trợ giúp
+Print[Key] -> In         Select[Key] -> Chọn        Pause[Key] -> Pause
+Separator[Key] -> Separator
+
+Next[Key]  -> Phím Next   Play[Key] -> Phím Play   Stop[Key] -> Phím Stop
+```
+
+7 theo một, 3 theo hướng ngược, và cách chia **không theo luật nào** — nó theo
+đợt nào chạm tới key. Ba key thêm "Phím" là ba key mà người đọc **có** thêm được
+gì, vì danh sách Key Commands đã ghi "Key" trong tiêu đề của nó rồi. `Phím Next`
+chính là kết quả của việc **đọc dấu hiệu như một từ** thay vì **đọc nó như một dấu
+hiệu**.
+
+**8 nhà cung cấp chốt theo hướng ngược lại, 7/10** — bản `[Key]` nhận **cùng**
+bản dịch với bản gốc:
+
+```
+Clear   de "Entf."      Clear[Key]   de "Entf."
+End     de "Ende"       End[Key]     de "Ende"
+Play    de "Wiedergabe" Play[Key]    de "Wiedergabe"
+Select  de "Auswahl"    Select[Key]  de "Auswahl"
+```
+
+Ba ngoại lệ là chỗ **tên phím phải giữ tiếng Anh**, vì phím bàn phím được đặt tên
+theo **chữ in trên mặt phím** — cùng miễn giống `Record Enable` và `Monitor`:
+
+```
+Pause[Key]      jp "Pause"          (bản gốc jp "休止記号")
+Separator[Key]  de "Separator"      (bản gốc de "Trennzeichen")
+```
+
+Nên `Pause[Key]` và `Separator[Key]` giữ nguyên, 3 key kia bỏ chữ "Phím".
+
+### `Cue Sends` / `Cue Send` — **chia đúng theo luật**, đừng đụng
+
+`Cue Sends` 10 lần, `Cue Send` 17 lần — và 10 lần kia **đúng là** những cái
+tác động lên **toàn bộ**: `Reset All Cue Sends`, `Activate Cue Sends`,
+`Views: Cue Sends`. Còn 17 là tác động lên **một** send. Đây là **số nhiều cho
+một mục**, **số ít cho một lệnh lên một phần tử** — giống hệt.
+
 ### Dấu phân giải của extractor **KHÔNG** được in lên màn hình
 
 Khi hai nhãn chia sẻ cùng một tiếng Anh, extractor gắn một **dấu hiệu vào
