@@ -111,14 +111,15 @@ Bàn nhạc không nằm trong bảng §3, nên dùng thuật ngữ âm nhạc t
 | Beam | đuôi nốt |
 | Stem / Stemlet | thân nốt / thân nốt nhỏ |
 | Barline | vạch nhịp |
-| Key Signature | hóa biểu |
-| Time Signature | số chỉ nhịp |
+| Key Signature | **số chỉ nhịp** |
+| Time Signature | **số chỉ nhịp** |
+| Chord Symbols | hóa biểu |
 | Voice | bè |
 | Ledger Line | dòng kẻ |
 | Accidental | dấu hóa |
 | Note (trường độ) | **giữ `Note`** → `Note 1/8` |
-| Rhythm Dot | dấu chấm nhịp |
-| Slash (gạch nhịp) | gạch nhịp |
+| Rhythm Dot | dấu chấm dôi |
+| Slash | gạch chéo |
 
 **`System` là từ ngữ cảnh — phải tra từng chuỗi:**
 
@@ -384,16 +385,69 @@ cái nào sai — nó chỉ chỉ ra chỗ cần nhìn.
 lan sang chỗ thứ hai**. Một quy tắc đã nghĩ ra thì phải tra cả họ, không chỉ
 chỗ vừa gặp.
 
-### `Signature` và `Expression` — hai từ dễ lẫn, đã lẫn ba lần
+### `Key Signature` là **số chỉ nhịp** — lỗi này do chính bảng luật sinh ra
 
-| Tiếng Anh | Tiếng Việt |
-|---|---|
-| `Key Signature` | **số chỉ nhịp** |
-| `Expression` | **hóa biểu** |
+Bảng §4 từng ghi `Key Signature | hóa biểu`. Sai. `hóa biểu` là **Chord
+Symbols** (dòng chữ tên hợp âm như `Cm7` viết cạnh nốt); `Key Signature` (khoá
+bấc) là **số chỉ nhịp** — cùng từ với `Time Signature`.
 
-`SMF: Key signature` → `SMF: Hóa biểu` (đợt 22) và `Sign.` → `Hóa biểu` (đợt 23).
-Hai viết tắt của hai từ khác nhau, cùng đều thành `hóa biểu`. Chính bên cạnh,
-`Signature` → `Số chỉ nhịp` lại **đúng**.
+Lỗi đó đã truyền vào bản dịch ở **8 chuỗi**, một số rất dài:
+
+```
+Notes Following a Change of Key Signature That Shows Cancellation Naturals
+  ->  Các nốt sau khi đổi hóa biểu có hiện dấu bình hủy bỏ
+Key Signatures at Start of System Following First System
+  ->  Hóa biểu ở đầu các dòng nhạc sau dòng nhạc đầu tiên
+Position Bar Numbers at Start of System After Clef and Key Signature
+  ->  Đặt số Bar ở đầu dòng nhạc sau khóa nhạc và hóa biểu
+```
+
+Đáng chú ý: đợt 22 và đợt 23 **đã phát hiện** cùng lỗi này ở `SMF: Key
+signature` và `Sign.`, đã sửa, và đã ghi vào đây — mà không mở lại bảng §4 để
+thấy nó là nguồn. Bản dịch làm đúng theo luật; **luật sai**.
+
+Đây là bài học lớn nhất về tài liệu: một bảng thuật ngữ viết sai không tự báo
+lỗi, và mọi lần sửa bản dịch theo nó đều *đúng theo luật*. Khi phát hiện một
+lỗi thuật ngữ, phải sửa **cả bản dịch lẫn dòng trong bảng**, và phải `grep` lại
+toàn bộ bản dịch theo từ khoá — ở đây là `hóa biểu`.
+
+### `String` đã bị đọc thành **ba** nghĩa khác nhau
+
+| Key | Nghĩa | Đã dịch thành |
+|---|---|---|
+| `From String`, `Add String Above` | MIDI String (bảng String của Cubase) | `String` |
+| `String Tunings`, `Move To String 1..12` | dây đàn | `dây đàn` |
+| `Replace Search String` | **chuỗi** tìm kiếm | `dây đàn` ← sai |
+
+Ba lần, ba cách. Cùng một chữ ở ba key khác nhau phải tra **ngữ cảnh**, không
+tra bằng từ điển. `String` chỉ đúng khi đứng một mình hoặc đi kèm
+`Tuning`/`To String` (ghen dây đàn); đứng trong `Search ...` thì là *chuỗi*.
+
+### `Replace ...` đảo ngữ cảnh, không chỉ đảo từ
+
+```
+Replace All Events and Parts      ->  Part Replace All Events and
+Replace Recording in Editors      ->  Editor Replace Recording in
+Restore Default Setup              ->  Thiết lap Restore Default
+Restore Factory Presets           ->  Preset Restore Factory
+Reload Track Preset               ->  Preset Reload Track
+Resolve Missing Files             ->  File Resolve Missing
+Reveal Parameter on Write         ->  Tham so Reveal tren Write
+Resulting Video Files             ->  File Resulting Video
+```
+
+Cả bảy đều **tháo câu ra rồi ghép ngược**: phần đứng trước của giá trị là phần
+đứng sau trong tiếng Anh.
+
+### `Factory` đã có bốn cách dịch
+
+`xuất xưởng` · `từ nhà sản xuất` · `Factory` · và một câu trộn lẫn hai cách.
+Nhất thống theo `Factory`.
+
+### `Symbol` và `Sign` — cùng ra một giá trị
+
+`Symbol` (loại đầu nốt của Cubase) và `Sign` (ký hiệu ký âm) đều thành
+`ký hiệu`. `Sign` giữ `ký hiệu`; `Symbol` giữ `Symbol`.
 
 ### `Set up X` — dịch cả tiền tố rồi bỏ mặc danh từ
 
