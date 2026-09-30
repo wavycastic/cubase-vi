@@ -339,6 +339,46 @@ thành "công cụ chọn", tức là **một menu khác**.
 
 ### `No.` là *số* — quyết định rồi thì phải áp cho hết
 
+`No.` là viết tắt của **Number**, không phải phủ định. Trong khoảng 60 nhãn mở
+đầu bằng `No`, bốn cái đã đẩy chữ `No` ra cuối như danh từ:
+
+```
+No Parameter   ->  Tham số No        ← "tham số số"
+No Section     ->  Phần No           ← "phần số"
+No Status Info ->  Thông tin No Status
+No. of Frets  ->  No. của Frets
+```
+
+Cùng lớp với `Group` → `Gộp nhóm`: chữ bị coi là danh từ rồi đẩy hết xuống
+cuối. Đây là lỗi đảo thứ tự từ ở dạng ngắn, chỉ lộ ra khi đọc.
+
+**Đã dính ba lần.** Đợt 19 sửa `No. of Frets`, đợt 22 sửa `Scene No.`, đợt 24
+sửa `Take No.` — mỗi lần một chuỗi. Sau đợt 22 tôi đã viết vào đây "hãy tra
+bằng mẫu chứ không tra bằng key" rồi lại không làm. Ba lần là đủ để biết luật
+này phải **thực thi**, không chỉ viết ra.
+
+### `Version` giữ tiếng Anh — nhưng **chỉ ở nhãn**
+
+43 nhãn chứa `Version`. 32 cái đã dùng `Version`, 11 cái dùng `phiên bản`:
+
+```
+Version          ->  Phiên bản
+Track Versions   ->  Các phiên bản Track
+VST Version      ->  VST Phiên bản        (còn sai thứ tự)
+Software Version ->  Phần mềm Version     (nửa nọ nửa kia)
+```
+
+Nhất thống theo `Version` — vừa là đa số, vừa đúng luật "giữ thuật ngữ DAW bằng
+tiếng Anh".
+
+**Nhưng chạm tới câu văn thì dừng lại.** 31 câu chứa `phiên bản` đang **đúng**:
+`mức phiên bản chương trình đã hỗ trợ`, `dữ liệu không được phiên bản chương
+trình hỗ trợ` — ở đó `phiên bản` là từ tiếng Việt thông thường, `Version` sẽ
+rờ rạc. Nên đây là **11 mục viết tay**, không phải thay thế bằng regex.
+
+`grep` từ khóa rồi sửa từng dòng là cách đúng, nhưng **grep không quyết định**
+cái nào sai — nó chỉ chỉ ra chỗ cần nhìn.
+
 Đợt 19 sửa `No. of Frets` → `Số Frets`. Đợt 22 gặp `Scene No.` → `Cảnh Không`
 — nghĩa là "cảnh không". Cùng lỗi, cách đã xử lý đúng, **nhưng quyết định không
 lan sang chỗ thứ hai**. Một quy tắc đã nghĩ ra thì phải tra cả họ, không chỉ
