@@ -1182,6 +1182,89 @@ tìm ra nhiều lớp lỗi sai lệch chuyên ngành và dịch máy thô mà k
    - `Enter Locator Range Duration` để nguyên tiếng Anh → `Nhập thời lượng dải Locator`.
    - Hộp thoại Safe Mode xóa Preferences: tránh nói lặp "Tùy chọn này xóa các tùy chọn..." → `Tùy chọn này xóa toàn bộ Preferences...`.
 
+### ⚠️ Đợt 72: Quét thủ công liên miền — sửa 181 chuỗi sai lệch DAW, Mute, Snap, MIDI và key-mismatch
+
+1. **`Retrospective Record` bị dịch ngô nghê thành "Ghi hồi tố" (16 chuỗi):**
+   "Hồi tố" là thuật ngữ tư pháp hình sự (hiệu lực hồi tố của đạo luật). Trong DAW, Retrospective
+   Record là tính năng luôn ghi nhớ những gì người chơi vừa đàn để lấy lại khi cần.
+   Đồng bộ toàn bộ về **`Retrospective Record`** / **`Retrospective Recording`** / **`Bản ghi Retrospective`**
+   (ví dụ: `Empty Retrospective Record Buffer` → `Xóa Retrospective Record Buffer`).
+
+2. **`Mute` bị dịch sai thành "Tắt tiếng" và thảm họa "Tắt tiếng Strip" (16 chuỗi):**
+   - Vi phạm quy tắc AGENT.md: "Mute" là thuật ngữ cốt lõi, không được dịch thành "Tắt tiếng".
+     Sửa: `Mute các Event`, `Mute các khoảng trống`, `Mute tất cả Video Track`, `Mute/Bỏ Mute`, `Đang Mute`.
+   - `Strip Silence` (cắt bỏ khoảng lặng) bị dịch ngô nghê thành `Tắt tiếng Strip` (hiểu nhầm
+     Strip là danh từ thanh/dải và Silence là động từ tắt tiếng!). Sửa thành: **`Cắt bỏ khoảng lặng`**.
+
+3. **Lỗi đảo chữ các lệnh Arm Track và Import (6 chuỗi):**
+   - `Arm All Audio Tracks` bị dịch thành `Track Arm All Audio` → `Bật sẵn sàng ghi cho tất cả Audio Track`.
+   - `Disarm All Audio Tracks` bị dịch thành `Track Disarm All Audio` → `Tắt sẵn sàng ghi cho tất cả Audio Track`.
+   - `Test Record Arming for all Tracks` bị dịch thành `Test Record Arming cho Track all` → `Kiểm tra sẵn sàng ghi cho tất cả Track`.
+   - `Track Record Arming Routing` → `Routing sẵn sàng ghi của Track`.
+   - `Import all Media Files` bị dịch thành `Import File all Media` → `Import tất cả file Media`.
+
+4. **Đồng bộ toàn bộ họ `Snap` và sửa tag chú thích thừa (15 chuỗi):**
+   - `Snap Point` bị dịch thành "Điểm bắt dính" trong khi các lệnh xung quanh đều là Snap Point → `Snap Point`.
+   - Bỏ tiền tố lai căng "Loại bắt dính: ...": `Loại Snap: Event`, `Loại Snap: Grid + Con trỏ`, `Loại Snap: Magnetic Cursor`, `Loại Snap: Shuffle`.
+   - `Use Snap from Drum Map` xóa đuôi chú thích ngo��c đơn vi phạm rule `(Snap)` → `Dùng Snap từ Drum Map`.
+   - `Scale Assistant: Toggle Snap Live Input` → `Scale Assistant: Bật/Tắt Snap Live Input`.
+
+5. **Giữ nguyên tên các bảng Assistant (15 chuỗi):**
+   - Không dịch máy Assistant thành "Trợ lý" tạo cảm giác như trợ lý cá nhân hay chatbot:
+     `Scale Assistant` (thay vì "Trợ lý Scale"), `Mapping Assistant` (thay vì "Trợ lý Mapping"),
+     `Touch Collect Assistant`, `Proximity Assistant`.
+
+6. **Chuẩn hóa thông điệp MIDI và Velocity (23 chuỗi):**
+   - `Note On` / `Note Off` bị dịch thành "Bật Note" / "Tắt Note" → `Note On` / `Note Off`.
+   - `On Velocity` / `Off Velocity` bị dịch thành "Bật Velocity" / "Tắt Velocity" → `On Velocity` / `Off Velocity`.
+   - `Note Insert Velocity` bị dịch thành "Chèn Velocity của Note" → `Velocity khi chèn nốt`.
+   - `CC: Attack Time` bị dịch thành "CC: Thời gian tấn công" → `CC: Thời gian Attack`.
+   - `CC: Gen Purp 1..8` bị dịch thành "CC: Mục đích chung 1..8" → `CC: Gen Purp 1..4` / `CC: Gen Purpose 5..8`.
+   - `CCMode: All Notes Off / All Sound Off / OMNI On/Off` → giữ nguyên chuẩn MIDI.
+   - `Pitch Shift` bị dịch thành "Dịch cao độ" trong khi cài đặt là Pitch Shift → `Pitch Shift`.
+
+7. **Chuẩn hóa các tab Modifier trong Chord Pads (6 chuỗi):**
+   - `Chord Modifiers` ("Bộ thay đổi hợp âm") → `Modifier hợp âm`.
+   - `Tension Modifiers` ("Bộ thay đổi Tension") → `Modifier Tension`.
+
+8. **Bypass không dịch thành "Bỏ qua" (13 chuỗi):**
+   - Bỏ qua là "Skip" / "Ignore". Trong trộn âm, Bypass là cho tín hiệu đi qua không xử lý.
+   - Sửa: `Bypass: Channel Strip / EQ / Insert / Modulator / Send`, `Đã Bypass`, `Bật/Tắt Bypass thay đổi VariAudio / Warp`.
+
+9. **Các key code `Switch:` bị dịch mù theo key code thay vì tiếng Anh hiển thị (10 chuỗi):**
+   - `Switch: Activate Speakers` (US: `Control Room On/Off`) bị dịch thành "Chuyển: Bật loa" → `Bật/Tắt Control Room`.
+   - `Switch: Click Active` (US: `Click On/Off`) bị dịch thành "Chuyển sang Click đang hoạt động" → `Bật/Tắt Click`.
+   - `Switch: Dim Active` (US: `Dim Signal On/Off`) → `Bật/Tắt tín hiệu Dim`.
+   - `Switch: Listen Cancel` (US: `Deactivate All Listen States`) → `Tắt tất cả trạng thái Listen`.
+   - `Switch: Talkback Active` (US: `Talkback On/Off`) → `Bật/Tắt Talkback`.
+
+10. **Lỗi sai lệch giao diện, câu thoại và key-mismatch (45+ chuỗi):**
+    - `Show/Hide Infoview` (US: `Show/Hide Info Line`) → `Hiện/Ẩn Info Line`.
+    - `VST Connections` (US: `Audio Connections`) bị dịch là "Kết nối VST" → `Audio Connections`.
+    - `Delete Tool` (US: `Erase Tool`) bị dịch thành "Xóa công cụ" → `Công cụ xóa`.
+    - `Assume Skipping` (US: `Process Existing Clip`) bị dịch thành "Giả định bỏ qua" → `Xử lý Clip hiện có`.
+    - `Fore` (US: `Forward`) để nguyên tiếng Anh xén bớt `Fore` → `Tua tới`.
+    - `Hit` (US: `Confirm`) để nguyên tiếng Anh `Hit` → `Xác nhận`.
+    - `AppKey[Key]` (US: `Menu`) → `Phím Menu`.
+    - `Autoscroll` (US: `Auto-Scroll On/Off`) → `Bật/Tắt Auto-Scroll`.
+    - `To Real Copy` / `Convert to Real Copy` bị dịch thành "Tới bản sao thật" → `Chuyển thành bản sao độc lập`.
+    - `Toggle Edit Group on Selected Tracks` bị dịch là "Chuyển đổi Group sửa..." → `Bật/Tắt Group Editing trên Track đã chọn`.
+    - `Toggle Read/Write Enable All Tracks` bị dịch là "Bật/tắt đọc/ghi..." → `Bật/Tắt Read/Write Automation cho tất cả Track`.
+    - `Continue Writing on Transport Jump` bị bỏ lửng "Continue Writing trên Transport Jump" → `Tiếp tục ghi khi Transport nhảy vị trí`.
+    - `Punch on Play` bị dịch là "Punch trên Play" → `Punch khi Play`.
+    - `Import Files on One Track` bị dịch là "Import File trên Track One" → `Import các file trên một Track`.
+    - `Text Input on Left-Click` bị dịch thô "Text Input trên Left-Click" → `Nhập văn bản khi nhấp chuột trái`.
+    - `Double-click Destination` bị dịch là "Nhấp đúp đích đến" → `Hành động khi nhấp đúp`.
+    - `Display Quantize` bị dịch là "Hiển thị Quantize" → `Quantize hiển thị`.
+    - `Cycle` bị dịch là "Lặp" trong khi xung quanh đều là Cycle → `Cycle`.
+    - `Track Loop Start` bị dịch đảo chữ "Track Loop Bắt đầu" → `Điểm đầu Track Loop`.
+    - `Nudge: Move Audio / Move Fade` khôi phục dấu hai chấm và động từ Di chuyển.
+    - Đơn giản hóa `Store / Store Pattern / Store Snapshot`: đổi từ "Lưu trữ..." thành `Lưu...`.
+    - `The application was terminated...` đổi "bị chấm dứt" thành `Ứng dụng bị buộc đóng do lỗi khi thực thi file sau:`.
+    - `The selected device port is used exclusively...` đổi "bị chấm dứt" thành `Kết nối này sẽ bị ngắt`.
+    - `Temporary Link Mode...` đổi "tham số đã chạm" thành `tham số vừa điều chỉnh`.
+
+
 ### Cặp `[Key]` — bản dịch **giống hệt** bản gốc, trừ **tên phím**
 dịch làm **ba** kiểu khác nhau:
 
