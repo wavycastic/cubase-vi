@@ -56,7 +56,7 @@
   "Adds/subtracts the selected amount of frames to the position sent via RS422 Out (playback mode)": "Cộng/trừ số lượng Frame đã chọn vào vị trí gửi qua RS422 Out (chế độ phát)",
   "Adds/subtracts the selected amount of frames to the position sent via RS422 Out (record mode)": "Cộng/trừ số lượng Frame đã chọn vào vị trí gửi qua RS422 Out (Chế độ ghi)",
   "Aeolian (nat. minor)": "Aeolian (thứ sáu tự nhiên)",
-  "After stopping, how many milliseconds before system can be restarted": "Sau khi dừng, số mili-giây trước khi hệ thống có thể khởi động lại",
+  "After stopping, how many milliseconds before system can be restarted": "Sau khi dừng, cần bao nhiêu mili-giây trước khi có thể khởi động lại hệ thống",
   "Agents: Show Only Selected Channels/Tracks": "Agents: Chỉ hiện Channel/Track đã chọn",
   "Agog\\u00F4 (High)": "Agogô (Cao)",
   "Agog\\u00F4 (Low)": "Agogô (Trầm)",
