@@ -652,6 +652,31 @@ giá trị so với nguồn.
 Còn sót: chuỗi mà tiền tố key trùng với anh em — hai trong ba lỗi ở đợt này do
 tìm **tay** khi kiểm tra đầu ra của bộ dò.
 
+### `Retrospective Record` = `ghi hồi tố` — **không phải** `hồi cứu`
+
+`hồi cứu` = *recovery* (hộp đen máy bay, xem lại video). `hồi tố` = *retroactive*
+(lương hồi tố, thuốc hồi tố). Cubase ghi lại cái bạn **vừa chơi** → `ghi hồi tố`.
+14 key, một tính năng, **hai cách**.
+
+Đây là lần thứ ba trong tháng này một tính năng bị vẽ ra hai kiểu — `Material`
+(đợt 43), `audio stream` (đợt 41) — và **nguyên nhân luôn giống nhau**: không ai
+đối chiếu key mới với bảy key đã có sẵn. Nên cách sửa luôn là **grep từ**.
+
+### Tên tính năng **trong ngoặc kép** phải giữ nguyên tiếng Anh
+
+Đợt 32 đã chốt: tên tính năng trong ngoặc kép là **danh từ riêng**, không phải
+tiếng Anh chưa dịch. Đợt 46 thấy hai key vi phạm:
+
+```
+"Converting automation data may invalidate existing 'Z-Axis Pan' automation."
+  ->  "... Automation 'Pan trục Z' hiện có."
+"This profile requires '3-Layer 3D Pan Mode'. ... otherwise 'Z-Axis Pan'
+ automation will be wrong."
+  ->  "... 'Z-Axis Pan' sẽ sai."
+```
+
+Phải khớp **đúng chữ trên bảng điều khiển**, nếu không người dùng tìm không thấy.
+
 ### `Material` = `chất liệu` — **không phải** `tư liệu`
 
 `tư liệu` = *documents* (từ thư viện). `chất liệu` = *material*, và nó phủ **cả
