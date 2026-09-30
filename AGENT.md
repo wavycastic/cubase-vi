@@ -444,6 +444,27 @@ Cả bảy đều **tháo câu ra rồi ghép ngược**: phần đứng trướ
 `xuất xưởng` · `từ nhà sản xuất` · `Factory` · và một câu trộn lẫn hai cách.
 Nhất thống theo `Factory`.
 
+### `Word` trong `Word Clock` không phải *từ*
+
+```
+Word Clock Output  ->  Từ Clock Đầu ra      ← "Từ" = từ văn bản
+Word Spacing       ->  Khoảng cách từ      ← đúng, "từ" ở đây là từ văn bản
+```
+
+`Word Clock` là **xung đồng hồ** (một xung mỗi giây để thiết bị ngoài đồng bộ),
+không phải *word*. Bốn key `Word Clock` kia đều đúng — chỉ key kết thúc bằng
+`Output` bị chọn nhầm nghĩa. Cùng lớp với `Replace Search String` →
+`Dây đàn` (đợt 29).
+
+### Bốn lần "đọc một từ thành một từ khác"
+
+`Half` → `Giảm` (flat) · `Ext.` → `Mở rộng` (extend) · `String` → `Dây đàn`
+(text string) · `Word` → `Từ` (text word). Cả bốn đều **đọc đúng về mặt hình
+thức, sai về nghĩa**, và cả bốn đều không thể bị bộ dò nào bắt.
+
+Nên khi một key có **nhiều nghĩa**, phải tra key anh em cùng họ trước khi dịch —
+rồi so cả những key đã tưởng là đúng.
+
 ### `Symbol` và `Sign` — cùng ra một giá trị
 
 `Symbol` (loại đầu nốt của Cubase) và `Sign` (ký hiệu ký âm) đều thành
