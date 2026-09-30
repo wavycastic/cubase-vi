@@ -301,6 +301,30 @@ một dấu cộng/trừ lơ lửng.
 Tìm họ bằng cách gom các key có cùng tiền tố rồi so **từng từ một**. Sửa một
 cái trong họ mà không sửa anh em chỉ là thêm một biến thể nữa.
 
+### Ngoặc và động từ không được rơi
+
+Cùng lớp với mất dấu `:` ở đợt 13, nhưng tệ hơn — chỉ còn **một** ngoặc:
+
+```
+Select Preset (rename using [Alt + click])  ->  Chọn Preset (đổi tên bằng [Alt + click]
+```
+
+Key có hai cặp ngoặc lồng nhau, giá trị chỉ còn một. Và:
+
+```
+Select Tool (Press [ALT] to draw events)  ->  Công cụ chọn (Nhấn [ALT] để vẽ Event)
+```
+
+Không còn chữ "Select" nào trong tiếng Việt — nhãn bắt đầu bằng danh từ nên đọc
+thành "công cụ chọn", tức là **một menu khác**.
+
+### `No.` là *số* — quyết định rồi thì phải áp cho hết
+
+Đợt 19 sửa `No. of Frets` → `Số Frets`. Đợt 22 gặp `Scene No.` → `Cảnh Không`
+— nghĩa là "cảnh không". Cùng lỗi, cách đã xử lý đúng, **nhưng quyết định không
+lan sang chỗ thứ hai**. Một quy tắc đã nghĩ ra thì phải tra cả họ, không chỉ
+chỗ vừa gặp.
+
 ### Khung tiếng Việt bọc một mệnh đề tiếng Anh
 
 Lớp lớn nhất mà **không bộ dò nào bắt được**: dịch từng từ theo thứ tự, xong
