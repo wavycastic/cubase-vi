@@ -287,7 +287,7 @@
   "Destination Parameter before Modulation": "Tham số đích trước khi Modulation",
   "Destination track already contains chord events.": "Track đích đã chứa Chord Event.",
   "Detecting Note Segments...": "Đang nhận diện các đoạn Note...",
-  "Determines how far before the actual hitpoint position the audio event is sliced": "Xác định khoảng cách trước vị trí Hitpoint thực tế mà Audio Event được cắt",
+  "Determines how far before the actual hitpoint position the audio event is sliced": "Xác định khoảng cách trước vị trí Hitpoint thực tế mà Audio Event được cắt lát",
   "Devices (Studio)": "Thiết bị (Studio)",
   "Dial: Destination Parameter before Modulation\\nInner Indicator: Modulation\\nOuter Indicator: Modulation Depth": "Núm xoay: Tham số đích trước khi Modulation\\nChỉ báo trong: Modulation\\nChỉ báo ngoài: Độ sâu Modulation",
   "Dialogue Translation 1": "Bản dịch đối thoại 1",
