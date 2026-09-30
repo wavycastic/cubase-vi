@@ -192,6 +192,23 @@ không phải newline thật. Bộ dò placeholder phải khớp cả `%1.0f` v�
       là đúng. `Db` cạnh `dB` là **chính Steinberg viết**, không phải việc của
       ta. `DRY`/`Dry`, `OFFLINE`/`Offline` đã khác nhau ở tiếng Anh gốc.
 
+11. **PHÉP THỬ RỖNG LUÔN PASS. Đừng đọc 0 là sự thật — ba lần đã hỏng.**
+    - Đợt 95: tìm `"chỉ dẫn diễn tấu"` trong `vi.json` ra **0**, tưởng đợt 88 đã
+      sạch. Thật ra giá trị bắt đầu bằng `Chỉ` **hoa**, tôi tìm chuỗi **thường**.
+      Bỏ phân biệt hoa/thường thì ra **1** — chỗ đó lọt sót từ đợt 88.
+    - Đợt 96: quét `"bộ lọc"` chỉ trong khoá **ngắn hơn 34 ký tự**, bỏ sót 15
+      chỗ, rồi định sửa cụm `Filter` theo tỉ lệ 17/32. Tỉ lệ 51/49 không phải
+      bằng chứng, và sửa 17 chuỗi theo đa số yếu là đúng loại lỗi đã mắc 4 lần.
+    - Đợt 98: đếm cụm `Template` bằng `if 'emplate' in v` — nhưng **giá trị** là
+      tiếng Việt (`Mẫu`), chữ đó nằm ở **khoá**. Ra 0, rồi so `0 == 0` → pass.
+      Đúng phải là `if 'emplate' in k and 'mẫu' in v`.
+    - **Cơ chung:** mọi phép thử đếm hoặc tìm trong `fix_readingNN.py` phải có
+      **chốt rỗng** — tìm ra 0 chỗ thì **báo lỗi**, không được coi là "đã sạch".
+      Và **đừng so với con số viết tay**: đợt 98 đếm tay ra 10, thực tế 11; hãy so
+      **trước với sau** trên cùng một cách đếm.
+    - Cùng lớp với `score.FORBIDDEN` là `dict` khoá **số** còn test tra `c` là
+      **ký tự** → không bao giờ khớp, `check_text` trả về chuỗi có byte NUL.
+
 ## 9. Quy trình kiểm tra
 
 Dừng ngay khi một bước báo lỗi.
