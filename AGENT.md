@@ -828,6 +828,90 @@ màn hình.
 `nhấp chuột`, `Hold` → `giữ`. Ngoài ngoặc vuông **không đụng**, nên 5 key cố ý
 giữ `Click` trong văn xuôi vẫn nguyên.
 
+### `nhịp` vs `Beat` vs `phách` — **một từ, ba cách**, và bằng chứng nằm trong một câu
+
+Bằng chứng quyết định là **một giá trị dịch cùng một từ tiếng Anh theo hai
+cách ngay trong cùng một câu**:
+
+```
+Notes That Subdivide Compound Beats, and Fill the Beat
+  ->  Các nốt phân chia NHỊP phức và lấp đầy PHÁCH
+```
+
+`phách` = **phần nhấn** của một nhịp (một thứ có thật), không phải **cái nhịp**
+mà Cubase gọi. Chuẩn là `nhịp`. Đợt 57: `phách` → `nhịp` ở 21 key.
+
+Nhưng đây là **hai quyết định khác nhau**, và cả hai đều đúng:
+
+| nghĩa | giữ |
+|---|---|
+| Văn xuôi / ký âm: một nhịp chia Bar | **`nhịp`** |
+| Đơn vị Cubase in ra ở ô vị trí | **`Beat`** |
+
+Vì `Ticks` → `Tick` và `Bars` → `Bar` đã là tiếng Anh từ lâu, chỉ `Beats` là
+lạc. Đợt 58 đồng bộ:
+
+```
+Beats  ->  Beat          (trước: Nhịp)
+Beat   ->  Beat          (trước: Phách)
+Bars+Beats  ->  Bar+Beat
+Time Offset (Bars + Beats)  ->  Lệch thời gian (Bar + Beat)
+```
+
+`Bar+Nhịp` là **hai ngôn ngữ trong bốn ký tự** — và hai thành phần của nó đang
+được xử lý khác nhau ngay trong cùng bản dịch.
+
+### `đếm nhịp` vs `Count-In` — cùng kiểu, cao hơn một bậc
+
+4 giá trị nói `Count-In` (đúng — đó là tên trên bảng Transport), 3 giá trị nói
+`đếm nhịp`. `đểm nhịp` không sai, nhưng nó là **tên thứ hai cho một thứ Cubase đã
+đặt tên**, và người đọc phải tự suy ra cái nào mới là nút trên panel. Số đông là
+thuật ngữ → 3 giá trị đó theo số đông.
+
+### `Pick-up` -> **`Lấy đà`**
+
+`Lấy đà` = **lấy cằm**. Từ thì đúng (pick-up nghĩa là giành lấy giá trị hiện tại
+— cùng nghĩa với `Pick-up Mode`, mà bản dịch đã giữ `Pick-up` đúng). Sai ở chỗ
+chọn từ tiếng Việt. Sửa: giữ `Pick-up` như **em thứ ba** của nó đã làm.
+
+### `[X]-Click` — `Click` **ngoài** ngoặc vuông
+
+Đợt 54 chỉ thay **trong** ngoặc vuông (đúng cách, để không đụng `Click` của
+metronome). Nhưng 6 giá trị có động từ chuột **ngoài** ngoặc, vì key gốc viết
+phím sửa trong ngoặc và động từ ngoài:
+
+```
+Assign Downmix Preset 1 (Reset All Presets with [Alt] + Click)
+Next Chain Step\nUse [ALT]-Click to jump to last chain step
+Set Tilt/Rotate Anchor ([ALT]-Click to Reset)
+```
+
+Đợt 57 lặp lại phép thay cho hình dạng `[X]-Click` và `[X] + Click`. **Key chord
+vẫn giữ tiếng Anh**, chỉ động từ chuyển.
+
+⚠️ Phân biệt bắt buộc: `Click` **của metronome** (`Activate Metronome Click` →
+`Bật Click Metronome`, `Click Sounds` → `Âm thanh của Click`, ~30 key) là **một
+từ khác** và giữ tiếng Anh là đúng. Chỉ `Click` đi cùng một key chord mới là
+chuột.
+
+### ⚠️ `if 'phách' not in v` — bẫy phân biệt hoa thường
+
+Đợt 57 dùng `if 'phách' not in v: continue` rồi thay cả `phách`/`Phách` — nên
+key `Beat` với giá trị `Phách` (hoa) **thoát khỏi vòng lặp**. Đợt 58 bắt được.
+Luôn kiểm cả hai biến, hoặc so khớp không phân biệt hoa thường.
+
+### `Score Direction` / `Score Dynamic` — hai giá trị lạc trong gia đình tám
+
+```
+Score Direction -> Hướng trong Score     (gia đình: Direction [musical
+                                         performance direction] -> Chỉ dẫn diễn tấu)
+Score Dynamic   -> Động lực trong Score  (8 key khác: Insert Dynamic Symbol
+                                         -> Chèn Dynamic Symbol)
+```
+
+`hướng` là nghĩa của **thân nốt**. Một chỉ dẫn diễn tấu trong bản nhạc là **ký
+hiệu trên trang**, không phải tiêu đề.
+
 ### Hai menu item **trùng chữ** — bảng luật có dòng *không thể đúng*
 
 ```
