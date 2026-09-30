@@ -15,20 +15,44 @@
 .PARAMETER Action
   install | uninstall | status
 
+.PARAMETER Variant
+  full   - the whole translation.xml, all nine languages plus Vietnamese
+  en     - English and Vietnamese only, about a quarter of the size
+
+  Both are built by tools\build.py. The full one is the default because it is
+  the file shape Cubase ships: the original has all nine language elements in
+  all 10,737 entries, so a reduced file is a shape Cubase has never been handed.
+  Install it only if the size matters to you, and keep this in mind:
+
+    - install.ps1 writes a .bak beside every file it overwrites
+    - -Action uninstall puts the .bak back
+    - keys\translation_original.xml is the source both are built from, and is in git
+
 .EXAMPLE
   powershell -File scripts\install.ps1 -Action install
+
+.EXAMPLE
+  powershell -File scripts\install.ps1 -Action install -Variant en
 #>
 [CmdletBinding()]
 param(
   [ValidateSet('install', 'uninstall', 'status')]
   [string]$Action = 'status',
+  [ValidateSet('full', 'en')]
+  [string]$Variant = 'full',
   [string]$CubaseDir = 'E:\Steinberg\Cubase 15',
   [string]$Built = ''
 )
 
 $ErrorActionPreference = 'Stop'
 $RepoRoot = Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path)
-if (-not $Built) { $Built = Join-Path $RepoRoot 'build\translation_vi.xml' }
+if (-not $Built) {
+  $Built = if ($Variant -eq 'en') {
+    Join-Path $RepoRoot 'build\translation_vi_en.xml'
+  } else {
+    Join-Path $RepoRoot 'build\translation_vi.xml'
+  }
+}
 
 # Candidate search directories, most likely first.
 $Targets = @(
@@ -45,10 +69,14 @@ function Assert-CubaseClosed {
 
 function Show-Status {
   Write-Host "Cubase dir : $CubaseDir" -ForegroundColor Cyan
-  if (Test-Path $Built) {
-    Write-Host ("Built      : {0}  ({1:N0} bytes)" -f $Built, (Get-Item $Built).Length)
-  } else {
-    Write-Host "Built      : $Built  (MISSING - run: python tools\build.py)" -ForegroundColor Yellow
+  foreach ($v in @('full', 'en')) {
+    $f = if ($v -eq 'en') { Join-Path $RepoRoot 'build\translation_vi_en.xml' }
+         else { Join-Path $RepoRoot 'build\translation_vi.xml' }
+    if (Test-Path $f) {
+      Write-Host ("  {0,-5}  {1,12:N0} bytes  {2}" -f $v, (Get-Item $f).Length, (Split-Path -Leaf $f))
+    } else {
+      Write-Host ("  {0,-5}  {1,12}  {2}  (MISSING - run: python tools\build.py)" -f $v, '-', (Split-Path -Leaf $f)) -ForegroundColor Yellow
+    }
   }
   Write-Host ''
   foreach ($t in $Targets) {
@@ -67,6 +95,7 @@ switch ($Action) {
   'install' {
     if (-not (Test-Path $Built)) { throw "missing build output: $Built  (run: python tools\build.py)" }
     try { [xml]$null = Get-Content $Built -Raw } catch { throw "not valid XML: $_" }
+    Write-Host ("variant    : {0}   ({1:N0} bytes)" -f $Variant, (Get-Item $Built).Length) -ForegroundColor Cyan
     Assert-CubaseClosed
 
     foreach ($t in $Targets) {

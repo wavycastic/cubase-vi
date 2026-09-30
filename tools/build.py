@@ -35,6 +35,11 @@ run([T('tools', 'prune_map.py'), '--dry-run'], 'check every map key exists in Cu
 run([T('tools', 'check_style.py')], 'enforce hybrid style (AGENT.md)')
 run([T('tools', 'check_punctuation.py')], 'check ? ! ; ... line breaks edge spaces')
 run([T('tools', 'build_translation.py'), BASE, OUT, MAP], 'build Vietnamese translation.xml')
+# a second target: the same file with the eight unused languages removed,
+# 5,328,470 -> ~1,449,000 bytes. Opt-in at install time; the full file above is
+# still the default, and the original is still the source both are built from.
+run([T('tools', 'strip_languages.py'), OUT, T('build', 'translation_vi_en.xml')],
+    'build the English + Vietnamese only variant')
 run([T('tools', 'validate_translation.py'), OUT], 'validate output')
 
 print(f'\nDone. -> {os.path.relpath(OUT, ROOT)}  ({os.path.getsize(OUT):,} bytes)')
