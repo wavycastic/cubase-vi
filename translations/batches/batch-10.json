@@ -1084,7 +1084,7 @@
   "This plug-in has been moved to the blocklist.": "Plug-in này đã được chuyển vào Blocklist.",
   "This will remove all inactive redo branches.\\n\\nDo you want to continue?": "Thao tác này sẽ gỡ bỏ tất cả nhánh làm lại không hoạt động.\\n\\nBạn có muốn tiếp tục không?",
   "This will remove tracks that contain data!\\nDo you want to continue?": "Thao tác này sẽ gỡ bỏ các Track có chứa dữ liệu!\\nBạn có muốn tiếp tục không?",
-  "This will reset the command assignment to the factory default.": "Thao tác này sẽ đặt lại phép gán lệnh về mặc định xuất xưởng.",
+  "This will reset the command assignment to the factory default.": "Thao tác này sẽ đặt lại phép gán lệnh về mặc định Factory.",
   "Thru Filter": "Thru Filter",
   "Time": "Thời gian",
   "Time Signatures With Half-Bars": "Số chỉ nhịp kèm nửa Bar",
