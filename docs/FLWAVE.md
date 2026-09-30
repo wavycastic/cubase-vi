@@ -1333,14 +1333,93 @@ Cubase vẽ dải sóng). Đó là cách duy nhất đóng được nốt câu h
 Với màu, `style+0x50` là ứng viên đầu tiên: nó là thứ duy nhất đi thẳng tay vào
 lời gọi cuối.
 
-### 12.7 Trình tự nên làm
+### 12.7 Bẫy phần cứng: kiểm tra xong, và nó **không** thành hiện thực
 
-1. Bật hook `0x141E9AD10` **chỉ để đếm và ghi lại 6 tham số** ra file, đối chiếu 4
-   lần gọi bằng bộ lọc §12.3. Chưa sửa gì.
-2. In ra `style+0x50` (8 byte) cùng `+0x90`, `+0x98`, `+0xA8`, `+0xB0` cho vài event
-   khác nhau, xem cái nào đổi theo màu track. Đó là ứng viên màu.
-3. Chỉ thay màu. Xác nhận bằng cách đếm số lần tô trên một event.
-4. Mới động tới hình dạng.
+Cần cảnh báo trước khi đặt kỳ vọng vào `uint32_t* pixels`. Đã kiểm, và kết
+luận ngược với dự đoán: **dải sóng của Cubase 15 vẽ trên CPU, qua GDI**, không
+phải texture GPU.
 
-Bỏ qua bướp 1–2 thì mọi thứ vẽ sau đó đều sai, mà lỗi loại này Cubase không báo
+Bằng chứng, từ bảng import của `Cubase15.exe` (79 DLL):
+
+| DLL | số hàm | ý nghĩa |
+|---|---|---|
+| `GDI32.dll` | 20 | `CreateCompatibleDC`, `CreateCompatibleBitmap`, `BitBlt`, `SelectObject`, `CreateSolidBrush`, `GetDeviceCaps`, `DeleteDC`… |
+| `dxgi.dll` | 1 | chỉ `CreateDXGIFactory1` — dò độ phân giải, không phải vẽ |
+| `dwmapi.dll` | 4 | `DwmFlush`, `DwmSetWindowAttribute` — hiệu ứng cửa sổ |
+| `d2d1.dll` | **0** | — |
+| `d3d11.dll` | **0** | — |
+| `dwrite.dll` | **0** | — |
+| `gdiplus.dll` | **0** | — |
+
+`CreateCompatibleDC` + `CreateCompatibleBitmap` + `BitBlt` là mẫu kinh điển: dựng
+trong DC ảo, rồi chép sang cửa sổ. Không có `StretchDIBits` / `CreateDIBSection`
+cũng nghĩa là không có đường nào để lấy con trỏ pixel tĩnh — **GDI giữ bitmap
+trong bộ nhớ hệ thống**, không phải heap của tiến trình.
+
+Ngoài ra, trong toàn bộ `Cubase15.exe` **không có chuỗi nào** chứa `d2d1.dll`,
+`D3D11`, `ID2D1DeviceContext`, `D2D1CreateDeviceContext`, `opengl32`, `vulkan`. Vậy
+không phải chuyện gọi `LoadLibrary` động.
+
+Có một DLL tên đáng ngờ: `graphics2d.dll` (2.5 MB) **có** import cả `d2d1.dll`
+`d3d11.dll` `DWrite.dll` `gdiplus.dll`. Nhưng nó không export gì liên quan
+(2 export), và không hề có chuỗi `ID2D1RenderTarget` / `CreateRenderTarget`. Đường
+dẫn nguồn PDB cho thấy nó thuộc `lib.graphics2d\win\x64` — lớp vẽ 2D dùng chung,
+**không phải** đường đi của dải sóng. Đường tôi đã lần theo (§12.1) nằm trọn
+trong `Cubase15.exe` và kết thúc ở GDI.
+
+**Hệ quả cho "Mức 3":** không có `uint32_t* pixels` để `memcpy`, nhưng cũng không
+bị chặn. Nếu vẽ bằng GDI thì đường tự nhiên là `GetDC` cửa sổ → vẽ đè bằng
+primitive của GDI (`Rectangle`, `MoveToEx`/`LineTo`, `Polyline`) → `ReleaseDC`.
+Đó là đường ngắn nhất, và nó cho anti-aliasing/clipping của chính hệ thống.
+
+### 12.8 Đã dựng xong: bộ probe đọc vtable của device
+
+`0x141E9D010` lấy vtable bằng **gọi ảo trả về**, không phải hằng số trong `.rdata`:
+
+```
+0x141EAD690  mov  rax, [rbx]              ; vtable cua mot doi tuong khac
+0x141EAD698  call [rax + 0x2B8]          ; -> tra ve vtable cua device
+0x141EAD69E  mov  [rbp - 0x30], rax
+   ...
+0x141EAE165  mov  [rbp + 0x110], rax     ; gan vao dau struct device
+```
+
+Nên **không** dò được bằng cách quét `.rdata`: phải chạy. Đã dựng bộ probe:
+
+| việc | ở đâu |
+|---|---|
+| nhận `dev` (đã có sẵn trong stub ASM, truyền `rcx` vào `WaveDrawHook_C`) | `hook/wavehook.h`, `hook/wavehook.c` |
+| xuất 24 slot đầu + 8 trường đầu, kèm **tên module chứa con trỏ** | `probe_device()` |
+| tự ghi ra `%TEMP%\waveprobe.txt` | `probe_flush_file()` |
+| lệnh đọc | `python tools\inject_wavehook.py devdump` |
+| build | `hook\build.bat release wavehook4.dll` (đã build, 142.848 byte) |
+
+Hai điều cố ý trong cách làm:
+
+- **Mọi phép đọc bọc `__try`.** Con trỏ màu có thể chưa khởi tạo, và một lỗi đọc
+  sẽ làm Cubase crash — đúng cái giá đã trả ở §13.1. Ở đây bảo vệ là bắt buộc,
+  không phải phòng tránh.
+- **Chỉ ghi một lần.** Ham vẽ chạy trên luồng Cubase, mỗi phép I/O đều làm luồng
+  đó nghẽn. Một lần thì không đáng kể.
+
+Còn thiếu để chạy thật: **Cubase phải vẽ một dải sóng**, tức cần dự án có audio.
+Máy này không có `.cpr` của Cubase 15 (chỉ template của Cubase 14 ở bản cài khác,
+mở bằng Cubase 15 sẽ ra hộp thoại chuyển đổi cần input thật, mà session này gửi
+input không tới app — xem `docs/RESEARCH.md`). Nên `devdump` hiện báo
+*"hook chưa chạy lần nào"*, đúng như thiết kế.
+
+### 12.9 Trình tự nên làm
+
+1. Mở một dự án có audio, rồi chạy
+   `python tools\inject_wavehook.py devdump`. Phần đang chờ nằm ở §12.8.
+2. Từ vtable thu được, xác định slot nào là `QueryInterface` / `AddRef` /
+   `Release`, và slot `+0x80` rơi vào module nào — trong `Cubase15.exe` hay
+   `graphics2d.dll`. Kết quả này quyết định Mức 3 đi đường GDI hay cần thêm bước.
+3. Chuyển hook sang `0x141E9AD10`, chỉ sửa **màu**: in ra `style+0x50` cùng `+0x90`,
+   `+0x98`, `+0xA8`, `+0xB0` cho vài event khác nhau, xem cái nào đổi theo màu
+   track. Đó là ứng viên màu.
+4. Xác nhận bằng cách đếm số lần tô trên một event.
+5. Mới động tới hình dạng — sửa mảng điểm.
+
+Bỏ qua bước 1–2 thì mọi thứ vẽ sau đó đều sai, mà lỗi loại này Cubase không báo
 gì — chỉ vẽ ra sai màu, rất khó phát hiện là do hook.
