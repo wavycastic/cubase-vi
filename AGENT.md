@@ -39,12 +39,17 @@ môi trường ký âm và khắc bản nhạc (notation/engraving) chuyên sâu
 toàn bộ thuật ngữ chuyên ngành ký âm quốc tế được giữ nguyên tiếng Anh (Staff/Stave ·
 Clef · Barline · Stem · Beam · Accidental · Rest · Grace Note · Notehead · Arpeggio ·
 Tuplet · Glissando · Trill · Fermata · Key Signature · Time Signature · Chord Symbols ·
-Rhythm Dot · Ledger Line · Voice · Slash).
+Rhythm Dot · Ledger Line · Slash).
 Động từ thao tác và giao diện chung vẫn Việt hóa tự nhiên: Thêm, Xóa, Ẩn, Hiện, Sửa,
 Thiết lập, Mở, Đóng, Lật (Flip)...
 
 `System` và `Bar` theo ngữ cảnh: Score Editor → `System` / `Bar`; ngoài đó →
 `hệ thống` / `thanh`. Từ HLV cũng giữ bên HLV: `con trỏ`, `bè`, `phát lại`, `hợp âm`.
+
+> `Voice` **không** giữ tiếng Anh — đã gỡ khỏi danh sách Score Editor ở trên (đợt
+> 161). Gia đình `Voice` đo được 36 chuỗi, 33 chuỗi dịch `bè`; 9 ngôn ngữ gốc đều
+> dùng nghĩa *thanh/giọng* (zh 声部, de Stimme, ru голос). Dòng này trước đây liệt
+> `Voice` vào danh sách giữ EN, làm cho 2 chuỗi `Single Voice` lạc khỏi gia đình.
 
 ## 3. Bẫy thuật ngữ — đọc sai ở đây là hỏng
 
