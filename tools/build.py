@@ -61,6 +61,59 @@ def _load_map():
     return json.load(open(MAP, encoding='utf-8'))
 
 
+FORBIDDEN_PARENS = re.compile(r'\s*\([^()]+\)\s*$')
+
+
+def check_value(key, val, src_text):
+    """The five hard rules, applied to ONE value. [] means clean.
+
+    `step_style` walks the map and calls this; the tests call it with a single
+    value. Round 193 made the split because a rule that cannot be called on one
+    value cannot be tested on one value - and the [RM] rule was unreachable from
+    `check()`, which only knows the DAW-term table, so the round-66 case had no
+    way to be asserted at all.
+
+    The ORDER matters and is preserved from the original single loop: an empty
+    value and a bad trailing parenthesis stop the other rules from also firing,
+    so one wrong value produces one message rather than three.
+    """
+    from cubelib.placeholders import PLACEHOLDER
+
+    if not isinstance(val, str) or not val.strip():
+        return ['empty value']
+
+    # Rule 1: no trailing dictionary parentheses unless the KEY has them
+    if not FORBIDDEN_PARENS.search(key):
+        mo = FORBIDDEN_PARENS.search(val)
+        if mo:
+            inside = mo.group(0).strip()[1:-1].strip()
+            if inside.lower() in key.lower() or \
+                    (len(inside) >= 3 and inside.isascii()):
+                return [f'dictionary-style parenthesis {mo.group(0)!r} '
+                        'forbidden by AGENT.md']
+
+    out = []
+
+    # Rule 2: no awkward literal Vietnamese of a standard DAW term
+    for term in _forbidden(src_text, val):
+        out.append(f'awkward translation of DAW term: keep {term!r} in English')
+
+    # Rule 3: placeholders must match
+    if src_text:
+        want = sorted(PLACEHOLDER.findall(src_text))
+        got = sorted(PLACEHOLDER.findall(val))
+        if want != got:
+            out.append(f'placeholder mismatch: source has {want}, '
+                       f'translation has {got}')
+
+    # Rule 5: the "[RM]" marker names the KEY, not the text
+    if '[RM]' in val:
+        out.append('the [RM] read-mode marker belongs to the key, '
+                   'never to the translated text')
+
+    return out
+
+
 # =====================================================================
 # extract - pull TRANSLATION.XML out of the Steinberg PE
 # =====================================================================
@@ -227,52 +280,14 @@ display and names it "X[RM]"; the two keys are separate <String> entries with th
 same English, and every one of the eight vendors translates them IDENTICALLY and
 with no marker in the value. Round 66 found eleven values carrying it, which
 means the word "[RM]" would have been drawn on screen next to the label."""
-    from cubelib.placeholders import PLACEHOLDER
-
     verbose = '--verbose' in a
     src = _load_tsv()
     m = _load_map()
 
-    FORBIDDEN_PARENS = re.compile(r'\s*\([^()]+\)\s*$')
     errors, warns = [], []
-
     for key, val in sorted(m.items()):
-        if not isinstance(val, str) or not val.strip():
-            errors.append((key, val, 'empty value'))
-            continue
-
-        # Rule 1: no trailing dictionary parentheses unless the KEY has them
-        if not FORBIDDEN_PARENS.search(key):
-            mo = FORBIDDEN_PARENS.search(val)
-            if mo:
-                inside = mo.group(0).strip()[1:-1].strip()
-                if inside.lower() in key.lower() or \
-                        (len(inside) >= 3 and inside.isascii()):
-                    errors.append((key, val,
-                                   f'dictionary-style parenthesis {mo.group(0)!r} '
-                                   'forbidden by AGENT.md'))
-                    continue
-
-        # Rule 2: no awkward literal Vietnamese of a standard DAW term
-        for term in _forbidden(src.get(key, ''), val):
-            errors.append((key, val,
-                           f'awkward translation of DAW term: keep {term!r} '
-                           'in English'))
-
-        # Rule 3: placeholders must match
-        if key in src:
-            want = sorted(PLACEHOLDER.findall(src[key]))
-            got = sorted(PLACEHOLDER.findall(val))
-            if want != got:
-                errors.append((key, val,
-                               f'placeholder mismatch: source has {want}, '
-                               f'translation has {got}'))
-
-        # Rule 5: the "[RM]" marker names the KEY, not the text
-        if '[RM]' in val:
-            errors.append((key, val,
-                           'the [RM] read-mode marker belongs to the key, '
-                           'never to the translated text'))
+        for why in check_value(key, val, src.get(key, '')):
+            errors.append((key, val, why))
 
     print(f'style check: {len(m)} entries in {os.path.relpath(MAP, ROOT)}')
 

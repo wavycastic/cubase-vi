@@ -444,6 +444,52 @@ giữ EN / động từ `chèn`), `Send` (nút giữ / động từ `gửi`).
 > - **`termspec.py` đã vào `build.py`**, và `tools/tests/` import `build` thay
 >   vì nó — luật mà test chạy và luật mà `build.py style` chạy **là một**.
 
+> **Đợt 194 — "bộ dò này mạnh chưa?" Trả lời: CHƯA, và câu hỏi đã tìm ra 4 lỗi.**
+> Câu hỏi buộc phải trả lời bằng chứng thay vì bằng cảm giác, và cảm giác thì sai:
+> `audit.py --all` in ra *"detectors that fired: none"*. **`none` đó vô nghĩa** —
+> nó lấy `return` làm điều kiện, mà 20/22 bộ dò trả `0` **cố ý** để giữ exit code
+> cũ. Ba bộ dò đang có phát hiện (`same_en` 11, `collapsed` 4, `funcwords` 1) và
+> bản tóm tắt không thấy một cái nào.
+> - **Sửa `--all`:** giờ **đếm phát hiện**, không đọc exit code; và tách **LỖI THẬT**
+>   khỏi **DẪN ĐƯỜNG** (10 bộ dò luôn ra danh sách để đọc tay — `thin` 908,
+>   `frame` 106… gộp chung vào "lỗi" sẽ dạy người đọc bỏ qua bản tóm tắt, đúng
+>   thứ AGENT.md §7 cảnh báo).
+> - **`same_en` — 11 phát hiện, 11 BÁO ĐỘNG GIẢ.** Cả 11 là cặp `X` / `X[marker]`.
+>   Tra `translation_original.xml`: **8/9 ngôn ngữ dịch khác nhau** cho
+>   `Key` vs `Key[keycomms]` (de: *Tonart* = hóa âm vs *Taste* = phím). Chênh lệch
+>   là **đúng**. Mã cũ làm **ngược với điều mà chú thích của chính nó nói**: nó
+>   bóc marker, rồi đòi mọi khoá phải quy về cùng chuỗi trần — tức là **giữ đúng
+>   những cặp có marker** mà nó tuyên bố là loại bỏ. Nay **11 → 0**.
+> - **`collapsed` — chưa từng bắt được ví dụ của chính nó.** Lookahead
+>   `\1(?![^\s,;/&+])` nghĩa là cụm đứng trước `)` không khớp, mà phát hiện đợt 61
+>   là đúng `"Lam phang (voi Tuy chon & Tuy chon)"` — nằm trong ngoặc và kết
+>   thúc bằng `)`. Sửa: cho phép `)` `]` ở cuối. **Không sinh báo động giả mới.**
+> - **Cổng `HAN.search(v)` là thủ phạm gốc.** `funcwords` hỏi "giá trị này có chữ
+>   Việt không" trước khi đếm. Nhưng `trong`, `cho`, `khi`, `vao`, `voi` viết bằng
+>   **ASCII thuần** — nên những bản dịch TỆ NHẤT, bản dịch dựng từ đám từ chức năng,
+>   chính là những bản **không vượt qua cổng**. Ví dụ đợt 59 `"Used trong Project:
+>   %s"` **không có một ký tự non-ASCII nào**. Đo trước khi sửa: gỡ cổng ra
+>   **không thêm một phát hiện nào**. Cùng cái bẫy này đã giết
+>   `audit_readability2.py` (1.171 báo giả) ở đợt 192.
+> - **`tools/tests/test_detectors.py` (20 test, mới):** mỗi test là **một lỗi đã
+>   thật sự sửa** trong lịch sử, đặt lại giá trị cũ, và hỏi bộ dò có bắt không.
+>   Bản dịch sạch **không chứng minh bộ dò mạnh** — bản dịch sạch và bộ dò mù
+>   trông giống nhau từ bên ngoài. **166 test** (trước 146).
+> - **HAI ĐIỂM MÙ CÒN LẠI, và tôi ghi tên chứ không giấu:**
+>   (1) **Đợt 33 — khung tiếng Anh.** `frame` cần 4 từ Anh liên tiếp có trong
+>   nguồn, mà giá trị lỗi `"Nhấp 'Bắt đầu' vao scan cho unreferenced files"` bị
+>   `cho` (không có trong nguồn) cắt mọi cửa sổ 4; dài nhất còn sạch là 2. Chỉ
+>   `thin` — một bộ dò **dẫn đường** — thấy.
+>   (2) **Đợt 59 — phân từ quá khứ.** Đúng 1 từ, ngưỡng mặc định là 2. Ở
+>   `funcwords 1` nó bắt được, với **63 ứng viên thay vì 1**. Giữ ngưỡng 2: đó là
+>   đánh đổi độ chính xác, và §7 chọn độ chính xác.
+>   Hai điểm mù này **có test khẳng định là mù** — nếu ngày nào nó bắt được, test
+>   sẽ đỏ và bắt người sau cập nhật AGENT.md.
+> - **Còn nằm trong bản dịch, chưa ai phán xét: 15.** `quality`=7 (GLOSSARY cũ,
+>   đã ghi nhận là stale từ nhiều đợt), `rm`=4 (4 khoá `[RM]` mồ côi, không có
+>   khoá gốc để so — đã kiểm, đều `ok`), `collapsed`=4 (trong đó
+>   `'Tên Track và tên Track Version'` là **đúng**, detector báo nhầm).
+
 > **Đợt 192 — đo bộ dò trước khi gộp:**
 > - **Gộp (đã đối chiếu output từng dòng):** `read.py` ← `read_long` + `read_short`
 >   (cùng một công cụ, điều kiện lọc ngược nhau — 4/4 lần chạy khớp 100%);

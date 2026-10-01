@@ -99,6 +99,11 @@ def _full(k, src, longest):
 
 
 DETECTORS = {}
+# The raw (args, vi, src, longest) -> count callables, so a test can run a
+# detector against a MAP IT CHOSE rather than against translations/vi.json.
+# Without this the only way to ask "would this detector have caught the round-60
+# bug?" is to corrupt the real map, which is not a thing to do on a guess.
+RAW = {}
 
 
 def detector(name, desc, needs_src=True):
@@ -111,8 +116,25 @@ def detector(name, desc, needs_src=True):
                 src, longest = _load_src()
             return fn(args, vi, src, longest) or 0
         DETECTORS[name] = (run, desc)
+        RAW[name] = fn
         return fn
     return deco
+
+
+def count_on(name, vi, src=None, longest=None, args=None):
+    """How many findings this detector reports in THIS map.
+
+    `src` and `longest` come from keys/all_strings.tsv; pass them in or they are
+    loaded. Output is swallowed - a caller asking for a count does not want the
+    report, and the report is what makes these detectors expensive.
+    """
+    import contextlib
+    import io
+    if src is None or longest is None:
+        src, longest = _load_src()
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        return RAW[name](args or [], vi, src, longest)
 
 
 def _int(args, i, default):
@@ -257,7 +279,7 @@ def d_quality(args, vi, src, _):
             print(f'\n  -- {c} ({len(items)}) --')
             for k, v, forms in items[:6]:
                 print(f'     {forms} {v[:88]!r}')
-    return 0
+    return len(untranslated) + len(violations) + len(reordered)
 
 
 # =====================================================================
@@ -353,7 +375,7 @@ def d_leak(args, vi, src, _):
                 print(f'      leak: {bad}')
             if len(hits) > 12:
                 print(f'  ... and {len(hits) - 12} more (use --list)')
-    return 1 if hits else 0
+    return len(hits)
 
 
 # =====================================================================
@@ -407,7 +429,7 @@ def d_fragments(args, vi, src, _):
         rows.sort(key=lambda x: (x[2][0].lower(), x[0]))
         for k, v, hits in rows:
             print(f'\n### {",".join(hits)}\nKEY: {k}\nNOW: {v}')
-    return 0
+    return len(rows)
 
 
 # =====================================================================
@@ -463,7 +485,7 @@ def d_leftover(args, vi, src, _):
     print(f'\nwrote {out}')
     for i, (k, s, v) in enumerate(leftover[:10], 1):
         print(f'  {k[:70]!r}\n      -> {v[:70]!r}')
-    return 0
+    return len(leftover)
 
 
 # =====================================================================
@@ -511,7 +533,7 @@ def d_dropped(args, vi, src, longest):
         print(f'  -{d}  ({a} -> {b})  {k[:70]!r}')
         print(f'      EN {en[:150]!r}')
         print(f'      VI {v[:150]!r}')
-    return 0
+    return len(rows)
 
 
 # =====================================================================
@@ -559,7 +581,7 @@ def d_thin(args, vi, src, _):
     for r, k, v, nw in rows[:TOP]:
         print(f'  [{r:4.1f}] {k[:64]!r}')
         print(f'          {v[:130]!r}')
-    return 0
+    return len(rows)
 
 
 # =====================================================================
@@ -621,7 +643,7 @@ def d_quotes(args, vi, src, longest):
         print(f'    in {k[:66]!r}')
         print(f'    VI quotes {b}')
         print()
-    return 0
+    return len(rows)
 
 
 # =====================================================================
@@ -666,7 +688,7 @@ def d_rm(args, vi, src, _):
     for k in orphan:
         bad = MARK in vi[k]
         print(f'  {"MARKER IN VALUE" if bad else "ok":16} {k[:44]!r}  VI {vi[k][:44]!r}')
-    return 0
+    return len(rows) + len(orphan)
 
 
 # =====================================================================
@@ -705,7 +727,7 @@ def d_prefix(args, vi, src, _):
     for k, p, v in rows:
         print(f'  {p!r} in {k[:58]!r}')
         print(f'      {v[:100]!r}')
-    return 0
+    return len(rows)
 
 
 # =====================================================================
@@ -724,10 +746,18 @@ def d_collapsed(args, vi, src, _):
     between - and the ENGLISH must have two DIFFERENT words there. If the
     English repeats the word too, the repetition is a parallel construction and
     the value is fine."""
-    # the same 1-3 word phrase, twice, with only a connector between
+    # the same 1-3 word phrase, twice, with only a connector between.
+    #
+    # The lookahead after the repetition has to accept CLOSING punctuation, and
+    # until round 193 it did not. `\1(?![^\s,;/&+])` meant a phrase followed by
+    # ")" never matched, and the round-61 finding this detector was written for
+    # is exactly "Lam phang (voi Tuy chon & Tuy chon)" - the phrase sits inside
+    # brackets and ends in ")". So it had never fired on its own motivating
+    # example. The characters after it may be a delimiter, or the end of a
+    # bracket, or the end of the value.
     JOIN = r'(?:\s*(?:&|/|,|;|\bnhưng\b|\bhoặc\b|\bvà\b|\bhay\b|\bor\b|\+)\s*)'
     PHRASE = re.compile(
-        r'((?:[^\s,;/&+]+\s+){0,2}[^\s,;/&+]+)' + JOIN + r'\1(?![^\s,;/&+])',
+        r'((?:[^\s,;/&+]+\s+){0,2}[^\s,;/&+]+)' + JOIN + r'\1(?![^\s,;/&+)\]])',
         re.IGNORECASE)
 
     # the same test on English words, to decide whether the repetition is intended
@@ -764,7 +794,7 @@ def d_collapsed(args, vi, src, _):
         print('--- intended repetitions, for the record')
         for _, k, v, phrase, whole in intended[:10]:
             print(f'  {phrase!r} in {k[:56]!r}')
-    return 0
+    return len(defects)
 
 
 # =====================================================================
@@ -836,7 +866,7 @@ def d_gloss(args, vi, src, _):
         print(f'      EN {src.get(k, "?")[:66]!r}')
         print(f'      VI {v[:80]!r}')
         print(f'      ^ {b!r}')
-    return 0
+    return len(rows)
 
 
 # =====================================================================
@@ -901,6 +931,18 @@ refreshed pressed released dragged dropped
 
     TOKEN = re.compile(r"[^\s]+")
 
+    # Official Cubase/MIDI command names that contain English words verbatim and
+    # are printed that way in every language. Round 193 added this because
+    # "Nhạc cụ dùng Automation Read All và Write All" was flagged for ['All',
+    # 'All'] - the two Alls belong to the command names "Automation Read All" and
+    # "Write All", not to the sentence. `leak` has had this exemption for
+    # several rounds; two detectors disagreeing about the same string is how a
+    # false alarm survives.
+    NAMED_PHRASE = {
+        'Nhạc cụ dùng Automation Read All và Write All',  # Automation Read/Write All
+        'Gửi thông điệp All Notes Off',                   # MIDI All Notes Off
+    }
+
     def strip(v):
         for rx in MASK:
             v = rx.sub(' ', v)
@@ -919,7 +961,19 @@ refreshed pressed released dragged dropped
 
     rows = []
     for k, v in vi.items():
-        if not HAN.search(v):
+        # NO "does this value contain a Vietnamese character" gate here, and that
+        # is the point of round 193. Every other frame detector asks
+        # `HAN.search(v)` first, and `trong`, `cho`, `khi`, `vao`, `voi` are
+        # Vietnamese words written in PLAIN ASCII - so the worst translations,
+        # the ones a translation pass made out of function words, are exactly
+        # the ones that fail the gate. Round 59's own case is
+        # "Used trong Project: %s": not one character of it is non-ASCII, and
+        # `funcwords` never even looked at it.
+        #
+        # Removing the gate was measured, not assumed: on the shipped map it adds
+        # ZERO findings, because a value made only of Cubase terms is caught by
+        # the count test below anyway, not by the accent test.
+        if v in NAMED_PHRASE:
             continue
         hit = [w for w in latin_words(strip(v)) if w.lower() in VERBISH]
         if len(hit) >= MINF:
@@ -932,7 +986,7 @@ refreshed pressed released dragged dropped
         print(f'  [{n}] {k[:64]!r}')
         print(f'      {v[:110]!r}')
         print(f'      {hit}')
-    return 0
+    return len(rows)
 
 
 # =====================================================================
@@ -969,7 +1023,7 @@ def d_opening(args, vi, src, _):
     for k, v, w in rows:
         print(f'  {w:<10} {k[:62]!r}')
         print(f'  {"":<10} {v[:126]!r}')
-    return 0
+    return len(rows)
 
 
 # =====================================================================
@@ -1029,7 +1083,7 @@ def d_repeat_en(args, vi, src, _):
         print(f'  [{n}w x{mx}] {k[:60]!r}')
         print(f'          {v[:104]!r}')
         print(f'          {rep}')
-    return 0
+    return len(rows)
 
 
 # =====================================================================
@@ -1092,7 +1146,7 @@ all any each every some both either neither
         print(f'  [{n}] {k[:60]!r}')
         print(f'      {v[:100]!r}')
         print(f'      {rep}')
-    return 0
+    return len(rows)
 
 
 # =====================================================================
@@ -1140,7 +1194,7 @@ def d_frame(args, vi, src, _):
         print(f'  [{best:2d}] {k[:70]!r}')
         print(f'        {v[:132]!r}')
         print(f'        run: {run[:70]!r}')
-    return 0
+    return len(rows)
 
 
 # =====================================================================
@@ -1188,7 +1242,7 @@ def d_frame_short(args, vi, src, _):
         print(f'  [{b}] {k[:64]!r}')
         print(f'      {v[:100]!r}')
         print(f'      > {r!r}')
-    return 0
+    return len(rows)
 
 
 # =====================================================================
@@ -1279,7 +1333,7 @@ def d_pure_en(args, vi, src, _):
             for k, v in buckets[name]:
                 print(f'  {k[:74]!r}')
                 print(f'      -> {v[:74]!r}')
-    return 0
+    return len(buckets['MULTI-WORD - check']) + len(buckets['single word - check'])
 
 
 # =====================================================================
@@ -1335,7 +1389,7 @@ def d_typos(args, vi, src, _):
             print(f'    EN {u[:88]}')
             print(f'    VI {v[:88]}')
         print()
-    return 0
+    return total
 
 
 # =====================================================================
@@ -1402,7 +1456,7 @@ def d_outlier(args, vi, src, _):
 
     if '--show' not in args:
         print('Chi tiet: python tools\\audit.py outlier --show 0')
-        return 0
+        return len(rows)
 
     print('\n' + '=' * 70)
     for n_t, n_k, term, kept, trans in rows:
@@ -1414,7 +1468,7 @@ def d_outlier(args, vi, src, _):
             print(f'  VI {vi[k][:74]}')
             print(f'     rieng cua ban dich: {ds}')
             print(f'     con "giu" deu dung: {n_k} chuoi')
-    return 0
+    return len(rows)
 
 
 # =====================================================================
@@ -1428,27 +1482,43 @@ def d_same_en(args, vi, src, _):
     which is a usability problem. This asks the opposite: "do two labels that
     Cubase stores under the same English read DIFFERENTLY on screen".
 
-    Round 66 is the proof that the two are not always the same string:
-        Key="Keep History"      <us>Keep History</us>
-        Key="Keep History[RM]"  <us>Keep History</us>
-    Two keys, one English, so a lookup by English cannot tell them apart. Every
-    vendor translates them identically, which is what a lookup by English forces
-    - and it is why the "[RM]" marker belongs in the Key and nowhere else."""
+    WHAT IT MUST NOT REPORT. Round 193 ran this against keys/translation_
+    original.xml and found all eleven of its findings to be FALSE ALARMS. Every
+    one was a pair separated by the extractor's own DISAMBIGUATION marker, and
+    the marker is the mechanism that is supposed to let two labels share one
+    English:
+
+        Key        <us>Key</us>          vi "Key"     (the musical key)
+        Key[keycomms] <us>Key</us>       vi "Phím tắt" (the keyboard shortcut)
+
+    German makes the distinction explicit - "Tonart" against "Taste" - and 8 of
+    the 9 vendors translate that pair differently. Checking all eleven, the
+    split runs from 8/9 down to 1/9, and not one of them wants them equal.
+
+    The first version of this tool did the exact opposite of what its own
+    comment said: it stripped the marker, required every key to reduce to the
+    same bare string, and so KEPT precisely the marker pairs it claimed to be
+    discarding. A comment that contradicts its code is worse than no comment,
+    because it stops the next person checking. `DISAMBIG` below is the filter
+    the comment described.
+
+    `X[RM]` is a different marker and does NOT belong here: it is the same label
+    shown in Cubase's Read Mode, all eight vendors translate the pair
+    identically, and `audit.py rm` is the check that owns it. Including it would
+    double-report one class and miss the other."""
     g = defaultdict(list)
     for k, u in src.items():
         if k in vi:
             g[u].append(k)
 
-    # Most groups the first cut found are the extractor's own DISAMBIGUATION
-    # markers, and those are exactly what is SUPPOSED to separate two labels that
-    # share an English. A marker in the KEY is the mechanism, so those groups are
-    # correct and there is nothing to report. What is left - and what cannot be
-    # resolved by a marker, because there is no marker - is two keys that are the
-    # SAME string with no distinguishing suffix at all.
-    MARK = re.compile(r'\[(?:[^\]]*)\]|\{\{[^{}]*\}\}')
+    # A trailing "[...]" or "{{...}}", i.e. the extractor's note to itself.
+    # Anchored: "Direction [direction of a stem]" has the note at the end, and
+    # "Page Height" inside "Height[Page Height]" has no brackets at all, so an
+    # unanchored pattern is what made the old filter keep the wrong pairs.
+    DISAMBIG = re.compile(r'\s*(?:\[[^\]]*\]|\{\{[^{}]*\}\})\s*$')
 
-    def bare(k):
-        return re.sub(r'\s+', ' ', MARK.sub('', k)).strip().lower()
+    def label_of(k):
+        return DISAMBIG.sub('', k.strip()).strip().lower()
 
     rows = []
     for u, ks in g.items():
@@ -1457,11 +1527,17 @@ def d_same_en(args, vi, src, _):
         vals = {vi[k] for k in ks}
         if len(vals) < 2:
             continue
-        # EVERY key in the group must be the same bare string. One stray key whose
-        # column 2 was truncated into a neighbour - "VST Connections" and "Audio
-        # Connections" both have column 2 "Audio Connections" - otherwise drags
-        # in a group that has nothing to do with the defect.
-        if len({bare(k) for k in ks}) != 1:
+        # Drop it when every key reduces to ONE label once its marker is gone -
+        # that means a marker is the only thing telling them apart, which is the
+        # mechanism working, not a defect.
+        labels = {label_of(k) for k in ks}
+        if len(labels) == 1 and any(DISAMBIG.search(k.strip()) for k in ks):
+            continue
+        # And drop it when the keys are genuinely DIFFERENT labels that share an
+        # English only because column 2 was truncated into a neighbour -
+        # "VST Connections" and "Audio Connections" both carry
+        # "Audio Connections". Different labels must translate differently.
+        if len(labels) > 1:
             continue
         rows.append((u, ks))
 
@@ -1473,7 +1549,7 @@ def d_same_en(args, vi, src, _):
             print(f'       {k[:66]!r}')
             print(f'         -> {vi[k][:66]!r}')
         print()
-    return 0
+    return len(rows)
 
 
 # =====================================================================
@@ -1578,11 +1654,21 @@ def d_mojibake(args, vi, src, _):
     bad = [k for k, v in REPAIRS.items() if MOJIBAKE.search(v)]
     if bad:
         print(f'  REPAIR STILL BROKEN: {bad}')
-        return 1
+
+    # A repair table LARGER than the set of broken values is not a finding: the
+    # repairs were applied, so `extra` lists all 34 of them and the map is clean.
+    # Counting it would report a healthy map as broken forever.
+    if not broken and not missing and not bad:
+        if '--write' not in args:
+            print('\n(dry run - pass --write to apply)')
+        return 0
+
+    if bad:
+        return len(broken) + len(missing) + len(bad)
 
     if '--write' not in args:
         print('\n(dry run - pass --write to apply)')
-        return 0
+        return len(broken) + len(missing)
 
     import glob
     applied = 0
@@ -1607,6 +1693,20 @@ ORDER = ['mojibake', 'leak', 'quality', 'fragments', 'same_en', 'quotes', 'rm',
          'opening', 'frame', 'frame_short', 'leftover', 'repeat_en', 'repeat_vi',
          'pure_en', 'outlier', 'typos']
 
+# A LEAD GENERATOR is a detector whose job is to hand you a list to READ, not to
+# assert a defect. `fragments` reports 188 values every single run and 20 of
+# them are worth looking at; `thin` reports 908 and 3 are. They never go quiet,
+# so listing them under "defects" would train the reader to skip the summary -
+# which is the failure mode AGENT.md §7 warns about. Keep them separate.
+LEADS = {'fragments', 'thin', 'repeat_en', 'repeat_vi', 'frame', 'frame_short',
+         'pure_en', 'outlier', 'typos', 'opening'}
+
+# Only these two exit non-zero on a finding, and that reproduces the exit codes
+# the 24 separate scripts had. Round 193 measured this: making the other 20
+# exit 1 as well would make AGENT.md §9 ("dừng ngay khi một bước báo lỗi") stop
+# the pipeline on findings that have been read and judged ten times over.
+STRICT_EXIT = {'leak', 'mojibake'}
+
 
 def main():
     a = sys.argv[1:]
@@ -1615,30 +1715,48 @@ def main():
         print('=' * 72)
         w = max(len(n) for n in DETECTORS)
         for name in ORDER:
-            print(f'  {name:<{w}}  {DETECTORS[name][1]}')
+            tag = '  (dẫn đường)' if name in LEADS else ''
+            print(f'  {name:<{w}}  {DETECTORS[name][1]}{tag}')
         print(f'\n{len(DETECTORS)} detectors.  Extra arguments go straight through,')
         print('e.g. `audit.py dropped 80`, `audit.py fragments --list`.')
         return 0
 
     if a[0] == '--all':
-        bad = []
+        # COUNT findings, do not read exit codes. Round 193 shipped a --all that
+        # used the return value as a truthy test while twenty detectors returned
+        # 0 by design, so it printed "detectors that fired: none" on a map that
+        # same_en was reporting 11 findings for. A summary that cannot see is
+        # worse than no summary.
+        defects, leads = [], []
         for name in ORDER:
             print(f'\n===== {name} ' + '=' * (66 - len(name)))
             try:
-                if DETECTORS[name][0]([]):
-                    bad.append(name)
+                n = DETECTORS[name][0]([])
             except Exception as exc:                  # noqa: BLE001
                 print(f'!! {name} crashed: {exc}')
-                bad.append(name)
+                defects.append((name, -1))
+                continue
+            if n:
+                (leads if name in LEADS else defects).append((name, n))
+
         print('\n' + '=' * 72)
-        print('detectors that fired: ' + (', '.join(bad) if bad else 'none'))
-        return 1 if bad else 0
+        print(f'LỖI THẬT  ({len(ORDER) - len(LEADS)} bộ dò): '
+              + ('không có' if not defects
+                 else ', '.join(f'{n}={c}' for n, c in defects)))
+        print(f'DẪN ĐƯỜNG ({len(LEADS)} bộ dò, luôn ra danh sách để đọc tay):')
+        for n, c in leads:
+            print(f'    {n:<12} {c}')
+        if not leads:
+            print('    (không có)')
+        print('\nDẫn đường KHÔNG phải lỗi. Đọc nó bằng tay: `read.py`, `family.py`.')
+        return 1 if defects else 0
 
     if a[0] not in DETECTORS:
         print(f'no detector named {a[0]!r}')
         print('run `python tools/audit.py` for the list')
         return 2
-    return DETECTORS[a[0]][0](a[1:])
+    n = DETECTORS[a[0]][0](a[1:])
+    return 1 if (a[0] in STRICT_EXIT and n) else 0
 
 
 if __name__ == '__main__':
