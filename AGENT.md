@@ -174,6 +174,10 @@ giữ EN / động từ `chèn`), `Send` (nút giữ / động từ `gửi`).
 >   `Đổi kích thước áp dụng Time Stretch`. Sửa lỗi dịch sai của `Sizing Moves Content`
 >   (trước dịch thành "Kéo cạnh để đổi kích thước" vốn là định nghĩa của Normal Sizing).
 
+> **Đồng bộ 100% Lower Zone (đợt 182):**
+> - **Đưa 7 chuỗi dịch nửa vời `Zone dưới` về `Lower Zone`:** Khớp hoàn toàn với `Left Zone`, `Right Zone`,
+>   `Lower Zone` trên thanh công cụ và cửa sổ Project.
+
 > **Ngoại lệ đã chốt — `Chord` dịch `hợp âm` (77 chuỗi).** Dù `Chord` nằm trong
 > 68 từ cốt lõi, thực tế đo được: 77 chuỗi dùng `hợp âm`, và anh em giữ EN chỉ là
 > **tên tính năng** (`Chord Track`, `Chord Pad`, `Chord Symbol`). Sửa danh sách thì
