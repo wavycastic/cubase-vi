@@ -11,6 +11,10 @@ luật tồn tại, không phải để tra luật.
   `Xóa`, `Gỡ bỏ`, `Nhân bản`, `Sửa`, `Mở`, `Lưu`, `Bật`, `Tắt`, `Ẩn`, `Hiện`,
   `Chọn`, `Tới`, `Đảo ngược`.
 - **Thuật ngữ âm thanh & DAW** → **giữ tiếng Anh**, ghép vào ngữ pháp tiếng Việt.
+- **Bảng màu (Color Setup / Palette)**: giữ nguyên tiếng Anh cho toàn bộ tên màu
+  (White, Black, Red, Green, Blue, Yellow, Orange, Magenta, các biến thể Dark/Light,
+  Black 50/70, Gray 5..90) theo yêu cầu người dùng. Các nhãn chức năng vẫn dịch
+  bình thường (`Color` -> `Màu`, `Colors` -> `Màu sắc`, `Colorize` -> `Tô màu`).
 - **TUYỆT ĐỐI KHÔNG**: ngoặc chú thích ở cuối (`Thêm track (Add Audio Tracks)` — SAI,
   nhãn tràn chữ). Chỉ giữ ngoặc khi **key gốc đã có**, và khi đó dịch trong ngoặc.
   Cũng không dịch thuần Việt: `Automation`, `Bounce`, `Track`, `Clip`, `Freeze`, `Quantize`.

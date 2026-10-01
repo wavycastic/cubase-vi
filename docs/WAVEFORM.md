@@ -138,7 +138,7 @@ bất đồng bộ: UI có lúc chỉ, có lúc báo lỗi.
 | `rdx` | con trỏ ra: **mảng kết quả**, mỗi phần tử **8 byte = 2 × float32** |
 | `r8d` | `startPixel` |
 | `r9d` | `numPixels` |
-| `[rsp+0x130]` | `framesPerPixel` — `double` |
+| `[rsp+0x130]` | `framesPerPixel` — `double`. **Đơn vị của nó là "frame" của Audio Image, tức một cột peak, không phải một mẫu âm thanh** — xem §3.6 |
 | `[rsp+0x140]` | con trỏ chuyển đổi miền thời gian (warp), có thể `null` |
 
 Ngay đầu hàm log:
@@ -153,8 +153,9 @@ vi thực tế thì đây là chỗ cài log.
 ### 3.2 Chuẩn bị
 
 ```
-xmm6 = startPixel * framesPerPixel              ; vị trí frame đầu
-xmm7 = (startPixel+numPixels) * framesPerPixel  ; vị trí frame cuối
+xmm10 = (double)framesPerPixel                   ; đọc từ [rsp+0x130]
+xmm6 = (float)framesPerPixel                     ; cvtpd2ps rồi cvtps2pd 0x141E9C38D
+xmm7 = (startPixel+numPixels) * framesPerPixel  ; vị trí cuối
 nếu có converter (warp):
     nếu converter->mode() == 0x0A (VT_R8):
         bỏ qua
@@ -163,44 +164,55 @@ nếu có converter (warp):
     rồi gọi converter->vfunc+0x20(start) và vfunc+0x20(end)
 r15d = nguồn->vfunc+0x38()                      ; SỐ KÊNH
 iterator = 0x1421F3650(rcx, xmm1=start, xmm2=end, r9d=channels, fpp)
-frames  = iterator->vfunc+0x18()                ; số frame trong lát
+n       = iterator->vfunc+0x18()                ; SỐ BẢN GHI, uint64
+xmm8    = framesPerPixel / n                    ; 0x141E9C4FC
 ```
 
-`xmm7` ở `0x141E9C501` nạp hằng `1.0` (`0x145ED62F0`), `xmm7` ở `0x141E9C666`
-nạp hằng `0.5` (`0x145ECCF38`).
+`xmm7` ở `0x141E9C501` nạp hằng `1.0` (`0x145ED62F0`), ở `0x141E9C666` nạp
+`0.5` (`0x145ECCF38`). Cả hai nằm trong một bảng ngưỡng dùng chung ở `0x145ED62D0`:
+`1e-5`, `0.010001`, `0.050001`, `1.0`, `FLT_MAX`, `-FLT_MAX`, `0.0`.
 
 ### 3.3 Nhánh A — phóng to (nội suy)
 
-Điều kiện: `1.0 <= framesPerPixel / frames` thì sang **nhánh B**. Tức nhánh A xảy
-ra khi **một pixel nhỏ hơn lát dữ liệu**.
+Nhánh A xảy ra khi `1.0 > framesPerPixel / n`, tức **một pixel che được nhiều hơn
+một bản ghi**. Với file `.peak` (256 mẫu/cột) điều này tức mức phóng dưới
+**256 mẫu mỗi pixel** — chi tiết ở §3.6.
 
 Với mỗi cột:
 
 ```
-t = (pixel * framesPerPixel) / frames           ; 0..1 trong lát
-i = (int)t                                     ; cắt phần nguyên
-f = t - i                                      ; phần thập phân
-v0 = iterator->getPair(i * channels)            ; 8 byte: (a0, b0)
-v1 = iterator->getPair((i+1) * channels)        ; 8 byte: (a1, b1)
-nếu getPair thứ hai trả false → dùng luôn (a0, b0)
-kết quả = lerp:  a = a0*(1-f) + a1*f ,  b = b0*(1-f) + b1*f
-ghi 8 byte ra con trỏ ra; con trỏ += 8
+t = (pixel * framesPerPixel) / n                 ; 0x141E9C542
+i = (int)t                                       ; cvttsd2si 0x141E9C54E
+f = t - i                                        ; subsd     0x141E9C560
+v0 = iterator->vfunc+0x20(i * channels, &out)     ; 0x141E9C597 -> (a0, b0)
+v1 = iterator->vfunc+0x20((i+1)*channels, &out)   ; 0x141E9C5B1 -> (a1, b1)
+nếu lần hai trả false → dùng luôn (a0, b0)         ; 0x141E9C5C2
+kết quả = lerp:  a = a0*(1-f) + a1*f ,  b = b0*(1-f) + b1*f   ; 0x141E9C5E4
+ghi 8 byte ra con trỏ ra; con trỏ += 8              ; 0x141E9C629 / 0x141E9C62D
 ```
 
 Chính là **nội suy tuyến tính riêng cho min và max**, theo phần thập phân của vị
-trí mẫu. Đây là cơ chế phía sau tuỳ chọn *Interpolate Audio Waveforms*.
+trí bản ghi. Đây là cơ chế phía sau tuỳ chọn *Interpolate Audio Waveforms*.
 
-Chỗ `f < 0` thì `1.0 - f` vẫn đúng, nên nhánh này không cần `min/max` thủ công.
+Hai chi tiết đáng ghi:
+
+- Vế phải của phép lerp là `1.0 - f`, và `1.0` nạp từ `0x145ED62F0` (`0x141E9C5E4`).
+  Nên khi `f` hơi âm do sai số `double` thì `1.0 - f > 1` vẫn đúng — nhánh này an
+  toàn với `f` âm.
+- `a0, b0` được đọc vào `xmm1, xmm2` dạng **float32** (`movss` rồi `cvtps2pd`),
+  nhưng phép lerp làm ở **double** rồi mới `cvtpd2ps` ghi lại. Vậy bản ghi `.peak`
+  là float32, phép nội suy là double — khớp với §15.2.
 
 ### 3.4 Nhánh B — thu nhỏ (gom min/max)
 
-Điều kiện ngược: `framesPerPixel >= frames` → mỗi pixel **bao trọn** cả lát.
+Điều kiện ngược: `1.0 <= framesPerPixel / n` → **một pixel che được không quá một
+bản ghi**, nên phải gom nhiều bản ghi cho một pixel.
 
 ```
-y0 = round_half_away((pixel * fpp) / frames)    ; "cắt ±0.5 rồi cắt phần nguyên"
-last = (int)(obj[0x30]/channels * obj[0x38] / frames) * channels - 1
+y0 = floor((pixel * fpp) / n)                         ; 0x141E9C65D..0x141E9C67F
+last = (int)(obj[0x30]/channels * obj[0x38] / n) * channels - 1
 với mỗi cột:
-    y1 = round_half_away(((pixel+1) * fpp) / frames)
+    y1 = floor(((pixel+1) * fpp) / n)                 ; 0x141E9C6E1..0x141E9C6FD
     rows = max(y1 - y0, 1)
     với mỗi kênh:
         nếu chỉ số < 0 hoặc > last → ghi 8 byte 0 (cột rỗng)
@@ -214,9 +226,141 @@ với mỗi cột:
 một lần cho tất cả kênh. Đây là đường đi khi dữ liệu nằm trong Audio Image hoặc
 khi phải đọc file.
 
-Làm tròn kiểu *round half away from zero*: `x < 0 ? x - 0.5 : x + 0.5` rồi `cvttsd2si`.
+**Đính chính (đọc lại mã, lượt trước sai):** tôi đã ghi làm tròn kiểu *round half
+away from zero*. Mã thật ở `0x141E9C66E` là:
 
-### 3.5 Vì sao lúc dựng phải dư 1 pixel mỗi bên
+```
+0x141E9C66E  comisd  xmm8(0.0), xmm6
+0x141E9C673  jbe    +   ->  addsd xmm6, 0.5     ; x <= 0
+0x141E9C675  subsd  xmm6, 0.5                  ; x >  0   <-- dấu bị đảo so với doc cũ
+0x141E9C67F  cvttsd2si edx, xmm6
+```
+
+Với `x >= 0` (chỉ số cột luôn không âm) thì `trunc(x - 0.5)` **chính là `floor(x)`**.
+Nên phép ánh xạ là **floor**, không phải làm tròn. Hệ quả thực tế: cột pixel thứ
+`p` lấy bản ghi `floor(p·fpp/n)`, lệch về bên trái, không lệch về gần giữa.
+
+Về `last`: công thức đọc từ mã cho ra `n - 1` **với điều kiện `obj[0x30]·obj[0x38]
+= n²`** — tức nó là chỉ số bản ghi hợp lệ cuối cùng, dùng để chặn đọc quá độ dài
+mảng. Tôi chưa xác định được `+0x30` và `+0x38` là gì, nhưng tích của chúng bằng `n²`
+thì công thức cho kết quả đúng; đây là điều kiện cần giữ khi đọc tiếp.
+
+### 3.6 `framesPerPixel` tính bằng **cột peak**, không phải bằng mẫu âm thanh
+
+Đọc lại `0x141E9C4C9`–`0x141E9C4FC` làm rõ đơn vị. Ở đây tôi đã hiểu sai từ trước:
+
+```
+0x141E9C4C9  mov  rax, [rax]              ; vtable của đối tượng Audio Image
+0x141E9C4CF  call [rax + 0x18]            ; -> n, trả về trong RAX
+0x141E9C4D5  xorps xmm9, xmm9
+0x141E9C4D9  test rax, rax
+0x141E9C4DC  js   0x141e9c4e5             ; âm -> nhánh chuyển đổi
+0x141E9C4DE  cvtsi2sd xmm9, rax           ; không âm
+0x141E9C4E5  shr  rax, 1                  ; idiom chuyển uint64 ->
+0x141E9C4E8  and  ecx, 1                  ;   double của MSVC, không
+0x141E9C4EB  or   rax, rcx                ;   mất chính xác
+0x141E9C4F3  addsd xmm9, xmm9
+0x141E9C4F8  movaps xmm8, xmm10           ; xmm10 = framesPerPixel
+0x141E9C4FC  divsd  xmm8, xmm9            ; xmm8 = fpp / n
+```
+
+Ba điều, tất cả từ mã:
+
+**1. `n` là SỐ BẢN GHI, không phải "số frame trong lát"** như tôi đã ghi ở §3.2.
+Cơ sở: `vfunc+0x18` (`0x1421F4C00`, §3.7) đọc `[rcx+0x30]->+0x38` và so sánh với
+chỉ số bản ghi trong `vfunc+0x20` (`0x1421F4C49  cmp rdx, r12`). Cùng một đại lượng
+ở cả hai hàm. Tôi cũng đoán "uint64" từ idiom `shr/and/or/addsd`; điều đó **không
+đủ căn cứ** vì hàm trả về `dword` — xem §3.7.
+
+**2. Mẫu số của mọi phép ánh xạ pixel→bản ghi là `n`, tức số bản ghi.** Nên
+`framesPerPixel` mà hàm nhận cũng tính bằng **cột peak**. Nếu nó là mẫu âm thanh
+thì `(pixel·fpp)/n` không ra chỉ số bản ghi.
+
+**3. Hệ quả trực tiếp với `.peak`:** một cột peak đại diện **256 mẫu âm thanh**
+(§15.4). Khi phóng vào mức **1 pixel < 256 mẫu**, hàm này vẽ dữ liệu đã lấy mẫu
+theo 256 rồi nội suy tuyến tính — **không phải dạng sóng thật**. Dạng sóng thật
+chỉ xuất hiện ở `fpp < 1.0` (§4, `0x141E9D4C0`).
+
+Nói cách khác: **điểm bão hòa thị giác của Cubase là 256 mẫu mỗi pixel.** Muốn vẽ
+đẹp hơn ở mức phóng lớn thì phải tự đọc file âm thanh, không dựa vào `.peak`.
+
+### 3.7 Ba hàm vfunc của AudioImage đã đọc được — và `0x100` hardcode
+
+Vtable **interface** 6 slot của `AudioImageFile` là `0x145FFAE30`
+(`AudioImageCache` là `0x145FFACA0`). `0x1421F3650` chính là hàm chọn: nó gán
+`0x145FFAC30` / `0x145FFACA0` cho vtable khi trả về cache, và tương tự cho file —
+khớp với §14.
+
+Ba slot mà `0x141E9C340` dùng, đọc trực tiếp từ mã:
+
+| slot | hàm | việc |
+|---|---|---|
+| `+0x18` | `0x1421F4C00` | **số bản ghi** |
+| `+0x20` | `0x1421F4C20` | đọc **một** bản ghi `(a, b)` |
+| `+0x28` | `0x1421F4E30` | đọc **một khoảng** → `(min, max)` |
+
+`+0x18` là một hàm 5 lệnh, và **đây là bằng chứng mã nguồn mạnh nhất cho con số 256**:
+
+```
+0x1421F4C00  mov  rax, qword ptr [rcx + 0x30]   ; con trỏ tới lớp nền
+0x1421F4C04  test rax, rax
+0x1421F4C07  je   0x1421F4C0D                    ; chưa nạp -> dùng hằng
+0x1421F4C09  mov  eax, dword ptr [rax + 0x38]    ; số bản ghi thật
+0x1421F4C0C  ret
+0x1421F4C0D  mov  eax, 0x100                     ; <-- 256
+0x1421F4C12  ret
+```
+
+Tức **256 là giá trị mặc định khi chưa có dữ liệu** — và nó trùng khớp chính xác với
+độ phân giải tôi đo được từ 19 file `.peak` thật (§15.4). Hai nguồn độc lập: công
+thức suy ra từ header, và hằng số trong mã. Điều này nâng `256` từ "suy đoán khớp
+số liệu" lên **hằng số xác nhận**.
+
+`+0x20` xác nhận bố cục xen kẽ của file `.peak` — nó chặn trên
+`[rcx+0x30]->+0x30`, rồi tính địa chỉ byte:
+
+```
+0x1421F4C45  mov  rax, [rcx + 0x30]
+0x1421F4C49  mov  r12d, [rax + 0x30]        ; tổng số bản ghi
+0x1421F4C4D  cmp  rdx, r12                  ; index >= n -> false
+0x1421F4C50  jae  -> tra false
+0x1421F4C56  mov  r14d, [rcx + 0x20]
+0x1421F4C5A  shr  r14d, 3                   ; <-- CHIA 8: kích thước 1 bản ghi
+```
+
+`shr 3` trên `[rcx+0x20]` là **8 byte mỗi bản ghi** — khớp §15.2. Và ở `0x1421F4CC8`
+: `lea rdi, [rcx + r15*8]` với `r15` là chỉ số bản ghi — xác nhận bản ghi tính bằng
+**chỉ số phẳng**, kênh xen kẽ, không có bảng tra. Tức `index*channels + kênh` là
+cách duy nhất, và nó là lý do §3.3/§3.4 nhân `channels` vào mọi chỉ số.
+
+`+0x28` là **thanh ghi 5 tham số** (`rcx, rdx, r8, r9, [rsp+0x50]`) — khớp với lời
+gọi 4 tham số ở §3.4. Nó ghi `*(qword*)rbx = 0` trước khi quét (`0x1421F4E5F`), tức
+**luôn khởi tạo kết quả bằng 0** rồi mới gom min/max — đó là lý do các cột ngoài phạm
+vi trả về 8 byte số 0 chứ không phải giá trị rác.
+
+Và 3 hàm này của `AudioImageCache` (`0x1421F12F0`, `0x1421F1310`, `0x1421F1330`) đều
+chỉ là **3 lệnh chuyển tiếp** — không có logic riêng:
+
+```
+0x1421F12F0  mov  rcx, [rcx + 0x10]   ; xuống lớp dưới
+0x1421F12F4  add  rcx, 0x30          ; lấy vtable con
+0x1421F12F8  mov  rax, [rcx]
+0x1421F12FB  jmp  [rax + 0x18]       ; gọi tiếp cùng slot
+```
+
+Nghĩa là cache **không có định nghĩa riêng** cho ba thao tác này — nó ủy quyền. Đây
+là cơ sở vững để chọn `AudioImageFile` làm điểm can thiệp: sửa logic thật, thay vì
+sửa một lớp chuyển tiếp.
+
+### 3.8 Vì sao có hai vòng lặp lồng nhau
+
+Nhánh A quét `rbp` trong khoảng `1..r15d` bên trong `r12` chạy **ngược** từ
+`numPixels` về 1 (`0x141E9C520` vòng trong, `0x141E9C652` vòng ngoài), con trỏ ra
+tăng 8 byte mỗi lần (`0x141E9C62D`). Thứ tự ghi là **pixel tăng dần, kênh tăng
+dần** — đúng thứ tự một bộ đệm `(numPixels × channels)` cần, và giải thích vì sao
+§3.8 phải cấp phát `channels * (numPixels+3)` phần tử.
+
+### 3.8 Vì sao lúc dựng phải dư 1 pixel mỗi bên
 
 Hàm điều phối `0x141E9B6F0`:
 
