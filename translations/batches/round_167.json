@@ -1,0 +1,6 @@
+{
+  "The locator range contains no video event. A black screen is exported.": "Dải Locator không có Video Event. Sẽ Export màn hình đen.",
+  "The project contains no video. A black screen is exported.": "Project không có Video. Sẽ Export màn hình đen.",
+  "Notes for Which Accidentals Have Already Been Stated Within the Bar": "Các nốt mà Accidental đã ghi trong Bar",
+  "This computer has multiple network interfaces. Please determine which \\ninterface is connected to the Nuendo workgroup and select the \\ncorresponding IP address. \\n\\nThe subnet mask specifies in which range broadcast messages \\nare sent to identify other Nuendo workstations. The default subnet mask \\nis a common choice, please adopt it for your specific network adapter.\\n\\nTo reopen this dialog, deactivate the network and activate it again.": "Máy tính có nhiều card mạng. Hãy xem card nào đang nối vào nhóm Nuendo\\nrồi chọn IP tương ứng. \\n\\n\\nSubnet mask quyết định phạm vi gửi bản tin broadcast \\nđể tìm các máy Nuendo khác. Subnet mask mặc định \\nlà lựa chọn thường dùng, cứ giữ nguyên cho card mạng.\\n\\nĐể mở lại hộp thoại này, hãy tắt mạng rồi bật lại."
+}
