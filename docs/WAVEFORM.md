@@ -879,7 +879,7 @@ bằng giá trị riêng — khớp với hằng `-0.0f` (`0x145FA4E40`) mà §3
 | `+0x08` | BE u32 | `96` ở cả 19 file | **kích thước header** ✓ |
 | `+0x0C` | BE u32 | `2` ở cả 19 file | **số kênh** ✓ (xem §15.4) |
 | `+0x10` | BE u32 | đổi ở cả 19 file | **tổng số frame** của audio ✓ |
-| `+0x14` | BE u32 | `256` ở cả 19 file | hằng — nghi ngờ là độ phân giải, xem §15.4 |
+| `+0x14` | BE u32 | `256` ở cả 19 file | khớp độ phân giải đo được ở §15.4 |
 | `+0x18` | BE u32 | `0xFFFFFFFF` ở cả 19 file | sentinel −1 |
 | `+0x1C` | BE u32 | hằng ở 18/19 file | nhiều khả năng là nhãn định dạng |
 | `+0x20` | char[] | `"02. Body.flac"` | **tên file nguồn**, đuôi `.flac` |
@@ -962,16 +962,23 @@ Còn một chi tiết lạ: thư mục `Images\Images\` có **một** bản `.ba
 `.peak` trùng tên với bản ở thư mục trên — dấu vết một lần dựng ảnh bị lặp. Không
 ảnh hưởng kết luận.
 
-### 15.6 Chưa giải được
+### 15.7 Chưa giải được
 
 - `+0x04` (= `65736` mọi file) và `+0x14` (= `256` mọi file): đều hằng, cần đọc mã
   bên ghi (`0x1421F1DD0`) mới đặt tên chắc chắn. `+0x14` bằng `256` rất đáng nghi là
   độ phân giải, nhưng **đã chứng minh được bằng công thức** ở §15.4 mà không cần
   đoán từ hằng số.
 - `+0x1C` khác ở đúng một file. Chưa rõ vì sao — cùng đợt dựng hay khác phiên bản.
-- **Sample rate không có trong file.** Suy ra được độ dài nếu biết tần số
-  (`frames / 44100` cho 141–253 giây với các file này), nhưng tần số phải lấy từ
+- **Sample rate không có trong file `.peak`.** Suy ra được độ dài nếu biết tần số
+  (`frames / 44100` cho 127–253 giây với 19 file này), nhưng tần số phải lấy từ
   `.cpr` hoặc từ chính file audio — file `.flac` gốc không còn trên máy.
+- **`.cpr` là container `RIF2` của Steinberg**, không phải ZIP: magic `RIF2`, rồi
+  chunk `ROOT`, các nhãn `CmObject` / `PAppVersion` / `Version` — tức chính là mô
+  hình CmObject đã thấy trong exe. Trong đó có **18** tham chiếu `.flac`, và mỗi
+  tham chiếu đi kèm một descriptor có chuỗi `flac` và chữ ký `FLAC Fi…`. Đọc được
+  tần số sẽ phải hiểu cấu trúc descriptor đó — chưa làm, và là một dự án riêng.
+  Lưu ý: không có chuỗi `48000`/`44100` nào trong `.cpr`, nên tần số được lưu dạng
+  số nhị phân, không phải văn bản.
 - Cách `AudioImageFile` ánh xạ frame → cột: biết độ phân giải là 256 nhưng chưa
   đọc được phép tính cụ thể trong `0x141E9C340` (nó có thể không chia thẳng mà
   gom theo bảng).
@@ -983,7 +990,7 @@ Còn một chi tiết lạ: thư mục `Images\Images\` có **một** bản `.ba
 1. ~~Chưa đọc được phần đầu file `.peak`~~ — **đã đóng ở §15**. Header 96 byte,
    bản ghi 8 byte × 2 float32 LE không âm. Còn `+0x04`/`+0x10` là hằng chưa đặt
    tên được, và số frame không lưu trong file.
-2. ~~Chưa truy được file `.peak` nằm ở đâu~~ — **đã đóng ở §15.4**: trong
+2. ~~Chưa truy được file `.peak` nằm ở đâu~~ — **đã đóng ở §15.6**: trong
    `Images\` cạnh thư mục dự án, tên `<tt>.<tên track><số băm>`. Cơ chế ghép tên
    trong mã vẫn chưa truy (hậu tố `%02d` ở §14.6), nhưng không còn quan trọng.
 3. ~~Chưa xác minh đối tượng 0x70 byte là `MAudioCollector::FlatSliceIterator`~~
