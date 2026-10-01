@@ -380,5 +380,14 @@ Hai lỗi **trong code của chính repo này**, do `tools/tests/test_score.py` 
   `check_text` vẫy về một chuỗi có byte NUL. Bộ dò mới bắt được.
   Nay là `frozenset` ký tự.
 - `source_strings` đếm `uiName` và `singularFullName` là hai người dùng, nên
-  `--status` báo đội gấp đôi số bè mỗi chuỗi tiết kiệm được. Nay khử trùng
+  `--status` báo ��ội gấp đôi số bè mỗi chuỗi tiết kiệm được. Nay khử trùng
   theo entity.
+
+## 11. Cubase Hub — `hubservice.dll`
+
+Cubase Hub là module độc lập tại `Components\hubservice.dll`. Nó sở hữu bảng XML gồm
+**89 chuỗi riêng** (chứa `Create Empty Project...`, `Recent`, `Tutorials`, `Deals`,
+`User Manuals`, `Hub Settings`, `Choose File...`) nhúng trực tiếp trong binary.
+Các chuỗi này không nằm trong `translation.xml` chính; khi chạy tiếng Việt nếu
+chưa patch bảng XML trong DLL thì các nhãn riêng của Hub sẽ tự động fallback về
+tiếng Anh `<us>`. Chi tiết kỹ thuật và danh sách chuỗi xem tại `docs/HUBSERVICE.md`.

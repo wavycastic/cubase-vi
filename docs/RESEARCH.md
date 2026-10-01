@@ -105,6 +105,20 @@ section này bị đặt tên lại trong binary (cùng nhóm `IPPCODE` / `IPPDA
 con trỏ kiểu dữ liệu unwind table). Nên **chưa xác định được chính xác thư mục
 mà loader tìm** bằng phân tích tĩnh.
 
+## Kiến trúc các Component Localization độc lập
+
+Ngoài binary chính `Cubase15.exe` (sử dụng `translation.xml` 10.737 chuỗi), Cubase 15 có các thành phần giao diện độc lập sử dụng cơ chế bản dịch riêng:
+
+1. **Score Editor**: `Components\ScoringEngine\ScoringEngine.dll` (lõi Dorico)
+   - Nhạc cụ: `Components\ScoringEngine\l10n\instrumentnames_*.xml`
+   - Giao diện ký âm: `Components\ScoringEngine\l10n\strings_*.qm` (Qt catalogue)
+
+2. **Cubase Pro Hub**: `Components\hubservice.dll`
+   - Khởi tạo cửa sổ Hub khi mở Cubase.
+   - Nhúng trực tiếp bảng XML gồm **89 chuỗi riêng** trong section data từ offset `0x25D192` đến `0x266180`.
+   - Chứa các nhãn giao diện Hub: `Create Empty Project...`, `Recent`, `Tutorials`, `Deals`, `User Manuals`, `Hub Settings`, `Choose File...`.
+   - Do bảng XML gốc chỉ có 9 ngôn ngữ (thiếu `<vi>`), các chuỗi đặc thù của Hub tự động fallback về tiếng Anh `<us>` (chi tiết xem `docs/HUBSERVICE.md`).
+
 ## Giới hạn của việc xác minh
 
 Máy đang chạy agent nằm ở **session 2 (disconnected)**, console là session 5 nhưng
