@@ -133,7 +133,7 @@
     "Studio", "Offline", "Mixer",
     "Precount", "Bit Depth", "Strip Silence", "Saturation", "Normalize", "Nudge",
     "Circle of Fifths", "Proximity", "Detect Silence", "Integrated Loudness", "Short-Term Loudness",
-    "Acoustic Feedback", "Bank Select"
+    "Acoustic Feedback", "Bank Select", "Jog", "Track Archive"
   ],
 
   "_keep_english_doc": [

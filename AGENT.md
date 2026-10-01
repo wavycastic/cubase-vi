@@ -143,6 +143,12 @@ giữ EN / động từ `chèn`), `Send` (nút giữ / động từ `gửi`).
 > - **`Bank Select` giữ EN:** Chuẩn MIDI Controller CC0/CC32 giữ EN trong danh sách MIDI CC, khớp
 >   với `Portamento`, `Modulation`, `Breath Control`...
 
+> **Jog Wheel & Track Archive (đợt 177):**
+> - **`Jog` giữ EN:** Bộ ba vận chuyển DAW `Jog / Shuttle / Scrub` phải đồng bộ. `Jog sang trái`,
+>   `Jog sang phải`, loại bỏ dịch thành "nhích" (từ bình dân).
+> - **`Track Archive` giữ EN:** Menu `File > Import > Track Archive...` và các thông báo lỗi liên quan
+>   phải giữ `Track Archive`, loại bỏ dịch thành "Lưu trữ Track..." (nghe như nút bấm sao lưu).
+
 > **Ngoại lệ đã chốt — `Chord` dịch `hợp âm` (77 chuỗi).** Dù `Chord` nằm trong
 > 68 từ cốt lõi, thực tế đo được: 77 chuỗi dùng `hợp âm`, và anh em giữ EN chỉ là
 > **tên tính năng** (`Chord Track`, `Chord Pad`, `Chord Symbol`). Sửa danh sách thì
