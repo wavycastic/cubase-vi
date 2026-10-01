@@ -156,6 +156,12 @@ giữ EN / động từ `chèn`), `Send` (nút giữ / động từ `gửi`).
 > - **Đồng bộ `Thumbnail Cache`:** Bỏ "bộ nhớ đệm Thumbnail", khớp với `Cache` trong danh sách thuật ngữ.
 > - **Chuẩn phòng thu `Pan Law`:** `Pan Law của Project`, `Stereo Pan Law`.
 
+> **Simple Crossfade Editor, Equalizers & Functions Browser (đợt 179):**
+> - **`Simple Crossfade Editor` giữ EN:** Loại bỏ "Trình sửa Crossfade đơn giản" (Editor duy nhất bị dịch
+>   "trình sửa" trong toàn bộ map). Đồng bộ với `Crossfade Editor` và toàn bộ các Editor khác.
+> - **Tab `Equalizers` giữ EN:** Bỏ chữ "Các" trên đầu đề tab/rack, đồng bộ với `Inserts`, `Sends`, `Strip`.
+> - **Khớp tên UI `Functions Browser`:** `qua Trình duyệt Functions` (thay vì "Trình duyệt chức năng").
+
 > **Ngoại lệ đã chốt — `Chord` dịch `hợp âm` (77 chuỗi).** Dù `Chord` nằm trong
 > 68 từ cốt lõi, thực tế đo được: 77 chuỗi dùng `hợp âm`, và anh em giữ EN chỉ là
 > **tên tính năng** (`Chord Track`, `Chord Pad`, `Chord Symbol`). Sửa danh sách thì
