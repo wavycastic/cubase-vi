@@ -1,8 +1,8 @@
 """Find two keys with the SAME English but DIFFERENT Vietnamese.
 
-The mirror image of find_duplicate_values.py, and the more dangerous of the two.
+The mirror image of dupes.py values, and the more dangerous of the two.
 
-find_duplicate_values asks "do two different labels read the same on screen",
+dupes.py values asks "do two different labels read the same on screen",
 which is a usability problem. This asks the opposite: "do two labels that
 Cubase stores under the same English read DIFFERENTLY on screen". That is a
 correctness problem, and whether it matters depends on one thing - whether

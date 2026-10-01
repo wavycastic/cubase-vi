@@ -118,6 +118,17 @@ có 2 phe.**
 cần câu trả lời này là 3 chuỗi này (và toàn bộ 283 chuỗi còn lại) được quyết ngay.
 Trong lúc đó **đừng đo lại cụm này nữa** — đo 5 lần rồi.
 
+**Trạng thái (đợt 191): người dùng trả lời "chưa check"** — chưa mở Cubase để đối chiếu
+nên **3 chuỗi này giữ nguyên, đã đóng băng cho tới khi có câu trả lời.** Đừng hỏi lại
+và đừng sửa. Ba chuỗi đó là:
+`MIDI Step Input` → `MIDI Step Input` · `Slip Event` → `Slip Event` ·
+`Pre/Post Fader` → `Pre/Post Fader`.
+
+**Cách người dùng tự kiểm tra trong 30 giây:** mở Cubase → *Edit ▸ Preferences ▸
+General ▸ Language* → đổi sang **English**, bật chế độ đọc (View ▸ Read Mode ▸ On),
+tìm nút **Step Input** trên thanh công cụ Key Editor (hoặc menu *MIDI ▸ Step Input*)
+→ xem nó ghi `MIDI Input` hay `MIDI Step Input`. Trả lời một câu là xong cụm này.
+
 ---
 
 ## Đã quyết rồi (không cần hỏi lại)

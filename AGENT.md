@@ -381,6 +381,60 @@ giữ EN / động từ `chèn`), `Send` (nút giữ / động từ `gửi`).
 > nhiều, bao nhiêu giá trị còn giữ chữ `s`**. Nếu nhóm đó hầu hết *không* giữ `s`
 > thì giữ `s` là lỗi; nếu *toàn bộ* giữ `s` (`Noteheads`) thì đó là mẫu tên.
 
+> **Rò từ tiếng Anh lọt vào giá trị, sửa 10 chuỗi (đợt 191):** `audit_fragments.py` in ra
+> **25 từ** tiếng Anh còn nằm trong giá trị có tiếng Việt. Đọc cả 25 nhóm:
+> - **Báo động giả:** `In` (40 chuỗi) — toàn bộ là **thành phần của thuật ngữ ghép**
+>   (`Count-In`, `Punch In`, `Fade In`, `MIDI In`), không phải giới từ lọt. Tương tự
+>   `After Fader Listen`, `Open Jazz`, `Add-on`, `Bank Select`, `Cut/Delete/Draw/Paste`.
+> - **Lỗi thật — đều là "1–3 chuỗi lạc khỏi gia đình đã dịch":**
+>   | Từ | Chuỗi lạc | Số anh em giữ nguyên cách dịch |
+>   |---|---|---|
+>   | `Picture` | `Hide Track Pictures`, `Remove Selected Pictures…`, `Select Track Picture` | 15/18 dùng `hình ảnh` |
+>   | `Text` | `Edit Text`, `Insert Text` | 13 dùng `văn bản` |
+>   | `Item` | `Current Item`, `Item Properties` | 5/7 dùng `mục` |
+>   | `Previous` | `Use Previous Track Color +1` | 1 anh em trực tiếp |
+>   | `Random` | `Use Random Track Color`, `Set Relative Random Values Between` | 5/7 dùng `ngẫu nhiên` |
+> - **Bắt được thêm 1 lỗi hoa/thường sót từ đợt 186:** `Use Random Track Color` →
+>   `Dùng Màu Random Track` có chữ `Màu` HOA giữa chuỗi. Nó **đã xuất hiện** trong
+>   bảng 113 token của đợt 186 nhưng tôi không đưa vào bảng sửa — **bộ dò báo đúng,
+>   người đọc bỏ sót.** Sửa luôn thành `Dùng màu Track ngẫu nhiên`.
+>
+> **BẪY LẶP LẠI — đừng viết lại bộ dò hoa/thường sai:** phải kiểm bằng
+> `tok[0].isupper()`, **không** dùng lớp ký tự `[A-ZÀ-ỸĐ]`. Vì `đ` (U+0111) **nằm
+> trong** dải `À-Ỹ`, nên bản dùng lớp ký tự báo động giả cho `đã`, `đó`, `đối` —
+> đúng những từ hợp lệ nhất trong tiếng Việt. Bản đợt 186 dùng `isupper()` nên đúng.
+>
+> **Ba chuỗi `key` ≠ `<us>` đã đóng băng** — xem mục 6 của `docs/OPEN_QUESTIONS.md`.
+> Người dùng trả lời "chưa check" (đợt 191) nên **3 chuỗi `MIDI Step Input` /
+> `Slip Event` / `Pre/Post Fader` giữ nguyên. Đừng hỏi lại, đừng sửa.**
+
+> **Dọn kho công cụ — 230 file → 75 (đợt 192):** Đếm thật: chỉ **47/230** file
+> `tools/*.py` được gọi. Đã gộp / chuyển:
+> - **Gộp (đã đối chiếu output từng dòng):** `read.py` ← `read_long` + `read_short`
+>   (cùng một công cụ, điều kiện lọc ngược nhau — 4/4 lần chạy khớp 100%);
+>   `dupes.py keys|values|json` ← `check_duplicate_keys` + `find_duplicate_values` +
+>   `check_dups`; `clarity.py long|hard` ← `audit_clarity` (phần `long` cho **230**,
+>   khớp đúng bản gốc).
+> - **Chuyển sang `tools/archive/` (149 file, `git mv` nên giữ lịch sử):**
+>   `archive/one_shot/` = 127 `fix_readingNN`/`fix_scoreNN`/`fix_vao` + `fix_quoted_names`;
+>   `archive/replaced/` = 13 `glossary_*` + 6 `leak_fixes_*` + `apply_glossary` +
+>   `apply_retouch`. **Không xoá hẳn** vì §8.3 nói chúng là dấu vết của từng đợt.
+> - **`audit_readability2.py` — ĐÃ XOÁ, VÌ HỎNG THẬT.** Quy tắc 1 dùng
+>   `\b[A-Za-z][A-Za-z'-]*\b` để tìm "từ Anh lọt", nhưng `trong`, `cho`, `khi`,
+>   `ghi`, `theo`, `xung` đều là **tiếng Việt viết bằng ký tự ASCII thuần** →
+>   **1.171 báo động giả**, và 5 "từ Anh phổ biến nhất" mà nó báo **đều là tiếng Việt**.
+>   **Không thể phân biệt bằng ký tự.** Muốn kiểm tra cái này thì dùng
+>   `audit_fragments.py` (in ra **từ đã rút gọn** để đọc tay phán xét — đợt 191
+>   dùng nó và ra 10 lỗi thật). `clarity.py hard` **cố ý bỏ** tín hiệu
+> "english-run" vì lý do y hệt.
+> - **SỬA LỖI THẬT: `merge_maps.py --check` luôn exit 1.** Dòng 48 là
+>   `sys.exit(1 if (intra or conflicts) else 0)`, nhưng *"later files win"* **là
+>   thiết kế** — mỗi đợt sau cố ý ghi đè đợt trước. 700+ xung đột, **0 khoá trùng
+>   trong cùng file**. Vì vậy `build.py` **chưa bao giờ chạy quá bước 3**, và
+>   bước 1 của §9 ("dừng ngay khi một bước báo lỗi") **đã thất lạc từ đợt 126 mà
+>   không ai thấy** — vì tôi vẫn chạy `merge_maps.py` không có `--check`.
+>   Nay chỉ `intra` mới là lỗi. **`build.py` đã chạy trọn 10 bước.**
+
 > **Ngoại lệ đã chốt — `Chord` dịch `hợp âm` (77 chuỗi).** Dù `Chord` nằm trong
 > 68 từ cốt lõi, thực tế đo được: 77 chuỗi dùng `hợp âm`, và anh em giữ EN chỉ là
 > **tên tính năng** (`Chord Track`, `Chord Pad`, `Chord Symbol`). Sửa danh sách thì
@@ -465,7 +519,7 @@ Phải là **tiếng Việt đời thường**, không phải tiếng Việt do 
 >
 > **Đo quy tắc này (đợt 165) — cả 4 cách săn đều ra báo động giả.** Ghi lại để
 > không phải đo lại:
-> - `audit_clarity` [B] "khó đọc": 313 chuỗi. Đọc 30 chuỗi đầu — **không lỗi nào**;
+> - `audit_clarity` [B] "khó đọc" (nay là `clarity.py hard`): 313 chuỗi. Đọc 30 chuỗi đầu — **không lỗi nào**;
 >   dài vì nguyên văn dài, `english-run` là cụm thuật ngữ đúng.
 > - Từ lặp ≥3 lần trong một value: **74 chuỗi**. Đọc 25 — tất cả lặp vì **nguyên văn
 >   lặp** (`Channel` 6 lần vì EN cũng 6 lần). Đếm từ không phân biệt nguyên văn.
@@ -475,8 +529,8 @@ Phải là **tiếng Việt đời thường**, không phải tiếng Việt do 
 >   (`CC01 : Modulation`, `Switch Layout :`). Chính Steinberg viết vậy.
 >
 > **Kết luận:** bộ dò bằng mẫu không bắt được lỗi này — §8.9 đã nói "lỗi chỉ lộ ra
-> khi **đọc thật**". Muốn săn lỗi văn phong thì phải đọc tay (`read_long.py`), và
-> quy tắc là **so từng cặp với nguồn 9 ngôn ngữ**, không phải đếm mẫu.
+> khi **đọc thật**". Muốn săn lỗi văn phong thì phải đọc tay (`tools/read.py long`),
+> và quy tắc là **so từng cặp với nguồn 9 ngôn ngữ**, không phải đếm mẫu.
 
 - **Bỏ bị động `... được`** — dấu hiệu rõ nhất của câu dịch máy: `đã được` → `đã` ·
   `sẽ được` → `sẽ` · `đang được` → `đang` · `đã bị loại bỏ` → `đã bỏ` · `Không thể
@@ -561,12 +615,12 @@ không phải newline thật. Bộ dò placeholder phải khớp cả `%1.0f` v�
    (`Thiết lập thẻ` = Tab, đúng), `vùng` bắn 213 (`vùng chọn` đúng) — sửa chuỗi. Đợt 85:
    15 mẫu, 8 lỗi sửa tay.
 9. Lỗi đảo trong câu dài, cách diễn đạt khó đọc, mất câu, sai nghĩa chỉ lộ ra khi **đọc
-   thật**. Đọc tay là bước cuối: `read_long.py` / `sample_domain.py <miền> <bắt đầu>`.
+   thật**. Đọc tay là bước cuối: `tools/read.py long|short <miền> <bắt đầu>`.
 
 10. **ĐỪNG dùng số liệu thay cho việc đọc. Hai vòng đã làm sai theo đúng cách đó.**
     - Đợt 88 lọc bằng *tỉ lệ số từ*, ra 380 chuỗi "dài". **Sai**: 3.234 chuỗi có
       nguồn ≥ 25 ký tự thì trung vị bản dịch **ngắn hơn 2 ký tự**, lệch dài nhất
-      `+21c`, và **không chuỗi nào dài hơn 30 ký tự**. `audit_clarity.py` báo giá
+      `+21c`, và **không chuỗi nào dài hơn 30 ký tự**. `audit_clarity.py` (nay `clarity.py long`) báo giá
       trị dài nhất 328c và *in ra trông dài hơn tiếng Anh* — nhưng nó **cắt cụt**
       chuỗi Anh: nguồn dài 371c, tức bản dịch **ngắn hơn 43c**. Cả hai đúng, một
       cái hiển thị sai. Lặp từ: 9 chuỗi cả bản dịch.
@@ -620,14 +674,16 @@ python tools\audit_fragments.py         # kép lệch, key trùng, U+FFFD
 python tools\find_dropped_sentences.py
 python tools\find_english_frame.py
 python tools\find_quoted_names.py
-python tools\check_duplicate_keys.py
+python tools\dupes.py keys             # khoa gan trung -> hai cach viet
+python tools\dupes.py values           # hai key KHAC nhau -> mot gia tri
 python tools\fix_mojibake.py
-python tools\audit_clarity.py           # [A] dài  [B] khó đọc
+python tools\clarity.py                # long  dai  |  hard  kho doc
 python tools\audit_outlier.py           # chuỗi lạc khỏi gia đình thuật ngữ
 python tools\tests\run.py               # 146 test: bất biến + bộ dò
 python tools\family.py <từ>            # đọc cả gia đình chuỗi cùng từ đầu
 python tools\family.py -a              # nhóm còn dùng hai kiểu ghi (chốt hồi quy)
-python tools\read_long.py <miền> <bắt đầu>  # đọc tay: câu dài, chỗ vướng nằm ở đây
+python tools\read.py long  <miền> <bắt đầu>   # đọc tay: câu dài, chỗ vướng nằm ở đây
+python tools\read.py short <miền> <bắt đầu>   # đọc tay: nhãn menu 1–6 từ
 python tools\check_translation_build.py # build\translation_vi.xml = bản gốc + <vi>
 python tools\score_instruments.py check # Score Editor: trùng key + 4 bất biến
 python tools\build.py                   # sinh build/translation_vi.xml + validate

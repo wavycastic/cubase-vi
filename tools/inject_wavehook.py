@@ -49,16 +49,15 @@ TH32CS_SNAPPROCESS = 0x00000002
 TH32CS_SNAPMODULE  = 0x00000008
 TH32CS_SNAPMODULE32 = 0x00000010
 
-RVA_WAVE_DRAW = 0x1E9E140
-# 15 byte dau ham ve song: 4 lenh chi doi thoat so. Day cung la thu DLL
-# kiem tra truoc khi ghi de, nen injector phai kiem tra DUNG 15 byte - neu
-# chi 7 byte thi se bo qua 3 lenh nua, va mot ban Cubase moi hoac mot ham
-# sua nhe se duoc ghi de ma ta khong biet.
+RVA_WAVE_DRAW = 0x1E9AD10
+# 15 byte dau ham to dải song 0x1E9AD10:
+#   mov [rsp+8], rbx    (5 byte: 48 89 5C 24 08)
+#   mov [rsp+10h], rsi  (5 byte: 48 89 74 24 10)
+#   mov [rsp+18h], rdi  (5 byte: 48 89 7C 24 18)
 PROLOGUE_SIZE = 15
-EXPECTED_PROLOGUE = bytes((0x48, 0x8B, 0xC4,                    # mov rax, rsp
-                           0x4C, 0x89, 0x48, 0x20,               # mov [rax+20h], r9
-                           0x4C, 0x89, 0x40, 0x18,               # mov [rax+18h], r8
-                           0x48, 0x89, 0x50, 0x10))              # mov [rax+10h], rdx
+EXPECTED_PROLOGUE = bytes((0x48, 0x89, 0x5C, 0x24, 0x08,         # mov [rsp+8], rbx
+                           0x48, 0x89, 0x74, 0x24, 0x10,         # mov [rsp+10h], rsi
+                           0x48, 0x89, 0x7C, 0x24, 0x18))        # mov [rsp+18h], rdi
 
 DLL = Path(__file__).resolve().parent.parent / 'hook' / 'wavehook.dll'
 EXE = Path(r'E:\Steinberg\Cubase 15\Cubase15.exe')
@@ -334,7 +333,7 @@ def load(install=True):
             say(f'    mong doi: {EXPECTED_PROLOGUE.hex(" ")}')
             say('  Van nap - DLL se tu kiem tra lai truoc khi ghi de.')
         else:
-            say(f'  prologue 0x1E9E140 dung nhu da RE '
+            say(f'  prologue 0x{RVA_WAVE_DRAW:X} dung nhu da RE '
                 f'({PROLOGUE_SIZE} byte)')
 
         # LoadLibraryW trong tien trinh dich
@@ -438,11 +437,11 @@ def status():
         pro = read_mem(h, base + RVA_WAVE_DRAW, PROLOGUE_SIZE)
         if pro[:2] == b'\x49\xBB' and pro[10:13] == b'\x41\xFF\xE3':
             dest = struct.unpack_from('<Q', pro, 2)[0]
-            say(f'  0x1E9E140: DA HOOK (JMP tuyet doi -> 0x{dest:X})')
+            say(f'  0x{RVA_WAVE_DRAW:X}: DA HOOK (JMP tuyet doi -> 0x{dest:X})')
         elif pro == EXPECTED_PROLOGUE:
-            say(f'  0x1E9E140: chua hook ({PROLOGUE_SIZE} byte prologue goc)')
+            say(f'  0x{RVA_WAVE_DRAW:X}: chua hook ({PROLOGUE_SIZE} byte prologue goc)')
         else:
-            say(f'  0x1E9E140: KHONG HOP - {pro.hex(" ")}')
+            say(f'  0x{RVA_WAVE_DRAW:X}: KHONG HOP - {pro.hex(" ")}')
             say(f'  {"mong doi":<20} {EXPECTED_PROLOGUE.hex(" ")}')
     finally:
         k32.CloseHandle(h)

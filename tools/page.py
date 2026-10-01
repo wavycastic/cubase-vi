@@ -5,7 +5,7 @@
     python tools/page.py 60 60         # 60 chuỗi tiếp theo
     python tools/page.py 5000 60 -q    # chỉ key + VI, không in EN
 
-Cách làm này **không bỏ sót**. Các công cụ cũ (`read_long.py`,
+Cách làm này **không bỏ sót**. Công cụ cũ (`read.py`,
 `sample_domain.py`) lấy mẫu theo miền hoặc ngẫu nhiên, nên chỉ đọc được
 một phần. Ở đây mỗi chuỗi được đọc đúng một lần, theo thứ tự của
 `keys/all_strings.tsv` - cùng thứ tự đó dùng để chia khối cho nhiều người

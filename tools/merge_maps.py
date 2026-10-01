@@ -39,10 +39,17 @@ if conflicts:
     print(f'{len(conflicts)} conflict(s), last file wins:')
     for k, a, b, f in conflicts[:20]:
         print(f'  {k!r}: {a!r} -> {b!r}   ({f})')
+    # A conflict across two batch files is the DESIGNED behaviour - a later
+    # round deliberately supersedes an earlier one. It is information, not an
+    # error, and counting it as one made this step exit 1 forever, which meant
+    # tools/build.py died at step 3 and AGENT.md §9 step 1 had been failing
+    # unnoticed since round 126 (700+ conflicts, zero of them real).
+    print('  -> cross-file overrides, expected. Only keys repeated INSIDE one '
+          'file are errors.')
 else:
     print('no conflicts')
 
 if not check_only:
     json.dump(merged, open(OUT, 'w', encoding='utf-8'), ensure_ascii=False, indent=1, sort_keys=True)
     print(f'wrote {os.path.relpath(OUT, ROOT)}')
-sys.exit(1 if (intra or conflicts) else 0)
+sys.exit(1 if intra else 0)

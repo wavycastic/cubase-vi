@@ -1,7 +1,7 @@
 """Đo độ dài dòng: tiếng Việt bao nhiêu so với tiếng Anh.
 
 Tiếng Việt dịch từ tiếng Anh UI thường *ngắn hơn*, không dài hơn - nên tỉ lệ
-ký tự là tín hiệu khách quan cho "dài dòng", khác với audit_clarity.py chỉ đếm
+ký tự là tín hiệu khách quan cho "dài dòng", khác với clarity.py long chỉ đếm
 ngưỡng tuyệt đối.
 
 Kèm phần đếm các từ đệm, vì đó là nguyên nhân chứ không phải triệu chứng.

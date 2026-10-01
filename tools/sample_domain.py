@@ -41,8 +41,8 @@ def domain(k):
 
 
 # Everything below is the command line entry point. It is guarded so that
-# read_long.py and read_short.py can import domain() from this module without
-# running the printer - which is what made both of them paste their own copy
+# read.py can import domain() from this module without running the printer -
+# which is what made both halves of read.py paste their own copy
 # of domain() in instead.
 if __name__ == '__main__':
     want = sys.argv[1] if len(sys.argv) > 1 else None
