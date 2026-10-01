@@ -1,0 +1,10 @@
+{
+  "Not a valid plug-in": "Không phải Plug-in hợp lệ",
+  "Correct Pitch": "Chỉnh Pitch",
+  "Convert audio files to new rate?": "Chuyển đổi file Audio sang Sample Rate mới?",
+  "Slave to MIDI Machine Control": "Slave theo MIDI Machine Control",
+  "Mute Pre-Send when Mute": "Mute Pre-Send khi Mute Track",
+  "Record Note Off Velocity": "Ghi Velocity Note Off",
+  "Record Note On Velocity": "Ghi Velocity Note On",
+  "Snap MIDI Parts to Bars": "Snap MIDI Part theo đầu Bar"
+}

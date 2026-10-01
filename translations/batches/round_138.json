@@ -1,0 +1,21 @@
+{
+  "Audio Part Editor: ": "Audio Part Editor: ",
+  "Open Audio Part Editor in Lower Zone": "Mở Audio Part Editor trong Lower Zone",
+  "Open Audio Part Editor in Window": "Mở Audio Part Editor trong Window",
+  "MIDI Remote Script Console": "MIDI Remote Script Console",
+  "Note Expression MIDI Input": "Note Expression MIDI Input",
+  "Nuendo Audio Pull Factor": "Audio Pull Factor của Nuendo",
+  "EQ Band 1 Gain": "EQ Band 1 Gain",
+  "EQ Band 2 Gain": "EQ Band 2 Gain",
+  "EQ Band 3 Gain": "EQ Band 3 Gain",
+  "EQ Band 4 Gain": "EQ Band 4 Gain",
+  "Wait for Project Play": "Chờ Project phát",
+  "Remove Empty Tracks": "Gỡ bỏ Track rỗng",
+  "Remove Fades": "Gỡ bỏ các Fade",
+  "Remove Selected": "Gỡ bỏ mục đã chọn",
+  "Remove Track": "Gỡ bỏ Track",
+  "Passes: Remove Inactive Branchs": "Lượt xử lý: Gỡ bỏ nhánh không dùng",
+  "Remove irregular tempo jumps and smooth the tempo curve": "Gỡ bỏ các đoạn Tempo nhảy bất thường và làm mượt đường cong Tempo",
+  "Removes any previous audio in the record range.": "Gỡ bỏ mọi Audio trước đó trong vùng ghi.",
+  "Removes any existing audio in the record range, but creates new audio events for each cycle in cycle record.": "Gỡ bỏ mọi Audio có sẵn trong vùng ghi, nhưng tạo Audio Event mới cho mỗi Cycle khi ghi theo Cycle."
+}
