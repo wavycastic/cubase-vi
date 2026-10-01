@@ -112,6 +112,12 @@ giữ EN / động từ `chèn`), `Send` (nút giữ / động từ `gửi`).
 | `Beat` | nhãn/đơn vị | văn xuôi → `nhịp` |
 | `Group` | tên tính năng (`Group Track`) | `nhóm nốt` → `nhóm` |
 
+> **`Beat` dùng `nhịp`, KHÔNG `phách`** (đợt 173): 17 chuỗi `nhịp` trước, 3 chuỗi
+> lọt dùng `phách` — *phách* đúng nghĩa nhưng lạc khỏi 17 chuỗi còn lại.
+> **`Group` đánh số phải giữ EN** (đợt 173): `Group %d`, `Group 1..4` là tên tính
+> năng nhưng lọt sang `Nhóm %d`/`Nhóm 1`, trong khi `Group` đơn lẻ đã giữ EN. Văn
+> xuôi vẫn `nhóm` (`nhóm nốt`, `nhóm phụ`) — **9 chuỗi đó đúng, đừng đụng**.
+
 > **Ngoại lệ đã chốt — `Chord` dịch `hợp âm` (77 chuỗi).** Dù `Chord` nằm trong
 > 68 từ cốt lõi, thực tế đo được: 77 chuỗi dùng `hợp âm`, và anh em giữ EN chỉ là
 > **tên tính năng** (`Chord Track`, `Chord Pad`, `Chord Symbol`). Sửa danh sách thì
