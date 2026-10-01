@@ -246,6 +246,49 @@ giữ EN / động từ `chèn`), `Send` (nút giữ / động từ `gửi`).
 >   ngôn ngữ còn lại** (de `Bestehenden Clip bearbeiten`, ja/zh/ru đều nói *xử lý clip
 >   hiện có*). Đây là lỗi di truyền của Steinberg; bản dịch theo đa số là đúng.
 
+> **Quét 6 chiều *cấu trúc*, sửa 13 chuỗi (đợt 187):** Đợt 186 soi *gia đình thuật ngữ*;
+> đợt này soi **hình dạng chuỗi**, không soi từ. Bốn bộ dò đáng ghi nhớ:
+> 1. **Chữ thường ngay sau dấu `:`** — `re.finditer(r":\s+([a-zà-ỹĐđ])", value)`. Bắt
+>    được 3 chỗ có **anh em đối xứng ngay cạnh**: `Show: All Channel Types` →
+>    `Hiện: mọi loại Channel` trong khi `Hide: All Channel Types` → `Ẩn: Tất cả loại
+>    Channel`; `Track Display Settings: All Visible Tracks` / `: Toggle Modes` thường
+>    trong khi 3 anh em cùng tiền tố Hoa.
+>    **Phải phân biệt *nhãn* với *câu*** — sau `:` mà là câu thì thường là đúng
+>    (`Lỗi: file không hợp lệ…`, `…: loại Channel không khớp.`). Chỉ sửa khi có anh em
+>    cùng tiền tố làm chuẩn.
+> 2. **Gom nhóm theo mẫu rồi đếm số cách render.** 64 chuỗi `On/Off` → 63 đặt
+>    `Bật/Tắt` ở **đầu**; riêng `Link to Grid On/Off` đặt ở **cuối**. 41 chuỗi
+>    `Open/Close` và 60 chuỗi `Show/Hide` **hoàn toàn đồng nhất** — chứng minh bộ dò
+>    mẫu là loại bắt lỗi tốt nhất khi gia đình đủ lớn.
+> 3. **`value == key` mà key thuộc gia đình đã dịch.** `Make Unbeamed` và
+>    `Reset Beaming` chưa dịch, trong khi `Beaming: Make Unbeamed` → `Nối Beam: Tách
+>    Beam` và `Beaming: Reset Beaming` → `Nối Beam: Đặt lại nối Beam` đã dịch.
+>    **Rẻ nhất: key trùng value là ứng viên**, rồi tra anh em theo từ đầu tiên.
+> 4. **`grep` lại từ mà chính luật đã cấm.** §5 cấm `Vui lòng` — quét thì ra
+>    **3 chuỗi còn sót**, cả 3 đều mở đầu bằng `Vui lòng không …`.
+>
+> **Ba lỗi nghĩa (không phải lỗi hình thức):**
+> - **`Unfold Tracks` → `Mở Track` SAI NGHĨA.** `Mở` là lệnh *Open*; `Unfold` là *bung
+>   ra* (đối với `Fold Tracks` → `Gấp Track`). Sửa thành `Mở rộng Track` (khớp
+>   `Expand/Collapse Folder` → `Mở rộng/Thu gọn thư mục`). Quét `Mở Track` toàn map
+>   thì **chỉ đúng 2 chuỗi này** — nên không có xung đột, nhưng đọc lên vẫn thấy sai.
+> - **`Record only Specific Controller No.` → `Chỉ ghi Controller cụ thể số.`** văn
+>   xuôi vỡ. Sửa thành `Chỉ ghi Controller có số cụ thể`.
+> - **`Generic` → `Chung`** làm nó **trùng giá trị với `General`**. 5 anh em
+>   (`Generic Editor`, `Generic Remote`, `Generic Value`, `Generic Device`,
+>   `Use Generic Device`) đều giữ `Generic` → sửa về `Generic`.
+>
+> **Lỗi §6 do bộ dò của tôi phát hiện, không phải công cụ:** `Link to Grid On/Off` →
+> `Liên kết với Grid: Bật/Tắt` có dấu `:` **mà key không có**. Khi sửa phải so
+> **key ↔ giá trị mới**; so *giá trị cũ ↔ giá trị mới* thì đúng lẽ phải giữ dấu `:`
+> và mình sẽ giữ lại vi phạm.
+>
+> **Đã cân nhắc nhưng giữ nguyên:** `Respell`, `Respell Using Note Name Above`,
+> `Respell Using Note Name Below` chưa dịch — `Respell` là động từ nhạc lý (đặt lại
+> tên nốt đồng âm), §2 giữ nguyên thuật ngữ ký âm, dịch sẽ mất sắc thái. Cũng giữ
+> `Beaming: Beam Together` → `Nối Beam: Nối chung` dù hơi lặp, vì `Verbalken` của
+> de cũng lặp.
+
 > **Ngoại lệ đã chốt — `Chord` dịch `hợp âm` (77 chuỗi).** Dù `Chord` nằm trong
 > 68 từ cốt lõi, thực tế đo được: 77 chuỗi dùng `hợp âm`, và anh em giữ EN chỉ là
 > **tên tính năng** (`Chord Track`, `Chord Pad`, `Chord Symbol`). Sửa danh sách thì
