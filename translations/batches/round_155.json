@@ -1,0 +1,20 @@
+{
+  "Add New Signature...": "Thêm Time Signature mới...",
+  "Add Signature": "Thêm Time Signature",
+  "Apply Click Pattern to Equal Signatures": "Áp dụng Click Pattern cho Time Signature đều",
+  "Edit Signature": "Sửa Time Signature",
+  "Modify Signature": "Sửa Time Signature",
+  "Move Signature": "Di chuyển Time Signature",
+  "Paste Click Pattern to Selected Signatures": "Dán Click Pattern vào Time Signature đã chọn",
+  "Remove Signature": "Gỡ bỏ Time Signature",
+  "Set Audio Signature": "Đặt Time Signature của Audio",
+  "This specifies the maximum duration the Score Editor will produce for a rhythmic slash, without considering rhythm dots, and applies in all time signatures. For example, if you choose '1/4 Note (Crotchet)', the Score Editor will create four slashes in 2/2, and two dottet slashes in 6/8.": "Thời lượng tối đa của một Rhythmic Slash, không tính Rhythm Dot, áp dụng cho mọi Time Signature.\nChọn 'Note 1/4 (nốt đen)': 2/2 tạo bốn gạch, 6/8 tạo hai gạch có chấm.",
+  "Direction [direction of a stem]": "Hướng của Stem",
+  "Slashes (with stems)": "Slash (có Stem)",
+  "Slashes (without stems)": "Slash (không có Stem)",
+  "Show Cautionary": "Hiện Accidental nhắc lại",
+  "Show Cautionary in Parentheses": "Hiện Accidental nhắc lại trong ngoặc",
+  "Primary type is used for the main chord symbol": "Dùng loại chính cho Chord Symbol chính",
+  "In general, the voice in which notes appear does not influence the appearance of cautionary accidentals. However, for complex music on instruments with multiple staves, you may prefer to allow cautionary accidentals to appear for notes at the same pich and octave in other voices.": "Nhìn chung, bè chứa nốt không ảnh hưởng tới Accidental nhắc lại. Tuy nhiên, với nhạc phức tạp trên nhạc cụ nhiều khuông, có thể cho Accidental nhắc lại hiện ở các bè khác cho nốt cùng cao độ và quãng tám.",
+  "This option effectively takes precedence over showing cautionary accidentals on notes in the same or different octaves in the following bar. If this option is set to show a cautionary either with or without parentheses, then other cautionary accidentals that would otherwise appear later in the bar are suppressed.": "Tùy chọn này ưu tiên hơn việc hiện Accidental nhắc lại cho nốt cùng hoặc khác quãng tám ở Bar sau. Nếu đã chọn hiện dấu nhắc lại (có hoặc không có ngoặc), các Accidental nhắc lại khác trong Bar sẽ ẩn."
+}
