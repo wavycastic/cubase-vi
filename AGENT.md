@@ -131,6 +131,13 @@ Phải là **tiếng Việt đời thường**, không phải tiếng Việt do 
 > - **Bài học sâu:** 169 vòng kiểm đều pass mà UI vẫn có 4 lỗi. Công cụ kiểm
 >   bản dịch, **không kiểm cách Cubase ghép chuỗi**. Chỉ nhìn màn hình mới thấy.
 >   Khi nghi ngờ UI, kiểm key `%s` và key đơn lẻ trước, đừng đụng vào chuỗi dài.
+> - **Đã quét toàn bộ khuôn:** 265 chuỗi có `%s`, trong đó 49 có danh từ
+>   Track/Channel/Bus/Event/Part/Clip/Lane/Zone — **đều đúng**. Chỉ
+>   `Add %s Track` là lỗi. 152 key đơn lẻ giá trị tiếng Việt (`Color`, `Align`,
+>   `Create`…) là nút độc lập, không ghép — **không phải lỗi**.
+> - **Nhãn ghép ở giao diện, không tìm thấy trong map:** `Thời gian ghi từ đá`
+>   (Transport) và `Đầu vào/E` (bị cột hẹp cắt) — Cubase ghép/chỉnh ở runtime,
+>   không phải chuỗi có key. **Đừng đi tìm chúng trong `vi.json`.**
 
 > **`ui-navigation.json` LUÔN THẮNG — đây là bẫy merge.** `merge_maps.py` dùng
 > `sorted()`, mà `u` > `r` nên file này đứng **sau** mọi `round_*.json`. Sửa ở
