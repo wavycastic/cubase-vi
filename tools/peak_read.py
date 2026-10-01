@@ -30,7 +30,7 @@ hai duong ghi khac nhau. No khong dung `bswap` ma hoan doi byte thu cong tung ca
 `+0x04` va `+0x06` la **hai so 16-bit rieng biet**, khong phai mot so 32-bit. Toi
 da doc nham mot so 32-bit `65736` o cac vong truoc; ma kiem tra header cua Cubase
 (`0x1421F15D9`) so sanh chung bang `cmp word`, va gia tri 65736 do hop nhat cua
-`0x0001` + `0x00C8`. Xem docs/WAVEFORM.md §3.6c.
+`0x0001` + `0x00C8`. Xem docs/WAVEFORM.md §3.8.
 
 Cong thuc kiem tra du lieu (khop 19/19 file):
 

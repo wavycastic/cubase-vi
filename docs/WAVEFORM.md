@@ -320,7 +320,7 @@ Ba slot mà `0x141E9C340` dùng, đọc trực tiếp từ mã:
 0x1421F4C12  ret
 ```
 
-### 3.6b Đã tìm thấy mã **ghi** header `.peak` — mọi trường đã đặt tên được
+### 3.7 Đã tìm thấy mã **ghi** header `.peak` — mọi trường đã đặt tên được
 
 Hàm `0x1421F1600` ghi header, và nó **xác nhận từng trường** bằng nguồn ghi, không
 phải bằng suy luận:
@@ -352,20 +352,51 @@ từ phía ghi.
 điểm cho mục "chưa đặt tên được" ở §15.7: **`0x100` là frames-per-column do phía
 ghi quyết định**, và nó trùng với giá trị mọi file thật.
 
-**4. `+0x1C` được ghi là `0`**, không phải giá trị khác. Vậy `0x8DAFEE63` quan sát
-được ở 18/19 file **không do hàm này sinh ra** ở lúc ghi header — nó phải được ghi
-ở giai đoạn khác (nhiều khả năng là checksum dữ liệu, ghi sau khi ghi xong phần
-bản ghi). Điều này **lật ngược** giả thuyết "nhãn định dạng" tôi đưa ra ở
-§15.4/§15.7: một nhãn định dạng sẽ là hằng, mà hằng thì không giải thích vì sao
-đúng một file khác. Giả thuyết checksum dữ liệu khớp tốt hơn, nhưng **chưa kiểm
-được** — cần đọc tiếp phần ghi bản ghi.
+**4. `+0x1C` là HASH của một chuỗi đường dẫn, không phải checksum dữ liệu.** Trong
+toàn bộ vùng mã `aimage` chỉ có **hai** chỗ ghi vào `+0x1C`, và cả hai đều không
+liên quan tới dữ liệu:
+
+```
+0x1421F16DF  mov dword ptr [rdi + 0x1C], 0            ; nhanh: chua co gi
+...
+0x1421F17AD  mov rcx, rax
+0x1421F17B0  call 0x1421F66E0                          ; ham hash
+0x1421F17B6  mov dword ptr [rdi + 0x1C], eax           ; luu ket qua hash
+```
+
+`0x1421F66E0` là hàm hash chuỗi rỗng-kết-thúc trên **ký tự 16-bit** (kiểu
+`wchar_t`/UTF-16), dạng djb2 biến thể, và nó **cộng dồn theo từng thành phần** ngăn
+cách bởi ký tự phân cách:
+
+```
+0x1421F66EF  movzx eax, word ptr [rcx]        ; ky tu 16-bit hien tai
+0x1421F66FE  movzx ecx, word ptr [rip + …]     ; KY TU PHAN CACH
+0x1421F6705  cmp  ax, cx
+0x1421F6708  jne  -> xu ly ky tu thuoc
+0x1421F670A  add  esi, ebx                     ; gap: cong don vao tong
+0x1421F670C  xor  ebx, ebx                     ;   bat dau don moi
+0x1421F6713  call 0x1439CBF60                  ; bien doi ky tu (hoa thuong?)
+0x1421F6722  lea  ebx, [rax + rbx*2]           ; don = kyTu + don*2
+0x1421F6732  lea  eax, [rbx + esi]             ; ket qua
+```
+
+Nên `+0x1C` **không** phụ thuộc nội dung dữ liệu âm thanh, và cũng không phải hằng
+định dạng. Việc 18/19 file trùng nhau có nghĩa là **18 file đó cùng dùng một chuỗi
+đầu vào** — nhiều khả năng là đường dẫn thư mục, vì cả 19 file đều nằm trong
+`Images\`. File `01 - Show Me` khác, nên nó nhiều khả năng được dựng từ nguồn khác
+(đường dẫn audio khác, hoặc phiên Cubase khác).
+
+Tôi **không** tái tạo được đúng giá trị `0x8DAFEE63`: hằng phân cách tại
+`0x1465A01D3` đọc ra `0x5C00` chứ không phải `0x005C`, và `0x1439CBF60` không còn là
+`tolower` đơn giản. Nên tôi ghi đây là "hash chuỗi 16-bit, chưa biết chuỗi đầu vào"
+chứ không khẳng định nó là hash của thư mục.
 
 Về `+0x04` = `65736`: mã không ghi trường này ở `0x1421F1600`. Giá trị `0xC80001`
 mà tôi thấy ở `0x1421F1C6C` (`mov dword ptr [rbp - 0x7C], 0xC80001`) là **mặc nạn
 so sánh** trong hàm kiểm tra header cũ còn khớp không, không phải giá trị ghi ra
 file. Nên `65736` vẫn chưa đặt tên được.
 
-### 3.6c Vì sao header là big-endian: hàm `0x1421F0EF0`
+### 3.8 Vì sao header là big-endian: hàm `0x1421F0EF0`
 
 Header trong RAM là little-endian; trước khi ghi, Cubase gọi `0x1421F0EF0` để đảo
 byte. Hàm này **không** dùng `bswap` — nó hoán đổi từng cặp byte:
@@ -442,15 +473,15 @@ Nghĩa là cache **không có định nghĩa riêng** cho ba thao tác này — 
 là cơ sở vững để chọn `AudioImageFile` làm điểm can thiệp: sửa logic thật, thay vì
 sửa một lớp chuyển tiếp.
 
-### 3.7 Vì sao có hai vòng lặp lồng nhau
+### 3.9 Vì sao có hai vòng lặp lồng nhau
 
 Nhánh A quét `rbp` trong khoảng `1..r15d` bên trong `r12` chạy **ngược** từ
 `numPixels` về 1 (`0x141E9C520` vòng trong, `0x141E9C652` vòng ngoài), con trỏ ra
 tăng 8 byte mỗi lần (`0x141E9C62D`). Thứ tự ghi là **pixel tăng dần, kênh tăng
 dần** — đúng thứ tự một bộ đệm `(numPixels × channels)` cần, và giải thích vì sao
-§3.8 phải cấp phát `channels * (numPixels+3)` phần tử.
+§3.10 phải cấp phát `channels * (numPixels+3)` phần tử.
 
-### 3.8 Vì sao lúc dựng phải dư 1 pixel mỗi bên
+### 3.10 Vì sao lúc dựng phải dư 1 pixel mỗi bên
 
 Hàm điều phối `0x141E9B6F0`:
 
@@ -1109,14 +1140,14 @@ bằng giá trị riêng — khớp với hằng `-0.0f` (`0x145FA4E40`) mà §3
 | offset | kiểu | đọc được | ghi chú |
 |---|---|---|---|
 | `+0x00` | char[4] | `PIFF` | chữ ký thật trên đĩa |
-| `+0x04` | BE u16 | `1` ở cả 19 file | hằng, mã kiểm tra nó bằng `cmp word` (§3.6c). Chưa đặt tên được |
+| `+0x04` | BE u16 | `1` ở cả 19 file | hằng, mã kiểm tra nó bằng `cmp word` (§3.8). Chưa đặt tên được |
 | `+0x06` | BE u16 | `200` ở cả 19 file | hằng, mã kiểm tra `≤ 200`. Chưa đặt tên được |
 | `+0x08` | BE u32 | `96` ở cả 19 file | **kích thước header** ✓ |
 | `+0x0C` | BE u32 | `2` ở cả 19 file | **số kênh** ✓ — xác nhận từ mã ghi `vfunc+0x38` |
 | `+0x10` | BE u32 | đổi ở cả 19 file | **tổng số frame** ✓ — xác nhận từ mã ghi `vfunc+0x48`, clamp `0x7FFFFFFF` |
 | `+0x14` | BE u32 | `256` ở cả 19 file | **frames mỗi cột** ✓ — mã ghi **hardcode `0x100`** |
 | `+0x18` | BE u32 | `0xFFFFFFFF` ở cả 19 file | sentinel −1 |
-| `+0x1C` | BE u32 | hằng ở 18/19 file | mã ghi header đặt nó = **0**; giá trị quan sát được ghi ở giai đoạn khác (§3.6b) |
+| `+0x1C` | BE u32 | hằng ở 18/19 file | **hash chuỗi 16-bit** từ `0x1421F66E0` (§3.7) |
 | `+0x20` | char[] | `"02. Body.flac"` | **tên file nguồn**, đuôi `.flac` |
 | `+0x60` | — | dữ liệu | `2 × ceil(frames / 256)` bản ghi |
 
@@ -1154,11 +1185,12 @@ file: 7, 21, 32, 48, 84, 96 … tới 256 (file `07. Long Way` chia hết).
 Kiểm tra nhất quán: `+0x0C` = `2` ở cả 19 file ⇒ số kênh, và `n` luôn chẵn — đúng
 với bố cục xen kẽ theo kênh mà §14.4 đọc từ mã.
 
-`+0x1C` là **hằng ở 18/19 file** (`0x8DAFEE63`), chỉ `01 - Show Me` khác
-(`0x587251E0`) — và file đó cũng là file duy nhất có tên theo mẫu khác
-(`01 - ` thay vì `01. `). Nên nó nhiều khả năng là **nhãn phiên bản/định dạng**,
-không phải dữ liệu. `+0x04` (`65736`) và `+0x14` (`256`) là hằng ở cả 19 file;
-`+0x18` = `0xFFFFFFFF` là sentinel −1.
+> **Đính chính (đọc mã ghi ở §3.7):** đoạn này ở lượt trước đã đoán `+0x1C` là
+> "nhãn phiên bản/định dạng" và `+0x04` là số `65736`. **Cả hai đều sai.**
+> `+0x1C` là hash chuỗi 16-bit; `+0x04` là **hai số 16-bit** (`1` và `200`), không
+> phải một số 32-bit. Xem §3.7 và §3.8.
+
+`+0x18` = `0xFFFFFFFF` là sentinel −1, hằng ở cả 19 file.
 
 ### 15.5 Đã dựng công cụ đọc `.peak`
 
@@ -1199,16 +1231,21 @@ Còn một chi tiết lạ: thư mục `Images\Images\` có **một** bản `.ba
 
 ### 15.7 Chưa giải được
 
-- - **Đã đóng ở §3.6b:** `+0x14` = 256 là **frames mỗi cột**, mã ghi hardcode
-  `0x100`. `+0x0C` = số kênh, `+0x10` = tổng số frame, đều đọc từ vfunc của nguồn.
-- **Còn mở:** `+0x04` (= 1) và `+0x06` (= 200) — hai số 16-bit hằng, chưa biết
-  nghĩa. Mã chỉ kiểm tra chúng chứ không dùng để tính toán.
-- **Còn mở:** `+0x1C`. Mã ghi header đặt = 0, nên `0x8DAFEE63` ở 18/19 file do
-  giai đoạn khác ghi. Giả thuyết checksum dữ liệu khớp hơn "nhãn định dạng" (một
-  nhãn hằng không giải thích vì sao đúng một file khác), nhưng chưa kiểm được.
-- **Sample rate không có trong file `.peak`.** Suy ra được độ dài nếu biết tần số
-  (`frames / 44100` cho 127–253 giây với 19 file này), nhưng tần số phải lấy từ
-  `.cpr` hoặc từ chính file audio — file `.flac` gốc không còn trên máy.
+**Đã đóng ở §3.7 (đọc mã ghi header `0x1421F1600`):**
+
+- `+0x14` = 256 là **frames mỗi cột**, mã ghi **hardcode `0x100`**.
+- `+0x0C` = số kênh, đọc từ nguồn `vfunc+0x38`.
+- `+0x10` = tổng số frame, đọc từ nguồn `vfunc+0x48`, clamp `0x7FFFFFFF`.
+- `+0x20` = tên file nguồn, chép **từng byte** tới byte 0.
+- `+0x1C` = **hash chuỗi 16-bit** (`0x1421F66E0`), không phải checksum dữ liệu.
+
+**Còn mở:**
+
+- `+0x04` (= 1) và `+0x06` (= 200) — hai số 16-bit hằng. Mã chỉ kiểm tra chúng
+  (`+0x04 == 1`, `+0x06 ≤ 200`), không dùng để tính toán.
+- Chuỗi đầu vào của hash `+0x1C`. Hằng phân cách tại `0x1465A01D3` đọc ra
+  `0x5C00` chứ không phải `0x005C`, và `0x1439CBF60` không còn là `tolower` đơn
+  giản, nên tôi không tái tạo được `0x8DAFEE63`.
 - **`.cpr` là container `RIF2` của Steinberg**, không phải ZIP: magic `RIF2`, rồi
   chunk `ROOT`, các nhãn `CmObject` / `PAppVersion` / `Version` — tức chính là mô
   hình CmObject đã thấy trong exe. Trong đó có **18** tham chiếu `.flac`, và mỗi
@@ -1216,32 +1253,40 @@ Còn một chi tiết lạ: thư mục `Images\Images\` có **một** bản `.ba
   tần số sẽ phải hiểu cấu trúc descriptor đó — chưa làm, và là một dự án riêng.
   Lưu ý: không có chuỗi `48000`/`44100` nào trong `.cpr`, nên tần số được lưu dạng
   số nhị phân, không phải văn bản.
-- Cách `AudioImageFile` ánh xạ frame → cột: biết độ phân giải là 256 nhưng chưa
-  đọc được phép tính cụ thể trong `0x141E9C340` (nó có thể không chia thẳng mà
-  gom theo bảng).
+- ~~Cách ánh xạ frame → cột~~ — **đã đóng ở §3.3/§3.4/§3.5.** Phép tính là
+  `floor(pixel · fpp / n)` với `n` = số bản ghi, không chia theo bảng.
 
 ---
 
 ## Chưa làm / hướng tiếp
 
-1. ~~Chưa đọc được phần đầu file `.peak`~~ — **đã đóng ở §15**. Header 96 byte,
-   bản ghi 8 byte × 2 float32 LE không âm. Còn `+0x04`/`+0x10` là hằng chưa đặt
-   tên được, và số frame không lưu trong file.
-2. ~~Chưa truy được file `.peak` nằm ở đâu~~ — **đã đóng ở §15.6**: trong
+1. ~~Chưa đọc được phần đầu file `.peak`~~ — **đã đóng hoàn toàn ở §15 + §3.7**.
+   Header 96 byte, bản ghi 8 byte × 2 float32 LE không âm. Mọi trường header đã
+   được đặt tên từ **mã ghi** `0x1421F1600`, kể cả `+0x14` = 256 frames/cột
+   (hardcode) và `+0x1C` = hash chuỗi. Chỉ còn `+0x04`/`+0x06` (hai số 16-bit
+   hằng 1 và 200) chưa biết nghĩa.
+2. ~~Chưa xác định được số frame của audio~~ — **đã đóng ở §3.7**: `+0x10` là tổng
+   số frame, đọc từ nguồn `vfunc+0x48`.
+3. ~~Chưa truy được file `.peak` nằm ở đâu~~ — **đã đóng ở §15.6**: trong
    `Images\` cạnh thư mục dự án, tên `<tt>.<tên track><số băm>`. Cơ chế ghép tên
    trong mã vẫn chưa truy (hậu tố `%02d` ở §14.6), nhưng không còn quan trọng.
-3. ~~Chưa xác minh đối tượng 0x70 byte là `MAudioCollector::FlatSliceIterator`~~
+4. ~~Chưa xác minh đối tượng 0x70 byte là `MAudioCollector::FlatSliceIterator`~~
    — **đã đóng ở §14.1**: đối tượng đó là `AudioImageFile`, tức file `.peak`.
    `MAudioCollector::FlatSliceIterator` còn là ứng viên cho **nhánh `fpp < 1`**
    (vẽ bằng số mẫu thật), chưa truy.
-4. Chưa rõ hằng `3.0` trong `0x141E9D4C0` chặn cái gì.
-5. Chỗ đọc pref `Show Waveforms` / `Wave Brightness` / `Wave Outline Intensity`
+5. ~~Chưa biết dải sóng được vẽ ra sao khi phóng to~~ — **đã đóng ở §3.3**: nhánh
+   nội suy tuyến tính giữa hai bản ghi liền kênh, tính ở double. Ràng buộc thực
+   tế: dưới **256 mẫu/pixel** thì dữ liệu đã bị lấy mẫu, không phải dạng sóng thật.
+6. Chưa rõ hằng `3.0` trong `0x141E9D4C0` chặn cái gì.
+7. Chỗ đọc pref `Show Waveforms` / `Wave Brightness` / `Wave Outline Intensity`
    lúc vẽ — mỗi id chỉ có **một** xref, đều trong hàm dựng trang Preferences
    `0x1EB9900..0x1EB9DE2`, nên chắc đi qua observer. Khoảng min/max đã lấy được
    ở §13.2; phần còn thiếu là **công thức** biến `brightness` / `outline` thành
    hệ số màu khi vẽ.
-6. `imagegenerator.dll` trong thư mục cài đặt **không** liên quan: nó là OpenCV +
+8. `imagegenerator.dll` trong thư mục cài đặt **không** liên quan: nó là OpenCV +
    bộ lọc ảnh (`PixelSIMD@Steinberg`, `IPL_DATA_ORDER_PIXEL`), không phải dải sóng.
-7. Chưa chạy được bộ probe vtable của device (xem `FLWAVE.md` §12.8) — cần Cubase
+9. Chưa chạy được bộ probe vtable của device (xem `FLWAVE.md` §12.8) — cần Cubase
    đang chạy và vẽ dải sóng. `demo1.cpr` **có** audio nên điều kiện đã đủ, chỉ còn
    một phiên desktop thật.
+10. **Sample rate**: không có trong `.peak`, và `.cpr` là container `RIF2` đóng
+    gói (`§15.7`). Đây là mục RE riêng, chặn việc suy ra độ dài chính xác.
