@@ -1,0 +1,20 @@
+{
+  "Reset to Default Notehead": "Đặt lại về Notehead mặc định",
+  "If this option is activated, the Score Editor will produce, assuming 'Maximum Duration for Rhythmic Slashes' is set to '1/4' Note (Crotchet)', a dotted slash followed by an undotted slash in 5/8, but five slashes in 5/4.": "Nếu bật tùy chọn này và \"Thời lượng tối đa cho Rhythmic Slash\" đặt thành \"Note 1/4 (nốt đen)\", Score Editor sẽ tạo một gạch có chấm rồi một gạch không chấm ở 5/8, nhưng năm gạch ở 5/4.",
+  "If this option is activated, the Score Editor will produce, assuming 'Maximum Duration for Rhythmic Slashes' is set to '1/4' Note (Crotchet)', two dotted slashes in 6/8, but six undotted slashes in 6/4.": "Nếu bật tùy chọn này và \"Thời lượng tối đa cho Rhythmic Slash\" đặt thành \"Note 1/4 (nốt đen)\", Score Editor sẽ tạo hai gạch có chấm ở 6/8, nhưng sáu gạch không chấm ở 6/4.",
+  "Maximum Duration for Rhythmic Slashes": "Thời lượng tối đa cho Rhythmic Slash",
+  "Respect Maximum Duration for Rhythmic Slashes in Compound Time Signatures": "Giữ thời lượng tối đa của Rhythmic Slash trong Time Signature phức tạp",
+  "Respect Maximum Duration for Rhythmic Slashes in Irregular Time Signatures": "Giữ thời lượng tối đa của Rhythmic Slash trong Time Signature bất thường",
+  "Rhythmic Slash Grouping in Compound Time Signatures": "Nhóm Rhythmic Slash trong Time Signature phức",
+  "Rhythmic Slash Grouping in Irregular Time Signatures": "Nhóm Rhythmic Slash trong Time Signature bất thường",
+  "Rhythmic Slashes": "Rhythmic Slash",
+  "Slash Region": "Region Slash",
+  "Slash Type": "Loại Slash",
+  "Slashed Grace Note": "Nốt Grace có Slash",
+  "Slashes": "Slash",
+  "Slashes (with stems)": "Slash (có thân nốt)",
+  "Slashes (without stems)": "Slash (không có thân nốt)",
+  "Slashes with Stems": "Slash có Stem",
+  "Slashes without Stems": "Slash không có Stem",
+  "Without Slashes": "Không có Slash"
+}
