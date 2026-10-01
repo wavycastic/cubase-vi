@@ -222,15 +222,15 @@ class TestConditionalRules(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        import termspec
-        cls.termspec = termspec
+        import build
+        cls.rules = build
 
     def test_fires_when_the_source_requires_it(self):
         for src_text, value, term in CONDITIONAL:
             if term is None:
                 continue
             with self.subTest(src=src_text, value=value):
-                hits = [t for t, _ in self.termspec.check(src_text, value)]
+                hits = [t for t, _ in self.rules.check(src_text, value)]
                 self.assertIn(term, hits,
                               f'{value!r} for source {src_text!r} should '
                               f'have been caught as {term}')
@@ -241,7 +241,7 @@ class TestConditionalRules(unittest.TestCase):
             if term is not None:
                 continue
             with self.subTest(src=src_text, value=value):
-                hits = [t for t, _ in self.termspec.check(src_text, value)]
+                hits = [t for t, _ in self.rules.check(src_text, value)]
                 self.assertEqual(hits, [],
                                  f'{value!r} for source {src_text!r} is '
                                  f'correct but was flagged as {hits}')
@@ -253,7 +253,7 @@ class TestConditionalRules(unittest.TestCase):
         for k, v in vi.items():
             if k not in src:
                 continue
-            found = self.termspec.check(src[k], v)
+            found = self.rules.check(src[k], v)
             if found:
                 hits.append((k, v, found))
         self.assertEqual(hits, [],
@@ -261,7 +261,7 @@ class TestConditionalRules(unittest.TestCase):
 
 
 class TestEnglishFrame(unittest.TestCase):
-    """find_english_frame.py flags 4+ English words copied verbatim.
+    """`audit.py frame` flags 4+ English words copied verbatim.
 
     These are the values that class produced. They are the reason the
     threshold is 4: Cubase DAW vocabulary generates a lot of harmless 2-3

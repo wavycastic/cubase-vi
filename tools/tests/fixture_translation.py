@@ -150,7 +150,7 @@ PLACEHOLDERS_SEEN = {
     '%.2f': 8, '%02d': 6, '%.0f': 4, '%1.0f': 2, '%l': 2,
 }
 
-# --- find_english_frame.py: 4+ English words copied verbatim from the source
+# --- `audit.py frame`: 4+ English words copied verbatim from the source
 # is a frame, not a translation. The threshold is 4 rather than 1 because at 1
 # it produced 72 items and the 24 that survived at 5 were all correct
 # (feature names in quotes, menu paths, format strings).
@@ -163,7 +163,7 @@ FRAMES_BAD = [
 def load():
     """Return [(term, compiled_regex)] - rules that hold in every context.
 
-    Uses tools/termspec.py, so the tests and check_style.py read the same
+    Uses tools/build.py, so the tests and `build.py style` read the same
     spec. Conditional rules (those with a `src` partner) are excluded here:
     they cannot be tested without a source string. test_translation.py tests
     those separately against real (src, val) pairs.
@@ -172,5 +172,5 @@ def load():
     tools = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     if tools not in sys.path:
         sys.path.insert(0, tools)
-    import termspec
-    return termspec.rules_for_tests()
+    import build
+    return build.rules_for_tests()

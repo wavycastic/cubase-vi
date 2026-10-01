@@ -208,7 +208,7 @@ parser phải clamp chứ không tin độ dài, nếu không mất sạch mọi
 
 ## Bản vá ghi đè
 
-`tools/build_translation.py` chèn ngay trước `</String>`:
+bước `build` trong `tools/build.py` (nay là `build.py build`) chèn ngay trước `</String>`:
 
 ```xml
 <language key="vi">Vietnamese</language>   <!-- trước </LanguageTable> -->

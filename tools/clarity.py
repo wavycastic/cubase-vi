@@ -72,7 +72,7 @@ def sec_hard(limit):
     `xung` are all pure-ASCII Vietnamese syllables, so any `[A-Za-z]+` rule
     flags them. That is exactly how audit_readability2.py came to report 1,171
     false positives whose five most frequent "English fragments" were
-    trong/cho/khi/ghi/theo — all Vietnamese. Use tools/audit_fragments.py for
+    trong/cho/khi/ghi/theo — all Vietnamese. Use `audit.py fragments` for
     that check: it prints the distinct words so a human can judge them.
     """
     hits = []

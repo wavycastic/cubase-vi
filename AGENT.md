@@ -216,7 +216,7 @@ giữ EN / động từ `chèn`), `Send` (nút giữ / động từ `gửi`).
 > 5. **`value == key` mà key có từ chức năng tiếng Anh** — tìm chuỗi *chưa dịch*.
 >    Bắt được 15 chuỗi, gồm nhóm `Notehead: …` (bản không tiền tố đã dịch, bản có
 >    tiền tố thì không) và `Reset to Original Staff` (anh em `Cross Staff: Reset to
->    Original Staff` đã dịch). **Bộ dò `audit_quality [1]` báo 0** vì nó chỉ soi
+>    Original Staff` đã dịch). **Bộ dò `audit.py quality [1]` báo 0** vì nó chỉ soi
 >    *văn xuôi*; các nhãn có thuật ngữ giữ EN không vào diện.
 > 6. **Tra từ khóa luật trên toàn map** (không chỉ trên key mới). Đợt 174 đã cấm
 >    `đọc`/`ghi` cho Read/Write trong Automation — quét lại thuật ngữ đó toàn cục
@@ -358,7 +358,7 @@ giữ EN / động từ `chèn`), `Send` (nút giữ / động từ `gửi`).
 >   khi **180 chuỗi `Show X` dùng `Hiện` và 30 chuỗi `Hide X` dùng `Ẩn`**, và chính
 >   anh em cùng nhóm `Show Key Signatures` → `Hiện Key Signature` là khuôn mẫu.
 >   Sửa 3 nhãn **+ 2 chuỗi dài có trích dẫn `'Hide Clefs'` / `'Hide Key Signatures'`**;
->   `find_quoted_names.py` báo 0 là bằng chứng trích dẫn đã khớp nhãn.
+>   `audit.py quotes` báo 0 là bằng chứng trích dẫn đã khớp nhãn.
 > - **`Forced Accidentals` → `Forced Accidentals`**, 8/8 ngôn ngữ đều dịch
 >   (`Erzwungene Vorzeichen` / `强制变音记号`) → `Accidental bắt buộc`, khớp
 >   `Cautionary Accidentals` → `Accidental nhắc lại`.
@@ -381,7 +381,7 @@ giữ EN / động từ `chèn`), `Send` (nút giữ / động từ `gửi`).
 > nhiều, bao nhiêu giá trị còn giữ chữ `s`**. Nếu nhóm đó hầu hết *không* giữ `s`
 > thì giữ `s` là lỗi; nếu *toàn bộ* giữ `s` (`Noteheads`) thì đó là mẫu tên.
 
-> **Rò từ tiếng Anh lọt vào giá trị, sửa 10 chuỗi (đợt 191):** `audit_fragments.py` in ra
+> **Rò từ tiếng Anh lọt vào giá trị, sửa 10 chuỗi (đợt 191):** `audit.py fragments` in ra
 > **25 từ** tiếng Anh còn nằm trong giá trị có tiếng Việt. Đọc cả 25 nhóm:
 > - **Báo động giả:** `In` (40 chuỗi) — toàn bộ là **thành phần của thuật ngữ ghép**
 >   (`Count-In`, `Punch In`, `Fade In`, `MIDI In`), không phải giới từ lọt. Tương tự
@@ -408,8 +408,43 @@ giữ EN / động từ `chèn`), `Send` (nút giữ / động từ `gửi`).
 > Người dùng trả lời "chưa check" (đợt 191) nên **3 chuỗi `MIDI Step Input` /
 > `Slip Event` / `Pre/Post Fader` giữ nguyên. Đừng hỏi lại, đừng sửa.**
 
-> **Dọn kho công cụ — 230 file → 75 (đợt 192):** Đếm thật: chỉ **47/230** file
-> `tools/*.py` được gọi. Đã gộp / chuyển:
+> **Dọn kho công cụ — 230 → 75 → 10 (đợt 192–193):** Đếm thật ở đợt 192: chỉ
+> **47/230** file `tools/*.py` được gọi. Đợt 193 đo từng bộ dò rồi gộp tiếp.
+> **Còn đúng 10 file dịch** (9 file `inject_wavehook`/`memscan`/`set_prefs`… là
+> tính năng khác, chưa tính):
+>
+> | file | làm gì |
+> | --- | --- |
+> | `build.py` | cả pipeline: `extract` `list` `prune` `style` `punct` `build` `strip` `validate` + `termspec` |
+> | `merge_maps.py` | batch → `vi.json` |
+> | `audit.py` | **22 bộ dò**, mỗi cái một lệnh con |
+> | `dupes.py` | `keys` / `values` / `json` |
+> | `clarity.py` | `long` / `hard` |
+> | `read.py` | `long` `short` `page` `sample` `worklist` `inspect` |
+> | `family.py` | đọc cả gia đình chuỗi cùng từ đầu |
+> | `check_translation_build.py` | **bằng chứng** cho toàn dự án — tách riêng có chủ đích |
+> | `score_instruments.py` | Score Editor |
+> | `patch_hub.py` | bảng 89 chuỗi của Cubase Hub |
+>
+> - **Mọi lần gộp đều kèm đối chiếu byte-for-byte.** `audit.py`: 22 bộ dò × 35
+>   lần chạy (có tham số mặc định lẫn tham số tường minh) → **34/35 khớp tuyệt
+>   đối**, khác duy nhất là một dòng gợi ý trỏ tên mới. `read.py`: **14/14**.
+>   `build.py`: 8 bước + **`translation_vi.xml` giống từng byte** (5.322.854) +
+>   `all_strings.tsv` **cùng SHA-256**. Không có lần nào "chắc là giống".
+> - **Exit code CỐ Ý giữ nguyên cái cũ, dù nó lệch nhau.** Chỉ `leak` và
+>   `mojibake` trả 1 khi có phát hiện; 20 cái còn lại in ra rồi thoát 0. Sửa vội
+>   thành "thống nhất" thì §9 ("dừng ngay khi một bước báo lỗi") sẽ dừng pipeline
+>   ở những phát hiện đã được đọc và phán xét mười lần. Đó là quyết định về quy
+>   trình, không phải việc dọn code.
+> - **`tools/archive/measurement/` (17 file)** — đo độ phủ, in bảng, **chưa
+>   bao giờ bắt được lỗi nào**. Trong đó **3 cái đang chết thật**:
+>   `audit_glossary.py` in `section 4 table not found`, `audit_labels.py` in
+>   `khong doc duoc §2`, cả hai vì bảng §2/§4 của AGENT.md đã đổi định dạng;
+>   `suggest_keys.py` cần argv. Báo cáo không ai đọc không phải là kiểm tra.
+> - **`termspec.py` đã vào `build.py`**, và `tools/tests/` import `build` thay
+>   vì nó — luật mà test chạy và luật mà `build.py style` chạy **là một**.
+
+> **Đợt 192 — đo bộ dò trước khi gộp:**
 > - **Gộp (đã đối chiếu output từng dòng):** `read.py` ← `read_long` + `read_short`
 >   (cùng một công cụ, điều kiện lọc ngược nhau — 4/4 lần chạy khớp 100%);
 >   `dupes.py keys|values|json` ← `check_duplicate_keys` + `find_duplicate_values` +
@@ -424,7 +459,7 @@ giữ EN / động từ `chèn`), `Send` (nút giữ / động từ `gửi`).
 >   `ghi`, `theo`, `xung` đều là **tiếng Việt viết bằng ký tự ASCII thuần** →
 >   **1.171 báo động giả**, và 5 "từ Anh phổ biến nhất" mà nó báo **đều là tiếng Việt**.
 >   **Không thể phân biệt bằng ký tự.** Muốn kiểm tra cái này thì dùng
->   `audit_fragments.py` (in ra **từ đã rút gọn** để đọc tay phán xét — đợt 191
+>   `audit.py fragments` (in ra **từ đã rút gọn** để đọc tay phán xét — đợt 191
 >   dùng nó và ra 10 lỗi thật). `clarity.py hard` **cố ý bỏ** tín hiệu
 > "english-run" vì lý do y hệt.
 > - **SỬA LỖI THẬT: `merge_maps.py --check` luôn exit 1.** Dòng 48 là
@@ -479,7 +514,7 @@ Phải là **tiếng Việt đời thường**, không phải tiếng Việt do 
 > - **Cấm để lại chỗ dở dang**: sửa nửa câu còn tệ hơn để nguyên. §4 đã cấm
 >   dịch nửa vế; quy tắc này mở rộng điều đó sang *toàn câu*.
 > - **Vẫn phải giữ bất biến kỹ thuật (§6)** kể cả khi giữ EN: dấu câu, placeholder,
->   `\n`, khoảng trắng đầu/cuối. `check_punctuation.py` không ngoại lệ.
+>   `\n`, khoảng trắng đầu/cuối. `build.py punct` không ngoại lệ.
 >
 > **Cubase GHÉP CHUỖI Ở RUNTIME — giá trị tiếng Việt lọt thẳng vào UI.** Đợt 170,
 > người dùng chụp màn hình thấy `Thêm Nhóm Track`, `Thêm Hop âm Track`,
@@ -581,12 +616,12 @@ không phải newline thật. Bộ dò placeholder phải khớp cả `%1.0f` v�
 - **"bộ dò báo 0" và "bộ dò hỏng" trông giống nhau.** Thử một giá trị biết đúng vào bộ
   dò trước khi tin kết quả. Mọi ký tự đại diện phải kiểm bằng giá trị mẫu.
 - Bộ dò đếm CÂU bỏ sót vế mất **ở giữa** câu (số dấu chấm vẫn khớp) — phải so **số
-  dòng**; `check_punctuation.py` đã nối vào `build.py`.
+  dòng**; `build.py punct` đã nối vào `build.py`.
 - `all_strings.tsv` có thể **cắt cụt key dài**; hai dòng có thể trùng tiền tố 60 ký tự.
   Khi tra bằng key, yêu cầu **đúng một** ứng viên.
 - Bốn báo động giả đã biết: (1) `Tên Channel`/`Số Note` trông đảo nhưng đúng;
   (2) `gán vào`/`chuyển vào` cần `vào`; (3) `lặng` nằm trong `dấu lặng`, `Over`
-  trong `Cross-Over` khớp `\b` sau gạch nối; (4) `check_style` cấm ngoặc `(ms)` ở
+  trong `Cross-Over` khớp `\b` sau gạch nối; (4) `build.py style` cấm ngoặc `(ms)` ở
   cuối dù là đơn vị — sửa **giá trị**, đừng sửa luật. Bộ dò báo động giả nhiều lần
   còn tệ hơn không có bộ dò: nó dạy người đọc bỏ qua báo cáo.
 
@@ -609,8 +644,8 @@ không phải newline thật. Bộ dò placeholder phải khớp cả `%1.0f` v�
    `Latency → độ trễ` lên đầu, nhưng lịch sử cho thấy *Độ trễ Channel* là ví dụ **được
    duyệt**. `grep` chỉ ra chỗ cần nhìn, không quyết định đúng sai.
 7. **Bốn bộ dò tên gần giống, đừng lẫn.** `audit_terms.py` liệt kê cách diễn đạt của một
-   thuật ngữ; `audit_split.py` hỏi thuật ngữ §2 nào đang bị dịch; `audit_outlier.py` tìm
-   chuỗi lạc khỏi gia đình; `audit_domain.py` hỏi theo miền — **toàn báo động giả**.
+   thuật ngữ; `archive/measurement/audit_split.py` hỏi thuật ngữ §2 nào đang bị dịch; `audit.py outlier` tìm
+   chuỗi lạc khỏi gia đình; `archive/measurement/audit_domain.py` hỏi theo miền — **toàn báo động giả**.
 8. **Chỉ thêm mẫu cấm khi cách dịch sai là cách dịch DUY NHẤT.** `thẻ` bắn 13 chuỗi
    (`Thiết lập thẻ` = Tab, đúng), `vùng` bắn 213 (`vùng chọn` đúng) — sửa chuỗi. Đợt 85:
    15 mẫu, 8 lỗi sửa tay.
@@ -664,26 +699,35 @@ không phải newline thật. Bộ dò placeholder phải khớp cả `%1.0f` v�
 
 Dừng ngay khi một bước báo lỗi.
 
+**Mười công cụ, đủ dùng.** `tools/*.py` còn lại đúng 10 file (đợt 193); nhóm
+`inject_wavehook` / `memscan` / `set_prefs`… là tính năng khác, không tính.
+
 ```powershell
 python tools\merge_maps.py --check      # gộp batch -> vi.json, bắt key trùng
-python tools\check_style.py             # 5 luật cứng (xem dưới)
-python tools\audit_quality.py           # thuật ngữ xung đột + trật tự từ
-python tools\audit_leak.py              # 8 bộ dò chữ (xem README): Anh lọt câu / lọt
-python tools\find_leftover_english.py   # lẻ, câu chưa dịch, mất vế, khung Anh, ngoặc
-python tools\audit_fragments.py         # kép lệch, key trùng, U+FFFD
-python tools\find_dropped_sentences.py
-python tools\find_english_frame.py
-python tools\find_quoted_names.py
-python tools\dupes.py keys             # khoa gan trung -> hai cach viet
-python tools\dupes.py values           # hai key KHAC nhau -> mot gia tri
-python tools\fix_mojibake.py
-python tools\clarity.py                # long  dai  |  hard  kho doc
-python tools\audit_outlier.py           # chuỗi lạc khỏi gia đình thuật ngữ
+python tools\build.py style             # 5 luật cứng (xem dưới)
+python tools\build.py punct             # ? ! ; ... xuống dòng, khoảng trắng đầu/cuối
+python tools\audit.py                   # liệt kê 22 bộ dò
+python tools\audit.py --all             # chạy hết, dừng ở bộ dò có phát hiện
+python tools\audit.py leak              # từ chức tiếng Anh còn sót trong câu Việt
+python tools\audit.py fragments         # TỪNG TỪ Anh còn lại, rút gọn để đọc tay
+python tools\audit.py quality           # chưa dịch hẳn + thuật ngữ xung đột + giới từ đảo
+python tools\audit.py quotes            # tên trong ngoặc kép lệch với nhãn nó trích dẫn
+python tools\audit.py rm                # khoá [RM] lệch với khoá gốc
+python tools\audit.py gloss             # ghi chú phân biệt của extractor lọt vào bản dịch
+python tools\audit.py dropped           # mất câu so với nguyên văn
+python tools\audit.py same_en           # một tiếng Anh, hai bản dịch
+python tools\audit.py mojibake          # U+FFFD (thêm --write để vá)
+python tools\audit.py outlier           # chuỗi lạc khỏi gia đình thuật ngữ
+python tools\dupes.py keys              # khoá gần trùng -> hai cách viết
+python tools\dupes.py values            # hai key KHÁC nhau -> một giá trị
+python tools\clarity.py                 # long  dài  |  hard  khó đọc
 python tools\tests\run.py               # 146 test: bất biến + bộ dò
-python tools\family.py <từ>            # đọc cả gia đình chuỗi cùng từ đầu
-python tools\family.py -a              # nhóm còn dùng hai kiểu ghi (chốt hồi quy)
+python tools\family.py <từ>             # đọc cả gia đình chuỗi cùng từ đầu
+python tools\family.py -a               # nhóm còn dùng hai kiểu ghi (chốt hồi quy)
 python tools\read.py long  <miền> <bắt đầu>   # đọc tay: câu dài, chỗ vướng nằm ở đây
 python tools\read.py short <miền> <bắt đầu>   # đọc tay: nhãn menu 1–6 từ
+python tools\read.py page  <bắt đầu> [số]     # đọc TUẦN TỰ, không lọc — không bỏ sót
+python tools\read.py inspect <từ>              # một khoá, đủ 9 ngôn ngữ gốc
 python tools\check_translation_build.py # build\translation_vi.xml = bản gốc + <vi>
 python tools\score_instruments.py check # Score Editor: trùng key + 4 bất biến
 python tools\build.py                   # sinh build/translation_vi.xml + validate
@@ -704,12 +748,12 @@ bằng cơ chế, không phải bằng lời: file build **bỏ các dòng `<vi>
 đúng 10 khối `<us>…<ru><vi>`; không `<us>…<ru>` nào bị đổi; mọi `<vi>` bằng
 đúng `vi.json`; và dòng `<vi>` thụt lùi **đúng bằng 9 anh em** nó.
 
-Bản cũ viết thẳng `\t\t` trong `build_translation.py`, nên `<vi>` lệch 1 tab so với
+Bản cũ viết thẳng `\t\t` trong bước `build`, nên `<vi>` lệch 1 tab so với
 9 anh em, và `<language key="vi">` lệch 1 tab theo hướng ngược lại — `<vi>` nhìn
 như anh em của `</String>` chứ không phải con của nó. XML không quan tâm, nhưng
 diff 10.737 dòng thì có. Nay thụt lùi lấy từ chính file.
 
-**5 luật cứng của `check_style.py`**: (1) cấm ngoặc chú thích cuối trừ khi key gốc có;
+**5 luật cứng của `build.py style`**: (1) cấm ngoặc chú thích cuối trừ khi key gốc có;
 (2) cấm dịch thuần Việt thuật ngữ §1 — nay **64 mẫu** trong `terms_do_not_translate.json`;
 (3) placeholder phải khớp; (4) giá trị không rỗng; (5) cấm `[RM]`. Luật 5 **duy nhất
 không mang tính thẩm mỹ** — nó ngăn chữ lên màn hình.
@@ -780,7 +824,7 @@ phải chỗ sót. Người Việt gọi "guitar", "piano", "kora", "cổ điể
 "đàn ghi-ta". Bảng chính đã chốt sẵn 146 chuỗi theo đúng cách đó
 (`tools/score_instruments.py import` nhập 88 chuỗi có sẵn + 58 chuỗi trùng).
 
-Vì thế **đừng** dùng `find_leftover_english.py` vào `translations/score/`, và
+Vì thế **đừng** dùng `audit.py leftover` vào `translations/score/`, và
 **đừng** ép mọi giá trị khác tiếng Anh. Trái lại là sai: `Snare` → `Trống Snare`?
 Không — `Snare` giữ nguyên, còn `Side Drum` → `Trống phụ` là đúng, vì "snare" không
 có từ Việt còn "drum phụ" thì có.
