@@ -149,6 +149,13 @@ giữ EN / động từ `chèn`), `Send` (nút giữ / động từ `gửi`).
 > - **`Track Archive` giữ EN:** Menu `File > Import > Track Archive...` và các thông báo lỗi liên quan
 >   phải giữ `Track Archive`, loại bỏ dịch thành "Lưu trữ Track..." (nghe như nút bấm sao lưu).
 
+> **Send Initial Value, Auto-Scroll, Thumbnail Cache & Pan Law (đợt 178):**
+> - **Sửa lỗi dịch sai ngữ nghĩa `Send Initial Value`:** Thành `Gửi giá trị khởi tạo` (lệnh gửi tới thiết
+>   bị MIDI, bản dịch cũ tưởng nhầm là kênh hiệu ứng Send nên dịch "Giá trị khởi tạo của Send").
+> - **Nút bấm Toolbar `Auto-Scroll`:** Đồng bộ với `Auto-Scroll (Tạm dừng)`, cập nhật cả `ui-navigation.json`.
+> - **Đồng bộ `Thumbnail Cache`:** Bỏ "bộ nhớ đệm Thumbnail", khớp với `Cache` trong danh sách thuật ngữ.
+> - **Chuẩn phòng thu `Pan Law`:** `Pan Law của Project`, `Stereo Pan Law`.
+
 > **Ngoại lệ đã chốt — `Chord` dịch `hợp âm` (77 chuỗi).** Dù `Chord` nằm trong
 > 68 từ cốt lõi, thực tế đo được: 77 chuỗi dùng `hợp âm`, và anh em giữ EN chỉ là
 > **tên tính năng** (`Chord Track`, `Chord Pad`, `Chord Symbol`). Sửa danh sách thì
