@@ -182,6 +182,13 @@ giữ EN / động từ `chèn`), `Send` (nút giữ / động từ `gửi`).
 > - **Sửa đảo từ `tuning Hermode`:** Đổi thành `Hermode Tuning` trong hộp thoại Project Setup,
 >   đồng bộ 100% với các chuỗi Hermode Tuning khác.
 
+> **Sửa Send 1..4 Out/Pre, Group 1..4, MIDI Step Input (đợt 184):**
+> - **Mixer Send Routing (8 chuỗi):** Loại bỏ "Gửi 1 Out", "Gửi 1 Pre" ngô nghê, giữ nguyên `Send 1 Out`,
+>   `Send 1 Pre`, `Send 2 Out`, `Send 2 Pre`...
+> - **Lưu dứt điểm `Group 1..4` và `Group %d`:** Đưa từ `Nhóm 1..4` về `Group 1..4` và `Group %d`.
+> - **Khôi phục `MIDI Step Input`:** Sửa lỗi rơi mất chữ `Step` (trước dịch thiếu thành `MIDI Input`).
+> - **Đồng bộ `Bit Depth Audio:`:** Khớp với `Bit Depth`.
+
 > **Ngoại lệ đã chốt — `Chord` dịch `hợp âm` (77 chuỗi).** Dù `Chord` nằm trong
 > 68 từ cốt lõi, thực tế đo được: 77 chuỗi dùng `hợp âm`, và anh em giữ EN chỉ là
 > **tên tính năng** (`Chord Track`, `Chord Pad`, `Chord Symbol`). Sửa danh sách thì
