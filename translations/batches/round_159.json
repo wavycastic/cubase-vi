@@ -1,0 +1,5 @@
+{
+  "In some hand-copied lead sheets, the clef is shown only at the beginning of the first bar, and it is hidden on subsequent systems. To follow this convention, choose 'Hide Clefs'.": "Trong một số bản lead sheet chép tay, Clef chỉ hiện ở đầu Bar đầu tiên và ẩn ở các dòng nhạc tiếp theo. Để theo quy ước này, hãy chọn 'Hide Clefs'.",
+  "In some hand-copied lead sheets, the key signature is shown only at the beginning of the first bar, and it is hidden on subsequent systems. To follow this convention, choose 'Hide Key Signatures'.": "Trong một số bản lead sheet chép tay, Key Signature chỉ hiện ở đầu Bar đầu tiên và ẩn ở các dòng nhạc tiếp theo. Để theo quy ước này, hãy chọn 'Hide Key Signatures'.",
+  "Pedal lines always show some text or symbol at the start of subsequent systems, unless the 'Hook Only' appearance is chosen for the start of the line. This option determines whether or not the text or symbol that appears should be in parentheses.": "Đường pedal luôn hiện văn bản hoặc ký hiệu ở đầu các dòng nhạc tiếp theo, trừ khi chọn 'Chỉ móc' cho đầu dòng. Tùy chọn này xác định ký hiệu có nằm trong ngoặc hay không."
+}
