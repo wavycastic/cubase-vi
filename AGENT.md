@@ -135,6 +135,14 @@ giữ EN / động từ `chèn`), `Send` (nút giữ / động từ `gửi`).
 >   và `Proximity` (loại bỏ dịch "độ gần" như khoảng cách vật lý).
 > - **Menu Audio giữ EN:** `Detect Silence` (cùng với `Strip Silence` trên menu `Audio > Advanced`).
 
+> **Acoustic Feedback, Bank Select & Filter Slope (đợt 176):**
+> - **Sửa lỗi dịch ngược `Filter Slope: <%s>`:** Thành `Độ dốc Filter: <%s>` (khớp với `Chọn độ dốc Filter`,
+>   `Độ dốc High-Cut`, `Độ dốc Low-Cut`).
+> - **`Acoustic Feedback` giữ EN:** Nút nghe thử nốt trên thanh công cụ MIDI Editor giữ EN, loại bỏ
+>   dịch từng từ "Phản hồi Acoustic" (gây hiểu nhầm sang hiện tượng hú mic).
+> - **`Bank Select` giữ EN:** Chuẩn MIDI Controller CC0/CC32 giữ EN trong danh sách MIDI CC, khớp
+>   với `Portamento`, `Modulation`, `Breath Control`...
+
 > **Ngoại lệ đã chốt — `Chord` dịch `hợp âm` (77 chuỗi).** Dù `Chord` nằm trong
 > 68 từ cốt lõi, thực tế đo được: 77 chuỗi dùng `hợp âm`, và anh em giữ EN chỉ là
 > **tên tính năng** (`Chord Track`, `Chord Pad`, `Chord Symbol`). Sửa danh sách thì
