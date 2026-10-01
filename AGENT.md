@@ -116,6 +116,22 @@ Phải là **tiếng Việt đời thường**, không phải tiếng Việt do 
 > - **Vẫn phải giữ bất biến kỹ thuật (§6)** kể cả khi giữ EN: dấu câu, placeholder,
 >   `\n`, khoảng trắng đầu/cuối. `check_punctuation.py` không ngoại lệ.
 >
+> **Cubase GHÉP CHUỖI Ở RUNTIME — giá trị tiếng Việt lọt thẳng vào UI.** Đợt 170,
+> người dùng chụp màn hình thấy `Thêm Nhóm Track`, `Thêm Hop âm Track`,
+> `Thêm Transpose Track Track`. Nguyên nhân: menu là khuôn **`Add %s Track`**
+> → `Thêm %s Track`, và `%s` lấy từ **key đơn lẻ**. Kiểm tra JSON cho thấy
+> `'Add Group Track' -> 'Thêm Group Track'` **đúng**, nhưng key `'Group'` lại là
+> `'Nhóm'` → menu ra `Thêm Nhóm Track`.
+> - **Vì vậy: key đơn lẻ (`Group`, `Chord`, `Folder`, `TransposeTrack`…) quan
+>   trọng ngang chuỗi dài.** Giá trị của nó đi vào UI qua `%s`, nên dịch sai
+>   sẽ lộ ra ngay. Sửa cả hai vế: `Group` → `Group` cho khớp `Group Track`.
+> - **`TransposeTrack` (không space) là chuỗi điền `%s`**, 8/9 ngôn ngữ gốc
+>   không chữ "track" (de=`Transposition`, jp=`移調`). Đặt `Transpose Track` →
+>   lặp thành `Track Track`. Giá trị đúng: `Transpose`.
+> - **Bài học sâu:** 169 vòng kiểm đều pass mà UI vẫn có 4 lỗi. Công cụ kiểm
+>   bản dịch, **không kiểm cách Cubase ghép chuỗi**. Chỉ nhìn màn hình mới thấy.
+>   Khi nghi ngờ UI, kiểm key `%s` và key đơn lẻ trước, đừng đụng vào chuỗi dài.
+
 > **`ui-navigation.json` LUÔN THẮNG — đây là bẫy merge.** `merge_maps.py` dùng
 > `sorted()`, mà `u` > `r` nên file này đứng **sau** mọi `round_*.json`. Sửa ở
 > `round_NNN.json` mà key đó có trong `ui-navigation.json` sẽ **bị ghi đề im lặng**
