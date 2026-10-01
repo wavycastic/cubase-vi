@@ -1,0 +1,17 @@
+{
+  "Show Clefs": "Hiện Clef",
+  "Hide Clefs": "Ẩn Clef",
+  "Hide Key Signatures": "Ẩn Key Signature",
+  "In some hand-copied lead sheets, the clef is shown only at the beginning of the first bar, and it is hidden on subsequent systems. To follow this convention, choose 'Hide Clefs'.": "Trong một số bản lead sheet chép tay, Clef chỉ hiện ở đầu Bar đầu tiên và ẩn ở các dòng nhạc tiếp theo. Để theo quy ước này, hãy chọn 'Ẩn Clef'.",
+  "In some hand-copied lead sheets, the key signature is shown only at the beginning of the first bar, and it is hidden on subsequent systems. To follow this convention, choose 'Hide Key Signatures'.": "Trong một số bản lead sheet chép tay, Key Signature chỉ hiện ở đầu Bar đầu tiên và ẩn ở các dòng nhạc tiếp theo. Để theo quy ước này, hãy chọn 'Ẩn Key Signature'.",
+  "Forced Accidentals": "Accidental bắt buộc",
+  "Tuplets": "Tuplet",
+  "Bar Rests": "Bar Rest",
+  "Multi-Bar Rests": "Multi-Bar Rest",
+  "Bar and Multi-Bar Rests": "Bar Rest và Multi-Bar Rest",
+  "Multi-Bar Rests and Bar Repeats": "Multi-Bar Rest và lặp lại Bar",
+  "Toggle Triplet": "Chuyển đổi liên ba",
+  "Melodic": "Melodic",
+  "Melodic Minor": "Melodic Minor",
+  "Harmonic Minor": "Harmonic Minor"
+}

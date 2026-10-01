@@ -345,6 +345,42 @@ giữ EN / động từ `chèn`), `Send` (nút giữ / động từ `gửi`).
 > `CC No.`/`MIDI Controller No.` → `Số CC`/`Số MIDI Controller`). Khi viết bộ dò kiểm
 > phải **miễn trừ hai ký tự này**, nếu không sẽ báo động giả hàng loạt.
 
+> **Đọc hết 340 cặp trùng giá trị + thống kê số nhiều thuật ngữ ký âm, sửa 15 chuỗi
+> (đợt 190):** Đợt 189 phát hiện `Temple Block`/`Wood Block`; đợt này đọc **toàn bộ**
+> 340 cặp còn lại (213 nhóm 2 key) và thêm bộ dò **đếm số nhiều của thuật ngữ ký âm**.
+> - **Một báo động giả đắt nhất — đừng sửa:** `Switch: Activate Speakers` →
+>   `Bật/Tắt Control Room` *trông* như lỗi copy-paste. Nhưng `<us>` gốc là
+>   **`Control Room On/Off`** và cả 8 ngôn ngữ đều dịch "Control Room" — **key bị cũ**,
+>   bản dịch đã đúng. **Đây là bài học đắt nhất của đợt này: mọi ứng viên phải tra
+>   `<us>` trước khi sửa.** Cùng loại: `Assume Skipping` (đợt 186).
+> - **Lệnh `Show/Hide` bị bỏ nguyên tiếng Anh:** `Show Clefs` → `Show Clefs`,
+>   `Hide Clefs` → `Hide Clefs`, `Hide Key Signatures` → `Hide Key Signatures`, trong
+>   khi **180 chuỗi `Show X` dùng `Hiện` và 30 chuỗi `Hide X` dùng `Ẩn`**, và chính
+>   anh em cùng nhóm `Show Key Signatures` → `Hiện Key Signature` là khuôn mẫu.
+>   Sửa 3 nhãn **+ 2 chuỗi dài có trích dẫn `'Hide Clefs'` / `'Hide Key Signatures'`**;
+>   `find_quoted_names.py` báo 0 là bằng chứng trích dẫn đã khớp nhãn.
+> - **`Forced Accidentals` → `Forced Accidentals`**, 8/8 ngôn ngữ đều dịch
+>   (`Erzwungene Vorzeichen` / `强制变音记号`) → `Accidental bắt buộc`, khớp
+>   `Cautionary Accidentals` → `Accidental nhắc lại`.
+> - **Số nhiều:** đếm trên 13 thuật ngữ ký âm cho thấy luật đã rõ — `Slurs`→`Slur`,
+>   `Clefs`→`Clef`, `Accidentals`→`Accidental` là đúng; sửa nốt `Tuplets`→`Tuplet`,
+>   `Bar Rests`→`Bar Rest`, `Multi-Bar Rests`→`Multi-Bar Rest` (2 chuỗi ghép).
+>   **`Noteheads` giữ nguyên 39/39** vì 40 tên notehead đều mang đuôi `s` — đó là mẫu
+>   tên, không phải số nhiều cần bỏ.
+> - **Gia đình `Triplet` lạc 1/4:** `Triplet`/`Triplets`/`1/8 Triplet`/
+>   `Toggle Quantize Triplet` đều dùng `liên ba`, chỉ `Toggle Triplet` giữ EN.
+> - **`Melodic` trùng giá trị với `Melody`** (`Giai điệu`), trong khi anh em
+>   `Melodic Mode` → `Chế độ Melodic` giữ EN → `Melodic`.
+> - **Ba thang ngam có 3 cách viết:** `Natural Minor` → `Natural Minor` (đợt 172 đã
+>   chốt giữ EN), `Harmonic Minor` → `Hòa âm Minor`, `Melodic Minor` →
+>   **`Thứ giai điệu`** (dịch "melodic" thành *giai điệu* = *melody*!). Đồng bộ
+> hai cái kia theo cái đã chốt.
+>
+> **Cách đo bộ dò số nhiều (làm lại được):** với mỗi thuật ngữ, tách 3 nhóm —
+> key chỉ có số ít / key chỉ có số nhiều / key có cả hai — rồi đếm **trong nhóm số
+> nhiều, bao nhiêu giá trị còn giữ chữ `s`**. Nếu nhóm đó hầu hết *không* giữ `s`
+> thì giữ `s` là lỗi; nếu *toàn bộ* giữ `s` (`Noteheads`) thì đó là mẫu tên.
+
 > **Ngoại lệ đã chốt — `Chord` dịch `hợp âm` (77 chuỗi).** Dù `Chord` nằm trong
 > 68 từ cốt lõi, thực tế đo được: 77 chuỗi dùng `hợp âm`, và anh em giữ EN chỉ là
 > **tên tính năng** (`Chord Track`, `Chord Pad`, `Chord Symbol`). Sửa danh sách thì
