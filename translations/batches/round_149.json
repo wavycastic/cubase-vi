@@ -1,0 +1,18 @@
+{
+  "5-line Staff": "Staff 5 dòng",
+  "Above Specific Instruments' Staves": "Staff phía trên nhạc cụ đã chọn",
+  "Accidentals apply to all notes at the same staff position (i.e. in one octave only), until the end of the bar or a change of key, whichever is sooner, and apply to all voices belonging to the same track.": "Accidental áp dụng cho tất cả nốt ở cùng vị trí Staff (tức là chỉ trong một quãng tám), cho tới hết Bar hoặc khi đổi hóa âm, tùy cái nào đến trước, và áp dụng cho mọi bè thuộc cùng Track.",
+  "Assign Stave and Voice": "Gán Staff và bè",
+  "Assigned Stave (Score Editor)": "Staff đã gán (Score Editor)",
+  "Automatically Resolve Collisions Between Adjacent Staves and Systems": "Tự xử lý chồng lấn giữa Staff và dòng nhạc cạnh nhau",
+  "Chord symbols appear either above the staves belonging to specific instruments as defined in Instrument Settings, or above the top staff in the system.": "Ký hiệu hợp âm hiện trên Staff của nhạc cụ đã đặt trong cài đặt Instrument, hoặc trên Staff trên cùng của dòng nhạc.",
+  "Justify Distance Between Staves and Systems When Page Is at Least:": "Căn đều khoảng cách giữa Staff và dòng nhạc khi trang đạt ít nhất:",
+  "Justify Staves When Page with Single System Is Above This Threshold": "Căn đều Staff khi trang có một dòng nhạc vượt ngưỡng này",
+  "Minimum Number of Staves in System": "Số Staff tối thiểu trên mỗi dòng nhạc",
+  "Timecode Staff": "Staff Timecode",
+  "Unassign Stave and Voice": "Hủy gán Staff và bè",
+  "When Min. Staves Exceeded": "Khi vượt quá số Staff tối thiểu",
+  "When Number of Staves Differs": "Khi số Staff khác nhau",
+  "When bar numbers are positioned at barlines, you may prefer dynamics to be placed closer to the staff than bar numbers, or vice versa. This has no effect for bar numbers centered on the bar, which are always placed outside dynamics.": "Khi số Bar đặt tại vạch nhịp, bạn có thể đặt Dynamics gần Staff hơn số Bar hoặc ngược lại. Không áp dụng với số Bar căn giữa Bar, luôn nằm ngoài Dynamics.",
+  "When the page is less full than the threshold for justifying staves, no vertical justification occurs.": "Khi độ lấp đầy của trang chưa đạt ngưỡng căn đều Staff, sẽ không căn đều theo chiều dọc."
+}
