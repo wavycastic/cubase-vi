@@ -118,6 +118,15 @@ giữ EN / động từ `chèn`), `Send` (nút giữ / động từ `gửi`).
 > năng nhưng lọt sang `Nhóm %d`/`Nhóm 1`, trong khi `Group` đơn lẻ đã giữ EN. Văn
 > xuôi vẫn `nhóm` (`nhóm nốt`, `nhóm phụ`) — **9 chuỗi đó đúng, đừng đụng**.
 
+> **Automation Read / Write & Thuật ngữ âm thanh số (đợt 174):**
+> - **`Read / Write` trong Automation giữ EN:** Nút **R** và **W** trên channel, menu và phím tắt
+>   phải là `Read Automation`, `Write Automation`, `Read/Write Automation` — tuyệt đối không dịch
+>   thành "đọc" và "ghi" (gây nhầm lẫn nghiêm trọng với `Record` - ghi âm).
+> - **`Nudge` giữ EN:** Không dùng từ bình dân "nhích" trong thanh công cụ/menu DAW chuyên nghiệp.
+> - **Thuật ngữ Audio đồng bộ EN:** `Precount` (khớp với `Count-In`), `Bit Depth` (khớp với `Sample Rate`),
+>   `Strip Silence` (công cụ xử lý Audio kinh điển), `Saturation` (màu âm analog/tape, không phải
+>   "độ bão hòa" màu sắc), `Normalize` (chuẩn hóa biên độ/loudness số).
+
 > **Ngoại lệ đã chốt — `Chord` dịch `hợp âm` (77 chuỗi).** Dù `Chord` nằm trong
 > 68 từ cốt lõi, thực tế đo được: 77 chuỗi dùng `hợp âm`, và anh em giữ EN chỉ là
 > **tên tính năng** (`Chord Track`, `Chord Pad`, `Chord Symbol`). Sửa danh sách thì

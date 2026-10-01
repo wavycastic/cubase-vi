@@ -130,7 +130,8 @@
     "Permission", "Pre-Fader", "Subsection", "Post-roll", "Downmix",
     "Module", "Count-In", "CCMode", "NoteExp", "Latch", "Thru", "Z-Axis",
     "Remote-Control", "AudioWarp", "Transformer", "Scripting", "Cache",
-    "Studio", "Offline", "Mixer"
+    "Studio", "Offline", "Mixer",
+    "Precount", "Bit Depth", "Strip Silence", "Saturation", "Normalize", "Nudge"
   ],
 
   "_keep_english_doc": [
