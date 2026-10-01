@@ -1,0 +1,15 @@
+{
+  "Short-Term Loudness": "Short-Term Loudness",
+  "Maximum Short-Term Loudness": "Short-Term Loudness tối đa",
+  "Short-term loudness level at cursor position": "Mức Short-Term Loudness tại vị trí con trỏ",
+  "Integrated Loudness": "Integrated Loudness",
+  "Integrated Loudness Reference": "Tham chiếu Integrated Loudness",
+  "Integrated Loudness in LUFS": "Integrated Loudness tính bằng LUFS",
+  "Loudness Integrated: %.1f LUFS": "Loudness Integrated: %.1f LUFS",
+  "Chord Assistant - Circle of Fifths": "Chord Assistant - Circle of Fifths",
+  "Circle of Fifths": "Circle of Fifths",
+  "Chord Assistant - Proximity": "Chord Assistant - Proximity",
+  "Proximity": "Proximity",
+  "Detect Silence": "Detect Silence",
+  "Detect Silence (with Current Settings)": "Detect Silence (với cài đặt hiện tại)"
+}

@@ -127,6 +127,14 @@ giữ EN / động từ `chèn`), `Send` (nút giữ / động từ `gửi`).
 >   `Strip Silence` (công cụ xử lý Audio kinh điển), `Saturation` (màu âm analog/tape, không phải
 >   "độ bão hòa" màu sắc), `Normalize` (chuẩn hóa biên độ/loudness số).
 
+> **Chuẩn Loudness, Chord Assistant & Menu Audio (đợt 175):**
+> - **Chuẩn đo Loudness giữ EN:** `Integrated Loudness`, `Short-Term Loudness` giữ EN (đồng bộ với
+>   `Momentary Loudness` và lệnh `Normalize theo Integrated Loudness`). Loại bỏ tình trạng cấn cá
+>   khi thanh đo Metering lúc ghi "ngắn hạn", "tích hợp" lúc lại ghi tiếng Anh.
+> - **Chord Assistant giữ EN:** `Circle of Fifths` (loại bỏ dịch ngô nghê "vòng tròn quãng năm")
+>   và `Proximity` (loại bỏ dịch "độ gần" như khoảng cách vật lý).
+> - **Menu Audio giữ EN:** `Detect Silence` (cùng với `Strip Silence` trên menu `Audio > Advanced`).
+
 > **Ngoại lệ đã chốt — `Chord` dịch `hợp âm` (77 chuỗi).** Dù `Chord` nằm trong
 > 68 từ cốt lõi, thực tế đo được: 77 chuỗi dùng `hợp âm`, và anh em giữ EN chỉ là
 > **tên tính năng** (`Chord Track`, `Chord Pad`, `Chord Symbol`). Sửa danh sách thì
