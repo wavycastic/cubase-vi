@@ -97,6 +97,7 @@ tên file. Có thể là lệch. Bảng không cho biết `Bass Drum` trong bả
 |---|---|
 | Bảng màu (Color Setup / Palette) -> giữ nguyên tiếng Anh | Người dùng yêu cầu trực tiếp (32 chuỗi: White, Black, Red, Blue, Dark/Light..., Black 50/70, Gray 5..90) |
 | Score Editor -> giữ nguyên thuật ngữ chuyên ngành ký âm | Người dùng yêu cầu trực tiếp (Staff, Clef, Barline, Stem, Beam, Accidental, Rest, Notehead, Arpeggio, Tuplet...) |
+| `Equal Power` (Stereo Pan Law) -> giữ nguyên `Equal Power` | Người dùng yêu cầu trực tiếp qua ảnh chụp màn hình (đồng bộ với `Equal Gain`) |
 | `X Presets` (số nhiều, tập hợp) -> `Preset X`; `X Preset` (thuật ngữ) -> giữ | `Mixer Presets` -> `Preset của Mixer` vs `Logical Preset` -> `Logical Preset` |
 | khoá `"X - Y"` -> giữ dấu ` - ` | 93 chuỗi, 91 giữ (đợt 102) |
 | bỏ số nhiều tiếng Anh trong thuật ngữ giữ nguyên | `Articulations` 22/25, `Voicing` 35/38, `Crossfade` 26/27 (đợt 101, 103) |
