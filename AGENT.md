@@ -162,6 +162,12 @@ giữ EN / động từ `chèn`), `Send` (nút giữ / động từ `gửi`).
 > - **Tab `Equalizers` giữ EN:** Bỏ chữ "Các" trên đầu đề tab/rack, đồng bộ với `Inserts`, `Sends`, `Strip`.
 > - **Khớp tên UI `Functions Browser`:** `qua Trình duyệt Functions` (thay vì "Trình duyệt chức năng").
 
+> **Sửa dứt điểm Record Enable & Arm/Disarm (đợt 180):**
+> - **`Record Enable` trong `ui-navigation.json`:** Sửa tận gốc key `'Record Enable': 'Record Enable'`
+>   để ngăn `merge_maps.py` âm thầm ghi đè lại thành "Bật ghi".
+> - **`Arm / Disarm`:** Chuyển `Bật/Tắt sẵn sàng ghi` dài dòng thành `Bật/Tắt Record Enable cho tất cả Track`.
+> - **`Read/Write-Enable`:** Đổi `Cho phép đọc/ghi` thành `Bật Read/Write` (khớp với Automation Read/Write).
+
 > **Ngoại lệ đã chốt — `Chord` dịch `hợp âm` (77 chuỗi).** Dù `Chord` nằm trong
 > 68 từ cốt lõi, thực tế đo được: 77 chuỗi dùng `hợp âm`, và anh em giữ EN chỉ là
 > **tên tính năng** (`Chord Track`, `Chord Pad`, `Chord Symbol`). Sửa danh sách thì
