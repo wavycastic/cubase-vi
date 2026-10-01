@@ -289,6 +289,33 @@ giữ EN / động từ `chèn`), `Send` (nút giữ / động từ `gửi`).
 > `Beaming: Beam Together` → `Nối Beam: Nối chung` dù hơi lặp, vì `Verbalken` của
 > de cũng lặp.
 
+> **Đối chiếu 9 ngôn ngữ Steinberg, sửa 5 chuỗi (đợt 188):** Bộ dò mạnh nhất từ
+> nay, và **chạy được vì `keys/translation_original.xml` có đủ 9 `<us><de><fr><es>
+> <it><pt><jp><zh><ru>`**. Công thức: so `norm(value)` với `norm(us)`.
+> - **Y1 — VI là người *duy nhất* giữ EN** (≥6/8 ngôn ngữ khác đã dịch): **1 chuỗi**,
+>   `Solfege` → `Solfège`, mà de/fr cũng giữ `Solfège` có dấu → giữ nguyên, không sửa.
+> - **Y2 — VI là người *duy nhất* dịch** (≥7/8 ngôn ngữ khác giữ nguyên EN): 37 chuỗi,
+>   đọc ra **3 lỗi thật**, đều nằm ngoài `keep_english` nên bộ dò từ điển không thấy:
+>   | Key | Đang | Vì sao sai |
+>   |---|---|---|
+>   | `Family Name` | `Tên họ` | **`họ` = họ tên (surname)** — sai nghĩa hoàn toàn. Đây là trường metadata (họ sản phẩm). Anh em `Add Family` → `Thêm Family`, `iXML Family UID` giữ EN |
+>   | `Navigator` | `Thanh điều hướng` | *thanh điều hướng* ≠ *Navigator*; de/fr/jp/zh 4/4 giữ |
+>   | `Drop Frames` | `Thả các Frame` | thuật ngữ SMPTE; anh em `Frame Rate` giữ EN. Sửa cả `NTSC to PAL Pull-Down` → giữ `Pull-Down` |
+> - 34 chuỗi còn lại đọc hết, **hợp lệ** (`Date Created` → `Ngày tạng` là chỗ Steinberg
+>   *chưa* dịch, ta dịch là đúng; `Content Summary` → `Tóm tắt Content` khớp
+>   chính sách giữ EN của map).
+>
+> **Còn sửa được bằng anh em:** `Scene` → `Cảnh` trong khi `Scene No.` → `Số Scene`,
+> `Scene Localization` → `Bản địa hóa Scene` (2/2 anh em giữ `Scene`). Và
+> `Select Hardware Input` → `Chọn Hardware Input` trong khi `Audio Hardware Input` →
+> `Đầu vào phần cứng Audio`, `Hardware` → `Phần cứng`.
+>
+> **Ba bộ dò này vô dụng — đừng chạy lại:** phủ định (280 ứng viên, tiếng Việt phủ
+> định bằng `Tắt`/`Bỏ`/`Gỡ`), tra `keep_english` (mọi ứng viên đều là *dùng trong văn
+> xuôi* với nghĩa thường — `part of the channel`, `has no effect`, `this step`),
+> và key trùng tiền tố có giá trị bằng nhau (13 cặp, tất cả là dấu `[...]` là
+> **marker ngữ cảnh của key** theo §6, giữ nguyên là đúng).
+
 > **Ngoại lệ đã chốt — `Chord` dịch `hợp âm` (77 chuỗi).** Dù `Chord` nằm trong
 > 68 từ cốt lõi, thực tế đo được: 77 chuỗi dùng `hợp âm`, và anh em giữ EN chỉ là
 > **tên tính năng** (`Chord Track`, `Chord Pad`, `Chord Symbol`). Sửa danh sách thì
