@@ -193,6 +193,59 @@ giữ EN / động từ `chèn`), `Send` (nút giữ / động từ `gửi`).
 > - **5 chuỗi dính đuôi `s`:** `Các Track đã chọn` (thay vì `Tracks đã chọn`), `Hiện/Ẩn Track toàn cục trong Editor`,
 >   `Các Event đã chọn...` (thay vì `Events đã chọn...`), `Hiện/Ẩn Sound Slot Lane`, `Tất cả Cue (Channel đã chọn)`.
 
+> **Quét 9 chiều mới, sửa 61 chuỗi (đợt 186):** Đợt này **không dùng bộ dò có sẵn** —
+> mọi bộ dò trong `tools/` đều báo "0 lỗi", vì chúng soi *mẫu* chứ không soi *gia đình*.
+> Tám chiều mới, mỗi chiều một bộ lọc riêng:
+> 1. **Chữ số & ký hiệu đặc biệt.** `nums(key)` vs `nums(value)`, và
+>    `Counter(ký tự đặc biệt)` key vs value. Bắt được `-oo dB` → `-∞ dB` và
+>    `-inf dB` → `-∞ dB` — **cả hai là vi phạm §6**, 9/9 và 6/9 catalogue Steinberg
+>    giữ nguyên chữ nguồn. Sửa về `-oo dB` và `-inf dB`.
+> 2. **Key bắt đầu bằng chữ thường nhưng value đã hoa.** Máy hay Việt-hoá ký hiệu:
+>    `maj3`→`Maj3`, `sus4/11`→`Sus4/11`, `min3/#9`→`Min3/#9`, trong khi anh em
+>    `Triads with maj9` / `min9` giữ **thường**. Regex: `^[a-z]…` rồi so với value.
+> 3. **Key lệnh đơn lẻ so với đa số gia đình.** `Show` → `Hiển thị` trong khi
+>    **180/200** chuỗi `Show …` dùng `Hiện …`. Cùng kiểu: `Dark` → `Tối`, `Light` → `Sáng`
+>    (vi phạm §1 bảng màu, 6 anh em mỗi bên đều giữ EN). Đây là **loại lỗi 169 vòng
+>    trước không thấy** vì không ai so key đơn lẻ với gia đình của nó.
+> 4. **Token tiếng Việt HOA giữa chuỗi.** `Loop Vùng chọn Solo`, `Mở/Đóng Phần …`,
+>    `Đặt Độ dài ×3`, `Tăng Giá trị …`, `Giá trị Hiển thị`, `Văn bản Tìm kiếm`,
+>    `Tên Định dạng`. **Bộ dò phải dùng dải mã `0x00C0–0x00FF` + `0x1E00–0x1EFF` cho
+>    CHỮ THƯỜNG CÓ DẤU** — bản đầu của tôi chỉ đưa chữ hoa vào lớp ký tự nên trượt
+>    `Vùng` (chữ `V` không dấu). Và phải cho vị trí 0 vào tập "đầu câu", nếu không
+>    mọi chuỗi đều báo.
+> 5. **`value == key` mà key có từ chức năng tiếng Anh** — tìm chuỗi *chưa dịch*.
+>    Bắt được 15 chuỗi, gồm nhóm `Notehead: …` (bản không tiền tố đã dịch, bản có
+>    tiền tố thì không) và `Reset to Original Staff` (anh em `Cross Staff: Reset to
+>    Original Staff` đã dịch). **Bộ dò `audit_quality [1]` báo 0** vì nó chỉ soi
+>    *văn xuôi*; các nhãn có thuật ngữ giữ EN không vào diện.
+> 6. **Tra từ khóa luật trên toàn map** (không chỉ trên key mới). Đợt 174 đã cấm
+>    `đọc`/`ghi` cho Read/Write trong Automation — quét lại thuật ngữ đó toàn cục
+>    thì ra **19 chuỗi `Suspend Read/Write` còn sót**, trong đó có
+>    `Tạm dừng đọc/ghi tất cả`. Cùng menu lại có 2 chuỗi đã đúng
+>    (`…trạng thái Read` / `…trạng thái Write`). **Đây là bài học §8.1 thuần:**
+>    luật viết trong AGENT.md **không tự lan** — phải quét lại bằng TỪ khóa luật.
+> 7. **Ngữ nghĩa sai ở key trùng tên.** `Sus` → `Sustain` là **sai nghĩa**: `Sus` là
+>    viết tắt hợp âm (sus2/sus4), `Sustain` là pedal. de/ja/zh đều giữ `Sus`.
+>    Cùng dạng: `Inversions: Move Down` giữ trọn tiếng Anh trong khi
+>    `Chord Editing - Inversions: …` cũng giữ trọn, dù **6/6** anh em `Chord Editing`
+>    khác đều dịch `Chỉnh sửa hợp âm` → đợt 172 sửa dở, chỉ giữ `Inversions`.
+> 8. **Đối chiếu XML gốc khi nghi ngờ ngữ nghĩa.** `Triangle` / `Sine` / `Square`:
+>    zh ghi `三角波` / `正弦` / `方波` — tức là **tên dạng sóng**, không phải notehead
+>    (nhóm `Triangle Up Noteheads` giữ EN là chuyện khác). Nhưng `Ramp` đã giữ EN từ
+>    trước, nên cả ba lạc khỏi gia đình → đưa về `Sine` / `Triangle` / `Square`.
+> 9. **Số nhiều của thuật ngữ giữ EN.** Đợt 172 đã làm `Slurs` → `Slur`; đợt 186
+>    làm nốt `Accidentals` → `Accidental`, `Clefs` → `Clef`. **Còn giữ nguyên:**
+>    `Noteheads` → `Noteheads` (40 tên notehead đều mang đuôi `s`, đó là mẫu tên
+>    chứ không phải số nhiềi cần bỏ).
+>
+> **Hai chuỗi đã cân nhắc sửa nhưng giữ nguyên (có lý do):**
+> - **`Note #` → `Số Note`:** 5/9 ngôn ngữ giữ `Note #`, nhưng `CC No.` đã dịch là
+>   `Số CC` — `Note #` và `CC No.` là **cùng một ý** (số thứ tự). Giữ `Số Note` là
+>   đúng và nhất quán với anh em.
+> - **`Assume Skipping` → `Xử lý Clip hiện có`:** key tiếng Anh lệch nghĩa với **cả 8
+>   ngôn ngữ còn lại** (de `Bestehenden Clip bearbeiten`, ja/zh/ru đều nói *xử lý clip
+>   hiện có*). Đây là lỗi di truyền của Steinberg; bản dịch theo đa số là đúng.
+
 > **Ngoại lệ đã chốt — `Chord` dịch `hợp âm` (77 chuỗi).** Dù `Chord` nằm trong
 > 68 từ cốt lõi, thực tế đo được: 77 chuỗi dùng `hợp âm`, và anh em giữ EN chỉ là
 > **tên tính năng** (`Chord Track`, `Chord Pad`, `Chord Symbol`). Sửa danh sách thì
