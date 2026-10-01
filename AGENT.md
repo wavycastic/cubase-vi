@@ -101,6 +101,21 @@ trị **tháo câu ra ghép ngược**: `Restore Default Setup` → `Thiết l�
 Phải là **tiếng Việt đời thường**, không phải tiếng Việt do máy dịch. Đợt 75/77/79 sửa
 358 chuỗi vì đúng mấy nguyên tắc này.
 
+> **Khó dịch thì để tiếng Anh. Đừng ép.** Người dùng chốt (đợt 165). Bản dịch vòng
+> vẫn đọc được thì dịch; **không đọc được thì giữ nguyên tiếng Anh** — một câu
+> tiếng Anh còn hơn một câu tiếng Việt sai nghĩa. Không phải "lười": chỉ khi đã thử
+> và còn vướng.
+> - Cờ đỏ, dừng lại: dịch từ tiếng Anh **có một nghĩa đúng** sang từ tiếng Việt
+>   **khác nghĩa**. Đợt 165: `…used **these clefs**…` → `…loại **khóa** này…`
+>   (khóa = key, không phải clef). Chỗ này **giữ `Clef`** mới đúng.
+> - Cờ đỏ thứ hai: hiểu là dịch được nhưng **đọc lông nhằng** (`nương`, `thiết bị
+>   đầu vào và đầu ra mạng` cho `network interface`). Viết lại cho tự nhiên; tới
+>   mức không tự nhiên được thì giữ EN.
+> - **Cấm để lại chỗ dở dang**: sửa nửa câu còn tệ hơn để nguyên. §4 đã cấm
+>   dịch nửa vế; quy tắc này mở rộng điều đó sang *toàn câu*.
+> - **Vẫn phải giữ bất biến kỹ thuật (§6)** kể cả khi giữ EN: dấu câu, placeholder,
+>   `\n`, khoảng trắng đầu/cuối. `check_punctuation.py` không ngoại lệ.
+
 - **Bỏ bị động `... được`** — dấu hiệu rõ nhất của câu dịch máy: `đã được` → `đã` ·
   `sẽ được` → `sẽ` · `đang được` → `đang` · `đã bị loại bỏ` → `đã bỏ` · `Không thể
   chỉnh sửa VariAudio` → `Không sửa được VariAudio` · `không thể được Modulation` →

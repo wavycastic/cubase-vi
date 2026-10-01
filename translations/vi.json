@@ -1760,7 +1760,7 @@
  "Clef": "Clef",
  "Clefs": "Clefs",
  "Clefs at Start of Systems Following First System": "Clef ở đầu các dòng nhạc sau dòng nhạc đầu tiên",
- "Clefs with 8 above or below normally indicate that the instrument playing the music sounds an octave higher (for example, piccolo) or lower (for example, double bass, or tenor voice) than written. More recently, some composers have used these clefs as a substitute for octave lines. This option allows you to choose between the two approaches to octave-transposing clefs.": "Clef có số 8 ở trên hoặc dưới thường chỉ định nhạc cụ diễn tấu cao hơn một quãng tám (như piccolo) hoặc trầm hơn một quãng tám (như double bass, giọng tenor) so với ký âm. Gần đây, một số nhạc sĩ đã dùng loại khóa này thay cho vạch quãng tám. Tùy chọn này cho phép bạn chọn giữa hai cách tiếp cận với khóa chuyển quãng tám.",
+ "Clefs with 8 above or below normally indicate that the instrument playing the music sounds an octave higher (for example, piccolo) or lower (for example, double bass, or tenor voice) than written. More recently, some composers have used these clefs as a substitute for octave lines. This option allows you to choose between the two approaches to octave-transposing clefs.": "Clef có số 8 ở trên hoặc dưới thường chỉ định nhạc cụ diễn tấu cao hơn một quãng tám (như piccolo) hoặc trầm hơn một quãng tám (như double bass, giọng tenor) so với ký âm. Gần đây, một số nhạc sĩ đã dùng loại Clef này thay cho vạch quãng tám. Tùy chọn này cho phép bạn chọn giữa hai cách tiếp cận với Clef chuyển quãng tám.",
  "Clefs with Octave Indicators": "Clef kèm chỉ báo Octave",
  "Click": "Click",
  "Click & Count-in": "Click & Count-In",
