@@ -456,6 +456,7 @@ Chưa sửa gì trong `translations/` — nghiên cứu này chỉ để dùng s
 | `ptr.py` | đọc con trỏ tại một VA và ghi chú từng con trỏ trỏ vào đâu: nằm trong `.pdata` không, chuỗi gì, hay header PE. Đây là công cụ đi từ "tên lớp" tới "danh sách hàm". Cần `--va` khi đưa vào một file offset đã ghi trong tài liệu này (bẫy 6) |
 | `deobf_str.py` | giải mã chuỗi Steinberg bị obfuscate bằng LCG (`state * 0xBC8F`) |
 | `deobf_scan.py` | dò theo **hình dạng** để giải mã hàng loạt chuỗi obfuscate, không cần gõ seed/key. Quét cả `.text` ra 281 chuỗi ở 36 file nguồn — xem §14.7. Lọc theo "chữ in được" nên con số là **cận dưới**: chuỗi quá ngắn hoặc không phải ASCII đều bị bỏ |
+| `tools\peak_read.py` | đọc file `.peak` thật: in header, kiểm tra công thức `records == channels × ceil(frames/256)`, và vẽ lại dải sóng ra PNG/ASCII. `--check` quét cả thư mục. Xem §15 |
 
 ```powershell
 python tools\research\strgrep.py "E:\Steinberg\Cubase 15\Cubase15.exe" "AudioImage" 
@@ -712,13 +713,18 @@ thật) **không đi qua đây** — nó dùng đối tượng đọc khác, ch�
 `MAudioCollector::FlatSliceIterator` vẫn là ứng viên hợp lý cho *nhánh đó*, và
 không phải cho đối tượng 0x70 byte.
 
-Vậy ngưỡng 8192 là độ phân giải của chính file `.peak`:
+Vậy ngưỡng 8192 là **giới hạn của cache RAM**, không phải độ phân giải file:
 
 | mức phóng | đối tượng đọc | nguồn |
 |---|---|---|
 | `fpp < 1` | chưa rõ | số mẫu thật |
 | `1 ≤ fpp < 8192` | `AudioImageFile` (0x70) | cột trong file `.peak` |
 | `fpp ≥ 8192` | `AudioImageCache` (0x28) | cache trong RAM |
+
+> **Đính chính (đo được từ file thật, §15.4):** độ phân giải của file `.peak` là
+> **256 frame/cột/kênh**, không phải 8192. 8192 là ngưỡng do
+> `cacheAccessor->vfunc+0x18()` báo — tức mức mà cache trong RAM phục vụ được. Nên
+> khi thu nhỏ mạnh, một pixel có thể gộp **32 cột `.peak`**.
 
 ### 14.6 File `.peak` nằm ở đâu — đã rõ cơ chế, còn thiếu tên file
 
@@ -869,21 +875,74 @@ bằng giá trị riêng — khớp với hằng `-0.0f` (`0x145FA4E40`) mà §3
 | offset | kiểu | đọc được | ghi chú |
 |---|---|---|---|
 | `+0x00` | char[4] | `PIFF` | chữ ký thật trên đĩa |
-| `+0x04` | BE u32 | `65736` ở **cả 19 file** | hằng, không đổi theo file ⇒ **không phải** số bản ghi. Chưa biết là gì (nghi ngờ định dạng/mức lọc) |
+| `+0x04` | BE u32 | `65736` ở **cả 19 file** | hằng ⇒ không phải số bản ghi. Chưa đặt tên được |
 | `+0x08` | BE u32 | `96` ở cả 19 file | **kích thước header** ✓ |
-| `+0x0C` | BE u32 | `2` | có thể là số kênh (file mẫu là stereo) |
-| `+0x10` | BE u32 | `6868726` | không đổi giữa các file ⇒ hằng |
-| `+0x14` | BE u32 | `256` | hằng |
-| `+0x18` | BE u32 | `0xFFFFFFFF` | sentinel −1, ở **mọi** file |
-| `+0x1C` | BE u32 | khác nhau mỗi file | có thể là checksum hoặc số frame |
+| `+0x0C` | BE u32 | `2` ở cả 19 file | **số kênh** ✓ (xem §15.4) |
+| `+0x10` | BE u32 | đổi ở cả 19 file | **tổng số frame** của audio ✓ |
+| `+0x14` | BE u32 | `256` ở cả 19 file | hằng — nghi ngờ là độ phân giải, xem §15.4 |
+| `+0x18` | BE u32 | `0xFFFFFFFF` ở cả 19 file | sentinel −1 |
+| `+0x1C` | BE u32 | hằng ở 18/19 file | nhiều khả năng là nhãn định dạng |
 | `+0x20` | char[] | `"02. Body.flac"` | **tên file nguồn**, đuôi `.flac` |
-| `+0x60` | — | dữ liệu | `(len − 0x60) / 8` bản ghi |
+| `+0x60` | — | dữ liệu | `2 × ceil(frames / 256)` bản ghi |
 
-Hệ quả: `+0x20` chứa **tên file âm thanh gốc**, và số bản ghi chỉ suy ra được từ
-kích thước file — Cubase không lưu nó ở dạng rõ ràng trong header. Vậy nếu muốn đọc
-`.peak` bằng công cụ riêng thì bắt buộc phải biết độ dài file.
+Hệ quả: `+0x20` chứa **tên file âm thanh gốc**, và số bản ghi **không** lưu ở
+dạng rõ ràng trong header — nó suy ra từ `+0x10`. Vậy công cụ đọc `.peak` bắt buộc
+phải hiểu công thức ở §15.4, không chỉ đọc header.
 
-### 15.4 File `.peak` nằm ở đâu — đã có file thật để trả lời
+### 15.4 Trường `+0x10` = tổng số frame; độ phân giải là **256 frame/cột**
+
+Đo trên 19 file. Hai kết quả, một trong đó là con số quan trọng nhất của cả
+nghiên cứu dải sóng:
+
+**`+0x10` là tổng số frame của audio.** Không phải hằng — nó đổi ở **cả 19**
+file (6.754.318 … 11.166.121). Vòng trước tôi chỉ kiểm một file rồi kết luận là
+hằng, nên đoán sai.
+
+**Độ phân giải `.peak` = 256 frame mỗi cột, mỗi kênh.** Kiểm bằng công thức:
+
+```
+số bản ghi  ==  2 × ceil(frames / 256)          ->  khớp 19/19 file
+```
+
+Tức `n / 2` là số cột, và mỗi cột gói **256 frame**. Lệch nhỏ giữa `frames` và
+`256 × cột` là do **cột cuối không tròn** — tính được frame của cột cuối cho từng
+file: 7, 21, 32, 48, 84, 96 … tới 256 (file `07. Long Way` chia hết).
+
+Đây là câu trả lời cho câu hỏi mà §15.3 nêu là chưa giải được, và nó **sửa
+đáng kể** hiểu biết cũ:
+
+> §14.5 và §5 nói ngưỡng mặc định là **8192** frame/cột. Con số đó là
+> `cacheAccessor->vfunc+0x18()` — giới hạn mà cache RAM đáp ứng, **không phải**
+> độ phân giải của file `.peak`. File `.peak` ở đây là **256**. Nên khi thu nhỏ
+> mạnh, Cubase gộp **32 cột `.peak`** cho mỗi pixel.
+
+Kiểm tra nhất quán: `+0x0C` = `2` ở cả 19 file ⇒ số kênh, và `n` luôn chẵn — đúng
+với bố cục xen kẽ theo kênh mà §14.4 đọc từ mã.
+
+`+0x1C` là **hằng ở 18/19 file** (`0x8DAFEE63`), chỉ `01 - Show Me` khác
+(`0x587251E0`) — và file đó cũng là file duy nhất có tên theo mẫu khác
+(`01 - ` thay vì `01. `). Nên nó nhiều khả năng là **nhãn phiên bản/định dạng**,
+không phải dữ liệu. `+0x04` (`65736`) và `+0x14` (`256`) là hằng ở cả 19 file;
+`+0x18` = `0xFFFFFFFF` là sentinel −1.
+
+### 15.5 Đã dựng công cụ đọc `.peak`
+
+`tools\peak_read.py` — đọc header, kiểm công thức, vẽ lại dải sóng ra PNG hoặc
+ASCII (chỉ thư viện chuẩn, `zlib` để ghi PNG):
+
+```powershell
+python tools\peak_read.py "D:\01_Music_Projects\Cubase\Images" --check
+python tools\peak_read.py "<mot file .peak>" --at 60 --width 96 --png wave.png
+```
+
+`--check` báo **19/19 khớp**. Ảnh vẽ ra là một dải sóng thật (một đoạn ghi âm
+đã master, gần chạm 0 dB với vài đỉnh đơn) — nghĩa là toàn bộ định dạng đã đọc
+được, không còn phần nào phải đoán.
+
+Cái này cũng mở đường cho hướng "vẽ đẹp hơn": có thể dựng lại dải sóng ngoài
+Cubase rồi so với ảnh Cubase chụp được, thay vì sửa bên trong tiến trình.
+
+### 15.6 File `.peak` nằm ở đâu — đã có file thật để trả lời
 
 ```
 D:\01_Music_Projects\Cubase\
@@ -903,17 +962,19 @@ Còn một chi tiết lạ: thư mục `Images\Images\` có **một** bản `.ba
 `.peak` trùng tên với bản ở thư mục trên — dấu vết một lần dựng ảnh bị lặp. Không
 ảnh hưởng kết luận.
 
-### 15.5 Chưa giải được
+### 15.6 Chưa giải được
 
-- Trường `+0x04` (= `65736` mọi file) và `+0x10` — hằng số, cần đọc mã bên ghi
-  (`0x1421F1DD0`) mới đặt tên được.
-- `+0x1C` khác nhau mỗi file: checksum, hay số frame thật? Thử nghiệm: file
-  `10. Call Back` dài 341.440 byte mà vẫn có `65736` ở `+0x04` — nên nó **không**
-  phải số frame.
-- **Số frame thật không có trong file.** Muốn biết một cột peak đại diện cho bao
-  nhiêu frame thì phải lấy từ `.cpr` (chiều dài event × sample rate) hoặc từ
-  `framesPerPixel` của cache. Đây là lý do ngưỡng 8192 ở §14.5 không nằm trong
-  file.
+- `+0x04` (= `65736` mọi file) và `+0x14` (= `256` mọi file): đều hằng, cần đọc mã
+  bên ghi (`0x1421F1DD0`) mới đặt tên chắc chắn. `+0x14` bằng `256` rất đáng nghi là
+  độ phân giải, nhưng **đã chứng minh được bằng công thức** ở §15.4 mà không cần
+  đoán từ hằng số.
+- `+0x1C` khác ở đúng một file. Chưa rõ vì sao — cùng đợt dựng hay khác phiên bản.
+- **Sample rate không có trong file.** Suy ra được độ dài nếu biết tần số
+  (`frames / 44100` cho 141–253 giây với các file này), nhưng tần số phải lấy từ
+  `.cpr` hoặc từ chính file audio — file `.flac` gốc không còn trên máy.
+- Cách `AudioImageFile` ánh xạ frame → cột: biết độ phân giải là 256 nhưng chưa
+  đọc được phép tính cụ thể trong `0x141E9C340` (nó có thể không chia thẳng mà
+  gom theo bảng).
 
 ---
 
