@@ -1402,11 +1402,28 @@ Hai điều cố ý trong cách làm:
 - **Chỉ ghi một lần.** Ham vẽ chạy trên luồng Cubase, mỗi phép I/O đều làm luồng
   đó nghẽn. Một lần thì không đáng kể.
 
-Còn thiếu để chạy thật: **Cubase phải vẽ một dải sóng**, tức cần dự án có audio.
-Máy này không có `.cpr` của Cubase 15 (chỉ template của Cubase 14 ở bản cài khác,
-mở bằng Cubase 15 sẽ ra hộp thoại chuyển đổi cần input thật, mà session này gửi
-input không tới app — xem `docs/RESEARCH.md`). Nên `devdump` hiện báo
-*"hook chưa chạy lần nào"*, đúng như thiết kế.
+Điều kiện để chạy thật: **Cubase phải vẽ một dải sóng**. Dự án `demo1.cpr` trên máy
+này (`D:\01_Music_Projects\Cubase\`) **có** audio — 19 file `.peak` trong `Images\`
+nên chắc chắn nó sẽ vẽ dải sóng khi mở. Thiếu duy nhất là một phiên desktop có
+input thật: session agent hiện tại gửi input không tới app (xem
+`docs/RESEARCH.md`), nên không tự mở dự án được.
+
+Nên khi có phiên desktop:
+
+```powershell
+# 1. mo Cubase, File > Open Project... > D:\01_Music_Projects\Cubase\demo1.cpr
+# 2. dam bao Project Window hien mot event audio (keo track cao mot chút)
+python tools\inject_wavehook.py load --dll hook\wavehook4.dll
+python tools\inject_wavehook.py devdump
+```
+
+`devdump` in ra 24 slot vtable kèm **tên module** của từng con trỏ, nên nhìn là biết
+slot `+0x80` rơi vào `Cubase15.exe` hay DLL khác — tức là trả lời ngay câu hỏi
+"CPU hay GPU" ở §12.7 bằng dữ kiện chứ không phải suy luận.
+
+`tools\inject_wavehook.py status` kiểm tra hook đã vào chưa (đọc 15 byte đầu hàm
+và tìm mẫu `49 BB ... 41 FF E3`), `calls` xem `g_callCount` đã đếm được bao nhiêu
+lần vẽ.
 
 ### 12.9 Trình tự nên làm
 

@@ -813,19 +813,118 @@ qua các handler đó. Đó là lý do cấu trúc bên trong không giống WAV
 
 ---
 
+## 15. Định dạng `.peak` — đã mổ được từ file thật
+
+Có dự án thật trên máy: `D:\01_Music_Projects\Cubase\demo1.cpr`, kèm **19 file
+`.peak`**. Đọc được header, và kết quả **sửa hai điều đoán ở vòng trước**.
+
+### 15.1 Chữ ký là `PIFF`, không phải `PEAK`
+
+```
+0000  50 49 46 46 00 01 00 C8  00 00 00 60  00 00 00 02   PIFF.......`....
+0010  00 68 CE F6 00 00 01 00  FF FF FF FF  8D AF EE 63   .h.............c
+0020  30 32 2E 20 42 6F 64 79  2E 66 6C 61 63 00 00 00   02. Body.flac...
+```
+
+Đối chiếu: `+0x08` bằng `96` ở **cả 19 file**, và `(len(file) - 96)` **chia hết
+cho 8** ở cả 19 file. Nên `+0x08` là **kích thước header**, và dữ liệu bắt đầu ở
+`0x60` — khớp với `[ảnh + 0x28] = 0x60` mà `AudioImageFile` đọc ở §14.4.
+
+Nên chữ ký thật là **`PIFF`** (viết tắt "Packed Image File Format" của
+Steinberg). Hằng `0x5045414B = 'PEAK'` ở §6.1 chỉ là tham số **signature** trong
+lệnh đăng ký loại file `0x14161AF40` — dùng để Cubase nhận ra file khi duyệt, còn
+4 byte đầu trên đĩa là `PIFF`. Đây là bẫy kiểu "tên hiển thị khác chữ ký thật", và
+nếu không có file thật thì rất dễ đoán sai (vòng trước đã đoán sai).
+
+### 15.2 Bản ghi dữ liệu: 2 × float32 **little-endian**, không âm
+
+Đo trên toàn bộ 53.662 bản ghi của một file:
+
+| kiểm tra | kết quả |
+|---|---|
+| big-endian float32 | ra `0.000000` mọi chỗ → **sai** |
+| little-endian float32 | ra giá trị 0..1 hợp lý → **đúng** |
+| tỉ lệ bản ghi có cả hai số ≥ 0 | **30000/30000 = 100%** |
+| khoảng giá trị toàn file | `min = 0.0`, `max = 1.0` |
+
+```
++60  00 40 14 3E  00 F0 37 3E     ->  0.144775  0.179626
++68  00 E0 C7 3D  00 10 FA 3D     ->  0.097595  0.122101
+...
+[26831]                              0.884888  0.644897
+[53661] (cuoi)                      0.000153  0.000183
+```
+
+**Xác nhận dự đoán ở §14.4**: hai số **không âm**, không phải `(min, max)` có dấu.
+Và việc `getRange` gộp bằng **max** (`0x141E9D010` → `0x141E9F4E30`) chỉ đúng
+với dữ liệu không âm. Bản ghi là `(đỉnh trên, |đỉnh dưới|)` — hai số đo độ lớn
+biên độ, chuẩn hoá 0..1.
+
+Cũng khớp với `movss` / `comiss` trong mã: cả hai đều là **float**, không phải
+int. Và không có bản ghi `(0,0)` nào trong file (0%), nên cột rỗng được đánh dấu
+bằng giá trị riêng — khớp với hằng `-0.0f` (`0x145FA4E40`) mà §3.4 nêu.
+
+### 15.3 Header 96 byte — trường nào đã biết, trường nào chưa
+
+| offset | kiểu | đọc được | ghi chú |
+|---|---|---|---|
+| `+0x00` | char[4] | `PIFF` | chữ ký thật trên đĩa |
+| `+0x04` | BE u32 | `65736` ở **cả 19 file** | hằng, không đổi theo file ⇒ **không phải** số bản ghi. Chưa biết là gì (nghi ngờ định dạng/mức lọc) |
+| `+0x08` | BE u32 | `96` ở cả 19 file | **kích thước header** ✓ |
+| `+0x0C` | BE u32 | `2` | có thể là số kênh (file mẫu là stereo) |
+| `+0x10` | BE u32 | `6868726` | không đổi giữa các file ⇒ hằng |
+| `+0x14` | BE u32 | `256` | hằng |
+| `+0x18` | BE u32 | `0xFFFFFFFF` | sentinel −1, ở **mọi** file |
+| `+0x1C` | BE u32 | khác nhau mỗi file | có thể là checksum hoặc số frame |
+| `+0x20` | char[] | `"02. Body.flac"` | **tên file nguồn**, đuôi `.flac` |
+| `+0x60` | — | dữ liệu | `(len − 0x60) / 8` bản ghi |
+
+Hệ quả: `+0x20` chứa **tên file âm thanh gốc**, và số bản ghi chỉ suy ra được từ
+kích thước file — Cubase không lưu nó ở dạng rõ ràng trong header. Vậy nếu muốn đọc
+`.peak` bằng công cụ riêng thì bắt buộc phải biết độ dài file.
+
+### 15.4 File `.peak` nằm ở đâu — đã có file thật để trả lời
+
+```
+D:\01_Music_Projects\Cubase\
+  demo1.cpr
+  Audio\
+  Images\
+    01. E851917649304.peak          <- KHÔNG cùng thư mục với WAV
+    02. Body1917435672.peak
+    ...
+```
+
+**Không nằm cạnh file âm thanh, mà nằm trong `Images\` ngay cạnh thư mục dự án**,
+và tên đặt theo mẫu `<số thứ tự>.<tên track><số băm>`. Audio nằm ở `Audio\`.
+Vậy mục 2 trong *Chưa làm* đã đóng bằng quan sát, không cần RE.
+
+Còn một chi tiết lạ: thư mục `Images\Images\` có **một** bản `.bak` và **một** bản
+`.peak` trùng tên với bản ở thư mục trên — dấu vết một lần dựng ảnh bị lặp. Không
+ảnh hưởng kết luận.
+
+### 15.5 Chưa giải được
+
+- Trường `+0x04` (= `65736` mọi file) và `+0x10` — hằng số, cần đọc mã bên ghi
+  (`0x1421F1DD0`) mới đặt tên được.
+- `+0x1C` khác nhau mỗi file: checksum, hay số frame thật? Thử nghiệm: file
+  `10. Call Back` dài 341.440 byte mà vẫn có `65736` ở `+0x04` — nên nó **không**
+  phải số frame.
+- **Số frame thật không có trong file.** Muốn biết một cột peak đại diện cho bao
+  nhiêu frame thì phải lấy từ `.cpr` (chiều dài event × sample rate) hoặc từ
+  `framesPerPixel` của cache. Đây là lý do ngưỡng 8192 ở §14.5 không nằm trong
+  file.
+
+---
+
 ## Chưa làm / hướng tiếp
 
-1. Chưa đọc được **phần đầu file `.peak`** (header: số cột, frames mỗi cột, cách
-   scale). Đã biết phần **dữ liệu** là bản ghi 8 byte × 2 float không âm, xen kẽ
-   theo kênh (§14.4), và biết nó nằm sau một header vì offset dữ liệu là
-   `[ảnh + 0x28]` — nhưng **chưa biết header gồm những gì**. Đáng vào:
-   `StMedia::AudioImageColumnHandler` (vtable `0x1462F8618`, xem §14.8) và bên ghi
-   là `0x1421F1DD0`. Trên máy này không có file `.peak` nào để đối chiếu — cần
-   một project Cubase thật.
-2. **Tên file `.peak`**: đã rõ cơ chế ghép tên (§14.6) nhưng chưa biết hậu tố
-   `%02d` là số gì, và chưa xác nhận tên có cùng thư mục với file WAV hay không.
-   Bước tiếp theo: đọc `0x1421F66E0` / `0x1421F6540` (hàm sinh con số) và
-   `0x1445caa20` (khởi tạo tài liệu).
+1. ~~Chưa đọc được phần đầu file `.peak`~~ — **đã đóng ở §15**. Header 96 byte,
+   bản ghi 8 byte × 2 float32 LE không âm. Còn `+0x04`/`+0x10` là hằng chưa đặt
+   tên được, và số frame không lưu trong file.
+2. ~~Chưa truy được file `.peak` nằm ở đâu~~ — **đã đóng ở §15.4**: trong
+   `Images\` cạnh thư mục dự án, tên `<tt>.<tên track><số băm>`. Cơ chế ghép tên
+   trong mã vẫn chưa truy (hậu tố `%02d` ở §14.6), nhưng không còn quan trọng.
 3. ~~Chưa xác minh đối tượng 0x70 byte là `MAudioCollector::FlatSliceIterator`~~
    — **đã đóng ở §14.1**: đối tượng đó là `AudioImageFile`, tức file `.peak`.
    `MAudioCollector::FlatSliceIterator` còn là ứng viên cho **nhánh `fpp < 1`**
@@ -838,3 +937,6 @@ qua các handler đó. Đó là lý do cấu trúc bên trong không giống WAV
    hệ số màu khi vẽ.
 6. `imagegenerator.dll` trong thư mục cài đặt **không** liên quan: nó là OpenCV +
    bộ lọc ảnh (`PixelSIMD@Steinberg`, `IPL_DATA_ORDER_PIXEL`), không phải dải sóng.
+7. Chưa chạy được bộ probe vtable của device (xem `FLWAVE.md` §12.8) — cần Cubase
+   đang chạy và vẽ dải sóng. `demo1.cpr` **có** audio nên điều kiện đã đủ, chỉ còn
+   một phiên desktop thật.
