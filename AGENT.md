@@ -116,6 +116,13 @@ Phải là **tiếng Việt đời thường**, không phải tiếng Việt do 
 > - **Vẫn phải giữ bất biến kỹ thuật (§6)** kể cả khi giữ EN: dấu câu, placeholder,
 >   `\n`, khoảng trắng đầu/cuối. `check_punctuation.py` không ngoại lệ.
 >
+> **`ui-navigation.json` LUÔN THẮNG — đây là bẫy merge.** `merge_maps.py` dùng
+> `sorted()`, mà `u` > `r` nên file này đứng **sau** mọi `round_*.json`. Sửa ở
+> `round_NNN.json` mà key đó có trong `ui-navigation.json` sẽ **bị ghi đề im lặng**
+> (đợt 168: 3 chuỗi `Add … Track to Selected Tracks…`). `vi.json` vẫn đúng về
+> kiểm tra nên không báo lỗi. **Sửa thì sửa cả hai file**, hoặc xoá key ở
+> `ui-navigation.json`. Luôn merge xong đối chiếu lại giá trị.
+
 > **Rút gọn: đừng để bộ dò tự cắt.** Đợt 166 thử cắt `Vui lòng` bằng regex và nó
 > làm **hỏng 11/33 chuỗi** — chữ thường sau `.` và sau `\n\n`
 > (`…cài đặt. Thử dùng…` thành `…cài đặt. thử dùng…`). Vì tiền tố lọc không biết

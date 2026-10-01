@@ -1,0 +1,18 @@
+{
+  "Insert Notes": "Chèn các Note",
+  "Insert Chord Events": "Chèn các Chord Event",
+  "Add Audio Tracks": "Thêm các Audio Track",
+  "Add Audio Tracks...": "Thêm các Audio Track...",
+  "Delete Source Tracks": "Xóa các Source Track",
+  "Remove Source Tracks": "Gỡ bỏ các Source Track",
+  "Remove Source Events": "Gỡ bỏ các Source Event",
+  "Add Events to Chord Track": "Thêm các Event vào Chord Track",
+  "Add Events and Parts": "Thêm các Event và Part",
+  "Insert Reset Events after Record": "Chèn các Event đặt lại sau khi ghi",
+  "Paste Warp Markers to Selected Events": "Dán các Warp Marker vào Event đã chọn",
+  "Remove Empty Tracks": "Gỡ bỏ các Track rỗng",
+  "More Tracks": "Thêm các Track",
+  "Add Effect Track to Selected Tracks...": "Thêm các Effect Track vào Track đã chọn...",
+  "Add Group Track to Selected Tracks...": "Thêm các Group Track vào Track đã chọn...",
+  "Add VCA Track to Selected Tracks...": "Thêm các VCA Track vào Track đã chọn..."
+}
