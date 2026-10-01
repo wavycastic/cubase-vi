@@ -178,6 +178,10 @@ giữ EN / động từ `chèn`), `Send` (nút giữ / động từ `gửi`).
 > - **Đưa 7 chuỗi dịch nửa vời `Zone dưới` về `Lower Zone`:** Khớp hoàn toàn với `Left Zone`, `Right Zone`,
 >   `Lower Zone` trên thanh công cụ và cửa sổ Project.
 
+> **Đồng bộ Hermode Tuning (đợt 183):**
+> - **Sửa đảo từ `tuning Hermode`:** Đổi thành `Hermode Tuning` trong hộp thoại Project Setup,
+>   đồng bộ 100% với các chuỗi Hermode Tuning khác.
+
 > **Ngoại lệ đã chốt — `Chord` dịch `hợp âm` (77 chuỗi).** Dù `Chord` nằm trong
 > 68 từ cốt lõi, thực tế đo được: 77 chuỗi dùng `hợp âm`, và anh em giữ EN chỉ là
 > **tên tính năng** (`Chord Track`, `Chord Pad`, `Chord Symbol`). Sửa danh sách thì
