@@ -323,7 +323,7 @@
   "Drop MIDI Part (Pattern)": "Thả MIDI Part (Pattern)",
   "Drum Editor: ": "Drum Editor: ",
   "Dry (Transfer Channel Settings)": "Dry (Chuyển cài đặt Channel)",
-  "Duplicate the root note (one octave higher)": "Nhân bản nốt gốc (cao hơn 1 quãng tám)",
+  "Duplicate the root note (one octave higher)": "Nhân bản Root Note (cao hơn 1 quãng tám)",
   "Duplicate the tenor (one octave higher)": "Nhân bản giọng Tenor (cao hơn 1 quãng tám)",
   "EQ Type: <%s>": "Loại EQ: <%s>",
   "EQ/Filter Transition: <Quick>": "Chuyển tiếp EQ/Filter: <Quick>",
