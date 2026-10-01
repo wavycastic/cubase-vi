@@ -285,7 +285,7 @@
   "Deselect and keep current Track Version active": "Bỏ chọn và giữ Track Version hiện tại hoạt động",
   "Destination Folder:": "Thư mục đích:",
   "Destination Parameter before Modulation": "Tham số đích trước khi Modulation",
-  "Destination track already contains chord events.": "Track đích đã chứa Chord Event.",
+  "Destination track already contains chord events.": "Destination Track đã chứa Chord Event.",
   "Detecting Note Segments...": "Đang nhận diện các đoạn Note...",
   "Determines how far before the actual hitpoint position the audio event is sliced": "Xác định Audio Event Slice trước vị trí Hitpoint thực tế bao xa",
   "Devices (Studio)": "Thiết bị (Studio)",
