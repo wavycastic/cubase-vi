@@ -47,7 +47,7 @@ môi trường ký âm và khắc bản nhạc (notation/engraving) chuyên sâu
 toàn bộ thuật ngữ chuyên ngành ký âm quốc tế được giữ nguyên tiếng Anh (Staff/Stave ·
 Clef · Barline · Stem · Beam · Accidental · Rest · Grace Note · Notehead · Arpeggio ·
 Tuplet · Glissando · Trill · Fermata · Key Signature · Time Signature · Chord Symbols ·
-Rhythm Dot · Ledger Line · Slash).
+Rhythm Dot · Ledger Line · Slur · Tie · Inversion · Interval · Swing · Cadence · Slash).
 Động từ thao tác và giao diện chung vẫn Việt hóa tự nhiên: Thêm, Xóa, Ẩn, Hiện, Sửa,
 Thiết lập, Mở, Đóng, Lật (Flip)...
 
@@ -56,6 +56,13 @@ Thiết lập, Mở, Đóng, Lật (Flip)...
 > đi tìm để sửa**, sẽ tốn thời. `Grace Note` chỉ có 2 chuỗi và đang trộn
 > (`Unslashed Grace Note` giữ EN, `Slashed Grace Note` → `Nốt Grace có Slash`).
 > Còn 3 từ Score khác đã kiểm là giữ EN đúng: `Clef`, `Tuplet`, `Rhythm Dot`.
+>
+> **6 từ thêm ở đợt 172 — vì tìm thấy chúng ĐANG bị dịch sai nghĩa:**
+> `Slur` (→"dấu luyến", *luyến* = lỗi lầm), `Inversion` (→"thể đảo", *thể* = cỡ vải),
+> `Interval` (→"khoảng"/"quãng", phải thống nhất), `Tie` (→"dấu nối"), `Swing`,
+> `Cadence`. **Bài học: danh sách §2 phải khớp với map, và cả hai đều phải kiểm** —
+> viết luật rồi tin là xong là lỗi nguồn (đã xảy ra ở `Time Signature`).
+> Đã sửa 19 chuỗi. Riêng `Chord` giữ nguyên `hợp âm` — xem bảng bên trên.
 
 `System` và `Bar` theo ngữ cảnh: Score Editor → `System` / `Bar`; ngoài đó →
 `hệ thống` / `thanh`. Từ HLV cũng giữ bên HLV: `con trỏ`, `bè`, `phát lại`, `hợp âm`.

@@ -1,0 +1,21 @@
+{
+  "Slur": "Slur",
+  "Slurs": "Slur",
+  "Bezier Slur": "Bezier Slur",
+  "Inversions": "Inversions",
+  "Inversions: Move Down": "Inversions: Move Down",
+  "Inversions: Move Up": "Inversions: Move Up",
+  "1st Inversion": "1st Inversion",
+  "2nd Inversion": "2nd Inversion",
+  "3rd Inversion": "3rd Inversion",
+  "Chord Editing - Inversions: Move Down": "Chord Editing - Inversions: Move Down",
+  "Chord Editing - Inversions: Move Up": "Chord Editing - Inversions: Move Up",
+  "Interval": "Interval",
+  "Notes with Augmented or Diminished Intervals": "Notes có Interval tăng hoặc giảm",
+  "Do Not Show Interval on Trill": "Không hiện Interval trên Trill",
+  "Show Interval on Trill": "Hiện Interval trên Trill",
+  "Tie": "Tie",
+  "Tie Steps": "Tie Steps",
+  "Tie Adjacent Steps": "Tie Adjacent Steps",
+  "Natural Minor": "Natural Minor"
+}
