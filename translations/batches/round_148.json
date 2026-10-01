@@ -1,0 +1,14 @@
+{
+  "... with Systemic Barline if at Start of System": "... với Barline chung nếu ở đầu dòng nhạc",
+  "Barline": "Barline",
+  "Barlines": "Barlines",
+  "Centered on Barline": "Căn giữa trên Barline",
+  "Left-Aligned on Barline": "Căn trái theo Barline",
+  "Allow Partial Beams on Stemless Rest at Start or End of Beam": "Cho phép đuôi nốt phụ trên Rest không có thân ở đầu hoặc cuối đuôi nốt",
+  "Note and Rest Colors": "Màu Note và Rest",
+  "Note and Rest Colors: None": "Màu Note và Rest: Không có",
+  "Note and Rest Colors: Out of Range": "Màu Note và Rest: Ngoài phạm vi",
+  "Note and Rest Colors: Voice Color": "Màu Note và Rest: Màu bè",
+  "Notes Starting on a Beat Followed by a Rest in the Middle of the Beat": "Các nốt bắt đầu tại phách và theo sau là Rest ở giữa phách",
+  "Show Normal Bar Number If Coincident with Start of Multi-Bar Rest Showing Range": "Hiện số Bar thông thường nếu trùng với đầu dải Rest nhiều Bar"
+}
