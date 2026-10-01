@@ -320,21 +320,89 @@ Ba slot mà `0x141E9C340` dùng, đọc trực tiếp từ mã:
 0x1421F4C12  ret
 ```
 
-Phải nói rõ độ mạnh của bằng chứng này, vì nó **không** chứng minh "mỗi cột peak =
-256 mẫu":
+### 3.6b Đã tìm thấy mã **ghi** header `.peak` — mọi trường đã đặt tên được
 
-- **Đã chứng minh:** khi chưa nạp dữ liệu, `vfunc+0x18` trả về **256**.
-- **Đã chứng minh độc lập:** độ phân giải file `.peak` là 256 mẫu/cột, bằng công
-  thức khớp 19/19 file (§15.4).
-- **Chưa chứng minh:** rằng con số 0x100 trong mã *chính là* frames-per-column của
-  file `.peak`. Hằng nằm ở đường trả về khi con trỏ lớp nền **null**, tức nó là giá
-  trị dự phòng cho một tình huống chưa có file — có thể là "coi như có 256 bản
-  ghi" chứ không phải "mỗi bản ghi 256 mẫu".
+Hàm `0x1421F1600` ghi header, và nó **xác nhận từng trường** bằng nguồn ghi, không
+phải bằng suy luận:
 
-Hai con số bằng nhau là **hợp lý nghi ngờ mạnh** (`.peak` viết 256 frame/cột, và lớp
-đọc cũng dùng 256 làm mặc định), nhưng tôi chưa tìm được mã **ghi** file `.peak`
-để khép lại. Vì vậy §3.5 dùng 256 như con số thực nghiệm của `.peak`, còn mã ở đây
-được trích dẫn như **hằng dự phòng 256** — không gộp làm một.
+```
+0x1421F16C8  ; vong copy ten file nguon vao [rdi + 0x20] byte tuong byte,
+             ;   dung den byte 0  -> chuoi NUL ket thuc
+0x1421F16DF  mov dword ptr [rdi + 0x1C], 0        ; +0x1C = 0 luc GHI
+0x1421F17C2  mov rax, [rsi + 0x10]
+0x1421F17CA  call [rax + 0x48]                   ; so luong mau
+0x1421F17CD  mov edx, 0x7FFFFFFF
+0x1421F17D2  cmp rax, rdx                         ; clam o 2^31-1
+0x1421F17D5  cmovl edx, eax
+0x1421F17D8  mov [rdi + 0x10], edx                ; +0x10 = TONG SO FRAME
+0x1421F17E3  call [rax + 0x38]                   ; so kenh
+0x1421F17E6  mov [rdi + 0x0C], eax                ; +0x0C = SO KENH
+0x1421F17E9  mov dword ptr [rdi + 0x14], 0x100    ; +0x14 = 256, HARDCODE
+```
+
+Bốn kết luận, tất cả từ mã ghi:
+
+**1. `+0x10` là tổng số frame** — lấy từ `vfunc+0x48` của đối tượng nguồn, có
+clamp ở `0x7FFFFFFF`. Đúng như tôi đo từ header 19 file (§15.4), nay đã xác nhận
+từ phía ghi.
+
+**2. `+0x0C` là số kênh** — từ `vfunc+0x38`. Đúng với giá trị `2` mọi file.
+
+**3. `+0x14` = 256 là hằng ghi cứng**, không phải số đo. Đây là câu trả lời dứt
+điểm cho mục "chưa đặt tên được" ở §15.7: **`0x100` là frames-per-column do phía
+ghi quyết định**, và nó trùng với giá trị mọi file thật.
+
+**4. `+0x1C` được ghi là `0`**, không phải giá trị khác. Vậy `0x8DAFEE63` quan sát
+được ở 18/19 file **không do hàm này sinh ra** ở lúc ghi header — nó phải được ghi
+ở giai đoạn khác (nhiều khả năng là checksum dữ liệu, ghi sau khi ghi xong phần
+bản ghi). Điều này **lật ngược** giả thuyết "nhãn định dạng" tôi đưa ra ở
+§15.4/§15.7: một nhãn định dạng sẽ là hằng, mà hằng thì không giải thích vì sao
+đúng một file khác. Giả thuyết checksum dữ liệu khớp tốt hơn, nhưng **chưa kiểm
+được** — cần đọc tiếp phần ghi bản ghi.
+
+Về `+0x04` = `65736`: mã không ghi trường này ở `0x1421F1600`. Giá trị `0xC80001`
+mà tôi thấy ở `0x1421F1C6C` (`mov dword ptr [rbp - 0x7C], 0xC80001`) là **mặc nạn
+so sánh** trong hàm kiểm tra header cũ còn khớp không, không phải giá trị ghi ra
+file. Nên `65736` vẫn chưa đặt tên được.
+
+### 3.6c Vì sao header là big-endian: hàm `0x1421F0EF0`
+
+Header trong RAM là little-endian; trước khi ghi, Cubase gọi `0x1421F0EF0` để đảo
+byte. Hàm này **không** dùng `bswap` — nó hoán đổi từng cặp byte:
+
+```
+0x1421F0EF3  movzx edx, byte ptr [rcx + 4]
+0x1421F0EF7  movzx eax, byte ptr [rcx + 5]
+0x1421F0EFB  mov byte ptr [rcx + 4], al
+0x1421F0F02  mov byte ptr [rcx + 5], dl
+0x1421F0F05  movzx edx, byte ptr [rcx + 6]
+0x1421F0F09  mov byte ptr [rcx + 6], al   ; al = byte[7]
+0x1421F0F11  mov byte ptr [rcx + 7], dl
+```
+
+Nó lặp lại cho các cặp `+8/+9`, `+0xA/+0xB`, … `+0xE/+0xF`, rồi `+0x10..+0x1F`,
+và **dừng ở `+0x1F`** — không đụng `+0x20` trở đi (tên file) và không đụng phần dữ
+liệu. Đây chính là lý do phần dữ liệu float32 ở `+0x60` vẫn là **little-endian**
+trong khi header là big-endian: hai vùng dùng hai đường ghi khác nhau.
+
+Kiểm chéo bằng số: giá trị trong RAM `0x00C80001` (LE → byte `01 00 C8 00`), hoán
+đổi từng cặp cho ra `00 01 00 C8` — **khớp đúng** 4 byte `+0x04` trong file thật.
+Vậy `+0x04` là **hai số 16-bit big-endian**: `0x0001` rồi `0x00C8` (= 200), chứ
+không phải một số 32-bit `65736`.
+
+Đây là một sửa đổi quan trọng cho §15.3: trường `+0x04` **không phải số 32-bit**. Mã
+kiểm tra header tại `0x1421F15D9` xác nhận — nó so sánh nó như **số 16-bit**:
+
+```
+0x1421F15C2  mov eax, 0xC8                      ; 200
+0x1421F15C7  cmp word ptr [rdi + 6], ax         ; +0x06 <= 200
+0x1421F15CB  jg  -> tu choi
+0x1421F15D9  cmp word ptr [rdi + 4], 1           ; +0x04 == 1
+0x1421F15DE  jne -> tu choi
+```
+
+Tức `+0x04` = 1 (số 16-bit) và `+0x06` = 200 (số 16-bit). Trường `+0x04` trong bảng
+§15.3 của tôi là **sai** — nó phải là hai trường riêng.
 
 `+0x20` xác nhận bố cục xen kẽ của file `.peak` — nó chặn trên
 `[rcx+0x30]->+0x30`, rồi tính địa chỉ byte:
@@ -1041,13 +1109,14 @@ bằng giá trị riêng — khớp với hằng `-0.0f` (`0x145FA4E40`) mà §3
 | offset | kiểu | đọc được | ghi chú |
 |---|---|---|---|
 | `+0x00` | char[4] | `PIFF` | chữ ký thật trên đĩa |
-| `+0x04` | BE u32 | `65736` ở **cả 19 file** | hằng ⇒ không phải số bản ghi. Chưa đặt tên được |
+| `+0x04` | BE u16 | `1` ở cả 19 file | hằng, mã kiểm tra nó bằng `cmp word` (§3.6c). Chưa đặt tên được |
+| `+0x06` | BE u16 | `200` ở cả 19 file | hằng, mã kiểm tra `≤ 200`. Chưa đặt tên được |
 | `+0x08` | BE u32 | `96` ở cả 19 file | **kích thước header** ✓ |
-| `+0x0C` | BE u32 | `2` ở cả 19 file | **số kênh** ✓ (xem §15.4) |
-| `+0x10` | BE u32 | đổi ở cả 19 file | **tổng số frame** của audio ✓ |
-| `+0x14` | BE u32 | `256` ở cả 19 file | khớp độ phân giải đo được ở §15.4 |
+| `+0x0C` | BE u32 | `2` ở cả 19 file | **số kênh** ✓ — xác nhận từ mã ghi `vfunc+0x38` |
+| `+0x10` | BE u32 | đổi ở cả 19 file | **tổng số frame** ✓ — xác nhận từ mã ghi `vfunc+0x48`, clamp `0x7FFFFFFF` |
+| `+0x14` | BE u32 | `256` ở cả 19 file | **frames mỗi cột** ✓ — mã ghi **hardcode `0x100`** |
 | `+0x18` | BE u32 | `0xFFFFFFFF` ở cả 19 file | sentinel −1 |
-| `+0x1C` | BE u32 | hằng ở 18/19 file | nhiều khả năng là nhãn định dạng |
+| `+0x1C` | BE u32 | hằng ở 18/19 file | mã ghi header đặt nó = **0**; giá trị quan sát được ghi ở giai đoạn khác (§3.6b) |
 | `+0x20` | char[] | `"02. Body.flac"` | **tên file nguồn**, đuôi `.flac` |
 | `+0x60` | — | dữ liệu | `2 × ceil(frames / 256)` bản ghi |
 
@@ -1130,11 +1199,13 @@ Còn một chi tiết lạ: thư mục `Images\Images\` có **một** bản `.ba
 
 ### 15.7 Chưa giải được
 
-- `+0x04` (= `65736` mọi file) và `+0x14` (= `256` mọi file): đều hằng, cần đọc mã
-  bên ghi (`0x1421F1DD0`) mới đặt tên chắc chắn. `+0x14` bằng `256` rất đáng nghi là
-  độ phân giải, nhưng **đã chứng minh được bằng công thức** ở §15.4 mà không cần
-  đoán từ hằng số.
-- `+0x1C` khác ở đúng một file. Chưa rõ vì sao — cùng đợt dựng hay khác phiên bản.
+- - **Đã đóng ở §3.6b:** `+0x14` = 256 là **frames mỗi cột**, mã ghi hardcode
+  `0x100`. `+0x0C` = số kênh, `+0x10` = tổng số frame, đều đọc từ vfunc của nguồn.
+- **Còn mở:** `+0x04` (= 1) và `+0x06` (= 200) — hai số 16-bit hằng, chưa biết
+  nghĩa. Mã chỉ kiểm tra chúng chứ không dùng để tính toán.
+- **Còn mở:** `+0x1C`. Mã ghi header đặt = 0, nên `0x8DAFEE63` ở 18/19 file do
+  giai đoạn khác ghi. Giả thuyết checksum dữ liệu khớp hơn "nhãn định dạng" (một
+  nhãn hằng không giải thích vì sao đúng một file khác), nhưng chưa kiểm được.
 - **Sample rate không có trong file `.peak`.** Suy ra được độ dài nếu biết tần số
   (`frames / 44100` cho 127–253 giây với 19 file này), nhưng tần số phải lấy từ
   `.cpr` hoặc từ chính file audio — file `.flac` gốc không còn trên máy.

@@ -9,18 +9,28 @@
 Dinh dang (do ra tu 19 file that, xem docs/WAVEFORM.md §15)
 ---------------------------------------------------------
 Tat ca so trong header la **big-endian**; du lieu la **little-endian**. Hai thu do
-nguoc nhau, va day la tu doan sai de nhat khi doc file nay:
+nguoc nhau, va day la tu doan sai de nhat khi doc file nay.
+
+Ham `0x1421F0EF0` cua Cubase hoan doi byte cho vung `+0x04` den `+0x1F` roi ghi
+ra, va **dung lai o `+0x20`** (ten file) va `+0x60` (du lieu) - do do hai vung dung
+hai duong ghi khac nhau. No khong dung `bswap` ma hoan doi byte thu cong tung cap.
 
     +0x00  char[4]   "PIFF"          <- chu ky THAT tren dia
-    +0x04  BE u32    hang            (65736 o ca 19 file)
+    +0x04  BE u16    hang            (1 o ca 19 file)
+    +0x06  BE u16    hang            (200 o ca 19 file)
     +0x08  BE u32    kich thuoc header (96)
-    +0x0C  BE u32    so kenh         (2)
-    +0x10  BE u32    TONG SO FRAME cua audio
-    +0x14  BE u32    hang            (256)
+    +0x0C  BE u32    so kenh         (2)   <- ma ghi: nguon->vfunc+0x38
+    +0x10  BE u32    TONG SO FRAME cua audio  <- ma ghi: nguon->vfunc+0x48
+    +0x14  BE u32    FRAME MOI COT   (256) <- ma ghi HARDCODE 0x100
     +0x18  BE u32    sentinel -1     (0xFFFFFFFF)
-    +0x1C  BE u32    nhan dinh dang  (hang o 18/19 file)
+    +0x1C  BE u32    ghi = 0 o buoc ghi header; gia tri that o giai doan khac
     +0x20  char[]    ten file audio goc, NUL ket thuc
     +0x60  du lieu: 2 x float32 LE moi ban ghi, XEN KE theo kenh
+
+`+0x04` va `+0x06` la **hai so 16-bit rieng biet**, khong phai mot so 32-bit. Toi
+da doc nham mot so 32-bit `65736` o cac vong truoc; ma kiem tra header cua Cubase
+(`0x1421F15D9`) so sanh chung bang `cmp word`, va gia tri 65736 do hop nhat cua
+`0x0001` + `0x00C8`. Xem docs/WAVEFORM.md §3.6c.
 
 Cong thuc kiem tra du lieu (khop 19/19 file):
 
@@ -56,7 +66,8 @@ class Peak:
             raise SystemExit(
                 f'{self.path}: khong phai file .peak (4 byte dau = '
                 f'{self.d[:4]!r}, mong doi "PIFF")')
-        self.sig_peak = self._be32(0x04)
+        self.h04 = self._be16(0x04)
+        self.h06 = self._be16(0x06)
         self.header_size = self._be32(0x08)
         self.channels = self._be32(0x0C)
         self.frames = self._be32(0x10)
@@ -69,6 +80,9 @@ class Peak:
 
     def _be32(self, off):
         return struct.unpack_from('>I', self.d, off)[0]
+
+    def _be16(self, off):
+        return struct.unpack_from('>H', self.d, off)[0]
 
     def pair(self, i):
         """Ban ghi thu `i`: (dinh tren, |dinh duoi|), ca hai float 0..1."""
@@ -170,13 +184,14 @@ def dump_header(peak):
     lines = [
         f'{peak.path.name}   ({len(peak.d):,} byte)',
         f'  chu ky         {peak.d[:4].decode()}  (khong phai "PEAK")',
-        f'  +0x04          {peak.sig_peak}   (hang o 19/19 file)',
+        f'  +0x04          {peak.h04}          (BE u16, hang o 19/19 file)',
+        f'  +0x06          {peak.h06}         (BE u16, hang o 19/19 file)',
         f'  +0x08          {peak.header_size}      kich thuoc header',
         f'  +0x0C          {peak.channels}          so kenh',
         f'  +0x10          {peak.frames:>10,}      tong so frame',
-        f'  +0x14          {peak.h14}      (hang)',
+        f'  +0x14          {peak.h14}      FRAME MOI COT (ma hardcode 0x100)',
         f'  +0x18          0x{peak.h18:08X}      sentinel -1',
-        f'  +0x1C          0x{peak.h1c:08X}      nhan dinh dang',
+        f'  +0x1C          0x{peak.h1c:08X}      ghi = 0 o buoc ghi header',
         f'  +0x20          {peak.source!r}      ten file audio goc',
         f'  ban ghi        {peak.records:,}  = {cols:,} cot x {peak.channels} kenh'
         f'   ({FRAMES_PER_COLUMN} frame/cot)',
