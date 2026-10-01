@@ -316,6 +316,35 @@ giữ EN / động từ `chèn`), `Send` (nút giữ / động từ `gửi`).
 > và key trùng tiền tố có giá trị bằng nhau (13 cặp, tất cả là dấu `[...]` là
 > **marker ngữ cảnh của key** theo §6, giữ nguyên là đúng).
 
+> **`key` ≠ `<us>` — 283 chuỗi, sửa 6 chuỗi (đợt 189):** Đây là cụm **nguy hiểm nhất
+> từng gặp**, vì AGENT.md §6 chỉ nói "theo key" trong nửa câu mà **chưa ai đo hệ quả**.
+> `keys/translation_original.xml` có **283 chuỗi `<us>` khác `Key`**, trong đó phần
+> lớn chỉ khác ở dấu `[...]`, nhưng **không phải tất cả**.
+> - **`Autoscroll` / `<us>Auto-Scroll On/Off`; `Check Files` / `<us>Find Missing Files`;
+>   `Arm All Audio Tracks` / `<us>Activate Record Enable for All Audio Tracks`**… Bản
+>   dịch đã lấy nội dung từ `<us>` đúng — kiểm độ dài cho ra **0 chuỗi rút ngắn quá
+>   60%**, tức là **không rơi nội dung chỗ nào**. Chỉ 3 chuỗi thật sự mơ hồ, đã ghi
+>   vào `docs/OPEN_QUESTIONS.md` mục 6 kèm bằng chứng 2 phe — **đừng đo lại**.
+> - **Bộ dò mới, đắt nhất: hai key KHÁC NHAU cùng ra một giá trị tiếng Việt.**
+>   340 cặp trùng, đọc hết thì ra đúng một lỗi nghiêm trọng:
+>   **`Temple Block` và `Wood Block` — HAI NHẠC CỤ KHÁC NHAU — cùng dịch `Mõ gỗ`.**
+>   5/9 ngôn ngữ phân biệt rõ: de `Templeblock` / `Holzblock`, fr `Bloc chinois` /
+>   `Wood-block`, ja `テンプルブロック` / `ウッドブロック`, ru `Темпл-блок` /
+>   `Деревянная коробочка`, zh giữ cả hai. 10 chuỗi (5 mức) gộp làm một, nghĩa là
+>   **hai pad khác nhau trong Drum Editor hiện cùng một tên**. Sửa: `Temple Block`
+>   giữ EN (theo §10 luật 1 "tên riêng không dịch" + zh/ru giữ), `Wood Block` giữ
+>   `Mõ gỗ`. **Cách chung: `Counter` trên `value`, rồi ghép `key` vào đọc tay.**
+> - **`Down More` → `Xuống nhiều hơn`** lạc khỏi `Up More` → `Lên thêm`, `Move Down More`
+>   → `Di chuyển xuống thêm`, `Move Up More` → `Di chuyển lên thêm`. Sửa `Xuống thêm`.
+> - **Score Editor (`score_instruments.py check`): 0 lỗi** — 1.126 chuỗi, 591 giữ
+>   nguyên EN, 0 trùng key, 3.115/3.115 ô đúng. Đã sạch, không cần xem lại.
+
+> **Hai quy ước về dấu câu đã có sẵn (đừng "sửa"):** dấu `-` trong `Medium-high` và
+> dấu `.` trong `No.` đều bị bỏ trong giá trị — đúng quy ước của cả họ
+> (`Roto-tom`/`Tenor Drum`/`Timbale`/`Tom-tom` → `(Trung bình cao)`;
+> `CC No.`/`MIDI Controller No.` → `Số CC`/`Số MIDI Controller`). Khi viết bộ dò kiểm
+> phải **miễn trừ hai ký tự này**, nếu không sẽ báo động giả hàng loạt.
+
 > **Ngoại lệ đã chốt — `Chord` dịch `hợp âm` (77 chuỗi).** Dù `Chord` nằm trong
 > 68 từ cốt lõi, thực tế đo được: 77 chuỗi dùng `hợp âm`, và anh em giữ EN chỉ là
 > **tên tính năng** (`Chord Track`, `Chord Pad`, `Chord Symbol`). Sửa danh sách thì

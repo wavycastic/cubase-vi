@@ -91,6 +91,35 @@ tên file. Có thể là lệch. Bảng không cho biết `Bass Drum` trong bả
 
 ---
 
+## 6. `key` ≠ `<us>` — dịch theo cột nào? **Đợt 189, để nguyên, cần người dùng quyết**
+
+`keys/translation_original.xml` có **283 chuỗi mà `<us>` khác `Key`**, không chỉ khác
+ở dấu `[...]`. Ví dụ `Key='Autoscroll'` nhưng `<us>='Auto-Scroll On/Off'`. Đây là
+điều AGENT.md §6 chỉ nói vừa một câu ("theo key") nhưng **chưa ai đo xem hệ quả**.
+
+**Điều Cubase hiện lên màn hình là `<us>` của ngôn ngữ đang chọn, không phải `Key`.**
+Nếu vậy thì 3 chuỗi dưới đang hiện **thiếu chữ** so với bản gốc:
+
+| Key | `<us>` | VI hiện tại | de | ja | zh | ru |
+|---|---|---|---|---|---|---|
+| `MIDI Step Input` | **`MIDI Input`** | `MIDI Step Input` | `MIDI-Eingabe` | `MIDI ステップ入力` | `MIDI 步进输入` | — |
+| `Slip Event` | **`Slip Event Content`** | `Slip Event` | `Event-Inhalt verschieben` | `イベントの内容をずらす` | `滑动事件` | — |
+| `Pre/Post Fader` | **`Pre-/Post-Fader`** | `Pre/Post Fader` | `Pre/Post Fader` | `プリ/ポストフェーダー` | `推子 前/后` | — |
+
+**Vì sao để nguyên chứ không sửa:** bằng chứng **chia làm đôi** —
+`MIDI Step Input` thì **ja + zh** dịch theo *key*, còn **de** theo `<us>`;
+`Pre/Post Fader` thì **de** lại theo *key*. Không ngôn ngữ nào nhất quán, nên
+51/49 ở đây lại là số đo, không phải quyết định. Riêng `MIDI Step Input` đợt 184 đã
+sửa *từ* `MIDI Input` **thành** `MIDI Step Input` dựa trên giả định của tôi rằng
+key là thứ hiển thị — **giả định đó chưa được kiểm chứng, đợt 189 mới phát hiện ra là
+có 2 phe.**
+
+**Cần:** người dùng xác nhận **Cubase 15 hiện `<us>` hay hiện `Key`** trên UI. Chỉ
+cần câu trả lời này là 3 chuỗi này (và toàn bộ 283 chuỗi còn lại) được quyết ngay.
+Trong lúc đó **đừng đo lại cụm này nữa** — đo 5 lần rồi.
+
+---
+
 ## Đã quyết rồi (không cần hỏi lại)
 
 | Quy ước | Nguồn của bằng chứng |
