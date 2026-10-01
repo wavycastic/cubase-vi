@@ -115,6 +115,21 @@ Phải là **tiếng Việt đời thường**, không phải tiếng Việt do 
 >   dịch nửa vế; quy tắc này mở rộng điều đó sang *toàn câu*.
 > - **Vẫn phải giữ bất biến kỹ thuật (§6)** kể cả khi giữ EN: dấu câu, placeholder,
 >   `\n`, khoảng trắng đầu/cuối. `check_punctuation.py` không ngoại lệ.
+>
+> **Đo quy tắc này (đợt 165) — cả 4 cách săn đều ra báo động giả.** Ghi lại để
+> không phải đo lại:
+> - `audit_clarity` [B] "khó đọc": 313 chuỗi. Đọc 30 chuỗi đầu — **không lỗi nào**;
+>   dài vì nguyên văn dài, `english-run` là cụm thuật ngữ đúng.
+> - Từ lặp ≥3 lần trong một value: **74 chuỗi**. Đọc 25 — tất cả lặp vì **nguyên văn
+>   lặp** (`Channel` 6 lần vì EN cũng 6 lần). Đếm từ không phân biệt nguyên văn.
+> - `của…của`, `bị…bị`, `không…không` lặp trong 40 ký tự: **15 chuỗi**, đọc hết —
+>   đều là cú pháp Việt đúng (`Vị trí của Event vượt quá ranh giới của Part`).
+> - Khoảng trắng thừa trước `:` — **9 chuỗi**, cả 9 đều **có** trong nguồn
+>   (`CC01 : Modulation`, `Switch Layout :`). Chính Steinberg viết vậy.
+>
+> **Kết luận:** bộ dò bằng mẫu không bắt được lỗi này — §8.9 đã nói "lỗi chỉ lộ ra
+> khi **đọc thật**". Muốn săn lỗi văn phong thì phải đọc tay (`read_long.py`), và
+> quy tắc là **so từng cặp với nguồn 9 ngôn ngữ**, không phải đếm mẫu.
 
 - **Bỏ bị động `... được`** — dấu hiệu rõ nhất của câu dịch máy: `đã được` → `đã` ·
   `sẽ được` → `sẽ` · `đang được` → `đang` · `đã bị loại bỏ` → `đã bỏ` · `Không thể
