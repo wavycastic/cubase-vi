@@ -116,6 +116,12 @@ Phải là **tiếng Việt đời thường**, không phải tiếng Việt do 
 > - **Vẫn phải giữ bất biến kỹ thuật (§6)** kể cả khi giữ EN: dấu câu, placeholder,
 >   `\n`, khoảng trắng đầu/cuối. `check_punctuation.py` không ngoại lệ.
 >
+> **Rút gọn: đừng để bộ dò tự cắt.** Đợt 166 thử cắt `Vui lòng` bằng regex và nó
+> làm **hỏng 11/33 chuỗi** — chữ thường sau `.` và sau `\n\n`
+> (`…cài đặt. Thử dùng…` thành `…cài đặt. thử dùng…`). Vì tiền tố lọc không biết
+> vị trí câu. **Cắt bằng tay, rồi kiểm hoa/thường bằng assert.** Chỉ dùng regex để
+> **tìm ra ứng viên**, không để ghi.
+>
 > **Đo quy tắc này (đợt 165) — cả 4 cách săn đều ra báo động giả.** Ghi lại để
 > không phải đo lại:
 > - `audit_clarity` [B] "khó đọc": 313 chuỗi. Đọc 30 chuỗi đầu — **không lỗi nào**;
