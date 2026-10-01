@@ -32,3 +32,8 @@ EXPORTS
     g_probeCount
     g_probeArg0
     g_probeInstalled
+    WaveHook_SetColorMode
+    WaveHook_GetColorMode
+    WaveHook_SetCustomColor
+    g_colorMode
+    g_lastColorRGB

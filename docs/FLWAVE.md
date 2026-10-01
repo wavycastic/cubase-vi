@@ -1440,3 +1440,69 @@ lần vẽ.
 
 Bỏ qua bước 1–2 thì mọi thứ vẽ sau đó đều sai, mà lỗi loại này Cubase không báo
 gì — chỉ vẽ ra sai màu, rất khó phát hiện là do hook.
+
+---
+
+## 13. Đã hoàn thiện Module Hook tô màu dải sóng kiểu FL Studio
+
+Module hook đã được triển khai hoàn chỉnh tại `hook/wavehook.c`, `hook/wavehook.asm`, `hook/wavecolour.c` và công cụ điều khiển `tools/inject_wavehook.py`.
+
+### 13.1 Điểm can thiệp và cơ chế truyền tham số
+
+1. **Điểm can thiệp:** Prologue 15 byte tại `0x141E9E140` (hàm vẽ dải sóng chính của audio event).
+2. **Cơ chế:** Thay thế bằng lệnh nhảy tuyệt đối 13 byte (`mov r11, imm64` + `jmp r11` + 2 NOP). Trampoline trong DLL phục hồi 15 byte gốc và tiếp tục thực thi liền mạch.
+3. **Thu thập dữ liệu đầy đủ:**
+   - `rcx`: Con trỏ `device` vẽ.
+   - `r9`: Con trỏ struct **`WaveStyle`** (`0xB8` = 184 byte).
+   - `[rsp+0x30]`: Mảng đỉnh âm thanh `src_minmax` (cặp float32 `min, max` theo cột).
+   - `[rsp+0x38]`: Số lượng cột `num_cols`.
+
+### 13.2 Cấu trúc đổi màu trong `WaveStyle`
+
+Cubase mã hoá màu trong `WaveStyle` dưới dạng số nguyên 64-bit gồm 4 kênh 16-bit:
+```c
+uint64_t color64 = ((uint64_t)(a << 8) << 48) |
+                   ((uint64_t)(b << 8) << 32) |
+                   ((uint64_t)(g << 8) << 16) |
+                   ((uint64_t)(r << 8) <<  0);
+```
+- `+0x50`: Màu tô dải sóng chính (`fill_color`).
+- `+0x88`: Màu đường viền dải sóng (`outline_color`).
+
+Khi ghi đè 2 trường này trong `WaveStyle`, toàn bộ các lệnh rasterize và draw polygon phía dưới của Cubase sẽ sử dụng màu mới mà không làm thay đổi luồng xử lý đồ hoạ nội bộ.
+
+### 13.3 Các chế độ màu hỗ trợ
+
+| Chế độ (`mode`) | Tên | Mô tả |
+|---|---|---|
+| `0` | `PASSTHROUGH` | Giữ nguyên màu mặc định của Cubase (chỉ probe/log chẩn đoán) |
+| `1` | `FL_MULTIBAND` | **Mặc định**: Tính màu động bằng 5 bộ lọc 1-pole của FL Studio từ `src_minmax` (Bass = Cam/Đỏ, Mid = Lục, Treble = Lam/Tím) |
+| `2` | `FL_NEON_BLUE` | Xanh lam neon rực rỡ đặc trưng của FL Studio Playlist |
+| `3` | `FL_ORANGE` | Cam ấm rực rỡ theo phong cách FL Studio Drum/Beat |
+| `4` | `FL_CYAN` | Xanh ngọc viền sáng (Cyan Glow) |
+| `5` | `CUSTOM` | Màu tuỳ chỉnh do người dùng đặt qua API |
+
+### 13.4 Lệnh sử dụng
+
+```powershell
+# 1. Kiểm tra trạng thái Cubase và hook
+python tools\inject_wavehook.py status
+
+# 2. Nạp DLL hook vào Cubase (mặc định bật chế độ 1: FL Multiband)
+python tools\inject_wavehook.py load
+
+# 3. Chuyển đổi chế độ màu lúc đang chạy
+python tools\inject_wavehook.py colormode 1   # FL Multiband
+python tools\inject_wavehook.py colormode 2   # Neon Blue
+python tools\inject_wavehook.py colormode 3   # Vibrant Orange
+python tools\inject_wavehook.py colormode 4   # Cyan Glow
+
+# 4. Kiểm tra màu RGB vừa được tính và vẽ
+python tools\inject_wavehook.py color
+
+# 5. Xem thông tin chi tiết về device và WaveStyle thu thập được
+python tools\inject_wavehook.py devdump
+
+# 6. Gỡ hook an toàn trước khi đóng Cubase
+python tools\inject_wavehook.py unload
+```

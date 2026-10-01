@@ -584,6 +584,53 @@ def probe_remove():
         k32.CloseHandle(h)
 
 
+def set_colormode(mode):
+    check_bitness()
+    pid = find_cubase_pid()
+    if pid is None:
+        sys.exit('LOI: Cubase15.exe khong chay.')
+    h = open_proc(pid)
+    try:
+        addr = find_export(pid, 'WaveHook_SetColorMode')
+        if addr is None:
+            sys.exit('LOI: khong tim thay export WaveHook_SetColorMode. DLL chua duoc nap?')
+        say(f'  Dat ColorMode = {mode}...')
+        remote_call(h, addr, mode)
+        say('  Thanh cong!')
+    finally:
+        k32.CloseHandle(h)
+
+
+def get_color_info():
+    check_bitness()
+    pid = find_cubase_pid()
+    if pid is None:
+        sys.exit('LOI: Cubase15.exe khong chay.')
+    h = open_proc(pid)
+    try:
+        addr_mode = find_export(pid, 'g_colorMode')
+        addr_color = find_export(pid, 'g_lastColorRGB')
+        mode_names = {
+            0: "0 (PASSTHROUGH - Mau goc Cubase)",
+            1: "1 (FL_MULTIBAND - Mau dong FL Studio theo pho)",
+            2: "2 (FL_NEON_BLUE - Xanh lam neon FL Playlist)",
+            3: "3 (FL_ORANGE - Cam ruc ro FL Beat)",
+            4: "4 (FL_CYAN - Xanh ngoc glow)",
+            5: "5 (CUSTOM - Mau tuy chinh)"
+        }
+        if addr_mode:
+            m = struct.unpack('<i', read_mem(h, addr_mode, 4))[0]
+            say(f'  Color Mode: {mode_names.get(m, str(m))}')
+        if addr_color:
+            rgb = struct.unpack('<I', read_mem(h, addr_color, 4))[0]
+            r = (rgb >> 16) & 0xFF
+            g = (rgb >> 8) & 0xFF
+            b = rgb & 0xFF
+            say(f'  Mau FL ve gan nhat (RGB): ({r}, {g}, {b})')
+    finally:
+        k32.CloseHandle(h)
+
+
 def main():
     global DLL
     ap = argparse.ArgumentParser(
@@ -591,7 +638,8 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument('cmd', choices=['load', 'unload', 'status', 'calls',
                                     'probe', 'probecount', 'proberemove',
-                                    'devdump'])
+                                    'devdump', 'colormode', 'color'])
+    ap.add_argument('val', nargs='?', type=int, help='Gia tri cho colormode (0..5)')
     ap.add_argument('--dll', help='duong dan DLL thay the (mac dinh '
                                   'hook/wavehook.dll). Dung khi ban cu dang '
                                   'nap trong Cubase nen khong ghi de duoc.')
@@ -623,6 +671,12 @@ def main():
         probe_counts('so lan goi')
     elif a.cmd == 'proberemove':
         probe_remove()
+    elif a.cmd == 'colormode':
+        if a.val is None:
+            sys.exit('Can truyen gia tri mode: 0 (Pass), 1 (FL Multiband), 2 (Neon Blue), 3 (Orange), 4 (Cyan)')
+        set_colormode(a.val)
+    elif a.cmd == 'color':
+        get_color_info()
 
 
 if __name__ == '__main__':

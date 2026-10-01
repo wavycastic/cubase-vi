@@ -15,6 +15,7 @@
  * lan goi, nen day la may trang thai, khong phai ham tinh lai tu dau.
  */
 #include "wavehook.h"
+#include <math.h>
 
 /* He so cua bo loc mot cuc, tach tu ham tan() cua FL (RVA 0x1C9EF0).
  *

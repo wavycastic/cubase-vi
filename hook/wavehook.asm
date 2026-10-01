@@ -69,24 +69,38 @@ WaveDrawHook PROC
     push    r13
     push    r14
     push    r15
-    sub     rsp, 48h
+    sub     rsp, 68h
 
-    mov     [rsp+20h], rcx
-    mov     [rsp+28h], rdx
-    mov     [rsp+30h], r8
-    mov     [rsp+38h], r9
-    mov     rax, [rsp+88h+20h]        ; tham so 5, tren khung goc da day
-    mov     [rsp+40h], rax
+    ; Luu cac thanh ghi tham so goc de khoi phuc truoc khi nhay ve trampoline
+    mov     [rsp+38h], rcx            ; arg1: dev
+    mov     [rsp+40h], rdx            ; arg2: ctx
+    mov     [rsp+48h], r8             ; arg3: pen
+    mov     [rsp+50h], r9             ; arg4: style (WaveStyle*)
+
+    ; Dat cac tham so 5, 6, 7 len stack cho WaveDrawHook_C
+    ; Khoang cach tu rsp hien tai toi stack goc luc vao ham:
+    ;   68h + 40h (8 lan push) = 0A8h.
+    ; Stack goc luc vao ham:
+    ;   [rsp+00h]: return address
+    ;   [rsp+28h]: caller arg 5 (dst_coords)
+    ;   [rsp+30h]: caller arg 6 (src_minmax)
+    ;   [rsp+38h]: caller arg 7 (num_cols)
+    mov     rax, [rsp+0A8h+28h]       ; caller arg 5: dst_coords
+    mov     [rsp+20h], rax            ; C arg 5
+    mov     rax, [rsp+0A8h+30h]       ; caller arg 6: src_minmax
+    mov     [rsp+28h], rax            ; C arg 6
+    mov     rax, [rsp+0A8h+38h]       ; caller arg 7: num_cols
+    mov     [rsp+30h], rax            ; C arg 7
 
     call    WaveDrawHook_C
 
-    mov     rcx, [rsp+20h]
-    mov     rdx, [rsp+28h]
-    mov     r8,  [rsp+30h]
-    mov     r9,  [rsp+38h]
-    mov     rax, [rsp+40h]
+    ; Khoi phuc thanh ghi cho trampoline
+    mov     rcx, [rsp+38h]
+    mov     rdx, [rsp+40h]
+    mov     r8,  [rsp+48h]
+    mov     r9,  [rsp+50h]
 
-    add     rsp, 48h
+    add     rsp, 68h
     pop     r15
     pop     r14
     pop     r13

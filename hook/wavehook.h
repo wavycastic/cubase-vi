@@ -10,6 +10,7 @@
 #define WAVEHOOK_H
 
 #include <windows.h>
+#include <stdint.h>
 
 /* Dia chi ham ve song trong Cubase15.exe.
  *
@@ -28,12 +29,82 @@
  * Nhay tuyet doi, khong dung rel32 - xem giai thich trong wavehook.asm. */
 #define HOOK_JMP_SIZE          13
 
-/* Ky hieu do MASM dua ra ngoai DLL (xem wavehook.def).
- *
- * Khai bao `extern` - KHONG dung dllimport: may ky tu do cung mot DLL,
- * dllimport se sinh mot lop gọi qua IAT cho chinh ham cua no. Chi can
- * khai bao de C va MASM tro toi cung mot dia chi. Neu asm tu khai bao
- * rieng, con do ghi dinh dich trong C se tro toi cho khac. */
+/* Bố cục struct WaveStyle (184 byte = 0xB8) nạp vào hàm vẽ */
+#pragma pack(push, 8)
+typedef struct {
+    void     *vtable;          /* +0x00 */
+    uint32_t  field_8;         /* +0x08 */
+    uint8_t   field_C;         /* +0x0C */
+    uint8_t   pad_D[3];
+    void     *field_10;        /* +0x10 */
+    void     *field_18;        /* +0x18 */
+    void     *field_20;        /* +0x20 */
+    uint32_t  field_28;        /* +0x28 */
+    uint8_t   field_2C;        /* +0x2C */
+    uint8_t   pad_2D[3];
+    void     *field_30;        /* +0x30 */
+    void     *field_38;        /* +0x38 */
+    /* +0x40: Primary fill brush/color */
+    void     *fill_vtable;     /* +0x40 */
+    uint32_t  fill_refcount;   /* +0x48 */
+    uint32_t  fill_pad;        /* +0x4C */
+    uint64_t  fill_color;      /* +0x50: 4x uint16_t (R, G, B, A) */
+    /* +0x58: Secondary brush/color */
+    void     *sec_vtable;      /* +0x58 */
+    uint32_t  sec_refcount;    /* +0x60 */
+    uint32_t  sec_pad;         /* +0x64 */
+    uint64_t  sec_color;       /* +0x68 */
+    /* +0x70 */
+    uint32_t  field_70;        /* +0x70 */
+    uint32_t  field_74;        /* +0x74 */
+    /* +0x78: Outline brush/color */
+    void     *outline_vtable;  /* +0x78 */
+    uint32_t  outline_refcount;/* +0x80 */
+    uint32_t  outline_pad;     /* +0x84 */
+    uint64_t  outline_color;   /* +0x88: 4x uint16_t (R, G, B, A) */
+    /* Scales & Flags */
+    double    scale_x;         /* +0x90 */
+    double    scale_y;         /* +0x98 */
+    uint32_t  field_A0;        /* +0xA0 */
+    uint32_t  field_A4;        /* +0xA4 */
+    void     *field_A8;        /* +0xA8 */
+    uint32_t  flags;           /* +0xB0: bitfield (bit 0=fill, bit 3=dot, bit 7=layer) */
+    uint32_t  pad_B4;          /* +0xB4 */
+} WaveStyle;
+#pragma pack(pop)
+
+/* Chế độ màu dải sóng */
+enum WaveColorMode {
+    WAVE_COLOR_PASSTHROUGH  = 0,  /* Giữ màu gốc của Cubase */
+    WAVE_COLOR_FL_MULTIBAND = 1,  /* Màu động FL Studio Multiband (theo phổ) */
+    WAVE_COLOR_FL_NEON_BLUE = 2,  /* Màu xanh lam neon đặc trưng FL Playlist */
+    WAVE_COLOR_FL_ORANGE    = 3,  /* Màu cam ấm rực rỡ FL Studio Beat */
+    WAVE_COLOR_FL_CYAN      = 4,  /* Màu xanh ngọc (cyan) viền sáng */
+    WAVE_COLOR_CUSTOM       = 5,  /* Màu tuỳ chỉnh do người dùng đặt */
+};
+
+/* Tiện ích đóng/mở gói màu 64-bit của Cubase */
+static inline uint64_t MakeWaveColor(uint8_t r, uint8_t g, uint8_t b, uint8_t a)
+{
+    uint16_t r16 = (uint16_t)r << 8;
+    uint16_t g16 = (uint16_t)g << 8;
+    uint16_t b16 = (uint16_t)b << 8;
+    uint16_t a16 = (uint16_t)a << 8;
+    return ((uint64_t)a16 << 48) |
+           ((uint64_t)b16 << 32) |
+           ((uint64_t)g16 << 16) |
+           ((uint64_t)r16 <<  0);
+}
+
+static inline void DecodeWaveColor(uint64_t c, uint8_t *r, uint8_t *g, uint8_t *b, uint8_t *a)
+{
+    if (r) *r = (uint8_t)((c >>  0) >> 8);
+    if (g) *g = (uint8_t)((c >> 16) >> 8);
+    if (b) *b = (uint8_t)((c >> 32) >> 8);
+    if (a) *a = (uint8_t)((c >> 48) >> 8);
+}
+
+/* Ky hieu do MASM dua ra ngoai DLL (xem wavehook.def). */
 extern void  WaveDrawHook(void);
 extern void  WaveDrawTrampoline(void);
 extern void *WaveDrawTrampolineVA;   /* stub nhay ve day           */
@@ -44,8 +115,14 @@ __declspec(dllexport) int  WaveHook_Install(void);
 __declspec(dllexport) int  WaveHook_Remove(void);
 __declspec(dllexport) int  WaveHook_IsInstalled(void);
 
-/* tham so 1 = thiet bi ve (arg1 cua ham ve cua Cubase) */
-__declspec(dllexport) void WaveDrawHook_C(void *dev);
+/* Điều khiển chế độ màu */
+__declspec(dllexport) void WaveHook_SetColorMode(int mode);
+__declspec(dllexport) int  WaveHook_GetColorMode(void);
+__declspec(dllexport) void WaveHook_SetCustomColor(int r, int g, int b, int or_, int og, int ob);
+
+/* Ham C hook nhan toan bo tham so ve tu ASM */
+__declspec(dllexport) void WaveDrawHook_C(void *dev, void *ctx, void *pen, WaveStyle *style,
+                                         void *dst_coords, const float *src_minmax, int64_t num_cols);
 
 /* Do dai vtable can xuat cho probe. 0xC0 = 24 slot: vua dat hon
  * slot +0x80 ma `0x141E9D010` goi, vua vua het cac slot danh tieng
