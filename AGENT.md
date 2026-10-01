@@ -23,12 +23,20 @@ luật tồn tại, không phải để tra luật.
 
 **DAW — giữ tiếng Anh (160 từ).**
 
-70 từ cốt lõi: Track · Channel · Bus · FX · Group · VCA · Insert · Send · Slot · Fader · Pan · Solo · Mute · Meter · Metronome · Click · Marker · Locator · Automation · Clip · Event · Part · Pool · Quantize · Snap · Grid · Bounce · Render · Freeze · Warp · Velocity · Pitch · Note · Chord · Tempo · Timecode · Bar · Beat · Fade · Punch · Buffer · Latency · Sample Rate · ASIO · VST · Plug-in · Preset · MixConsole · Inspector · Zone · Export · Import · Arranger · Chain · Step · Lane · Pattern · Expression · Voicing · Tension · Articulation · Layout · Map · Mapping · Script · Machine Control · Talkback · Cue
+68 từ cốt lõi: Track · Channel · Bus · FX · Group · VCA · Insert · Send · Slot · Fader · Pan · Solo · Mute · Meter · Metronome · Click · Marker · Locator · Automation · Clip · Event · Part · Pool · Quantize · Snap · Grid · Bounce · Render · Freeze · Warp · Velocity · Pitch · Note · Chord · Tempo · Timecode · Bar · Beat · Fade · Punch · Buffer · Latency · Sample Rate · ASIO · VST · Plug-in · Preset · MixConsole · Inspector · Zone · Export · Import · Arranger · Chain · Step · Lane · Pattern · Expression · Voicing · Tension · Articulation · Layout · Map · Mapping · Script · Machine Control · Talkback · Cue
+>
+> Vẫn là **160 từ** (`terms_do_not_translate.json`): 68 + 90 + 2 từ Score ở dưới
+> (`Key Signature`, `Time Signature`). Năm 2024 tiêu đề ghi "70" nhưng list chỉ có
+> 68; đợt 161 gỡ `Voice` nhưng không sửa tiêu đề. **Tính từ file, không tin tiêu đề.**
 
 90 từ mở rộng: Project · Audio · Controller · Cycle · Bypass · Remote · Effect · Monitor · Video · Routing · Bank · Loop · Transpose · Loudness · Assistant · Media · Strip · Focus · VariAudio · SyncStation · Player · Score · Logical · Listen · Region · Band · Crossfade · Clock · Panner · Workspace · Snapshot · Room · Hitpoint · Gain · Surface · Sampler · Transport · Retrospective · Learn · Shuttle · Pitchbend · Extension · Wave · Modulation · Frame · Dynamics · Modulator · Factory · ASIO-Guard · MediaBay · Mixdown · Layer · Ruler · SysEx · High-Cut · Side-Chain · Profile · Macro · Pre-roll · Phase · Tuning · Trim · Patch · Multi-Channel · Low-Cut · Word · Folding · Post-Fader · Dynamic · Pedal · Permission · Pre-Fader · Subsection · Post-roll · Downmix · Module · Count-In · CCMode · NoteExp · Latch · Thru · Z-Axis · Remote-Control · AudioWarp · Transformer · Scripting · Cache · Studio · Offline · Mixer
 
-> `Time Signature` và `Chord Symbols` đã gỡ khỏi danh sách vì §3 bắt dùng tiếng Việt;
-> map theo §3 (49 chuỗi) — quyết định chốt. 90 từ "mở rộng" đo trên 10.737 chuỗi:
+> ~~`Time Signature` và `Chord Symbols` đã gỡ khỏi danh sách vì §3 bắt dùng tiếng Việt;
+> map theo §3 (49 chuỗi)~~ **— hủy (đợt 171).** Rounds 146–171 đã sửa hết 49 chuỗi
+> đó sang `Time Signature` giữ EN, khớp danh sách Score bên dưới và khớp
+> `keep_english`. `Chord Symbols` chỉ còn 2 chuỗi, đều giữ EN. Bỏ dòng này thay
+> vì để lại nó là một luật ngược với map — đúng loại vi phạm §8.2.
+> 90 từ "mở rộng" đo trên 10.737 chuỗi:
 > nguồn ≥5 lần, bản dịch dịch ≤2 lần (`terms_do_not_translate.json`).
 >
 > **Cách tìm từ nên cấm** — đừng hỏi "thuật ngữ nào đã bị dịch" (16 ứng viên, **không
@@ -42,6 +50,12 @@ Tuplet · Glissando · Trill · Fermata · Key Signature · Time Signature · Ch
 Rhythm Dot · Ledger Line · Slash).
 Động từ thao tác và giao diện chung vẫn Việt hóa tự nhiên: Thêm, Xóa, Ẩn, Hiện, Sửa,
 Thiết lập, Mở, Đóng, Lật (Flip)...
+
+> **2 từ trong danh sách không tồn tại trong Cubase 15** (đợt 171 đo: 0 key, 0 giá
+> trị): `Fermata`, `Ledger Line`. Giữ trong luật để sau này dùng được — nhưng **đừng
+> đi tìm để sửa**, sẽ tốn thời. `Grace Note` chỉ có 2 chuỗi và đang trộn
+> (`Unslashed Grace Note` giữ EN, `Slashed Grace Note` → `Nốt Grace có Slash`).
+> Còn 3 từ Score khác đã kiểm là giữ EN đúng: `Clef`, `Tuplet`, `Rhythm Dot`.
 
 `System` và `Bar` theo ngữ cảnh: Score Editor → `System` / `Bar`; ngoài đó →
 `hệ thống` / `thanh`. Từ HLV cũng giữ bên HLV: `con trỏ`, `bè`, `phát lại`, `hợp âm`.
@@ -75,6 +89,27 @@ trị **tháo câu ra ghép ngược**: `Restore Default Setup` → `Thiết l�
 **Luật phụ thuộc nguồn** (mục `src` trong `terms_do_not_translate.json`): `Bypass` cấm
 `bỏ qua`, `Cycle` cấm `lặp` — cùng một từ Việt đúng ở nguồn này, sai ở nguồn kia. 13
 `Bypass` đã sửa ở đợt 72, nhưng 23 chuỗi `Ignore` **phải** giữ `bỏ qua`.
+
+**Danh sách 160 từ = thuật ngữ DAW, KHÔNG phải mọi lần xuất hiện.** Đo ở đợt 171:
+115 chuỗi có `Click` nhưng chỉ vài chuỗi giữ — vì `Click` **vừa** là nút (giữ `Click
+Pattern`) **vừa** là động từ (`click chuột` → `Nhấp`, đúng). Tương tự `Insert` (nút
+giữ EN / động từ `chèn`), `Send` (nút giữ / động từ `gửi`).
+
+| Từ | Giữ EN khi | Dịch khi |
+|---|---|---|
+| `Click` | `Click Pattern`, `Click & Count-In` (tên tính năng) | `click chuột` → `Nhấp` |
+| `Insert` | `Insert 1`, `Insert Slots`, `Bypass Insert` | `insert …` → `chèn` |
+| `Send` | `Send 1`, `Send Slots` | `send …` → `gửi` |
+| `Chord` | **`Chord` KHÔNG dịch** (77 chuỗi `hợp âm`) | — xem dòng dưới |
+| `Note` | `Note 1/8` (Score) | `note nhạc` → `nốt` |
+| `Beat` | nhãn/đơn vị | văn xuôi → `nhịp` |
+| `Group` | tên tính năng (`Group Track`) | `nhóm nốt` → `nhóm` |
+
+> **Ngoại lệ đã chốt — `Chord` dịch `hợp âm` (77 chuỗi).** Dù `Chord` nằm trong
+> 68 từ cốt lõi, thực tế đo được: 77 chuỗi dùng `hợp âm`, và anh em giữ EN chỉ là
+> **tên tính năng** (`Chord Track`, `Chord Pad`, `Chord Symbol`). Sửa danh sách thì
+> sai; đây là điển tượng của "thuật ngữ vừa DAW vừa chuyên ngành". **Không đổi** —
+> nhưng phải biết để không "sửa theo luật" rồi hỏng 77 chuỗi.
 
 ## 4. Thứ tự từ và câu
 
@@ -201,9 +236,13 @@ không phải newline thật. Bộ dò placeholder phải khớp cả `%1.0f` v�
   marker riêng của Cubase, nằm trong key — giữ nguyên.
 - **Key ≠ English.** Cột 1 và cột 2 của TSV khác nhau: `AppKey[Key]`→`Menu`,
   `Delete Tool`→`Erase Tool`, `Check Files`→`Find Missing Files` — theo **key**.
-- File Cubase đang chạy: **chỉ `us` + `vi`** (1.449.424 byte). `install.ps1` ghi `.bak`
-  cạnh mọi file; `keys/translation_original.xml` là nguồn của cả hai bản. PowerShell
-  báo `String: 0` là **sai** (`.String` trùng `System.String`) — kiểm bằng Python.
+- File Cubase đang chạy: bản **`full` 5.322.928 byte** (đủ 9 ngôn ngữ + `vi`).
+  Bản rút gọn `translation_vi_en.xml` chỉ 1.443.882 byte, chỉ dùng khi
+  `-Variant en` — **`install.ps1` mặc định lại là `en`**, cài nhầm thì Cubase có
+  thể không hiện tiếng Việt. Khi kiểm bằng ảnh chụp, **luôn `-Variant full`**.
+  `install.ps1` ghi `.bak` cạnh mọi file; `keys/translation_original.xml` là nguồn
+  của cả hai bản. PowerShell báo `String: 0` là **sai** (`.String` trùng
+  `System.String`) — kiểm bằng Python.
 
 ## 7. Bẫy công cụ
 

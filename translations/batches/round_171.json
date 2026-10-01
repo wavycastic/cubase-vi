@@ -1,0 +1,10 @@
+{
+  "Record Enable": "Record Enable",
+  "Record Enable On/Off": "Record Enable On/Off",
+  "Record Enable/Monitor": "Record Enable/Monitor",
+  "Record Enable All Tracks": "Record Enable All Tracks",
+  "Record-Enable allows MIDI Thru": "Record-Enable cho phép MIDI Thru",
+  "Number of record enabled tracks": "Số Track đang bật Record Enable",
+  "While Record-Enabled": "Trong khi đang bật Record Enable",
+  "Chord Pad Output Mode\\nOn: Output is sent to all record-enabled or monitored tracks.\\nOff: Output is sent exclusively to record-enabled or monitored tracks where Input Routing is set to Chord Pads.": "Chế độ đầu ra Chord Pad\\nBật: Đầu ra gửi tới mọi Track đang bật Record Enable hoặc Monitor.\\nTắt: Đầu ra chỉ gửi riêng tới Track đang bật Record Enable hoặc Monitor có Input Routing là Chord Pad."
+}

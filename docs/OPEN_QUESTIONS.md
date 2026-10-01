@@ -101,6 +101,7 @@ tên file. Có thể là lệch. Bảng không cho biết `Bass Drum` trong bả
 | `X Presets` (số nhiều, tập hợp) -> `Preset X`; `X Preset` (thuật ngữ) -> giữ | `Mixer Presets` -> `Preset của Mixer` vs `Logical Preset` -> `Logical Preset` |
 | khoá `"X - Y"` -> giữ dấu ` - ` | 93 chuỗi, 91 giữ (đợt 102) |
 | bỏ số nhiều tiếng Anh trong thuật ngữ giữ nguyên | `Articulations` 22/25, `Voicing` 35/38, `Crossfade` 26/27 (đợt 101, 103) |
-| `Arm` -> "sẵn sàng ghi", `Record Enable` -> "ghi" | 9 chuỗi, tách đúng hai khái niệm Steinberg |
-| `Time Signature` -> "số chỉ nhịp", `Barline` -> "vạch nhịp" | 60+ chuỗi |
+| `Arm` -> "sẵn sàng ghi", `Record Enable` -> **giữ EN** | đợt 171 (người dùng: "bật ghi nghe chán quá" + "record là từ chuyên ngành mà lại dịch à"). Luật AGENT.md dòng 95 đã yêu cầu giữ EN vì là **chữ in trên nút** — bản dịch trái luật mới là lỗi. Đã ghi đè dòng này. |
+| ~~`Time Signature` -> "số chỉ nhịp"~~ **giữ EN thay thế** | đợt 146–171: 49 chuỗi `số chỉ nhịp` → `Time Signature`, hết trong round 160. Dòng này viết từ trạng thái cũ. |
+| `Barline` -> giữ `Barline` | rounds 148–149 sửa `vạch nhịp` → `Barline`, giống Score Editor. Nguồn cũ ghi "vạch nhịp" — đã lệch. |
 | nhãn/đơn vị `Beat` -> `Beat`; văn xuôi về nhịp -> "nhịp" | `Beats` -> `Beat` cạnh `Beats in Original Length` -> `Số nhịp...` |
