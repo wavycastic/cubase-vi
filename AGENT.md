@@ -34,14 +34,16 @@ luật tồn tại, không phải để tra luật.
 > **Cách tìm từ nên cấm** — đừng hỏi "thuật ngữ nào đã bị dịch" (16 ứng viên, **không
 > cái nào sai**). Hỏi: **thuật ngữ nào có MỘT chuỗi lệch khỏi gia đình?** — 18 lỗi.
 
-**Bàn nhạc (Score Editor) — dùng tiếng Việt:** Staff/Stave = khuông nhạc ·
-Clef = khóa nhạc · Rest = dấu lặng · Beam = đuôi nốt · **Stem = thân nốt** ·
-Barline = vạch nhịp · **Key Signature = hóa âm** · Time Signature = số chỉ nhịp ·
-**Chord Symbols = hóa biểu** · Voice = bè · Ledger Line = dòng kẻ ·
-Accidental = dấu hóa · Note (trường độ) = giữ `Note` → `Note 1/8` ·
-Rhythm Dot = dấu chấm dôi · Slash = gạch chéo · Scale (data) = co giãn
+**Bàn nhạc (Score Editor) — giữ nguyên thuật ngữ chuyên ngành:** Vì Score Editor là
+môi trường ký âm và khắc bản nhạc (notation/engraving) chuyên sâu theo chuẩn quốc tế,
+toàn bộ thuật ngữ chuyên ngành ký âm quốc tế được giữ nguyên tiếng Anh (Staff/Stave ·
+Clef · Barline · Stem · Beam · Accidental · Rest · Grace Note · Notehead · Arpeggio ·
+Tuplet · Glissando · Trill · Fermata · Key Signature · Time Signature · Chord Symbols ·
+Rhythm Dot · Ledger Line · Voice · Slash).
+Động từ thao tác và giao diện chung vẫn Việt hóa tự nhiên: Thêm, Xóa, Ẩn, Hiện, Sửa,
+Thiết lập, Mở, Đóng, Lật (Flip)...
 
-`System` và `Bar` theo ngữ cảnh: Score Editor → `dòng nhạc` / `Bar`; ngoài đó →
+`System` và `Bar` theo ngữ cảnh: Score Editor → `System` / `Bar`; ngoài đó →
 `hệ thống` / `thanh`. Từ HLV cũng giữ bên HLV: `con trỏ`, `bè`, `phát lại`, `hợp âm`.
 
 ## 3. Bẫy thuật ngữ — đọc sai ở đây là hỏng
@@ -51,7 +53,7 @@ Rhythm Dot = dấu chấm dôi · Slash = gạch chéo · Scale (data) = co giã
 | `Duration` → **thời lượng** | *trường độ* = ngành/khoa | `New` → **mới** | không phải *Tạo* |
 | `Word Clock` → giữ `Word` | *Word Spacing* → *Khoảng cách từ* đúng | `Deactivate` → **Tắt** | *Hủy* = *cancel* |
 | `External` → giữ `External` | *outside* = nghĩa **đối lập** | `Doubles` → **Note trùng** | ghi trùng, không dài gấp đôi |
-| `Material` → **chất liệu** | không phải *tư liệu* | `Notehead` → **đầu nốt** | không phải *đầu nối* |
+| `Material` → **chất liệu** | không phải *tư liệu* | `Notehead` → giữ **Notehead** | thuật ngữ chuyên ngành ký âm |
 | `Retrospective Record` → giữ Anh | đợt 72 đảo lại; *hồi tố* = 0 chuỗi | `Group` (danh từ) → **nhóm** | `Gộp` là động từ |
 | `Factory` → giữ `Factory` | đã có 4 kiểu | `Command` → **lệnh** | `Key Command` → **phím tắt** |
 | `Pick-up` → giữ **`Pick-up`** | không phải *Lấy đà* | `Scaling` → **co giãn** | *thu phóng* = `Zoom` |
