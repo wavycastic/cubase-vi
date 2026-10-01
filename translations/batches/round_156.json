@@ -1,0 +1,5 @@
+{
+  "Accidentals apply only to one note, and are shown on all modified notes; naturals are not shown, and notes modified by the key signature do not show accidentals.": "Accidental chỉ tính cho một nốt, hiện trên mọi nốt đã đổi dấu; dấu bình không hiện, nốt đổi theo Key Signature cũng không hiện Accidental.",
+  "Accidentals apply only to one note, and are shown on all notes, including unmodified notes (naturals) and notes modified by the key signature.": "Accidental chỉ tính cho một nốt, hiện trên mọi nốt, kể cả nốt không đổi dấu (dấu bình) và nốt đổi theo Key Signature.",
+  "Accidentals apply to all notes at the same staff position (i.e. in one octave only), until the end of the bar or a change of key, whichever is sooner, and apply to all voices belonging to the same track.": "Accidental áp dụng cho tất cả nốt ở cùng vị trí Staff (tức là chỉ trong một quãng tám), cho tới hết Bar hoặc khi đổi Key Signature, tùy cái nào đến trước, và áp dụng cho mọi bè thuộc cùng Track."
+}
