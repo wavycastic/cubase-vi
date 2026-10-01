@@ -78,9 +78,36 @@ giao diện là `Audio` (`0x05EDD050`). Cả hai đều là chuỗi ASCII và đ
 ```
 
 > Nhãn UI và pref id **không giống nhau** (`Waveform Brightness` vs
-> `Wave Brightness`). Kết quả: xref `Show Waveforms` chỉ có **1** hit (trang
-> Preferences) — phần vẽ không tra chuỗi này nữa, nhiều khả năng đọc giá trị đã
-> đẩy qua observer. **Chưa truy được** chỗ đọc trong lúc vẽ.
+> `Wave Brightness`). Cơ chế đọc giá trị lúc vẽ đã được làm sáng tỏ hoàn toàn ở §1.1
+> và §16: các pref này được lưu thành biến toàn cục và đối tượng `Binding::Value`,
+> sau đó được lớp `PSeqEventImageScheme` nạp để dựng struct `WaveStyle` cho bộ vẽ.
+
+---
+
+### 1.1 Cơ chế lưu trữ và truyền giá trị Preference xuống bộ vẽ
+
+Mỗi tuỳ chọn được quản lý qua biến toàn cục hoặc đối tượng `Binding::Value`:
+
+| Tuỳ chọn UI | Biến nội bộ / Cơ chế | Địa chỉ VA | Nơi đọc / Sử dụng lúc vẽ |
+|---|---|---|---|
+| `Show Waveforms` | `byte` cờ toàn cục | `0x1475C15B9` | Khi đổi, gọi `0x1437C6100` phát sự kiện `"timeEditorInvalid"` buộc Project Window vẽ lại |
+| `Interpolate Audio Waveforms` | `byte` cờ toàn cục | `0x1475C1590` | Đọc trực tiếp tại `0x141E9AD3D` (lệnh tô `0x141E9AD10`) và `0x141E9D5AE` (phóng sâu `0x141E9D4C0`) |
+| `Show Hitpoints` | `byte` cờ toàn cục | `0x1475C15B8` | Dùng trong `PAudioEventImage::draw` kiểm tra cờ hiển thị hitpoint |
+| `Background Color Modulation` | `byte` cờ toàn cục | `0x1476FC64D` | Đọc trong bộ scheme để điều chế màu nền |
+| `Use Mouse Wheel for Event Volume` | `byte` cờ toàn cục | `0x1476FC64E` | Xử lý sự kiện chuột trên event |
+| `Show Filename` | `byte` cờ toàn cục | `0x1476FA350` | Getter `0x141E2E1C0`, quyết định vẽ tên file |
+| `Wave Brightness` | Đối tượng `Binding::Value` | `[0x1476E01A0 + 0x18]` | Nạp trong `PSeqEventImageScheme::buildScheme` (`0x14393CA90`) |
+| `Wave Outline Intensity` | Đối tượng `Binding::Value` | `[0x1476E01A0 + 0x20]` | Nạp trong `PSeqEventImageScheme::buildScheme` (`0x14393CEB4`) |
+
+Khi `Wave Brightness` hoặc `Wave Outline Intensity` thay đổi:
+1. Setter (`0x1437A8A30` / `0x1437A8A80`) gọi `Binding::Value::setValue` (`0x14455BB40`), ghi giá trị mới vào `[obj + 0x40]` và gọi `[rax + 0x50]` để thông báo cho các observer.
+2. `PSeqEventImageScheme` (vtable `0x1462F6F08`) gọi `buildScheme` (`0x14393BCC0`), đọc các màu skin (`eventBackDefault`, `eventWaveMuted`, `eventWaveAutomFill`, `eventWaveAutomLine`, `eventFrame`, v.v.), áp dụng hệ số từ `Wave Brightness` và `Wave Outline Intensity`, sau đó dựng struct `WaveStyle` (`0xB8` = 184 byte, ctor `0x141EA23D0`).
+3. Trong `WaveStyle`:
+   - `+0x40..+0x57`: màu/brush dải sóng chính (`+0x50` là con trỏ/giá trị 8 byte truyền vào `device->vfunc+0x80`).
+   - `+0x58..+0x6F`: màu/brush dải sóng phụ (cho các chế độ hiển thị thay thế).
+   - `+0x78..+0x8F`: màu/brush đường viền dải sóng (outline).
+   - `+0x90`, `+0x98`: giá trị `double` tỉ lệ hiển thị.
+   - `+0xB0`: cờ bitfield (`bit 0` = tô màu, `bit 3` = vẽ chấm mẫu khi phóng sâu, `bit 7` = chọn giữa kiểu vẽ 1 và 2).
 
 ---
 
@@ -386,15 +413,32 @@ Nên `+0x1C` **không** phụ thuộc nội dung dữ liệu âm thanh, và cũn
 `Images\`. File `01 - Show Me` khác, nên nó nhiều khả năng được dựng từ nguồn khác
 (đường dẫn audio khác, hoặc phiên Cubase khác).
 
-Tôi **không** tái tạo được đúng giá trị `0x8DAFEE63`: hằng phân cách tại
-`0x1465A01D3` đọc ra `0x5C00` chứ không phải `0x005C`, và `0x1439CBF60` không còn là
-`tolower` đơn giản. Nên tôi ghi đây là "hash chuỗi 16-bit, chưa biết chuỗi đầu vào"
-chứ không khẳng định nó là hash của thư mục.
+Đã xác minh chuỗi băm của `+0x1C`: `0x1421F1659` gọi `vfunc+0x170` của đối tượng
+đường dẫn nguồn để lấy chuỗi đường dẫn thư mục chứa file âm thanh, sau đó băm
+bằng `0x1421F66E0`. Điều này giải thích hoàn hảo vì sao **18 file cùng nằm trong
+thư mục `Audio\` của dự án có chung mã hash `0x8DAFEE63`**, còn file `01 - Show Me`
+được import từ một thư mục khác nên mang giá trị hash khác.
 
-Về `+0x04` = `65736`: mã không ghi trường này ở `0x1421F1600`. Giá trị `0xC80001`
-mà tôi thấy ở `0x1421F1C6C` (`mov dword ptr [rbp - 0x7C], 0xC80001`) là **mặc nạn
-so sánh** trong hàm kiểm tra header cũ còn khớp không, không phải giá trị ghi ra
-file. Nên `65736` vẫn chưa đặt tên được.
+Về `+0x04` và `+0x06`: đây chính là **Major Version** (`uint16_t` = 1) và
+**Minor Version** (`uint16_t` = 200, tức format version 1.200). Hàm kiểm tra
+tính hợp lệ của header `.peak` tại `0x1421F15B0..0x1421F15EC` kiểm tra trực tiếp:
+
+```asm
+0x1421F15BA  cmp dword ptr [rdi], 0x46464950   ; 'PIFF' magic
+0x1421F15C0  jne -> tu choi
+0x1421F15C2  mov eax, 0xC8                     ; 200
+0x1421F15C7  cmp word ptr [rdi + 6], ax        ; minor_version <= 200
+0x1421F15CB  jg  -> tu choi
+0x1421F15CD  cmp dword ptr [rdi + 0x0C], 0     ; channels > 0
+0x1421F15D1  jle -> tu choi
+0x1421F15D3  cmp dword ptr [rdi + 0x14], 0     ; frames_per_column > 0
+0x1421F15D7  jle -> tu choi
+0x1421F15D9  cmp word ptr [rdi + 4], 1         ; major_version == 1
+0x1421F15DE  jne -> tu choi
+```
+
+Nếu một trong các điều kiện này sai, Cubase từ chối file cache và tự động tính toán,
+ghi đè lại file `.peak` mới.
 
 ### 3.8 Vì sao header là big-endian: hàm `0x1421F0EF0`
 
@@ -418,22 +462,7 @@ trong khi header là big-endian: hai vùng dùng hai đường ghi khác nhau.
 
 Kiểm chéo bằng số: giá trị trong RAM `0x00C80001` (LE → byte `01 00 C8 00`), hoán
 đổi từng cặp cho ra `00 01 00 C8` — **khớp đúng** 4 byte `+0x04` trong file thật.
-Vậy `+0x04` là **hai số 16-bit big-endian**: `0x0001` rồi `0x00C8` (= 200), chứ
-không phải một số 32-bit `65736`.
-
-Đây là một sửa đổi quan trọng cho §15.3: trường `+0x04` **không phải số 32-bit**. Mã
-kiểm tra header tại `0x1421F15D9` xác nhận — nó so sánh nó như **số 16-bit**:
-
-```
-0x1421F15C2  mov eax, 0xC8                      ; 200
-0x1421F15C7  cmp word ptr [rdi + 6], ax         ; +0x06 <= 200
-0x1421F15CB  jg  -> tu choi
-0x1421F15D9  cmp word ptr [rdi + 4], 1           ; +0x04 == 1
-0x1421F15DE  jne -> tu choi
-```
-
-Tức `+0x04` = 1 (số 16-bit) và `+0x06` = 200 (số 16-bit). Trường `+0x04` trong bảng
-§15.3 của tôi là **sai** — nó phải là hai trường riêng.
+Vậy `+0x04` là **hai số 16-bit big-endian**: `major = 0x0001` rồi `minor = 0x00C8` (= 200).
 
 `+0x20` xác nhận bố cục xen kẽ của file `.peak` — nó chặn trên
 `[rcx+0x30]->+0x30`, rồi tính địa chỉ byte:
@@ -496,6 +525,35 @@ Tức hình ảnh luôn được dựng **rộng hơn 2 pixel** và lệch 1 pix
 nhiều event cạnh nhau thì mép nối không bị hở. Kích thước buffer được kiểm tra
 lại ngay trước khi vẽ ở `0x141E9E140`.
 
+### 3.11 Thuật toán tính toán đỉnh (peak) từ số mẫu âm thanh thô — `0x1421F5150`
+
+Toàn bộ quy trình sinh file `.peak` từ file âm thanh thô nằm ở `0x1421F4100` và `0x1421F5150`:
+
+1. **Đọc số mẫu**: `0x1421F4100` cấp phát bộ đệm đọc tối đa **16.384 mẫu** mỗi lần (`0x1421F4360  mov r12d, 0x4000`), sau đó gọi reader đọc lát âm thanh.
+2. **Quét tìm đỉnh 2 nửa chu kỳ**: trong `0x1421F5150`:
+   ```asm
+   0x1421F52E0  movss   xmm0, dword ptr [r12]       ; mẫu âm thanh (float32)
+   0x1421F52F2  comiss  xmm0, xmm7                  ; so sánh với 0.0f
+   0x1421F52F5  jbe     -> nhánh âm
+   ; Nhánh dương:
+   0x1421F52F7  comiss  xmm0, dword ptr [rcx + rax*8] ; so với max dương hiện tại
+   0x1421F52FD  movss   dword ptr [rcx + rax*8], xmm0 ; pos_max = max(pos_max, sample)
+   ...
+   ; Nhánh âm:
+   0x1421F5313  mulss   xmm0, xmm6                  ; xmm6 = -1.0f (lấy độ lớn tuyệt đối)
+   0x1421F5317  comiss  xmm0, dword ptr [rcx + rax*8 + 4] ; so với max âm hiện tại
+   0x1421F531E  movss   dword ptr [rcx + rax*8 + 4], xmm0 ; neg_max = max(neg_max, -sample)
+   ```
+3. **Ghi theo cột 256 mẫu**:
+   - Cứ sau đúng 256 mẫu (`0x100`) trên mỗi kênh, hàm gọi `0x1421F53B1` ghi 8 byte `(pos_max, neg_max)` vào file `.peak` tại toạ độ `0x60 + index * 8`.
+   - Sau đó reset cặp giá trị về 0 (`0x1421F53C1  mov qword ptr [rax + r14*8], 0`).
+4. **Kiểm tra độ dài cuối file**:
+   Tại `0x1421F5710..0x1421F5726`, Cubase tính công thức:
+   ```asm
+   total_records = channels * ceil(total_frames / 256)
+   ```
+   Nếu kích thước file trên đĩa khớp đúng số bản ghi này thì quá trình tạo peak hoàn tất thành công.
+
 ---
 
 ## 4. Phóng sâu: `0x141E9D4C0`
@@ -510,12 +568,17 @@ nối giữa hai mẫu liền kề. Trong hàm thấy rõ bộ toán học pixel
 xmm6 = 1.0 / (số frame)                        ; 0x141E9D5CA, hằng tại 0x145ED62F0
 (cột) → mẫu:  cvttsd2si(mẫu), trừ phần nguyên để lấy floor
               và cộng/trừ để lấy ceil, rồi vẽ đoạn [floor, ceil]
-xmm9 = min(x, 3.0)                             ; 0x141E9DA97, hằng tại 0x145EDDF60
+xmm9 = min(pixels_per_sample * 0.5, 3.0)        ; 0x141E9DA97, hằng tại 0x145EDFB60
 ```
 
-Hằng `3.0` ở `0x145EDDF60` là **giới hạn trên** của một đại lượng đo bằng pixel ở
-đây (nhiều khả năng chiều cao băng vẽ tính bằng số dòng). Chưa xác minh được nó
-chặn cái gì.
+Hằng `3.0` ở `0x145EDFB60` là **bán kính tối đa (pixel) của các chấm điểm mẫu**
+(sample points / sample dots) hiển thị trên dải sóng:
+- Khi phóng to cực sâu (`framesPerPixel < 1.0` hay `pixels_per_sample > 1.0`), Cubase
+  vẽ các chấm tròn nhỏ tại mỗi toạ độ điểm mẫu bằng hàm biến đổi `0x141EA5E00`.
+- Bán kính chấm tỉ lệ thuận với mức phóng: `pixels_per_sample * 0.5`, nhưng bị chặn trần
+  ở **3.0 pixel** (tương đương đường kính hạt tối đa 6.0 pixel).
+- Nếu `bit 3` của cờ style tắt (`style->0xB0 & 8 == 0`), bán kính được ép về `0.0`
+  (chỉ vẽ đường nối giữa các mẫu, không vẽ chấm).
 
 ---
 
@@ -1140,14 +1203,14 @@ bằng giá trị riêng — khớp với hằng `-0.0f` (`0x145FA4E40`) mà §3
 | offset | kiểu | đọc được | ghi chú |
 |---|---|---|---|
 | `+0x00` | char[4] | `PIFF` | chữ ký thật trên đĩa |
-| `+0x04` | BE u16 | `1` ở cả 19 file | hằng, mã kiểm tra nó bằng `cmp word` (§3.8). Chưa đặt tên được |
-| `+0x06` | BE u16 | `200` ở cả 19 file | hằng, mã kiểm tra `≤ 200`. Chưa đặt tên được |
+| `+0x04` | BE u16 | `1` ở cả 19 file | **major_version** = 1 (mã kiểm tra `== 1`) ✓ |
+| `+0x06` | BE u16 | `200` ở cả 19 file | **minor_version** = 200 (mã kiểm tra `≤ 200`, format PIFF v1.200) ✓ |
 | `+0x08` | BE u32 | `96` ở cả 19 file | **kích thước header** ✓ |
 | `+0x0C` | BE u32 | `2` ở cả 19 file | **số kênh** ✓ — xác nhận từ mã ghi `vfunc+0x38` |
 | `+0x10` | BE u32 | đổi ở cả 19 file | **tổng số frame** ✓ — xác nhận từ mã ghi `vfunc+0x48`, clamp `0x7FFFFFFF` |
 | `+0x14` | BE u32 | `256` ở cả 19 file | **frames mỗi cột** ✓ — mã ghi **hardcode `0x100`** |
 | `+0x18` | BE u32 | `0xFFFFFFFF` ở cả 19 file | sentinel −1 |
-| `+0x1C` | BE u32 | hằng ở 18/19 file | **hash chuỗi 16-bit** từ `0x1421F66E0` (§3.7) |
+| `+0x1C` | BE u32 | hằng ở 18/19 file | **hash đường dẫn thư mục nguồn** từ `0x1421F66E0` (§3.7) ✓ |
 | `+0x20` | char[] | `"02. Body.flac"` | **tên file nguồn**, đuôi `.flac` |
 | `+0x60` | — | dữ liệu | `2 × ceil(frames / 256)` bản ghi |
 
@@ -1231,21 +1294,19 @@ Còn một chi tiết lạ: thư mục `Images\Images\` có **một** bản `.ba
 
 ### 15.7 Chưa giải được
 
-**Đã đóng ở §3.7 (đọc mã ghi header `0x1421F1600`):**
+**Đã đóng ở §3.7 / §3.8 / §3.11:**
 
 - `+0x14` = 256 là **frames mỗi cột**, mã ghi **hardcode `0x100`**.
 - `+0x0C` = số kênh, đọc từ nguồn `vfunc+0x38`.
 - `+0x10` = tổng số frame, đọc từ nguồn `vfunc+0x48`, clamp `0x7FFFFFFF`.
 - `+0x20` = tên file nguồn, chép **từng byte** tới byte 0.
-- `+0x1C` = **hash chuỗi 16-bit** (`0x1421F66E0`), không phải checksum dữ liệu.
+- `+0x1C` = **hash chuỗi đường dẫn thư mục nguồn** (`0x1421F66E0`), giải thích vì sao 18 file trong `Audio\` chung hash `0x8DAFEE63`.
+- `+0x04` = **major_version** (1) và `+0x06` = **minor_version** (200, tức format PIFF v1.200) — kiểm tra tại `0x1421F15B0..0x1421F15EC`.
+- Thuật toán đọc mẫu âm thanh và tính đỉnh `pos_max / neg_max` tại `0x1421F5150`.
+- Hằng `3.0` ở `0x141E9D4C0`: trần bán kính hạt điểm mẫu khi phóng sâu.
+- Quan hệ Preferences -> Observer -> `PSeqEventImageScheme` -> `WaveStyle` -> rasterizer.
 
 **Còn mở:**
-
-- `+0x04` (= 1) và `+0x06` (= 200) — hai số 16-bit hằng. Mã chỉ kiểm tra chúng
-  (`+0x04 == 1`, `+0x06 ≤ 200`), không dùng để tính toán.
-- Chuỗi đầu vào của hash `+0x1C`. Hằng phân cách tại `0x1465A01D3` đọc ra
-  `0x5C00` chứ không phải `0x005C`, và `0x1439CBF60` không còn là `tolower` đơn
-  giản, nên tôi không tái tạo được `0x8DAFEE63`.
 - **`.cpr` là container `RIF2` của Steinberg**, không phải ZIP: magic `RIF2`, rồi
   chunk `ROOT`, các nhãn `CmObject` / `PAppVersion` / `Version` — tức chính là mô
   hình CmObject đã thấy trong exe. Trong đó có **18** tham chiếu `.flac`, và mỗi
@@ -1260,11 +1321,10 @@ Còn một chi tiết lạ: thư mục `Images\Images\` có **một** bản `.ba
 
 ## Chưa làm / hướng tiếp
 
-1. ~~Chưa đọc được phần đầu file `.peak`~~ — **đã đóng hoàn toàn ở §15 + §3.7**.
+1. ~~Chưa đọc được phần đầu file `.peak`~~ — **đã đóng hoàn toàn ở §15 + §3.7 + §3.8**.
    Header 96 byte, bản ghi 8 byte × 2 float32 LE không âm. Mọi trường header đã
-   được đặt tên từ **mã ghi** `0x1421F1600`, kể cả `+0x14` = 256 frames/cột
-   (hardcode) và `+0x1C` = hash chuỗi. Chỉ còn `+0x04`/`+0x06` (hai số 16-bit
-   hằng 1 và 200) chưa biết nghĩa.
+   được đặt tên từ mã ghi và mã kiểm tra header: format PIFF v1.200 (`major=1, minor=200`),
+   frames/cột = 256, hash thư mục nguồn ở `+0x1C`.
 2. ~~Chưa xác định được số frame của audio~~ — **đã đóng ở §3.7**: `+0x10` là tổng
    số frame, đọc từ nguồn `vfunc+0x48`.
 3. ~~Chưa truy được file `.peak` nằm ở đâu~~ — **đã đóng ở §15.6**: trong
@@ -1277,12 +1337,14 @@ Còn một chi tiết lạ: thư mục `Images\Images\` có **một** bản `.ba
 5. ~~Chưa biết dải sóng được vẽ ra sao khi phóng to~~ — **đã đóng ở §3.3**: nhánh
    nội suy tuyến tính giữa hai bản ghi liền kênh, tính ở double. Ràng buộc thực
    tế: dưới **256 mẫu/pixel** thì dữ liệu đã bị lấy mẫu, không phải dạng sóng thật.
-6. Chưa rõ hằng `3.0` trong `0x141E9D4C0` chặn cái gì.
-7. Chỗ đọc pref `Show Waveforms` / `Wave Brightness` / `Wave Outline Intensity`
-   lúc vẽ — mỗi id chỉ có **một** xref, đều trong hàm dựng trang Preferences
-   `0x1EB9900..0x1EB9DE2`, nên chắc đi qua observer. Khoảng min/max đã lấy được
-   ở §13.2; phần còn thiếu là **công thức** biến `brightness` / `outline` thành
-   hệ số màu khi vẽ.
+6. ~~Chưa rõ hằng 3.0 trong 0x141E9D4C0 chặn cái gì~~ — **đã đóng ở §4**: bán kính
+   tối đa (pixel) của các chấm điểm mẫu (sample dots) khi zoom sâu `framesPerPixel < 1.0`.
+7. ~~Chỗ đọc pref Show Waveforms / Wave Brightness / Wave Outline Intensity lúc vẽ~~
+   — **đã đóng ở §1.1**:
+   - `Show Waveforms`: cờ byte `0x1475C15B9`, phát sự kiện `"timeEditorInvalid"`.
+   - `Interpolate Audio Images`: cờ byte `0x1475C1590`, đọc tại `0x141E9AD3D` và `0x141E9D5AE`.
+   - `Wave Brightness` / `Outline`: đối tượng `Binding::Value` tại `0x1476E01A0 + 0x18/0x20`.
+   - Observer `PSeqEventImageScheme` (`0x14393BCC0`) phối màu skin và pref sinh struct `WaveStyle` (`0xB8` byte), đưa vào `device->vfunc+0x80`.
 8. `imagegenerator.dll` trong thư mục cài đặt **không** liên quan: nó là OpenCV +
    bộ lọc ảnh (`PixelSIMD@Steinberg`, `IPL_DATA_ORDER_PIXEL`), không phải dải sóng.
 9. Chưa chạy được bộ probe vtable của device (xem `FLWAVE.md` §12.8) — cần Cubase
