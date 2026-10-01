@@ -1,0 +1,12 @@
+{
+  "Add Displayed Key Signature": "Thêm Key Signature hiển thị",
+  "Add Key Signature": "Thêm Key Signature",
+  "Cautionary Key Signature at End of System": "Key Signature nhắc lại tại cuối dòng nhạc",
+  "In some hand-copied lead sheets, the key signature is shown only at the beginning of the first bar, and it is hidden on subsequent systems. To follow this convention, choose 'Hide Key Signatures'.": "Trong một số bản lead sheet chép tay, Key Signature chỉ hiện ở đầu Bar đầu tiên và ẩn ở các dòng nhạc tiếp theo. Để theo quy ước này, hãy chọn 'Ẩn Key Signature'.",
+  "Notes Following a Change of Key Signature That Shows Cancellation Naturals": "Các nốt sau khi đổi Key Signature có hiện dấu bình khử",
+  "Notes Following a Change of Key Signature in the Middle of a Bar": "Các nốt sau khi đổi Key Signature ở giữa Bar",
+  "Notes in the Bar Following a Change of Key Signature": "Các nốt trong Bar sau khi đổi Key Signature",
+  "Position Bar Numbers at Start of System After Clef and Key Signature": "Đặt số Bar ở đầu dòng nhạc sau Clef và Key Signature",
+  "Show Key Signatures": "Hiện Key Signature",
+  "Trills Where Upper Note Is Altered by Accidental Present in Key Signature": "Trill khi nốt trên đổi theo Accidental có trong Key Signature"
+}
