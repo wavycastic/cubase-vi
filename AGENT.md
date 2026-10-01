@@ -168,6 +168,12 @@ giữ EN / động từ `chèn`), `Send` (nút giữ / động từ `gửi`).
 > - **`Arm / Disarm`:** Chuyển `Bật/Tắt sẵn sàng ghi` dài dòng thành `Bật/Tắt Record Enable cho tất cả Track`.
 > - **`Read/Write-Enable`:** Đổi `Cho phép đọc/ghi` thành `Bật Read/Write` (khớp với Automation Read/Write).
 
+> **Bộ 3 chế độ Sizing của Object Selection Tool (đợt 181):**
+> - **Đồng bộ hành động Sizing:** Chuyển từ danh từ cụt ("Kích thước...") thành hành động rõ ràng
+>   `Đổi kích thước thông thường`, `Đổi kích thước di chuyển nội dung` (Slip edit),
+>   `Đổi kích thước áp dụng Time Stretch`. Sửa lỗi dịch sai của `Sizing Moves Content`
+>   (trước dịch thành "Kéo cạnh để đổi kích thước" vốn là định nghĩa của Normal Sizing).
+
 > **Ngoại lệ đã chốt — `Chord` dịch `hợp âm` (77 chuỗi).** Dù `Chord` nằm trong
 > 68 từ cốt lõi, thực tế đo được: 77 chuỗi dùng `hợp âm`, và anh em giữ EN chỉ là
 > **tên tính năng** (`Chord Track`, `Chord Pad`, `Chord Symbol`). Sửa danh sách thì
