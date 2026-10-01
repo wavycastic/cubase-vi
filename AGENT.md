@@ -189,6 +189,10 @@ giữ EN / động từ `chèn`), `Send` (nút giữ / động từ `gửi`).
 > - **Khôi phục `MIDI Step Input`:** Sửa lỗi rơi mất chữ `Step` (trước dịch thiếu thành `MIDI Input`).
 > - **Đồng bộ `Bit Depth Audio:`:** Khớp với `Bit Depth`.
 
+> **Xóa bỏ triệt để đuôi số nhiều `s` tiếng Anh trên thuật ngữ (đợt 185):**
+> - **5 chuỗi dính đuôi `s`:** `Các Track đã chọn` (thay vì `Tracks đã chọn`), `Hiện/Ẩn Track toàn cục trong Editor`,
+>   `Các Event đã chọn...` (thay vì `Events đã chọn...`), `Hiện/Ẩn Sound Slot Lane`, `Tất cả Cue (Channel đã chọn)`.
+
 > **Ngoại lệ đã chốt — `Chord` dịch `hợp âm` (77 chuỗi).** Dù `Chord` nằm trong
 > 68 từ cốt lõi, thực tế đo được: 77 chuỗi dùng `hợp âm`, và anh em giữ EN chỉ là
 > **tên tính năng** (`Chord Track`, `Chord Pad`, `Chord Symbol`). Sửa danh sách thì
