@@ -199,6 +199,31 @@ def step_list(a):
 
     print(f'wrote {out}: {len(rows):,} rows')
 
+    # A SECOND table, with all nine languages side by side.
+    #
+    # Eight vendors translating the same English is the only control group this
+    # project owns, and until round 194 it was only reachable by re-parsing a
+    # 4.8 MB XML on every question. Measured against it (see AGENT.md round
+    # 194): comparing LENGTH against the sibling median is round 88's mistake
+    # wearing a new hat - Vietnamese is simply more compact than German, and the
+    # tail of that comparison is nearly all correct values. What DOES work is
+    # comparing POLICY, and for that you need zh and jp: they write in
+    # non-Latin scripts, so every Latin run in their text is a term Steinberg
+    # chose to keep. That is how `audit.py terms` finds terms we translated
+    # without reading a single Vietnamese word.
+    sib = out.replace('all_strings', 'siblings')
+    codes = ['us', 'de', 'fr', 'es', 'it', 'pt', 'jp', 'zh', 'ru']
+    bodies = []
+    for m in re.finditer(r'<String Key="(.*?)">(.*?)</String>', txt, re.S):
+        langs = dict(re.findall(r'<(\w\w)>(.*?)</\1>', m.group(2), re.S))
+        bodies.append((unesc(m.group(1)),
+                       [unesc(langs.get(c, '')) for c in codes]))
+    with open(sib, 'w', encoding='utf-8', newline='') as f:
+        f.write('key\t' + '\t'.join(codes) + '\n')
+        for k, vals in bodies:
+            f.write(k + '\t' + '\t'.join(v.replace('\t', ' ') for v in vals) + '\n')
+    print(f'wrote {os.path.relpath(sib, ROOT)}: {len(bodies):,} rows x {len(codes)} languages')
+
     short = [(k, u) for k, u in rows
              if 0 < len(u) <= 40 and '\\' not in u and '{' not in u]
     print(f'short (<=40 chars, no placeholders): {len(short):,}')

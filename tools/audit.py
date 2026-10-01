@@ -76,6 +76,30 @@ def _load_vi():
     return json.load(open(VI, encoding='utf-8'))
 
 
+SIBLINGS = os.path.join(ROOT, 'keys', 'siblings.tsv')
+_SIB = None
+
+
+def _load_siblings():
+    """key -> {code: text} for all nine Steinberg languages.
+
+    Written by `build.py list`. Cached in the module because two detectors want
+    it and parsing the 4.8 MB original per call is not something to do twice.
+    """
+    global _SIB
+    if _SIB is None:
+        _SIB = {}
+        if os.path.exists(SIBLINGS):
+            with open(SIBLINGS, encoding='utf-8') as f:
+                head = f.readline().rstrip('\n').split('\t')[1:]
+                for line in f.read().splitlines():
+                    if '\t' not in line:
+                        continue
+                    parts = line.split('\t')
+                    _SIB[parts[0]] = dict(zip(head, parts[1:]))
+    return _SIB
+
+
 def _load_src():
     src, longest = {}, {}
     for line in open(TSV, encoding='utf-8').read().splitlines()[1:]:
@@ -1553,6 +1577,162 @@ def d_same_en(args, vi, src, _):
 
 
 # =====================================================================
+# numbers      - every number in the source must survive into the value
+# =====================================================================
+@detector('numbers', 'con so trong nguon phai con trong gia tri')
+def d_numbers(args, vi, src, longest):
+    """The dropped-clause class has turned up five times by hand (rounds 32, 38,
+    38, 40, 44) and every time the lost text was the clause with a CONDITION or a
+    COST in it. A number is the sharpest possible proxy for that: "44,1 kHz",
+    "3 seconds", "10 %" cannot survive a paraphrase by accident.
+
+    This is the one algorithmic detector in the set with no tuning and no
+    exceptions, and round 194 measured it against the whole map: ONE hit, and
+    that one is Cubase writing a European decimal comma in its own English
+    ("44,1 kHz") where Vietnamese correctly writes "44.1". So the map is clean -
+    but unlike every other clean result here, this one is earned by a rule that
+    cannot be satisfied by luck.
+
+    Two exclusions, both measured rather than guessed:
+      - ordinals. "1st" -> "Thứ nhất" is CORRECT, and 5 of the first 23 hits in
+        the first version of this probe were 1st..5th.
+      - keys containing a `\\u` escape. "Agog\\u00F4 (High)" has the digits of an
+        escaped code point in it, and the probe read them as the numbers 00 and 4.
+
+    The lookbehind/lookahead matter too: `3.` at the end of a sentence is a
+    number, so the trailing guard must reject a following WORD character and not
+    a full stop. Getting that wrong made "Plug-in VST 3." look like a missing
+    number, which is how the first probe reported two strings that are perfect.
+
+    Numbers are compared on their DIGITS, not on their text. Cubase writes a
+    European decimal comma in its own English - "44,1 kHz" - and Vietnamese
+    writes "44.1 kHz"; those are the same number, and comparing text made the
+    detector report the one string in the whole map where our translation is
+    demonstrably right. Stripping the separator also handles the thousands comma
+    correctly, so "1,000" and "1000" still match.
+    """
+    NUM = re.compile(r'(?<![\w.,])\d+(?:[.,]\d+)*(?!\w)')
+    ORDINAL = re.compile(r'\b\d+(?:st|nd|rd|th)\b', re.I)
+
+    def digits_only(text):
+        return Counter(re.sub(r'\D', '', n) for n in NUM.findall(text))
+
+    rows = []
+    for k, v in vi.items():
+        if '\\u' in k:
+            continue                       # a key with an escaped codepoint in it
+        en = _full(k, src, longest)        # NOT src[k]: column 2 is truncated
+        if not en:
+            continue
+        miss = digits_only(ORDINAL.sub(' ', en)) - digits_only(v)
+        if miss:
+            rows.append((k, sorted(miss), en, v))
+
+    rows.sort()
+    print(f'values missing a number that the source has: {len(rows)}\n')
+    for k, miss, en, v in rows:
+        print(f'  {miss}  {k[:56]!r}')
+        print(f'      EN {en[:130]!r}')
+        print(f'      VI {v[:110]!r}')
+    return len(rows)
+
+
+# =====================================================================
+# terms       - a term zh and jp both kept, that we translated
+# =====================================================================
+@detector('terms', 'thuat ngu ca zh va jp deu giu, ta lai dich [minhits]',
+          needs_src=False)
+def d_terms(args, vi, src, _):
+    """A LEAD GENERATOR built out of the eight other vendors, and the only
+    detector in the set that consults them.
+
+    THE IDEA. Chinese and Japanese write in scripts that are not Latin. So every
+    Latin run in their text is a word Steinberg chose NOT to translate - it is
+    evidence, not accident. Take the words zh and jp have in common, and ask
+    whether we kept them too. That is a question about POLICY, it needs no
+    Vietnamese, and it is the only way round 194 found to ask a real question
+    about terminology with a machine.
+
+    WHAT IT IS NOT. zh and jp are a biased oracle, and the bias has to be named
+    or the tool misleads. Both languages can translate a word Vietnamese should
+    keep - 点击 is a perfectly good Chinese for "Click" - so agreement between
+    them is not proof that the word must stay English. Round 194 measured the
+    raw output: 96 values, and the largest cluster is "Click" x10, which
+    AGENT.md round 54 settled the other way on purpose. Hence MINHITS: a term
+    that appears once is a coincidence, a term that appears five times is a
+    pattern.
+
+    Measured with minhits 2: 25 values, 18 terms. Read them; do not auto-fix them.
+    """
+    MINHITS = _int(args, 0, 2)
+    sib = _load_siblings()
+    if not sib:
+        print('keys/siblings.tsv not built - run: python tools\\build.py list ...')
+        return 0
+
+    LAT = re.compile(r"[A-Za-z0-9'\-]+")
+    # Split at a letter/digit boundary as well as at punctuation. OMF2.0 and
+    # OMF 2.0 are the same term, and without this the zh/jp text yields a bare
+    # "OMF" while ours yields "OMF2" - so the detector reported three perfect
+    # values as missing a term. German compounds (VST2PlugIn) hit it too.
+    BOUNDARY = re.compile(r'([A-Za-z]+)(\d+)')
+    STOPW = set("""the a an of in on at to for and or is are be been was were
+    with by from into as if then else when while not no yes do does did can could
+    will would shall should may might must you your this that these those it its
+    their there here what which who how all any some more most other new old
+    click please left right on off in out""".split())
+
+    def words(text):
+        out = set()
+        for chunk in re.split(r"[^A-Za-z0-9'\-]+", text):
+            chunk = BOUNDARY.sub(r'\1 \2', chunk)
+            for w in chunk.replace('-', ' ').split():
+                w = w.strip("'-.")
+                if len(w) >= 3 and w.lower() not in STOPW:
+                    out.add(w)
+        return out
+
+    # First pass: which terms does zh and jp agree on, and how often.
+    want = Counter()
+    for k, d in sib.items():
+        zh, jp = d.get('zh', ''), d.get('jp', '')
+        if not zh or not jp or k not in vi:
+            continue
+        common = words(zh) & words(jp)
+        for w in common:
+            want[w] += 1
+
+    rows = []
+    for k, v in vi.items():
+        d = sib.get(k)
+        if not d or not HAN.search(v):
+            continue                       # a value with no Vietnamese at all
+        zh, jp = d.get('zh', ''), d.get('jp', '')
+        if not zh or not jp:
+            continue
+        common = {w for w in (words(zh) & words(jp)) if want[w] >= MINHITS}
+        if not common:
+            continue
+        ours = {w.lower() for w in words(v)}
+        miss = sorted(w for w in common if w.lower() not in ours)
+        if miss:
+            rows.append((k, miss, d.get('us', ''), v))
+
+    tally = Counter(w for _, ms, _, _ in rows for w in ms)
+    print(f'values where a term zh and jp both kept was translated: '
+          f'{len(rows)}  (minhits={MINHITS}, {len(tally)} distinct terms)\n')
+    print('--- most frequent ---')
+    for w, n in tally.most_common(30):
+        print(f'  {w:<22} {n}')
+    print()
+    for k, miss, en, v in rows[:60]:
+        print(f'  {miss}  {k[:52]!r}')
+        print(f'      EN {en[:112]!r}')
+        print(f'      VI {v[:96]!r}')
+    return len(rows)
+
+
+# =====================================================================
 # mojibake      - U+FFFD, and the repairs that are already applied
 # =====================================================================
 @detector('mojibake', 'ký tự hỏng U+FFFD trong bản dịch [--write để vá]', needs_src=False)
@@ -1688,10 +1868,10 @@ def d_mojibake(args, vi, src, _):
 
 
 # =====================================================================
-ORDER = ['mojibake', 'leak', 'quality', 'fragments', 'same_en', 'quotes', 'rm',
-         'gloss', 'collapsed', 'prefix', 'dropped', 'thin', 'funcwords',
-         'opening', 'frame', 'frame_short', 'leftover', 'repeat_en', 'repeat_vi',
-         'pure_en', 'outlier', 'typos']
+ORDER = ['mojibake', 'leak', 'numbers', 'quality', 'fragments', 'same_en',
+         'quotes', 'rm', 'gloss', 'collapsed', 'prefix', 'dropped', 'thin',
+         'funcwords', 'opening', 'frame', 'frame_short', 'leftover', 'terms',
+         'repeat_en', 'repeat_vi', 'pure_en', 'outlier', 'typos']
 
 # A LEAD GENERATOR is a detector whose job is to hand you a list to READ, not to
 # assert a defect. `fragments` reports 188 values every single run and 20 of
@@ -1699,7 +1879,7 @@ ORDER = ['mojibake', 'leak', 'quality', 'fragments', 'same_en', 'quotes', 'rm',
 # so listing them under "defects" would train the reader to skip the summary -
 # which is the failure mode AGENT.md §7 warns about. Keep them separate.
 LEADS = {'fragments', 'thin', 'repeat_en', 'repeat_vi', 'frame', 'frame_short',
-         'pure_en', 'outlier', 'typos', 'opening'}
+         'pure_en', 'outlier', 'typos', 'opening', 'terms'}
 
 # Only these two exit non-zero on a finding, and that reproduces the exit codes
 # the 24 separate scripts had. Round 193 measured this: making the other 20

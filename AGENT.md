@@ -444,6 +444,53 @@ giữ EN / động từ `chèn`), `Send` (nút giữ / động từ `gửi`).
 > - **`termspec.py` đã vào `build.py`**, và `tools/tests/` import `build` thay
 >   vì nó — luật mà test chạy và luật mà `build.py style` chạy **là một**.
 
+> **Đợt 195 — "đọc tay tốn thời gian, dùng thuật toán được không?" ĐO 7 CÁCH, XÂY 2.**
+> Câu hỏi đúng. Nhưng câu trả lời phải là số, không phải cảm giác — và đo ra thì
+> **5 trong 7 cách cho ra nhiễu hoặc lặp lại một thất bại đã ghi sẵn.**
+>
+> | phương án | ra | phán quyết |
+> | --- | --- | --- |
+> | số phải sống sót | 1 | **dựng** |
+> | acronym | 19 — toàn `ALT`→`Alt`, `ERROR`→`LỖI` | chết |
+> | dấu ngoặc | 10 — lai | biên |
+> | **độ dài vs trung vị 8 anh em** | 108 — đuôi **toàn giả** | **đợt 88, lần 2** |
+> | ký tự cuối | 101 — toàn nhiễu (`;` của Đức là `:` của nó) | chết |
+> | dấu phẩy theo nhóm | 0 | chết |
+> | zh + jp đồng thuận | 96 → 40 | **dựng, thành dẫn đường** |
+>
+> - **ĐỘ DÀI KHÔNG BAO GIỜ ĐƯỢC DÙNG NỮA.** Ý tưởng "so độ dài với trung vị 8
+>   anh em" nghe rất hay. Đo thì nhóm 26 chuỗi ngắn nhất gần như **toàn báo giả**:
+>   `'Error during file copy! The operation must be canceled!'` →
+>   `'Lỗi sao chép file! Phải hủy!'` — **đầy đủ**, chỉ là tiếng Việt gọn hơn Đức và
+>   Nga. Đây là đợt 88 mặc lại mũ mới, và §8.10 đã ghi sẵn kết luận. **Bỏ.**
+> - **`audit.py numbers` — bộ dò thuật toán DUY NHẤT không cần ngoại lệ nào.**
+>   Lớp lỗi "mất vế" (đợt 32/38/38/40/44) chết 5 lần vì mất đúng cái mệnh đề có
+>   **điều kiện hoặc cái giá**, và một **con số** không thể sống sót qua việc
+>   diễn giải lại. Ba ngoại lệ đều **đo**, không đoán: thứ tự (`1st`→`Thứ nhất`
+>   **đúng**; 5 hit đầu của bản đầu là 1st..5th), khoá có escape `\u` (khớp "00"
+>   trong `Agog\u00F4`), và **so trên chuỗi chữ số** chứ không so trên văn bản —
+>   vì Cubase tự viết dấu thập phân kiểu châu Âu `44,1 kHz` còn ta viết
+>   `44.1 kHz`, và so văn bản biến **bản dịch đúng nhất của cả bản đồ** thành
+>   báo động giả. Giờ = **0**, và con số 0 đó *được mua* bằng luật chứ không phải
+>   may rủi.
+> - **`audit.py terms` — hỏi 9 anh em, không hỏi tiếng Việt.** `zh` và `jp` viết
+>   bằng bảng chữ không phải Latin, nên **mọi chuỗi Latin trong bản dịch của
+>   chúng là thuật ngữ được cố ý giữ**, không phải ngẫu nhiên. Lấy phần giao của
+>   hai tập đó rồi hỏi: ta có giữ không. Đây là câu hỏi về **chính sách dịch**, nó
+>   **không cần một chữ tiếng Việt nào**, và là cách duy nhất máy làm được.
+>   **Nhưng phải nói tên cái lệch của nó:** cả zh lẫn jp đều *dịch được* "Click"
+>   (点击), nên đồng thuận của chúng **không phải bằng chứng**. Bản đầu ra 96 giá
+>   trị, cụm lớn nhất là `Click` ×10 — mà đợt 54 đã **cố ý** chọn ngược lại. Vì vậy
+>   có tham số `minhits` (mặc định 2): một lần là trùng hợp, năm lần là mẫu.
+>   Còn **40 giá trị / 24 thuật ngữ**, đọc tay — **đừng sửa tự động.**
+> - **`keys/siblings.tsv`** — bảng 10.737 × 9 ngôn ngữ, do `build.py list` sinh ra.
+>   Trước đó muốn hỏi 8 anh em thì phải phân tích lại file XML 4,8 MB. Đây là
+>   **nhóm đối chứng duy nhất mà dự án sở hữu**, và nó phải là artifact phái sinh.
+> - **LỖI CỦA TÔI, do chính bài test bắt:** `numbers` báo 0 vì tôi đánh dấu
+>   `needs_src=False`, nên `src` rỗng và **mọi giá trị đều bị bỏ qua**. Số 0 đó là
+>   do hỏng chứ không phải do sạch. Không có bài test độ nhạy thì nó sẽ nằm đó
+>   mãi và trông rất đẹp.
+
 > **Đợt 194 — "bộ dò này mạnh chưa?" Trả lời: CHƯA, và câu hỏi đã tìm ra 4 lỗi.**
 > Câu hỏi buộc phải trả lời bằng chứng thay vì bằng cảm giác, và cảm giác thì sai:
 > `audit.py --all` in ra *"detectors that fired: none"*. **`none` đó vô nghĩa** —

@@ -166,6 +166,50 @@ class TestDetectors(unittest.TestCase):
         self.assertGreater(audit.count_on('gloss', m, src2, long2), 0,
                            'gloss did not fire on the round-66 marker')
 
+    # -- round 40: a number dropped with the clause it belonged to --------
+    def test_round40_dropped_number(self):
+        """The dropped-clause class, and the one place a machine can see it.
+        A number cannot survive a paraphrase by accident, so "44,1 kHz" going
+        missing means the sentence it was in went missing with it."""
+        key = ('Sample rate is not supported for video export. Set the audio '
+               'sample rate to 44,1 kHz or 48 kHz.')
+        if key not in REAL:
+            self.skipTest('key not in this build')
+        # the real value is CORRECT - it has the number. Drop it and the
+        # detector must notice, which is what proves the detector is alive.
+        self.assertFires(
+            'numbers', key,
+            'Sample Rate không hỗ trợ Export Video. Đặt Sample Rate Audio '
+            'thành 48 kHz.',
+            40, 'number dropped with its clause')
+
+    def test_ordinal_is_not_a_missing_number(self):
+        """1st -> Thứ nhất is CORRECT, and five of the first hits of the first
+        version of this detector were 1st..5th. A detector that flags those is a
+        detector nobody reads."""
+        if '1st' not in REAL:
+            self.skipTest('key not in this build')
+        before = audit.count_on('numbers', REAL, SRC, LONGEST)
+        after = audit.count_on('numbers', with_value('1st', 'Thứ nhất'),
+                               SRC, LONGEST)
+        self.assertEqual(before, after, 'numbers flagged an ordinal')
+
+    def test_decimal_separator_is_not_a_missing_number(self):
+        """Cubase writes a European decimal comma in its own English and
+        Vietnamese writes a point. Comparing the text made this the only
+        finding on the whole map, and our translation was the right one."""
+        key = 'Sample rate is not supported for video export. Set the audio ' \
+              'sample rate to 44,1 kHz or 48 kHz.'
+        if key not in REAL:
+            self.skipTest('key not in this build')
+        before = audit.count_on('numbers', REAL, SRC, LONGEST)
+        after = audit.count_on(
+            'numbers',
+            with_value(key, REAL[key].replace('44.1', '44,1')),
+            SRC, LONGEST)
+        self.assertEqual(before, after,
+                         'numbers treated 44,1 and 44.1 as different numbers')
+
     # -- round 66: the [RM] marker belongs to the key, not the text -------
     def test_round66_rm_marker_in_value(self):
         self.assertTrue(
@@ -297,7 +341,7 @@ class TestCleanMap(unittest.TestCase):
     # defect at some point, so 0 here means the defects were fixed, not that the
     # detector is dead. `test_above` is what proves it is not dead.
     SILENT = ['leak', 'leftover', 'dropped', 'quotes', 'gloss', 'prefix',
-              'funcwords', 'same_en']
+              'funcwords', 'same_en', 'numbers']
 
     def test_silent_detectors_find_nothing(self):
         noisy = []
