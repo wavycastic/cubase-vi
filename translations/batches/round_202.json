@@ -1,0 +1,3 @@
+{
+ "This specifies the maximum duration the Score Editor will produce for a rhythmic slash, without considering rhythm dots, and applies in all time signatures. For example, if you choose '1/4 Note (Crotchet)', the Score Editor will create four slashes in 2/2, and two dottet slashes in 6/8.": "Thời lượng tối đa của một Rhythmic Slash, không tính Rhythm Dot, áp dụng cho mọi Time Signature. Chọn 'Note 1/4 (nốt đen)': 2/2 tạo bốn gạch, 6/8 tạo hai gạch có chấm."
+}

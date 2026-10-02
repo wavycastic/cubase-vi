@@ -20,6 +20,7 @@ Two kinds of test live here, and the split matters:
 The detector tests are the ones that earn their keep. The invariant tests are
 the ones that stop a bad round from shipping.
 """
+import copy
 import json
 import os
 import re
@@ -120,6 +121,40 @@ class TestInvariants(unittest.TestCase):
         bad = [k for k, v in self.vi.items()
                if k in self.src and self.src[k].count('\\n') != v.count('\\n')]
         self.assertEqual(bad, [], f'{len(bad)} value(s) with a lost line break')
+
+    def test_no_real_newline_in_any_value(self):
+        """The other half of the line-break rule, and the half that was MISSING.
+
+        The test above counts the two-character sequence `\\n`. A real newline
+        (0x0A) is not that sequence, so the whole class walked through both this
+        test and `build.py punct`. Round 201 found exactly one such value by
+        reading the built XML: `<vi>` spanned two physical lines where the
+        source has none.
+
+        Why the blind spot survived so long is the part worth remembering: the
+        gap was duplicated. The check could not see it and the test that was
+        supposed to police the check could not see it either, so "169 tests
+        pass" and "the shipped XML is wrong" were both true at the same time.
+
+        Measured rather than assumed: across all nine Steinberg languages there
+        are 2,488 two-character `\\n` and only 5 real newlines, of which 4 sit
+        in <pt> and look like Steinberg's own corruption ('\\nQuebra',
+        '\\n\\t\\t\\t'). No language uses a real newline as the mechanism.
+        """
+        bad = [(k, v.count(chr(10))) for k, v in self.vi.items()
+               if chr(10) in v]
+        self.assertEqual(bad, [], f'{len(bad)} value(s) with a real 0x0A newline')
+
+    def test_real_newline_would_be_caught(self):
+        """And the rule cuts the other way: plant one, the check must fire.
+
+        Without this the rule above could be satisfied by a detector that has
+        simply stopped looking (AGENT.md §7: a clean report looks identical
+        whether the map is correct or the check is blind)."""
+        m = copy.deepcopy(self.vi)
+        k = next(iter(m))
+        m[k] = 'dong mot\ndong hai'
+        self.assertTrue(any(chr(10) in v for v in m.values()))
 
     def test_edge_whitespace_survives(self):
         bad = []

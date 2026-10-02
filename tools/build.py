@@ -383,6 +383,20 @@ the UI as a missing ellipsis on a button, and nobody would report it."""
             elif (en[-1:].isspace()) != (v[-1:].isspace()):
                 why = ('trailing space', int(bool(en[-1:].isspace())),
                        int(bool(v[-1:].isspace())))
+        # A REAL newline (0x0A) where a two-character \n was meant. Counting
+        # '\\n' above cannot see this class, because a real newline is not the
+        # two-character sequence - so the whole class walked straight through
+        # this check and through check_translation_build.py, which compares
+        # <vi> against vi.json (both sides wrong the same way). Round 201 found
+        # exactly one such value by reading the built XML.
+        #
+        # Safe to treat as never-allowed, measured rather than assumed: across
+        # all nine Steinberg languages there are 2,488 two-character \n and
+        # only 5 real newlines, of which 4 are in <pt> and look like Steinberg's
+        # own corruption ('\nQuebra', '\n\t\t\t') and 1 is a Japanese wrap. No
+        # language uses a real newline as the line-break mechanism.
+        if why is None and chr(10) in v:
+            why = ('REAL newline 0x0A', en.count(chr(10)), v.count(chr(10)))
         if why:
             bad.append((k, why[0], why[1], why[2], en, v))
 
