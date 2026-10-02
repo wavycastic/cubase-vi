@@ -1,9 +1,18 @@
 # AGENT.md — Quy tắc bắt buộc khi dịch Cubase 15
 
 Áp dụng cho **mọi** thay đổi trong `translations/**`. Không có ngoại lệ. Chuẩn hoá
-theo `keys/all_strings.tsv` (10.737 cặp key ⇄ English). Bản rút gọn từ 2.442 dòng —
-lịch sử 80 đợt đọc tay ở `…\Temp\opencode\AGENT.md.bak`, đọc khi cần biết *vì sao* một
-luật tồn tại, không phải để tra luật.
+theo `keys/all_strings.tsv` (10.737 cặp key ⇄ English).
+
+**Tài liệu này nén.** Nó chỉ giữ (a) luật áp dụng hôm nay và (b) bằng chứng không
+tái tạo được bằng cách đo lại. Chuyện đã xảy ra ở đợt nào nằm ở `git log`; lý do
+viết một luật nằm trong docstring của công cụ sinh ra nó. **Đừng bổ sung ghi chép
+đợt vào đây** — hãy viết vào docstring công cụ hoặc `docs/OPEN_QUESTIONS.md`.
+
+Trước khi điều tra một cụm đang lệch, đọc `docs/OPEN_QUESTIONS.md`. Năm cụm
+(`Filter`, `Template`, `Audio Performance`, tên nhạc cụ, `Auto X`) đã bị điều tra
+lại từ 5 vòng khác nhau mỗi lần đều dừng ở "không đủ bằng chứng". Một mục chỉ
+được xoá khi có (a) nhóm anh em buộc phải theo một hướng, hoặc (b) **người dùng
+quyết**. Tỉ lệ 51/49 không phải (b).
 
 ## 1. Kiểu dịch
 
@@ -14,63 +23,45 @@ luật tồn tại, không phải để tra luật.
 - **Bảng màu (Color Setup / Palette)**: giữ nguyên tiếng Anh cho toàn bộ tên màu
   (White, Black, Red, Green, Blue, Yellow, Orange, Magenta, các biến thể Dark/Light,
   Black 50/70, Gray 5..90) theo yêu cầu người dùng. Các nhãn chức năng vẫn dịch
-  bình thường (`Color` -> `Màu`, `Colors` -> `Màu sắc`, `Colorize` -> `Tô màu`).
-- **TUYỆT ĐỐI KHÔNG**: ngoặc chú thích ở cuối (`Thêm track (Add Audio Tracks)` — SAI,
-  nhãn tràn chữ). Chỉ giữ ngoặc khi **key gốc đã có**, và khi đó dịch trong ngoặc.
-  Cũng không dịch thuần Việt: `Automation`, `Bounce`, `Track`, `Clip`, `Freeze`, `Quantize`.
+  bình thường (`Color` → `Màu`, `Colors` → `Màu sắc`, `Colorize` → `Tô màu`).
+- **TUYỆT ĐỐI KHÔNG**: ngoặc chú thích ở cuối (`Thêm track (Add Audio Tracks)` —
+  SAI, nhãn tràn chữ). Chỉ giữ ngoặc khi **key gốc đã có**, và khi đó dịch trong
+  ngoặc. Cũng không dịch thuần Việt: `Automation`, `Bounce`, `Track`, `Clip`,
+  `Freeze`, `Quantize`.
 
 ## 2. Thuật ngữ bắt buộc
 
-**DAW — giữ tiếng Anh (160 từ).**
+**DAW — giữ tiếng Anh, 160 từ.** Nguồn chân lý là
+`terms_do_not_translate.json` (68 cốt lõi + 90 mở rộng + 2 Score). **Tính từ file,
+không tin tiêu đề** — năm 2024 tiêu đề ghi "70" nhưng list chỉ có 68.
 
-68 từ cốt lõi: Track · Channel · Bus · FX · Group · VCA · Insert · Send · Slot · Fader · Pan · Solo · Mute · Meter · Metronome · Click · Marker · Locator · Automation · Clip · Event · Part · Pool · Quantize · Snap · Grid · Bounce · Render · Freeze · Warp · Velocity · Pitch · Note · Chord · Tempo · Timecode · Bar · Beat · Fade · Punch · Buffer · Latency · Sample Rate · ASIO · VST · Plug-in · Preset · MixConsole · Inspector · Zone · Export · Import · Arranger · Chain · Step · Lane · Pattern · Expression · Voicing · Tension · Articulation · Layout · Map · Mapping · Script · Machine Control · Talkback · Cue
->
-> Vẫn là **160 từ** (`terms_do_not_translate.json`): 68 + 90 + 2 từ Score ở dưới
-> (`Key Signature`, `Time Signature`). Năm 2024 tiêu đề ghi "70" nhưng list chỉ có
-> 68; đợt 161 gỡ `Voice` nhưng không sửa tiêu đề. **Tính từ file, không tin tiêu đề.**
+Cách tìm từ nên cấm — **đừng** hỏi "thuật ngữ nào đã bị dịch" (16 ứng viên, không
+cái nào sai). Hỏi: **thuật ngữ nào có MỘT chuỗi lệch khỏi gia đình?** — 18 lỗi.
+`audit.py outlier` làm đúng việc đó.
 
-90 từ mở rộng: Project · Audio · Controller · Cycle · Bypass · Remote · Effect · Monitor · Video · Routing · Bank · Loop · Transpose · Loudness · Assistant · Media · Strip · Focus · VariAudio · SyncStation · Player · Score · Logical · Listen · Region · Band · Crossfade · Clock · Panner · Workspace · Snapshot · Room · Hitpoint · Gain · Surface · Sampler · Transport · Retrospective · Learn · Shuttle · Pitchbend · Extension · Wave · Modulation · Frame · Dynamics · Modulator · Factory · ASIO-Guard · MediaBay · Mixdown · Layer · Ruler · SysEx · High-Cut · Side-Chain · Profile · Macro · Pre-roll · Phase · Tuning · Trim · Patch · Multi-Channel · Low-Cut · Word · Folding · Post-Fader · Dynamic · Pedal · Permission · Pre-Fader · Subsection · Post-roll · Downmix · Module · Count-In · CCMode · NoteExp · Latch · Thru · Z-Axis · Remote-Control · AudioWarp · Transformer · Scripting · Cache · Studio · Offline · Mixer
-
-> ~~`Time Signature` và `Chord Symbols` đã gỡ khỏi danh sách vì §3 bắt dùng tiếng Việt;
-> map theo §3 (49 chuỗi)~~ **— hủy (đợt 171).** Rounds 146–171 đã sửa hết 49 chuỗi
-> đó sang `Time Signature` giữ EN, khớp danh sách Score bên dưới và khớp
-> `keep_english`. `Chord Symbols` chỉ còn 2 chuỗi, đều giữ EN. Bỏ dòng này thay
-> vì để lại nó là một luật ngược với map — đúng loại vi phạm §8.2.
-> 90 từ "mở rộng" đo trên 10.737 chuỗi:
-> nguồn ≥5 lần, bản dịch dịch ≤2 lần (`terms_do_not_translate.json`).
->
-> **Cách tìm từ nên cấm** — đừng hỏi "thuật ngữ nào đã bị dịch" (16 ứng viên, **không
-> cái nào sai**). Hỏi: **thuật ngữ nào có MỘT chuỗi lệch khỏi gia đình?** — 18 lỗi.
-
-**Bàn nhạc (Score Editor) — giữ nguyên thuật ngữ chuyên ngành:** Vì Score Editor là
-môi trường ký âm và khắc bản nhạc (notation/engraving) chuyên sâu theo chuẩn quốc tế,
-toàn bộ thuật ngữ chuyên ngành ký âm quốc tế được giữ nguyên tiếng Anh (Staff/Stave ·
-Clef · Barline · Stem · Beam · Accidental · Rest · Grace Note · Notehead · Arpeggio ·
-Tuplet · Glissando · Trill · Fermata · Key Signature · Time Signature · Chord Symbols ·
-Rhythm Dot · Ledger Line · Slur · Tie · Inversion · Interval · Swing · Cadence · Slash).
-Động từ thao tác và giao diện chung vẫn Việt hóa tự nhiên: Thêm, Xóa, Ẩn, Hiện, Sửa,
-Thiết lập, Mở, Đóng, Lật (Flip)...
-
-> **2 từ trong danh sách không tồn tại trong Cubase 15** (đợt 171 đo: 0 key, 0 giá
-> trị): `Fermata`, `Ledger Line`. Giữ trong luật để sau này dùng được — nhưng **đừng
-> đi tìm để sửa**, sẽ tốn thời. `Grace Note` chỉ có 2 chuỗi và đang trộn
-> (`Unslashed Grace Note` giữ EN, `Slashed Grace Note` → `Nốt Grace có Slash`).
-> Còn 3 từ Score khác đã kiểm là giữ EN đúng: `Clef`, `Tuplet`, `Rhythm Dot`.
->
-> **6 từ thêm ở đợt 172 — vì tìm thấy chúng ĐANG bị dịch sai nghĩa:**
-> `Slur` (→"dấu luyến", *luyến* = lỗi lầm), `Inversion` (→"thể đảo", *thể* = cỡ vải),
-> `Interval` (→"khoảng"/"quãng", phải thống nhất), `Tie` (→"dấu nối"), `Swing`,
-> `Cadence`. **Bài học: danh sách §2 phải khớp với map, và cả hai đều phải kiểm** —
-> viết luật rồi tin là xong là lỗi nguồn (đã xảy ra ở `Time Signature`).
-> Đã sửa 19 chuỗi. Riêng `Chord` giữ nguyên `hợp âm` — xem bảng bên trên.
+**Bàn nhạc (Score Editor) — giữ nguyên thuật ngữ chuyên ngành:** vì Score Editor là
+môi trường ký âm và khắc bản nhạc theo chuẩn quốc tế, toàn bộ thuật ngữ chuyên ngành
+ký âm quốc tế giữ nguyên tiếng Anh: Staff/Stave · Clef · Barline · Stem · Beam ·
+Accidental · Rest · Grace Note · Notehead · Arpeggio · Tuplet · Glissando · Trill ·
+Fermata · Key Signature · Time Signature · Chord Symbols · Rhythm Dot · Ledger Line ·
+Slur · Tie · Inversion · Interval · Swing · Cadence · Slash. Động từ thao tác và
+giao diện chung vẫn Việt hoá tự nhiên.
 
 `System` và `Bar` theo ngữ cảnh: Score Editor → `System` / `Bar`; ngoài đó →
 `hệ thống` / `thanh`. Từ HLV cũng giữ bên HLV: `con trỏ`, `bè`, `phát lại`, `hợp âm`.
 
-> `Voice` **không** giữ tiếng Anh — đã gỡ khỏi danh sách Score Editor ở trên (đợt
-> 161). Gia đình `Voice` đo được 36 chuỗi, 33 chuỗi dịch `bè`; 9 ngôn ngữ gốc đều
-> dùng nghĩa *thanh/giọng* (zh 声部, de Stimme, ru голос). Dòng này trước đây liệt
-> `Voice` vào danh sách giữ EN, làm cho 2 chuỗi `Single Voice` lạc khỏi gia đình.
+Ba ngoại lệ đã đo, **đừng đo lại**:
+
+| Ngoại lệ | Vì sao |
+|---|---|
+| `Voice` **không** giữ EN | Gia đình 36 chuỗi, 33 dịch `bè`; 9 ngôn ngữ gốc đều dùng nghĩa *thanh/giọng* (zh 声部, de Stimme). Liệt nó từng làm 2 chuỗi `Single Voice` lạc gia đình. |
+| `Fermata`, `Ledger Line` | **0 key, 0 giá trị** trong Cubase 15. Giữ trong luật để sau dùng, nhưng đừng đi tìm để sửa. |
+| 6 từ thêm (đợt 172) | `Slur` (→"dấu luyến"; *luyến* = lỗi lầm), `Inversion` (→"thể đảo"; *thể* = cỡ vải), `Interval` (thống nhất), `Tie`, `Swing`, `Cadence` — vì tìm thấy chúng **đang bị dịch sai nghĩa**. Sửa 19 chuỗi. |
+
+**Bài học của 6 từ đó:** danh sách §2 phải khớp với map, và cả hai đều phải kiểm.
+Viết luật rồi tin là xong là lỗi nguồn — đã xảy ra ở `Time Signature` (luật §3 bắt
+`số chỉ nhịp`, §2 bắt giữ EN; 49 chuỗi theo §3 là bằng chứng §3 sai). Đợt 146–171 đã
+sửa hết 49 chuỗi về giữ EN. `Chord` giữ nguyên `hợp âm` — xem bảng bên dưới.
 
 ## 3. Bẫy thuật ngữ — đọc sai ở đây là hỏng
 
@@ -80,494 +71,111 @@ Thiết lập, Mở, Đóng, Lật (Flip)...
 | `Word Clock` → giữ `Word` | *Word Spacing* → *Khoảng cách từ* đúng | `Deactivate` → **Tắt** | *Hủy* = *cancel* |
 | `External` → giữ `External` | *outside* = nghĩa **đối lập** | `Doubles` → **Note trùng** | ghi trùng, không dài gấp đôi |
 | `Material` → **chất liệu** | không phải *tư liệu* | `Notehead` → giữ **Notehead** | thuật ngữ chuyên ngành ký âm |
-| `Retrospective Record` → giữ Anh | đợt 72 đảo lại; *hồi tố* = 0 chuỗi | `Group` (danh từ) → **nhóm** | `Gộp` là động từ |
+| `Retrospective Record` → giữ Anh | *hồi tố* = 0 chuỗi | `Group` (danh từ) → **nhóm** | `Gộp` là động từ |
 | `Factory` → giữ `Factory` | đã có 4 kiểu | `Command` → **lệnh** | `Key Command` → **phím tắt** |
 | `Pick-up` → giữ **`Pick-up`** | không phải *Lấy đà* | `Scaling` → **co giãn** | *thu phóng* = `Zoom` |
 | `Mouse Wheel` → **con lăn chuột** | không phải *cuộn chuột* | `Write Protection` → **bảo vệ ghi** | kể cả ở nhãn |
 | `Flat` → **giảm** | nửa tông, không phải *phẳng* | `Multi` → **bội** | *đa kênh* = *multichannel* |
 | `Symbol` / `Sign` | cùng **một** giá trị | `Octave` | `quãng tám` trong câu, `Octave` ở nhãn |
 | `Version` (nhãn) → giữ | trong câu `phiên bản` đúng | chord **with a** 7 → **với nốt** 7 | `cấp 7` = Cmaj7 |
+| `Sus` | **viết tắt hợp âm** (sus2/sus4), KHÔNG phải `Sustain` (pedal) | `Doubles` | |
 
-**`Set up X`** (20 nhãn): dịch `Set up` thành `Thiết lập` rồi **bỏ mặc danh từ** —
-`Thiết lập Attribute Columns`. Kiểm "câu có tiếng Việt" sẽ bỏ sót; phải đọc phần sau
-tiền tố. Cùng kiểu, `Replace / Restore / Reload / Resolve / Reveal / Resulting` — bảy giá
-trị **tháo câu ra ghép ngược**: `Restore Default Setup` → `Thiết lập Restore Default`.
-
-**Luật phụ thuộc nguồn** (mục `src` trong `terms_do_not_translate.json`): `Bypass` cấm
-`bỏ qua`, `Cycle` cấm `lặp` — cùng một từ Việt đúng ở nguồn này, sai ở nguồn kia. 13
-`Bypass` đã sửa ở đợt 72, nhưng 23 chuỗi `Ignore` **phải** giữ `bỏ qua`.
-
-**Danh sách 160 từ = thuật ngữ DAW, KHÔNG phải mọi lần xuất hiện.** Đo ở đợt 171:
-115 chuỗi có `Click` nhưng chỉ vài chuỗi giữ — vì `Click` **vừa** là nút (giữ `Click
-Pattern`) **vừa** là động từ (`click chuột` → `Nhấp`, đúng). Tương tự `Insert` (nút
-giữ EN / động từ `chèn`), `Send` (nút giữ / động từ `gửi`).
+**Danh từ vs động từ — cùng một từ, hai cách.** `Click` **vừa** là nút giữ EN
+(`Click Pattern`, `Click & Count-In`) **vừa** là động từ (`click chuột` → `Nhấp`,
+đúng). Cùng kiểu `Insert`, `Send`, `Note`, `Beat`, `Group`. Đo ở đợt 171: 115 chuỗi
+có `Click` nhưng chỉ vài chuỗi giữ — vì nó là cả hai nghĩa.
 
 | Từ | Giữ EN khi | Dịch khi |
 |---|---|---|
 | `Click` | `Click Pattern`, `Click & Count-In` (tên tính năng) | `click chuột` → `Nhấp` |
 | `Insert` | `Insert 1`, `Insert Slots`, `Bypass Insert` | `insert …` → `chèn` |
 | `Send` | `Send 1`, `Send Slots` | `send …` → `gửi` |
-| `Chord` | **`Chord` KHÔNG dịch** (77 chuỗi `hợp âm`) | — xem dòng dưới |
+| `Chord` | **`Chord` KHÔNG dịch** (77 chuỗi `hợp âm`) | — |
 | `Note` | `Note 1/8` (Score) | `note nhạc` → `nốt` |
 | `Beat` | nhãn/đơn vị | văn xuôi → `nhịp` |
-| `Group` | tên tính năng (`Group Track`) | `nhóm nốt` → `nhóm` |
+| `Group` | tên tính năng (`Group Track`, `Group %d`, `Group 1..4`) | `nhóm nốt` → `nhóm` |
 
-> **`Beat` dùng `nhịp`, KHÔNG `phách`** (đợt 173): 17 chuỗi `nhịp` trước, 3 chuỗi
-> lọt dùng `phách` — *phách* đúng nghĩa nhưng lạc khỏi 17 chuỗi còn lại.
-> **`Group` đánh số phải giữ EN** (đợt 173): `Group %d`, `Group 1..4` là tên tính
-> năng nhưng lọt sang `Nhóm %d`/`Nhóm 1`, trong khi `Group` đơn lẻ đã giữ EN. Văn
-> xuôi vẫn `nhóm` (`nhóm nốt`, `nhóm phụ`) — **9 chuỗi đó đúng, đừng đụng**.
+**Ba ngoại lệ đã quyết, đừng mở lại:**
 
-> **Automation Read / Write & Thuật ngữ âm thanh số (đợt 174):**
-> - **`Read / Write` trong Automation giữ EN:** Nút **R** và **W** trên channel, menu và phím tắt
->   phải là `Read Automation`, `Write Automation`, `Read/Write Automation` — tuyệt đối không dịch
->   thành "đọc" và "ghi" (gây nhầm lẫn nghiêm trọng với `Record` - ghi âm).
-> - **`Nudge` giữ EN:** Không dùng từ bình dân "nhích" trong thanh công cụ/menu DAW chuyên nghiệp.
-> - **Thuật ngữ Audio đồng bộ EN:** `Precount` (khớp với `Count-In`), `Bit Depth` (khớp với `Sample Rate`),
->   `Strip Silence` (công cụ xử lý Audio kinh điển), `Saturation` (màu âm analog/tape, không phải
->   "độ bão hòa" màu sắc), `Normalize` (chuẩn hóa biên độ/loudness số).
+- **`Beat` dùng `nhịp`, KHÔNG `phách`** (đợt 173). *Phách* đúng nghĩa nhưng lạc khỏi
+  17 chuỗi còn lại; 3 chuỗi lọt dùng nó.
+- **`Noteheads` giữ nguyên 39/39.** 40 tên notehead đều mang đuôi `s` — đó là **mẫu
+  tên**, không phải số nhiều cần bỏ. Ngược lại `Slurs`→`Slur`, `Clefs`→`Clef`,
+  `Accidentals`→`Accidental`, `Tuplets`→`Tuplet`, `Bar Rests`→`Bar Rest` là đúng.
+  **Cách đo lại được:** tách 3 nhóm (chỉ số ít / chỉ số nhiều / cả hai), đếm trong
+  nhóm số nhiều bao nhiêu giá trị còn giữ `s`. Hầu hết *không* giữ → giữ là lỗi;
+  *toàn bộ* giữ → mẫu tên.
+- **`Set up X`** (20 nhãn): dịch `Set up` thành `Thiết lập` rồi **bỏ mặc danh từ** —
+  `Thiết lập Attribute Columns`. Kiểm "câu có tiếng Việt" sẽ bỏ sót; phải đọc phần
+  sau tiền tố. Cùng kiểu, `Replace / Restore / Reload / Resolve / Reveal /
+  Resulting` — bảy giá trị **tháo câu ra ghép ngược**: `Restore Default Setup` →
+  `Thiết lập Restore Default`.
 
-> **Chuẩn Loudness, Chord Assistant & Menu Audio (đợt 175):**
-> - **Chuẩn đo Loudness giữ EN:** `Integrated Loudness`, `Short-Term Loudness` giữ EN (đồng bộ với
->   `Momentary Loudness` và lệnh `Normalize theo Integrated Loudness`). Loại bỏ tình trạng cấn cá
->   khi thanh đo Metering lúc ghi "ngắn hạn", "tích hợp" lúc lại ghi tiếng Anh.
-> - **Chord Assistant giữ EN:** `Circle of Fifths` (loại bỏ dịch ngô nghê "vòng tròn quãng năm")
->   và `Proximity` (loại bỏ dịch "độ gần" như khoảng cách vật lý).
-> - **Menu Audio giữ EN:** `Detect Silence` (cùng với `Strip Silence` trên menu `Audio > Advanced`).
+**Luật phụ thuộc nguồn** (mục `src` trong `terms_do_not_translate.json`): `Bypass` cấm
+`bỏ qua`, `Cycle` cấm `lặp` — cùng một từ Việt đúng ở nguồn này, sai ở nguồn kia. 13
+`Bypass` đã sửa, nhưng 23 chuỗi `Ignore` **phải** giữ `bỏ qua`. Đây không phải chuyện
+phức tạp hoá: một mẫu vô điều kiện sẽ chặn hết 23 chuỗi đúng.
 
-> **Acoustic Feedback, Bank Select & Filter Slope (đợt 176):**
-> - **Sửa lỗi dịch ngược `Filter Slope: <%s>`:** Thành `Độ dốc Filter: <%s>` (khớp với `Chọn độ dốc Filter`,
->   `Độ dốc High-Cut`, `Độ dốc Low-Cut`).
-> - **`Acoustic Feedback` giữ EN:** Nút nghe thử nốt trên thanh công cụ MIDI Editor giữ EN, loại bỏ
->   dịch từng từ "Phản hồi Acoustic" (gây hiểu nhầm sang hiện tượng hú mic).
-> - **`Bank Select` giữ EN:** Chuẩn MIDI Controller CC0/CC32 giữ EN trong danh sách MIDI CC, khớp
->   với `Portamento`, `Modulation`, `Breath Control`...
+**Bộ thuật ngữ giữ EN đã chốt** (đều có mặt trong `terms_do_not_translate.json`, đừng
+viết lại ở đây): `Automation Read/Write` (nút **R**/**W** — tuyệt đối không dịch
+thành "đọc"/"ghi", gây nhầm với `Record`) · `Record Enable` · `Nudge` · `Jog`/
+`Shuttle`/`Scrub` · `Precount` · `Bit Depth` · `Strip Silence` · `Saturation` ·
+`Normalize` · `Integrated Loudness` · `Short-Term Loudness` · `Chord Assistant` ·
+`Circle of Fifths` · `Proximity` · `Detect Silence` · `Acoustic Feedback` ·
+`Bank Select` · `Track Archive` · `Thumbnail Cache` · `Pan Law` ·
+`Simple Crossfade Editor` · `Equalizers` (bỏ chữ "Các") · `Functions Browser` ·
+`Lower Zone` (khớp `Left Zone`/`Right Zone`) · `Hermode Tuning` (không đảo thành
+`tuning Hermode`) · `Send 1..4 Out/Pre` (không ngô nghê) · `Auto-Scroll` ·
+`Thumbnail Cache` · `Zoom` ≠ `Scaling`.
 
-> **Jog Wheel & Track Archive (đợt 177):**
-> - **`Jog` giữ EN:** Bộ ba vận chuyển DAW `Jog / Shuttle / Scrub` phải đồng bộ. `Jog sang trái`,
->   `Jog sang phải`, loại bỏ dịch thành "nhích" (từ bình dân).
-> - **`Track Archive` giữ EN:** Menu `File > Import > Track Archive...` và các thông báo lỗi liên quan
->   phải giữ `Track Archive`, loại bỏ dịch thành "Lưu trữ Track..." (nghe như nút bấm sao lưu).
+**Ba bộ dò đã dùng và bỏ — đừng chạy lại:** phủ định (280 ứng viên, tiếng Việt phủ
+định bằng `Tắt`/`Bỏ`/`Gỡ`) · tra `keep_english` (mọi ứng viên đều là *nghĩa thường
+trong văn xuôi* — `part of the channel`, `has no effect`) · key trùng tiền tố có
+giá trị bằng nhau (13 cặp, tất cả là marker `[...]` của key theo §6).
 
-> **Send Initial Value, Auto-Scroll, Thumbnail Cache & Pan Law (đợt 178):**
-> - **Sửa lỗi dịch sai ngữ nghĩa `Send Initial Value`:** Thành `Gửi giá trị khởi tạo` (lệnh gửi tới thiết
->   bị MIDI, bản dịch cũ tưởng nhầm là kênh hiệu ứng Send nên dịch "Giá trị khởi tạo của Send").
-> - **Nút bấm Toolbar `Auto-Scroll`:** Đồng bộ với `Auto-Scroll (Tạm dừng)`, cập nhật cả `ui-navigation.json`.
-> - **Đồng bộ `Thumbnail Cache`:** Bỏ "bộ nhớ đệm Thumbnail", khớp với `Cache` trong danh sách thuật ngữ.
-> - **Chuẩn phòng thu `Pan Law`:** `Pan Law của Project`, `Stereo Pan Law`.
+**Bốn cụm đã điều tra xong — đừng đo lại:**
 
-> **Simple Crossfade Editor, Equalizers & Functions Browser (đợt 179):**
-> - **`Simple Crossfade Editor` giữ EN:** Loại bỏ "Trình sửa Crossfade đơn giản" (Editor duy nhất bị dịch
->   "trình sửa" trong toàn bộ map). Đồng bộ với `Crossfade Editor` và toàn bộ các Editor khác.
-> - **Tab `Equalizers` giữ EN:** Bỏ chữ "Các" trên đầu đề tab/rack, đồng bộ với `Inserts`, `Sends`, `Strip`.
-> - **Khớp tên UI `Functions Browser`:** `qua Trình duyệt Functions` (thay vì "Trình duyệt chức năng").
+| Cụm | Kết luận |
+|---|---|
+| **`Switch: Activate Speakers`** → `Bật/Tắt Control Room` | **Trông như lỗi copy-paste, nhưng ĐÚNG.** `<us>` gốc là `Control Room On/Off`, cả 8 ngôn ngữ đều dịch "Control Room" — **key bị cũ**. Đây là bài học đắt nhất: **mọi ứng viên phải tra `<us>` trước khi sửa.** |
+| **`Note #` → `Số Note`** | 5/9 ngôn ngữ giữ `Note #`, nhưng `CC No.` đã dịch `Số CC`, và hai cái là **cùng một ý**. Giữ là đúng và nhất quán. |
+| **`Assume Skipping` → `Xử lý Clip hiện có`** | Key tiếng Anh lệch nghĩa với **cả 8 ngôn ngữ còn lại**. Lỗi di truyền của Steinberg; dịch theo đa số là đúng. |
+| **`Respell`, `Respell Using Note Name Above/Below`** | `Respell` là động từ nhạc lý, §2 giữ nguyên thuật ngữ ký âm, dịch sẽ mất sắc thái. Cũng giữ `Beaming: Beam Together` → `Nối Beam: Nối chung` dù hơi lặp, vì `Verbalken` của Đức cũng lặp. |
 
-> **Sửa dứt điểm Record Enable & Arm/Disarm (đợt 180):**
-> - **`Record Enable` trong `ui-navigation.json`:** Sửa tận gốc key `'Record Enable': 'Record Enable'`
->   để ngăn `merge_maps.py` âm thầm ghi đè lại thành "Bật ghi".
-> - **`Arm / Disarm`:** Chuyển `Bật/Tắt sẵn sàng ghi` dài dòng thành `Bật/Tắt Record Enable cho tất cả Track`.
-> - **`Read/Write-Enable`:** Đổi `Cho phép đọc/ghi` thành `Bật Read/Write` (khớp với Automation Read/Write).
+**Ba chuỗi `key` ≠ `<us>` đã đóng băng** — `MIDI Step Input` / `Slip Event` /
+`Pre/Post Fader`. Người dùng trả lời "chưa check", xem mục 6 của
+`docs/OPEN_QUESTIONS.md`. **Đừng hỏi lại, đừng sửa.**
 
-> **Bộ 3 chế độ Sizing của Object Selection Tool (đợt 181):**
-> - **Đồng bộ hành động Sizing:** Chuyển từ danh từ cụt ("Kích thước...") thành hành động rõ ràng
->   `Đổi kích thước thông thường`, `Đổi kích thước di chuyển nội dung` (Slip edit),
->   `Đổi kích thước áp dụng Time Stretch`. Sửa lỗi dịch sai của `Sizing Moves Content`
->   (trước dịch thành "Kéo cạnh để đổi kích thước" vốn là định nghĩa của Normal Sizing).
+### Bẫy KHÔNG có máy nào canh — mỗi dòng một bẫy, đã sửa xong nhưng luật phải nhớ
 
-> **Đồng bộ 100% Lower Zone (đợt 182):**
-> - **Đưa 7 chuỗi dịch nửa vời `Zone dưới` về `Lower Zone`:** Khớp hoàn toàn với `Left Zone`, `Right Zone`,
->   `Lower Zone` trên thanh công cụ và cửa sổ Project.
+Đợt 195 đo 7 phương án thuật toán: **5/7 cho ra nhiễu**. Các bẫy dưới đây **không
+thuộc loại đó** — không phải đếm, mà là so nghĩa, nên máy không thấy.
 
-> **Đồng bộ Hermode Tuning (đợt 183):**
-> - **Sửa đảo từ `tuning Hermode`:** Đổi thành `Hermode Tuning` trong hộp thoại Project Setup,
->   đồng bộ 100% với các chuỗi Hermode Tuning khác.
+| Bẫy | Luật |
+|---|---|
+| `-oo dB` / `-inf dB` | **KHÔNG** thay bằng `-∞ dB`. 9/9 và 6/9 catalogue Steinberg giữ nguyên chữ nguồn. Đợt 186 sửa ngược lại sau khi máy Việt-hoá. |
+| `maj3` `sus4/11` `min3/#9` | **Định danh nhịp giữ nguyên hoa/thường của nguồn.** Máy hay Việt-hoa ký hiệu. Anh em `Triads with maj9` / `min9` viết **thường** — theo chúng. |
+| `Sine` / `Square` / `Triangle` | zh ghi `正弦`/`方波`/`三角波` = **tên dạng sóng**, KHÔNG phải notehead. Nhóm `Triangle Up Noteheads` giữ EN là chuyện khác. `Ramp` đã giữ EN từ trước, nên cả ba phải về EN để đồng bộ. |
+| `Natural/Harmonic/Melodic Minor` | Cả **ba** giữ EN. Đợt 172 chốt `Natural Minor`, 186 đồng bộ hai cái kia — dịch "melodic" thành *giai điệu* là thành *melody*. |
+| `Family Name` | KHÔNG dịch `họ` — **`họ` = họ tên (surname)**, sai nghĩa hoàn toàn. Đây là trường metadata họ sản phẩm; `Add Family` → `Thêm Family`, `iXML Family UID` giữ EN. |
+| `Unfold Tracks` | `Mở` là lệnh *Open*. `Unfold` là *bung ra* (đối với `Fold` → `Gấp`). Đúng là `Mở rộng`, khớp `Expand/Collapse Folder` → `Mở rộng/Thu gọn`. |
+| `Generic` | `Chung` làm nó **trùng giá trị với `General`**. 5 anh em đều giữ `Generic`. |
+| `Record only Specific Controller No.` | Đừng để vỡ thành `Chỉ ghi Controller cụ thể số.` |
+| `CCMode:` · `Direct Offline Processing:` | Tiền tố `Word: ` là **nhãn**, phải đứng đầu giá trị và giữ tiếng Anh. |
+| `Assum Skipping` (thiếu `u`) | Lỗi chính tả **của nguồn**, dịch theo ý nghĩa. `audit.py typos` liệt kê 3 lỗi nguồn: `pich`, `occured`, `the the`. |
+| `-oo` dấu gạch nối | Quy ước có sẵn, đừng "sửa": dấu `-` trong `Medium-high` và dấu `.` trong `No.` đều bị bỏ trong giá trị. Khi viết bộ dò phải **miễn trừ** hai ký tự này. |
 
-> **Sửa Send 1..4 Out/Pre, Group 1..4, MIDI Step Input (đợt 184):**
-> - **Mixer Send Routing (8 chuỗi):** Loại bỏ "Gửi 1 Out", "Gửi 1 Pre" ngô nghê, giữ nguyên `Send 1 Out`,
->   `Send 1 Pre`, `Send 2 Out`, `Send 2 Pre`...
-> - **Lưu dứt điểm `Group 1..4` và `Group %d`:** Đưa từ `Nhóm 1..4` về `Group 1..4` và `Group %d`.
-> - **Khôi phục `MIDI Step Input`:** Sửa lỗi rơi mất chữ `Step` (trước dịch thiếu thành `MIDI Input`).
-> - **Đồng bộ `Bit Depth Audio:`:** Khớp với `Bit Depth`.
+**Cách tìm nhanh nhất — MỘT CHUỖI LỆCH KHỎI GIA ĐÌNH.** Đợt 186, 187 và 191 đều ra
+lỗi thật bằng cách này: gom nhóm theo từ đầu tiên (`tools/family.py <từ>`), đếm số
+cách viết, rồi đọc **chuỗi lạc**. Rẻ nhất là `value == key` trong khi anh em đã dịch —
+ứng viên tức thì. Hai chiều đều phải soi: **một chuỗi giữ EN trong khi 180 anh em dịch**
+(`Show` → `Hiện`) **và ngược lại** (`Show Clefs` giữ EN khi 180 chuỗi `Show X` dịch).
 
-> **Xóa bỏ triệt để đuôi số nhiều `s` tiếng Anh trên thuật ngữ (đợt 185):**
-> - **5 chuỗi dính đuôi `s`:** `Các Track đã chọn` (thay vì `Tracks đã chọn`), `Hiện/Ẩn Track toàn cục trong Editor`,
->   `Các Event đã chọn...` (thay vì `Events đã chọn...`), `Hiện/Ẩn Sound Slot Lane`, `Tất cả Cue (Channel đã chọn)`.
-
-> **Quét 9 chiều mới, sửa 61 chuỗi (đợt 186):** Đợt này **không dùng bộ dò có sẵn** —
-> mọi bộ dò trong `tools/` đều báo "0 lỗi", vì chúng soi *mẫu* chứ không soi *gia đình*.
-> Tám chiều mới, mỗi chiều một bộ lọc riêng:
-> 1. **Chữ số & ký hiệu đặc biệt.** `nums(key)` vs `nums(value)`, và
->    `Counter(ký tự đặc biệt)` key vs value. Bắt được `-oo dB` → `-∞ dB` và
->    `-inf dB` → `-∞ dB` — **cả hai là vi phạm §6**, 9/9 và 6/9 catalogue Steinberg
->    giữ nguyên chữ nguồn. Sửa về `-oo dB` và `-inf dB`.
-> 2. **Key bắt đầu bằng chữ thường nhưng value đã hoa.** Máy hay Việt-hoá ký hiệu:
->    `maj3`→`Maj3`, `sus4/11`→`Sus4/11`, `min3/#9`→`Min3/#9`, trong khi anh em
->    `Triads with maj9` / `min9` giữ **thường**. Regex: `^[a-z]…` rồi so với value.
-> 3. **Key lệnh đơn lẻ so với đa số gia đình.** `Show` → `Hiển thị` trong khi
->    **180/200** chuỗi `Show …` dùng `Hiện …`. Cùng kiểu: `Dark` → `Tối`, `Light` → `Sáng`
->    (vi phạm §1 bảng màu, 6 anh em mỗi bên đều giữ EN). Đây là **loại lỗi 169 vòng
->    trước không thấy** vì không ai so key đơn lẻ với gia đình của nó.
-> 4. **Token tiếng Việt HOA giữa chuỗi.** `Loop Vùng chọn Solo`, `Mở/Đóng Phần …`,
->    `Đặt Độ dài ×3`, `Tăng Giá trị …`, `Giá trị Hiển thị`, `Văn bản Tìm kiếm`,
->    `Tên Định dạng`. **Bộ dò phải dùng dải mã `0x00C0–0x00FF` + `0x1E00–0x1EFF` cho
->    CHỮ THƯỜNG CÓ DẤU** — bản đầu của tôi chỉ đưa chữ hoa vào lớp ký tự nên trượt
->    `Vùng` (chữ `V` không dấu). Và phải cho vị trí 0 vào tập "đầu câu", nếu không
->    mọi chuỗi đều báo.
-> 5. **`value == key` mà key có từ chức năng tiếng Anh** — tìm chuỗi *chưa dịch*.
->    Bắt được 15 chuỗi, gồm nhóm `Notehead: …` (bản không tiền tố đã dịch, bản có
->    tiền tố thì không) và `Reset to Original Staff` (anh em `Cross Staff: Reset to
->    Original Staff` đã dịch). **Bộ dò `audit.py quality [1]` báo 0** vì nó chỉ soi
->    *văn xuôi*; các nhãn có thuật ngữ giữ EN không vào diện.
-> 6. **Tra từ khóa luật trên toàn map** (không chỉ trên key mới). Đợt 174 đã cấm
->    `đọc`/`ghi` cho Read/Write trong Automation — quét lại thuật ngữ đó toàn cục
->    thì ra **19 chuỗi `Suspend Read/Write` còn sót**, trong đó có
->    `Tạm dừng đọc/ghi tất cả`. Cùng menu lại có 2 chuỗi đã đúng
->    (`…trạng thái Read` / `…trạng thái Write`). **Đây là bài học §8.1 thuần:**
->    luật viết trong AGENT.md **không tự lan** — phải quét lại bằng TỪ khóa luật.
-> 7. **Ngữ nghĩa sai ở key trùng tên.** `Sus` → `Sustain` là **sai nghĩa**: `Sus` là
->    viết tắt hợp âm (sus2/sus4), `Sustain` là pedal. de/ja/zh đều giữ `Sus`.
->    Cùng dạng: `Inversions: Move Down` giữ trọn tiếng Anh trong khi
->    `Chord Editing - Inversions: …` cũng giữ trọn, dù **6/6** anh em `Chord Editing`
->    khác đều dịch `Chỉnh sửa hợp âm` → đợt 172 sửa dở, chỉ giữ `Inversions`.
-> 8. **Đối chiếu XML gốc khi nghi ngờ ngữ nghĩa.** `Triangle` / `Sine` / `Square`:
->    zh ghi `三角波` / `正弦` / `方波` — tức là **tên dạng sóng**, không phải notehead
->    (nhóm `Triangle Up Noteheads` giữ EN là chuyện khác). Nhưng `Ramp` đã giữ EN từ
->    trước, nên cả ba lạc khỏi gia đình → đưa về `Sine` / `Triangle` / `Square`.
-> 9. **Số nhiều của thuật ngữ giữ EN.** Đợt 172 đã làm `Slurs` → `Slur`; đợt 186
->    làm nốt `Accidentals` → `Accidental`, `Clefs` → `Clef`. **Còn giữ nguyên:**
->    `Noteheads` → `Noteheads` (40 tên notehead đều mang đuôi `s`, đó là mẫu tên
->    chứ không phải số nhiềi cần bỏ).
->
-> **Hai chuỗi đã cân nhắc sửa nhưng giữ nguyên (có lý do):**
-> - **`Note #` → `Số Note`:** 5/9 ngôn ngữ giữ `Note #`, nhưng `CC No.` đã dịch là
->   `Số CC` — `Note #` và `CC No.` là **cùng một ý** (số thứ tự). Giữ `Số Note` là
->   đúng và nhất quán với anh em.
-> - **`Assume Skipping` → `Xử lý Clip hiện có`:** key tiếng Anh lệch nghĩa với **cả 8
->   ngôn ngữ còn lại** (de `Bestehenden Clip bearbeiten`, ja/zh/ru đều nói *xử lý clip
->   hiện có*). Đây là lỗi di truyền của Steinberg; bản dịch theo đa số là đúng.
-
-> **Quét 6 chiều *cấu trúc*, sửa 13 chuỗi (đợt 187):** Đợt 186 soi *gia đình thuật ngữ*;
-> đợt này soi **hình dạng chuỗi**, không soi từ. Bốn bộ dò đáng ghi nhớ:
-> 1. **Chữ thường ngay sau dấu `:`** — `re.finditer(r":\s+([a-zà-ỹĐđ])", value)`. Bắt
->    được 3 chỗ có **anh em đối xứng ngay cạnh**: `Show: All Channel Types` →
->    `Hiện: mọi loại Channel` trong khi `Hide: All Channel Types` → `Ẩn: Tất cả loại
->    Channel`; `Track Display Settings: All Visible Tracks` / `: Toggle Modes` thường
->    trong khi 3 anh em cùng tiền tố Hoa.
->    **Phải phân biệt *nhãn* với *câu*** — sau `:` mà là câu thì thường là đúng
->    (`Lỗi: file không hợp lệ…`, `…: loại Channel không khớp.`). Chỉ sửa khi có anh em
->    cùng tiền tố làm chuẩn.
-> 2. **Gom nhóm theo mẫu rồi đếm số cách render.** 64 chuỗi `On/Off` → 63 đặt
->    `Bật/Tắt` ở **đầu**; riêng `Link to Grid On/Off` đặt ở **cuối**. 41 chuỗi
->    `Open/Close` và 60 chuỗi `Show/Hide` **hoàn toàn đồng nhất** — chứng minh bộ dò
->    mẫu là loại bắt lỗi tốt nhất khi gia đình đủ lớn.
-> 3. **`value == key` mà key thuộc gia đình đã dịch.** `Make Unbeamed` và
->    `Reset Beaming` chưa dịch, trong khi `Beaming: Make Unbeamed` → `Nối Beam: Tách
->    Beam` và `Beaming: Reset Beaming` → `Nối Beam: Đặt lại nối Beam` đã dịch.
->    **Rẻ nhất: key trùng value là ứng viên**, rồi tra anh em theo từ đầu tiên.
-> 4. **`grep` lại từ mà chính luật đã cấm.** §5 cấm `Vui lòng` — quét thì ra
->    **3 chuỗi còn sót**, cả 3 đều mở đầu bằng `Vui lòng không …`.
->
-> **Ba lỗi nghĩa (không phải lỗi hình thức):**
-> - **`Unfold Tracks` → `Mở Track` SAI NGHĨA.** `Mở` là lệnh *Open*; `Unfold` là *bung
->   ra* (đối với `Fold Tracks` → `Gấp Track`). Sửa thành `Mở rộng Track` (khớp
->   `Expand/Collapse Folder` → `Mở rộng/Thu gọn thư mục`). Quét `Mở Track` toàn map
->   thì **chỉ đúng 2 chuỗi này** — nên không có xung đột, nhưng đọc lên vẫn thấy sai.
-> - **`Record only Specific Controller No.` → `Chỉ ghi Controller cụ thể số.`** văn
->   xuôi vỡ. Sửa thành `Chỉ ghi Controller có số cụ thể`.
-> - **`Generic` → `Chung`** làm nó **trùng giá trị với `General`**. 5 anh em
->   (`Generic Editor`, `Generic Remote`, `Generic Value`, `Generic Device`,
->   `Use Generic Device`) đều giữ `Generic` → sửa về `Generic`.
->
-> **Lỗi §6 do bộ dò của tôi phát hiện, không phải công cụ:** `Link to Grid On/Off` →
-> `Liên kết với Grid: Bật/Tắt` có dấu `:` **mà key không có**. Khi sửa phải so
-> **key ↔ giá trị mới**; so *giá trị cũ ↔ giá trị mới* thì đúng lẽ phải giữ dấu `:`
-> và mình sẽ giữ lại vi phạm.
->
-> **Đã cân nhắc nhưng giữ nguyên:** `Respell`, `Respell Using Note Name Above`,
-> `Respell Using Note Name Below` chưa dịch — `Respell` là động từ nhạc lý (đặt lại
-> tên nốt đồng âm), §2 giữ nguyên thuật ngữ ký âm, dịch sẽ mất sắc thái. Cũng giữ
-> `Beaming: Beam Together` → `Nối Beam: Nối chung` dù hơi lặp, vì `Verbalken` của
-> de cũng lặp.
-
-> **Đối chiếu 9 ngôn ngữ Steinberg, sửa 5 chuỗi (đợt 188):** Bộ dò mạnh nhất từ
-> nay, và **chạy được vì `keys/translation_original.xml` có đủ 9 `<us><de><fr><es>
-> <it><pt><jp><zh><ru>`**. Công thức: so `norm(value)` với `norm(us)`.
-> - **Y1 — VI là người *duy nhất* giữ EN** (≥6/8 ngôn ngữ khác đã dịch): **1 chuỗi**,
->   `Solfege` → `Solfège`, mà de/fr cũng giữ `Solfège` có dấu → giữ nguyên, không sửa.
-> - **Y2 — VI là người *duy nhất* dịch** (≥7/8 ngôn ngữ khác giữ nguyên EN): 37 chuỗi,
->   đọc ra **3 lỗi thật**, đều nằm ngoài `keep_english` nên bộ dò từ điển không thấy:
->   | Key | Đang | Vì sao sai |
->   |---|---|---|
->   | `Family Name` | `Tên họ` | **`họ` = họ tên (surname)** — sai nghĩa hoàn toàn. Đây là trường metadata (họ sản phẩm). Anh em `Add Family` → `Thêm Family`, `iXML Family UID` giữ EN |
->   | `Navigator` | `Thanh điều hướng` | *thanh điều hướng* ≠ *Navigator*; de/fr/jp/zh 4/4 giữ |
->   | `Drop Frames` | `Thả các Frame` | thuật ngữ SMPTE; anh em `Frame Rate` giữ EN. Sửa cả `NTSC to PAL Pull-Down` → giữ `Pull-Down` |
-> - 34 chuỗi còn lại đọc hết, **hợp lệ** (`Date Created` → `Ngày tạng` là chỗ Steinberg
->   *chưa* dịch, ta dịch là đúng; `Content Summary` → `Tóm tắt Content` khớp
->   chính sách giữ EN của map).
->
-> **Còn sửa được bằng anh em:** `Scene` → `Cảnh` trong khi `Scene No.` → `Số Scene`,
-> `Scene Localization` → `Bản địa hóa Scene` (2/2 anh em giữ `Scene`). Và
-> `Select Hardware Input` → `Chọn Hardware Input` trong khi `Audio Hardware Input` →
-> `Đầu vào phần cứng Audio`, `Hardware` → `Phần cứng`.
->
-> **Ba bộ dò này vô dụng — đừng chạy lại:** phủ định (280 ứng viên, tiếng Việt phủ
-> định bằng `Tắt`/`Bỏ`/`Gỡ`), tra `keep_english` (mọi ứng viên đều là *dùng trong văn
-> xuôi* với nghĩa thường — `part of the channel`, `has no effect`, `this step`),
-> và key trùng tiền tố có giá trị bằng nhau (13 cặp, tất cả là dấu `[...]` là
-> **marker ngữ cảnh của key** theo §6, giữ nguyên là đúng).
-
-> **`key` ≠ `<us>` — 283 chuỗi, sửa 6 chuỗi (đợt 189):** Đây là cụm **nguy hiểm nhất
-> từng gặp**, vì AGENT.md §6 chỉ nói "theo key" trong nửa câu mà **chưa ai đo hệ quả**.
-> `keys/translation_original.xml` có **283 chuỗi `<us>` khác `Key`**, trong đó phần
-> lớn chỉ khác ở dấu `[...]`, nhưng **không phải tất cả**.
-> - **`Autoscroll` / `<us>Auto-Scroll On/Off`; `Check Files` / `<us>Find Missing Files`;
->   `Arm All Audio Tracks` / `<us>Activate Record Enable for All Audio Tracks`**… Bản
->   dịch đã lấy nội dung từ `<us>` đúng — kiểm độ dài cho ra **0 chuỗi rút ngắn quá
->   60%**, tức là **không rơi nội dung chỗ nào**. Chỉ 3 chuỗi thật sự mơ hồ, đã ghi
->   vào `docs/OPEN_QUESTIONS.md` mục 6 kèm bằng chứng 2 phe — **đừng đo lại**.
-> - **Bộ dò mới, đắt nhất: hai key KHÁC NHAU cùng ra một giá trị tiếng Việt.**
->   340 cặp trùng, đọc hết thì ra đúng một lỗi nghiêm trọng:
->   **`Temple Block` và `Wood Block` — HAI NHẠC CỤ KHÁC NHAU — cùng dịch `Mõ gỗ`.**
->   5/9 ngôn ngữ phân biệt rõ: de `Templeblock` / `Holzblock`, fr `Bloc chinois` /
->   `Wood-block`, ja `テンプルブロック` / `ウッドブロック`, ru `Темпл-блок` /
->   `Деревянная коробочка`, zh giữ cả hai. 10 chuỗi (5 mức) gộp làm một, nghĩa là
->   **hai pad khác nhau trong Drum Editor hiện cùng một tên**. Sửa: `Temple Block`
->   giữ EN (theo §10 luật 1 "tên riêng không dịch" + zh/ru giữ), `Wood Block` giữ
->   `Mõ gỗ`. **Cách chung: `Counter` trên `value`, rồi ghép `key` vào đọc tay.**
-> - **`Down More` → `Xuống nhiều hơn`** lạc khỏi `Up More` → `Lên thêm`, `Move Down More`
->   → `Di chuyển xuống thêm`, `Move Up More` → `Di chuyển lên thêm`. Sửa `Xuống thêm`.
-> - **Score Editor (`score_instruments.py check`): 0 lỗi** — 1.126 chuỗi, 591 giữ
->   nguyên EN, 0 trùng key, 3.115/3.115 ô đúng. Đã sạch, không cần xem lại.
-
-> **Hai quy ước về dấu câu đã có sẵn (đừng "sửa"):** dấu `-` trong `Medium-high` và
-> dấu `.` trong `No.` đều bị bỏ trong giá trị — đúng quy ước của cả họ
-> (`Roto-tom`/`Tenor Drum`/`Timbale`/`Tom-tom` → `(Trung bình cao)`;
-> `CC No.`/`MIDI Controller No.` → `Số CC`/`Số MIDI Controller`). Khi viết bộ dò kiểm
-> phải **miễn trừ hai ký tự này**, nếu không sẽ báo động giả hàng loạt.
-
-> **Đọc hết 340 cặp trùng giá trị + thống kê số nhiều thuật ngữ ký âm, sửa 15 chuỗi
-> (đợt 190):** Đợt 189 phát hiện `Temple Block`/`Wood Block`; đợt này đọc **toàn bộ**
-> 340 cặp còn lại (213 nhóm 2 key) và thêm bộ dò **đếm số nhiều của thuật ngữ ký âm**.
-> - **Một báo động giả đắt nhất — đừng sửa:** `Switch: Activate Speakers` →
->   `Bật/Tắt Control Room` *trông* như lỗi copy-paste. Nhưng `<us>` gốc là
->   **`Control Room On/Off`** và cả 8 ngôn ngữ đều dịch "Control Room" — **key bị cũ**,
->   bản dịch đã đúng. **Đây là bài học đắt nhất của đợt này: mọi ứng viên phải tra
->   `<us>` trước khi sửa.** Cùng loại: `Assume Skipping` (đợt 186).
-> - **Lệnh `Show/Hide` bị bỏ nguyên tiếng Anh:** `Show Clefs` → `Show Clefs`,
->   `Hide Clefs` → `Hide Clefs`, `Hide Key Signatures` → `Hide Key Signatures`, trong
->   khi **180 chuỗi `Show X` dùng `Hiện` và 30 chuỗi `Hide X` dùng `Ẩn`**, và chính
->   anh em cùng nhóm `Show Key Signatures` → `Hiện Key Signature` là khuôn mẫu.
->   Sửa 3 nhãn **+ 2 chuỗi dài có trích dẫn `'Hide Clefs'` / `'Hide Key Signatures'`**;
->   `audit.py quotes` báo 0 là bằng chứng trích dẫn đã khớp nhãn.
-> - **`Forced Accidentals` → `Forced Accidentals`**, 8/8 ngôn ngữ đều dịch
->   (`Erzwungene Vorzeichen` / `强制变音记号`) → `Accidental bắt buộc`, khớp
->   `Cautionary Accidentals` → `Accidental nhắc lại`.
-> - **Số nhiều:** đếm trên 13 thuật ngữ ký âm cho thấy luật đã rõ — `Slurs`→`Slur`,
->   `Clefs`→`Clef`, `Accidentals`→`Accidental` là đúng; sửa nốt `Tuplets`→`Tuplet`,
->   `Bar Rests`→`Bar Rest`, `Multi-Bar Rests`→`Multi-Bar Rest` (2 chuỗi ghép).
->   **`Noteheads` giữ nguyên 39/39** vì 40 tên notehead đều mang đuôi `s` — đó là mẫu
->   tên, không phải số nhiều cần bỏ.
-> - **Gia đình `Triplet` lạc 1/4:** `Triplet`/`Triplets`/`1/8 Triplet`/
->   `Toggle Quantize Triplet` đều dùng `liên ba`, chỉ `Toggle Triplet` giữ EN.
-> - **`Melodic` trùng giá trị với `Melody`** (`Giai điệu`), trong khi anh em
->   `Melodic Mode` → `Chế độ Melodic` giữ EN → `Melodic`.
-> - **Ba thang ngam có 3 cách viết:** `Natural Minor` → `Natural Minor` (đợt 172 đã
->   chốt giữ EN), `Harmonic Minor` → `Hòa âm Minor`, `Melodic Minor` →
->   **`Thứ giai điệu`** (dịch "melodic" thành *giai điệu* = *melody*!). Đồng bộ
-> hai cái kia theo cái đã chốt.
->
-> **Cách đo bộ dò số nhiều (làm lại được):** với mỗi thuật ngữ, tách 3 nhóm —
-> key chỉ có số ít / key chỉ có số nhiều / key có cả hai — rồi đếm **trong nhóm số
-> nhiều, bao nhiêu giá trị còn giữ chữ `s`**. Nếu nhóm đó hầu hết *không* giữ `s`
-> thì giữ `s` là lỗi; nếu *toàn bộ* giữ `s` (`Noteheads`) thì đó là mẫu tên.
-
-> **Rò từ tiếng Anh lọt vào giá trị, sửa 10 chuỗi (đợt 191):** `audit.py fragments` in ra
-> **25 từ** tiếng Anh còn nằm trong giá trị có tiếng Việt. Đọc cả 25 nhóm:
-> - **Báo động giả:** `In` (40 chuỗi) — toàn bộ là **thành phần của thuật ngữ ghép**
->   (`Count-In`, `Punch In`, `Fade In`, `MIDI In`), không phải giới từ lọt. Tương tự
->   `After Fader Listen`, `Open Jazz`, `Add-on`, `Bank Select`, `Cut/Delete/Draw/Paste`.
-> - **Lỗi thật — đều là "1–3 chuỗi lạc khỏi gia đình đã dịch":**
->   | Từ | Chuỗi lạc | Số anh em giữ nguyên cách dịch |
->   |---|---|---|
->   | `Picture` | `Hide Track Pictures`, `Remove Selected Pictures…`, `Select Track Picture` | 15/18 dùng `hình ảnh` |
->   | `Text` | `Edit Text`, `Insert Text` | 13 dùng `văn bản` |
->   | `Item` | `Current Item`, `Item Properties` | 5/7 dùng `mục` |
->   | `Previous` | `Use Previous Track Color +1` | 1 anh em trực tiếp |
->   | `Random` | `Use Random Track Color`, `Set Relative Random Values Between` | 5/7 dùng `ngẫu nhiên` |
-> - **Bắt được thêm 1 lỗi hoa/thường sót từ đợt 186:** `Use Random Track Color` →
->   `Dùng Màu Random Track` có chữ `Màu` HOA giữa chuỗi. Nó **đã xuất hiện** trong
->   bảng 113 token của đợt 186 nhưng tôi không đưa vào bảng sửa — **bộ dò báo đúng,
->   người đọc bỏ sót.** Sửa luôn thành `Dùng màu Track ngẫu nhiên`.
->
-> **BẪY LẶP LẠI — đừng viết lại bộ dò hoa/thường sai:** phải kiểm bằng
-> `tok[0].isupper()`, **không** dùng lớp ký tự `[A-ZÀ-ỸĐ]`. Vì `đ` (U+0111) **nằm
-> trong** dải `À-Ỹ`, nên bản dùng lớp ký tự báo động giả cho `đã`, `đó`, `đối` —
-> đúng những từ hợp lệ nhất trong tiếng Việt. Bản đợt 186 dùng `isupper()` nên đúng.
->
-> **Ba chuỗi `key` ≠ `<us>` đã đóng băng** — xem mục 6 của `docs/OPEN_QUESTIONS.md`.
-> Người dùng trả lời "chưa check" (đợt 191) nên **3 chuỗi `MIDI Step Input` /
-> `Slip Event` / `Pre/Post Fader` giữ nguyên. Đừng hỏi lại, đừng sửa.**
-
-> **Dọn kho công cụ — 230 → 75 → 10 (đợt 192–193):** Đếm thật ở đợt 192: chỉ
-> **47/230** file `tools/*.py` được gọi. Đợt 193 đo từng bộ dò rồi gộp tiếp.
-> **Còn đúng 10 file dịch** (9 file `inject_wavehook`/`memscan`/`set_prefs`… là
-> tính năng khác, chưa tính):
->
-> | file | làm gì |
-> | --- | --- |
-> | `build.py` | cả pipeline: `extract` `list` `prune` `style` `punct` `build` `strip` `validate` + `termspec` |
-> | `merge_maps.py` | batch → `vi.json` |
-> | `audit.py` | **22 bộ dò**, mỗi cái một lệnh con |
-> | `dupes.py` | `keys` / `values` / `json` |
-> | `clarity.py` | `long` / `hard` |
-> | `read.py` | `long` `short` `page` `sample` `worklist` `inspect` |
-> | `family.py` | đọc cả gia đình chuỗi cùng từ đầu |
-> | `check_translation_build.py` | **bằng chứng** cho toàn dự án — tách riêng có chủ đích |
-> | `score_instruments.py` | Score Editor |
-> | `patch_hub.py` | bảng 89 chuỗi của Cubase Hub |
->
-> - **Mọi lần gộp đều kèm đối chiếu byte-for-byte.** `audit.py`: 22 bộ dò × 35
->   lần chạy (có tham số mặc định lẫn tham số tường minh) → **34/35 khớp tuyệt
->   đối**, khác duy nhất là một dòng gợi ý trỏ tên mới. `read.py`: **14/14**.
->   `build.py`: 8 bước + **`translation_vi.xml` giống từng byte** (5.322.854) +
->   `all_strings.tsv` **cùng SHA-256**. Không có lần nào "chắc là giống".
-> - **Exit code CỐ Ý giữ nguyên cái cũ, dù nó lệch nhau.** Chỉ `leak` và
->   `mojibake` trả 1 khi có phát hiện; 20 cái còn lại in ra rồi thoát 0. Sửa vội
->   thành "thống nhất" thì §9 ("dừng ngay khi một bước báo lỗi") sẽ dừng pipeline
->   ở những phát hiện đã được đọc và phán xét mười lần. Đó là quyết định về quy
->   trình, không phải việc dọn code.
-> - **`tools/archive/measurement/` (17 file)** — đo độ phủ, in bảng, **chưa
->   bao giờ bắt được lỗi nào**. Trong đó **3 cái đang chết thật**:
->   `audit_glossary.py` in `section 4 table not found`, `audit_labels.py` in
->   `khong doc duoc §2`, cả hai vì bảng §2/§4 của AGENT.md đã đổi định dạng;
->   `suggest_keys.py` cần argv. Báo cáo không ai đọc không phải là kiểm tra.
-> - **`termspec.py` đã vào `build.py`**, và `tools/tests/` import `build` thay
->   vì nó — luật mà test chạy và luật mà `build.py style` chạy **là một**.
-
-> **Đợt 195 — "đọc tay tốn thời gian, dùng thuật toán được không?" ĐO 7 CÁCH, XÂY 2.**
-> Câu hỏi đúng. Nhưng câu trả lời phải là số, không phải cảm giác — và đo ra thì
-> **5 trong 7 cách cho ra nhiễu hoặc lặp lại một thất bại đã ghi sẵn.**
->
-> | phương án | ra | phán quyết |
-> | --- | --- | --- |
-> | số phải sống sót | 1 | **dựng** |
-> | acronym | 19 — toàn `ALT`→`Alt`, `ERROR`→`LỖI` | chết |
-> | dấu ngoặc | 10 — lai | biên |
-> | **độ dài vs trung vị 8 anh em** | 108 — đuôi **toàn giả** | **đợt 88, lần 2** |
-> | ký tự cuối | 101 — toàn nhiễu (`;` của Đức là `:` của nó) | chết |
-> | dấu phẩy theo nhóm | 0 | chết |
-> | zh + jp đồng thuận | 96 → 40 | **dựng, thành dẫn đường** |
->
-> - **ĐỘ DÀI KHÔNG BAO GIỜ ĐƯỢC DÙNG NỮA.** Ý tưởng "so độ dài với trung vị 8
->   anh em" nghe rất hay. Đo thì nhóm 26 chuỗi ngắn nhất gần như **toàn báo giả**:
->   `'Error during file copy! The operation must be canceled!'` →
->   `'Lỗi sao chép file! Phải hủy!'` — **đầy đủ**, chỉ là tiếng Việt gọn hơn Đức và
->   Nga. Đây là đợt 88 mặc lại mũ mới, và §8.10 đã ghi sẵn kết luận. **Bỏ.**
-> - **`audit.py numbers` — bộ dò thuật toán DUY NHẤT không cần ngoại lệ nào.**
->   Lớp lỗi "mất vế" (đợt 32/38/38/40/44) chết 5 lần vì mất đúng cái mệnh đề có
->   **điều kiện hoặc cái giá**, và một **con số** không thể sống sót qua việc
->   diễn giải lại. Ba ngoại lệ đều **đo**, không đoán: thứ tự (`1st`→`Thứ nhất`
->   **đúng**; 5 hit đầu của bản đầu là 1st..5th), khoá có escape `\u` (khớp "00"
->   trong `Agog\u00F4`), và **so trên chuỗi chữ số** chứ không so trên văn bản —
->   vì Cubase tự viết dấu thập phân kiểu châu Âu `44,1 kHz` còn ta viết
->   `44.1 kHz`, và so văn bản biến **bản dịch đúng nhất của cả bản đồ** thành
->   báo động giả. Giờ = **0**, và con số 0 đó *được mua* bằng luật chứ không phải
->   may rủi.
-> - **`audit.py terms` — hỏi 9 anh em, không hỏi tiếng Việt.** `zh` và `jp` viết
->   bằng bảng chữ không phải Latin, nên **mọi chuỗi Latin trong bản dịch của
->   chúng là thuật ngữ được cố ý giữ**, không phải ngẫu nhiên. Lấy phần giao của
->   hai tập đó rồi hỏi: ta có giữ không. Đây là câu hỏi về **chính sách dịch**, nó
->   **không cần một chữ tiếng Việt nào**, và là cách duy nhất máy làm được.
->   **Nhưng phải nói tên cái lệch của nó:** cả zh lẫn jp đều *dịch được* "Click"
->   (点击), nên đồng thuận của chúng **không phải bằng chứng**. Bản đầu ra 96 giá
->   trị, cụm lớn nhất là `Click` ×10 — mà đợt 54 đã **cố ý** chọn ngược lại. Vì vậy
->   có tham số `minhits` (mặc định 2): một lần là trùng hợp, năm lần là mẫu.
->   Còn **40 giá trị / 24 thuật ngữ**, đọc tay — **đừng sửa tự động.**
-> - **`keys/siblings.tsv`** — bảng 10.737 × 9 ngôn ngữ, do `build.py list` sinh ra.
->   Trước đó muốn hỏi 8 anh em thì phải phân tích lại file XML 4,8 MB. Đây là
->   **nhóm đối chứng duy nhất mà dự án sở hữu**, và nó phải là artifact phái sinh.
-> - **LỖI CỦA TÔI, do chính bài test bắt:** `numbers` báo 0 vì tôi đánh dấu
->   `needs_src=False`, nên `src` rỗng và **mọi giá trị đều bị bỏ qua**. Số 0 đó là
->   do hỏng chứ không phải do sạch. Không có bài test độ nhạy thì nó sẽ nằm đó
->   mãi và trông rất đẹp.
-
-> **Đợt 194 — "bộ dò này mạnh chưa?" Trả lời: CHƯA, và câu hỏi đã tìm ra 4 lỗi.**
-> Câu hỏi buộc phải trả lời bằng chứng thay vì bằng cảm giác, và cảm giác thì sai:
-> `audit.py --all` in ra *"detectors that fired: none"*. **`none` đó vô nghĩa** —
-> nó lấy `return` làm điều kiện, mà 20/22 bộ dò trả `0` **cố ý** để giữ exit code
-> cũ. Ba bộ dò đang có phát hiện (`same_en` 11, `collapsed` 4, `funcwords` 1) và
-> bản tóm tắt không thấy một cái nào.
-> - **Sửa `--all`:** giờ **đếm phát hiện**, không đọc exit code; và tách **LỖI THẬT**
->   khỏi **DẪN ĐƯỜNG** (10 bộ dò luôn ra danh sách để đọc tay — `thin` 908,
->   `frame` 106… gộp chung vào "lỗi" sẽ dạy người đọc bỏ qua bản tóm tắt, đúng
->   thứ AGENT.md §7 cảnh báo).
-> - **`same_en` — 11 phát hiện, 11 BÁO ĐỘNG GIẢ.** Cả 11 là cặp `X` / `X[marker]`.
->   Tra `translation_original.xml`: **8/9 ngôn ngữ dịch khác nhau** cho
->   `Key` vs `Key[keycomms]` (de: *Tonart* = hóa âm vs *Taste* = phím). Chênh lệch
->   là **đúng**. Mã cũ làm **ngược với điều mà chú thích của chính nó nói**: nó
->   bóc marker, rồi đòi mọi khoá phải quy về cùng chuỗi trần — tức là **giữ đúng
->   những cặp có marker** mà nó tuyên bố là loại bỏ. Nay **11 → 0**.
-> - **`collapsed` — chưa từng bắt được ví dụ của chính nó.** Lookahead
->   `\1(?![^\s,;/&+])` nghĩa là cụm đứng trước `)` không khớp, mà phát hiện đợt 61
->   là đúng `"Lam phang (voi Tuy chon & Tuy chon)"` — nằm trong ngoặc và kết
->   thúc bằng `)`. Sửa: cho phép `)` `]` ở cuối. **Không sinh báo động giả mới.**
-> - **Cổng `HAN.search(v)` là thủ phạm gốc.** `funcwords` hỏi "giá trị này có chữ
->   Việt không" trước khi đếm. Nhưng `trong`, `cho`, `khi`, `vao`, `voi` viết bằng
->   **ASCII thuần** — nên những bản dịch TỆ NHẤT, bản dịch dựng từ đám từ chức năng,
->   chính là những bản **không vượt qua cổng**. Ví dụ đợt 59 `"Used trong Project:
->   %s"` **không có một ký tự non-ASCII nào**. Đo trước khi sửa: gỡ cổng ra
->   **không thêm một phát hiện nào**. Cùng cái bẫy này đã giết
->   `audit_readability2.py` (1.171 báo giả) ở đợt 192.
-> - **`tools/tests/test_detectors.py` (20 test, mới):** mỗi test là **một lỗi đã
->   thật sự sửa** trong lịch sử, đặt lại giá trị cũ, và hỏi bộ dò có bắt không.
->   Bản dịch sạch **không chứng minh bộ dò mạnh** — bản dịch sạch và bộ dò mù
->   trông giống nhau từ bên ngoài. **166 test** (trước 146).
-> - **HAI ĐIỂM MÙ CÒN LẠI, và tôi ghi tên chứ không giấu:**
->   (1) **Đợt 33 — khung tiếng Anh.** `frame` cần 4 từ Anh liên tiếp có trong
->   nguồn, mà giá trị lỗi `"Nhấp 'Bắt đầu' vao scan cho unreferenced files"` bị
->   `cho` (không có trong nguồn) cắt mọi cửa sổ 4; dài nhất còn sạch là 2. Chỉ
->   `thin` — một bộ dò **dẫn đường** — thấy.
->   (2) **Đợt 59 — phân từ quá khứ.** Đúng 1 từ, ngưỡng mặc định là 2. Ở
->   `funcwords 1` nó bắt được, với **63 ứng viên thay vì 1**. Giữ ngưỡng 2: đó là
->   đánh đổi độ chính xác, và §7 chọn độ chính xác.
->   Hai điểm mù này **có test khẳng định là mù** — nếu ngày nào nó bắt được, test
->   sẽ đỏ và bắt người sau cập nhật AGENT.md.
-> - **Còn nằm trong bản dịch, chưa ai phán xét: 15.** `quality`=7 (GLOSSARY cũ,
->   đã ghi nhận là stale từ nhiều đợt), `rm`=4 (4 khoá `[RM]` mồ côi, không có
->   khoá gốc để so — đã kiểm, đều `ok`), `collapsed`=4 (trong đó
->   `'Tên Track và tên Track Version'` là **đúng**, detector báo nhầm).
-
-> **Đợt 192 — đo bộ dò trước khi gộp:**
-> - **Gộp (đã đối chiếu output từng dòng):** `read.py` ← `read_long` + `read_short`
->   (cùng một công cụ, điều kiện lọc ngược nhau — 4/4 lần chạy khớp 100%);
->   `dupes.py keys|values|json` ← `check_duplicate_keys` + `find_duplicate_values` +
->   `check_dups`; `clarity.py long|hard` ← `audit_clarity` (phần `long` cho **230**,
->   khớp đúng bản gốc).
-> - **Chuyển sang `tools/archive/` (149 file, `git mv` nên giữ lịch sử):**
->   `archive/one_shot/` = 127 `fix_readingNN`/`fix_scoreNN`/`fix_vao` + `fix_quoted_names`;
->   `archive/replaced/` = 13 `glossary_*` + 6 `leak_fixes_*` + `apply_glossary` +
->   `apply_retouch`. **Không xoá hẳn** vì §8.3 nói chúng là dấu vết của từng đợt.
-> - **`audit_readability2.py` — ĐÃ XOÁ, VÌ HỎNG THẬT.** Quy tắc 1 dùng
->   `\b[A-Za-z][A-Za-z'-]*\b` để tìm "từ Anh lọt", nhưng `trong`, `cho`, `khi`,
->   `ghi`, `theo`, `xung` đều là **tiếng Việt viết bằng ký tự ASCII thuần** →
->   **1.171 báo động giả**, và 5 "từ Anh phổ biến nhất" mà nó báo **đều là tiếng Việt**.
->   **Không thể phân biệt bằng ký tự.** Muốn kiểm tra cái này thì dùng
->   `audit.py fragments` (in ra **từ đã rút gọn** để đọc tay phán xét — đợt 191
->   dùng nó và ra 10 lỗi thật). `clarity.py hard` **cố ý bỏ** tín hiệu
-> "english-run" vì lý do y hệt.
-> - **SỬA LỖI THẬT: `merge_maps.py --check` luôn exit 1.** Dòng 48 là
->   `sys.exit(1 if (intra or conflicts) else 0)`, nhưng *"later files win"* **là
->   thiết kế** — mỗi đợt sau cố ý ghi đè đợt trước. 700+ xung đột, **0 khoá trùng
->   trong cùng file**. Vì vậy `build.py` **chưa bao giờ chạy quá bước 3**, và
->   bước 1 của §9 ("dừng ngay khi một bước báo lỗi") **đã thất lạc từ đợt 126 mà
->   không ai thấy** — vì tôi vẫn chạy `merge_maps.py` không có `--check`.
->   Nay chỉ `intra` mới là lỗi. **`build.py` đã chạy trọn 10 bước.**
-
-> **Ngoại lệ đã chốt — `Chord` dịch `hợp âm` (77 chuỗi).** Dù `Chord` nằm trong
-> 68 từ cốt lõi, thực tế đo được: 77 chuỗi dùng `hợp âm`, và anh em giữ EN chỉ là
-> **tên tính năng** (`Chord Track`, `Chord Pad`, `Chord Symbol`). Sửa danh sách thì
-> sai; đây là điển tượng của "thuật ngữ vừa DAW vừa chuyên ngành". **Không đổi** —
-> nhưng phải biết để không "sửa theo luật" rồi hỏng 77 chuỗi.
+**Hai nhạc cụ khác nhau, một tên** là lớp lỗi nguy hiểm nhất: `Temple Block` và
+`Wood Block` cùng ra `Mõ gỗ` — 5/9 ngôn ngữ phân biệt (de `Templeblock`/`Holzblock`,
+fr `Bloc chinois`/`Wood-block`), nghĩa là **hai pad khác nhau trong Drum Editor hiện
+cùng một tên**. Cách phát hiện: `Counter` trên **`value`**, rồi ghép `key` vào đọc tay.
+`dupes.py values` làm đúng việc đó.
 
 ## 4. Thứ tự từ và câu
 
@@ -591,101 +199,84 @@ giữ EN / động từ `chèn`), `Send` (nút giữ / động từ `gửi`).
 
 ## 5. Văn phong — bỏ bị động, rút gọn
 
-Phải là **tiếng Việt đời thường**, không phải tiếng Việt do máy dịch. Đợt 75/77/79 sửa
-358 chuỗi vì đúng mấy nguyên tắc này.
+Phải là **tiếng Việt đời thường**, không phải tiếng Việt do máy dịch.
 
-> **Khó dịch thì để tiếng Anh. Đừng ép.** Người dùng chốt (đợt 165). Bản dịch vòng
-> vẫn đọc được thì dịch; **không đọc được thì giữ nguyên tiếng Anh** — một câu
-> tiếng Anh còn hơn một câu tiếng Việt sai nghĩa. Không phải "lười": chỉ khi đã thử
-> và còn vướng.
-> - Cờ đỏ, dừng lại: dịch từ tiếng Anh **có một nghĩa đúng** sang từ tiếng Việt
->   **khác nghĩa**. Đợt 165: `…used **these clefs**…` → `…loại **khóa** này…`
->   (khóa = key, không phải clef). Chỗ này **giữ `Clef`** mới đúng.
-> - Cờ đỏ thứ hai: hiểu là dịch được nhưng **đọc lông nhằng** (`nương`, `thiết bị
->   đầu vào và đầu ra mạng` cho `network interface`). Viết lại cho tự nhiên; tới
->   mức không tự nhiên được thì giữ EN.
-> - **Cấm để lại chỗ dở dang**: sửa nửa câu còn tệ hơn để nguyên. §4 đã cấm
->   dịch nửa vế; quy tắc này mở rộng điều đó sang *toàn câu*.
-> - **Vẫn phải giữ bất biến kỹ thuật (§6)** kể cả khi giữ EN: dấu câu, placeholder,
->   `\n`, khoảng trắng đầu/cuối. `build.py punct` không ngoại lệ.
->
-> **Cubase GHÉP CHUỖI Ở RUNTIME — giá trị tiếng Việt lọt thẳng vào UI.** Đợt 170,
-> người dùng chụp màn hình thấy `Thêm Nhóm Track`, `Thêm Hop âm Track`,
-> `Thêm Transpose Track Track`. Nguyên nhân: menu là khuôn **`Add %s Track`**
-> → `Thêm %s Track`, và `%s` lấy từ **key đơn lẻ**. Kiểm tra JSON cho thấy
-> `'Add Group Track' -> 'Thêm Group Track'` **đúng**, nhưng key `'Group'` lại là
-> `'Nhóm'` → menu ra `Thêm Nhóm Track`.
-> - **Vì vậy: key đơn lẻ (`Group`, `Chord`, `Folder`, `TransposeTrack`…) quan
->   trọng ngang chuỗi dài.** Giá trị của nó đi vào UI qua `%s`, nên dịch sai
->   sẽ lộ ra ngay. Sửa cả hai vế: `Group` → `Group` cho khớp `Group Track`.
-> - **`TransposeTrack` (không space) là chuỗi điền `%s`**, 8/9 ngôn ngữ gốc
->   không chữ "track" (de=`Transposition`, jp=`移調`). Đặt `Transpose Track` →
->   lặp thành `Track Track`. Giá trị đúng: `Transpose`.
-> - **Bài học sâu:** 169 vòng kiểm đều pass mà UI vẫn có 4 lỗi. Công cụ kiểm
->   bản dịch, **không kiểm cách Cubase ghép chuỗi**. Chỉ nhìn màn hình mới thấy.
->   Khi nghi ngờ UI, kiểm key `%s` và key đơn lẻ trước, đừng đụng vào chuỗi dài.
-> - **Đã quét toàn bộ khuôn:** 265 chuỗi có `%s`, trong đó 49 có danh từ
->   Track/Channel/Bus/Event/Part/Clip/Lane/Zone — **đều đúng**. Chỉ
->   `Add %s Track` là lỗi. 152 key đơn lẻ giá trị tiếng Việt (`Color`, `Align`,
->   `Create`…) là nút độc lập, không ghép — **không phải lỗi**.
-> - **Nhãn ghép ở giao diện, không tìm thấy trong map:** `Thời gian ghi từ đá`
->   (Transport) và `Đầu vào/E` (bị cột hẹp cắt) — Cubase ghép/chỉnh ở runtime,
->   không phải chuỗi có key. **Đừng đi tìm chúng trong `vi.json`.**
+**Khó dịch thì để tiếng Anh. Đừng ép.** Người dùng chốt (đợt 165). Bản dịch vòng vẫn
+đọc được thì dịch; **không đọc được thì giữ nguyên tiếng Anh** — một câu tiếng Anh còn
+hơn một câu tiếng Việt sai nghĩa. Không phải "lười": chỉ khi đã thử và còn vướng.
+- Cờ đỏ: dịch từ tiếng Anh **có một nghĩa đúng** sang từ tiếng Việt **khác nghĩa**.
+  Đợt 165: `…used **these clefs**…` → `…loại **khóa** này…` (khóa = key, không phải
+  clef). Chỗ này **giữ `Clef`** mới đúng.
+- Cờ đỏ thứ hai: hiểu là dịch được nhưng **đọc lông nhằng** (`nương`, `thiết bị đầu
+  vào và đầu ra mạng` cho `network interface`). Viết lại cho tự nhiên; tới mức không
+  tự nhiên được thì giữ EN.
+- **Cấm để lại chỗ dở dang**: sửa nửa câu còn tệ hơn để nguyên.
+- **Vẫn phải giữ bất biến kỹ thuật (§6)** kể cả khi giữ EN. `build.py punct` không
+  ngoại lệ.
 
-> **`ui-navigation.json` LUÔN THẮNG — đây là bẫy merge.** `merge_maps.py` dùng
-> `sorted()`, mà `u` > `r` nên file này đứng **sau** mọi `round_*.json`. Sửa ở
-> `round_NNN.json` mà key đó có trong `ui-navigation.json` sẽ **bị ghi đề im lặng**
-> (đợt 168: 3 chuỗi `Add … Track to Selected Tracks…`). `vi.json` vẫn đúng về
-> kiểm tra nên không báo lỗi. **Sửa thì sửa cả hai file**, hoặc xoá key ở
-> `ui-navigation.json`. Luôn merge xong đối chiếu lại giá trị.
+| Viết sai | Viết đúng |
+|---|---|
+| `đã được` / `sẽ được` / `đang được` | `đã` / `sẽ` / `đang` |
+| `đã bị loại bỏ` | `đã bỏ` |
+| `Không thể chỉnh sửa VariAudio` | `Không sửa được VariAudio` |
+| `không thể được Modulation` | `không nhận Modulation` |
+| `Bạn phải khởi động lại ứng dụng` | `Cần khởi động lại ứng dụng` |
+| `Thực hiện Audio Export` | `Export Audio` |
+| `Vui lòng nhập tên` | `Nhập tên` |
+| `các hành động` | `Action` |
+| `đã chứa` | `có` |
+| `sẽ bị gỡ bỏ` | `sẽ mất` |
+| `đang có hiệu lực` | `đang dùng` |
+| `Có thể do vấn đề về quyền ghi` | `Có thể do không có quyền ghi` |
+| `Thư mục Project chỉ cho phép đọc` | `Thư mục Project chỉ đọc` |
+| `làm mất hiệu lực` | `làm hỏng` |
+| `Ngưỡng cho phép đo` | `Ngưỡng đo` (*threshold* ≠ *allowed threshold*) |
+| `dấu bình hủy bỏ` | `dấu bình khử` |
+| `Tái sử dụng` | `Dùng lại` |
+| `hộp thoại file` | `cửa sổ duyệt file` |
+| `audio stream` | `Audio Stream` |
 
-> **Rút gọn: đừng để bộ dò tự cắt.** Đợt 166 thử cắt `Vui lòng` bằng regex và nó
-> làm **hỏng 11/33 chuỗi** — chữ thường sau `.` và sau `\n\n`
-> (`…cài đặt. Thử dùng…` thành `…cài đặt. thử dùng…`). Vì tiền tố lọc không biết
-> vị trí câu. **Cắt bằng tay, rồi kiểm hoa/thường bằng assert.** Chỉ dùng regex để
-> **tìm ra ứng viên**, không để ghi.
->
-> **Đo quy tắc này (đợt 165) — cả 4 cách săn đều ra báo động giả.** Ghi lại để
-> không phải đo lại:
-> - `audit_clarity` [B] "khó đọc" (nay là `clarity.py hard`): 313 chuỗi. Đọc 30 chuỗi đầu — **không lỗi nào**;
->   dài vì nguyên văn dài, `english-run` là cụm thuật ngữ đúng.
-> - Từ lặp ≥3 lần trong một value: **74 chuỗi**. Đọc 25 — tất cả lặp vì **nguyên văn
->   lặp** (`Channel` 6 lần vì EN cũng 6 lần). Đếm từ không phân biệt nguyên văn.
-> - `của…của`, `bị…bị`, `không…không` lặp trong 40 ký tự: **15 chuỗi**, đọc hết —
->   đều là cú pháp Việt đúng (`Vị trí của Event vượt quá ranh giới của Part`).
-> - Khoảng trắng thừa trước `:` — **9 chuỗi**, cả 9 đều **có** trong nguồn
->   (`CC01 : Modulation`, `Switch Layout :`). Chính Steinberg viết vậy.
->
-> **Kết luận:** bộ dò bằng mẫu không bắt được lỗi này — §8.9 đã nói "lỗi chỉ lộ ra
-> khi **đọc thật**". Muốn săn lỗi văn phong thì phải đọc tay (`tools/read.py long`),
-> và quy tắc là **so từng cặp với nguồn 9 ngôn ngữ**, không phải đếm mẫu.
+Giữ **mạo từ** khi làm chủ thể, bỏ khi thừa.
 
-- **Bỏ bị động `... được`** — dấu hiệu rõ nhất của câu dịch máy: `đã được` → `đã` ·
-  `sẽ được` → `sẽ` · `đang được` → `đang` · `đã bị loại bỏ` → `đã bỏ` · `Không thể
-  chỉnh sửa VariAudio` → `Không sửa được VariAudio` · `không thể được Modulation` →
-  `không nhận Modulation`.
-- **Bỏ giọng ra lệnh và từ thừa.** `Bạn phải khởi động lại ứng dụng` → `Cần khởi động
-  lại ứng dụng` · `Thực hiện Audio Export` → `Export Audio` · `Vui lòng nhập tên` →
-  `Nhập tên` · `các hành động` → `Action`. Bỏ lặp: `gồm cài đặt Channel, Group Channel,
-  Send Effect và Master Bus` → bỏ `cài đặt` ở cuối.
-- **Rút từ dư.** `đã chứa` → `có` · `sẽ bị gỡ bỏ` → `sẽ mất` · `đang có hiệu lực` →
-  `đang dùng` · `Có thể do vấn đề về quyền ghi` → `Có thể do không có quyền ghi` ·
-  `Thư mục Project chỉ cho phép đọc` → `Thư mục Project chỉ đọc`. Giữ **mạo từ**
-  khi làm chủ thể, bỏ khi thừa.
-- **`inactive` đổi nghĩa theo ngữ cảnh.** Bốn nghĩa: không dùng / chưa bật (Version,
-  Project) · đang tắt (Cycle) → `tắt` · tính năng bị hỏng → `chưa chọn` (đối chiếu
-  bản Đức) · đĩa hỏng → `đang chạy không bình thường`. `đang không hoạt động bình
-  thường` = dịch máy cho "not working normally".
-- **Từ hay dịch sai nghĩa:** `làm mất hiệu lực` → `làm hỏng` · `Ngưỡng cho phép đo` →
-  `Ngưỡng đo` (*threshold* ≠ *allowed threshold*) · `dấu bình hủy bỏ` → `dấu bình khử` ·
-  `Tái sử dụng` → `Dùng lại` · `hộp thoại file` → `cửa sổ duyệt file` · `audio stream`
-  → `Audio Stream`.
+**`inactive` đổi nghĩa theo ngữ cảnh.** Bốn nghĩa: không dùng / chưa bật (Version,
+Project) · đang tắt (Cycle) → `tắt` · tính năng bị hỏng → `chưa chọn` (đối chiếu bản
+Đức) · đĩa hỏng → `đang chạy không bình thường`. `đang không hoạt động bình thường` =
+dịch máy cho "not working normally".
+
+**Cubase GHÉP CHUỖI Ở RUNTIME — giá trị tiếng Việt lọt thẳng vào UI.** Đợt 170, người
+dùng chụp màn hình thấy `Thêm Nhóm Track`, `Thêm Hop âm Track`, `Thêm Transpose Track
+Track`. Menu là khuôn **`Add %s Track`** → `Thêm %s Track`, và `%s` lấy từ **key đơn
+lẻ**. `Add Group Track` → `Thêm Group Track` đúng, nhưng key `Group` lại là `Nhóm`.
+- **Key đơn lẻ (`Group`, `Chord`, `Folder`, `TransposeTrack`…) quan trọng ngang chuỗi
+  dài** — giá trị của nó đi vào UI qua `%s`.
+- **`TransposeTrack` (không space)** là chuỗi điền `%s`; 8/9 ngôn ngữ gốc không có
+  chữ "track" (de=`Transposition`, jp=`移調`). Giá trị đúng: `Transpose`.
+- **Đã quét toàn bộ khuôn:** 265 chuỗi có `%s`, 49 có danh từ
+  Track/Channel/Bus/Event/Part/Clip/Lane/Zone — **đều đúng**. 152 key đơn lẻ giá trị
+  tiếng Việt (`Color`, `Align`, `Create`…) là nút độc lập, không ghép.
+- **Nhãn ghép ở giao diện, không có trong map:** `Thời gian ghi từ đá` (Transport),
+  `Đầu vào/E` (bị cột hẹp cắt) — Cubase ghép/chỉnh lúc runtime. **Đừng đi tìm trong
+  `vi.json`.**
+- **Bài học sâu:** 169 vòng kiểm đều pass mà UI vẫn có 4 lỗi. Công cụ kiểm bản dịch,
+  **không kiểm cách Cubase ghép chuỗi**. Chỉ nhìn màn hình mới thấy.
+
+**`ui-navigation.json` LUÔN THẮNG — đây là bẫy merge.** `merge_maps.py` dùng
+`sorted()`, mà `u` > `r` nên file này đứng **sau** mọi `round_*.json`. Sửa ở
+`round_NNN.json` mà key đó có trong `ui-navigation.json` sẽ **bị ghi đè im lặng**
+(đợt 168: 3 chuỗi `Add … Track to Selected Tracks…`). `vi.json` vẫn đúng về kiểm
+tra nên không báo lỗi. **Sửa thì sửa cả hai file**, hoặc xoá key ở
+`ui-navigation.json`. Luôn merge xong đối chiếu lại giá trị.
+
+**Rút gọn: đừng để bộ dò tự cắt.** Đợt 166 thử cắt `Vui lòng` bằng regex và nó làm
+**hỏng 11/33 chuỗi** — chữ thường sau `.` và sau `\n\n`. Vì tiền tố lọc không biết
+vị trí câu. **Cắt bằng tay, rồi kiểm hoa/thường bằng assert.** Chỉ dùng regex để **tìm
+ra ứng viên**, không để ghi.
 
 ## 6. Bất biến kỹ thuật — giữ nguyên 100%
 
-Placeholder `%s %d %i %.3f` · dấu hai chấm · `?` `!` `.` · dấu ba chấm ·
-**số dòng mới** · **khoảng trắng đầu/cuối**. Xuống dòng bằng **`\n` hai ký tự**,
-không phải newline thật. Bộ dò placeholder phải khớp cả `%1.0f` và `%02d` —
+Placeholder `%s %d %i %.3f` · dấu hai chấm · `?` `!` `.` · dấu ba chấm · **số dòng
+mới** · **khoảng trắng đầu/cuối**. Xuống dòng bằng **`\n` hai ký tự**, không phải
+newline thật. Bộ dò placeholder phải khớp cả `%1.0f` và `%02d` —
 `r'%(?:\.\d+)?[a-zA-Z%]'` bỏ sót cả hai; dùng `cubelib.placeholders.PLACEHOLDER`.
 
 - **`[RM]` thuộc về KEY, tuyệt đối không được nằm trong giá trị** — nó sẽ **hiện lên
@@ -694,115 +285,130 @@ không phải newline thật. Bộ dò placeholder phải khớp cả `%1.0f` v�
   marker riêng của Cubase, nằm trong key — giữ nguyên.
 - **Key ≠ English.** Cột 1 và cột 2 của TSV khác nhau: `AppKey[Key]`→`Menu`,
   `Delete Tool`→`Erase Tool`, `Check Files`→`Find Missing Files` — theo **key**.
-- File Cubase đang chạy: bản **`full` 5.322.928 byte** (đủ 9 ngôn ngữ + `vi`).
-  Bản rút gọn `translation_vi_en.xml` chỉ 1.443.882 byte, chỉ dùng khi
-  `-Variant en` — **`install.ps1` mặc định lại là `en`**, cài nhầm thì Cubase có
-  thể không hiện tiếng Việt. Khi kiểm bằng ảnh chụp, **luôn `-Variant full`**.
-  `install.ps1` ghi `.bak` cạnh mọi file; `keys/translation_original.xml` là nguồn
-  của cả hai bản. PowerShell báo `String: 0` là **sai** (`.String` trùng
-  `System.String`) — kiểm bằng Python.
+  283 chuỗi lệch, đã kiểm độ dài: **0 chuỗi rút ngắn quá 60%**, tức không rơi nội dung
+  chỗ nào.
+- File Cubase đang chạy: bản **`full` 5.322.854 byte** (đủ 9 ngôn ngữ + `vi`). Bản rút
+  gọn `translation_vi_en.xml` chỉ 1.443.882 byte, chỉ dùng khi `-Variant en` —
+  **`install.ps1` mặc định lại là `en`**, cài nhầm thì Cubase có thể không hiện tiếng
+  Việt. Khi kiểm bằng ảnh chụp, **luôn `-Variant full`**. `install.ps1` ghi `.bak` cạnh
+  mọi file. PowerShell báo `String: 0` là **sai** (`.String` trùng `System.String`) —
+  kiểm bằng Python.
 
 ## 7. Bẫy công cụ
 
-- **`[Ā-ỿ]` là SAI** — tiếng Việt nằm ở `U+00C0…U+00FF`, dưới đầu khoảng đó. 9 công cụ
-  đã âm thầm chỉ xem một phần bản dịch. Đúng: `[\u00c0-\u024f\u1e00-\u1eff]`.
-- **"bộ dò báo 0" và "bộ dò hỏng" trông giống nhau.** Thử một giá trị biết đúng vào bộ
-  dò trước khi tin kết quả. Mọi ký tự đại diện phải kiểm bằng giá trị mẫu.
+- **Dải ký tự tiếng Việt.** `[\u00c0-\u024f\u1e00-\u1eff]` là đúng. `[Ā-ỿ]` là **sai** —
+  tiếng Việt nằm ở `U+00C0…U+00FF`, **dưới** đầu khoảng đó, và 9 công cụ đã âm thầm
+  chỉ xem một phần bản dịch.
+- **Bẫy ASCII — đã giết nhiều bộ dò, gặp lại 5 lần.** `trong`, `cho`, `khi`, `ghi`,
+  `theo`, `vao`, `voi`, `hay` là tiếng Việt viết bằng **ký tự ASCII thuần**. Hệ quả:
+  (a) cổng `HAN.search(v)` làm **những bản dịch tệ nhất** — dựng từ đám từ chức năng —
+     không vượt qua; (b) không thể phân biệt "từ Anh lọt" bằng ký tự, nên
+     `audit_readability2.py` đã báo **1.171 báo động giả** với 5 "từ Anh phổ biến
+     nhất" đều là tiếng Việt. Dùng **từ điển tiếng Anh tường minh** và in ra **từ đã
+     rút gọn** để đọc tay (`audit.py fragments`), không đếm.
+- **Bẫy hoa/thường.** Kiểm bằng `tok[0].isupper()`, **không** dùng lớp ký tự
+  `[A-ZÀ-ỸĐ]` — vì `đ` (U+0111) **nằm trong** dải `À-Ỹ`, nên bản dùng lớp ký tự báo
+  động giả cho `đã`, `đó`, `đối`.
+- **`[A-ZÀ-ỸĐ]` cho chữ thường cũng vậy** — bộ dò hoa/thường phải dùng `0x00C0–0x00FF`
+  + `0x1E00–0x1EFF`, và phải cho vị trí 0 vào tập "đầu câu", nếu không mọi chuỗi đều báo.
+- **"Bộ dò báo 0" và "bộ dò hỏng" trông giống nhau.** Thử một giá trị biết đúng vào bộ
+  dò trước khi tin kết quả. `tools/tests/test_detectors.py` làm việc này cho 24 bộ dò.
+- **Cổng `needs_src` sai làm bộ dò chết âm thầm.** `numbers` từng báo 0 vì đánh dấu
+  `needs_src=False`, nên `src` rỗng và **mọi giá trị đều bị bỏ qua** — số 0 trông rất
+  đẹp và hoàn toàn vô nghĩa.
 - Bộ dò đếm CÂU bỏ sót vế mất **ở giữa** câu (số dấu chấm vẫn khớp) — phải so **số
   dòng**; `build.py punct` đã nối vào `build.py`.
 - `all_strings.tsv` có thể **cắt cụt key dài**; hai dòng có thể trùng tiền tố 60 ký tự.
-  Khi tra bằng key, yêu cầu **đúng một** ứng viên.
-- Bốn báo động giả đã biết: (1) `Tên Channel`/`Số Note` trông đảo nhưng đúng;
-  (2) `gán vào`/`chuyển vào` cần `vào`; (3) `lặng` nằm trong `dấu lặng`, `Over`
-  trong `Cross-Over` khớp `\b` sau gạch nối; (4) `build.py style` cấm ngoặc `(ms)` ở
-  cuối dù là đơn vị — sửa **giá trị**, đừng sửa luật. Bộ dò báo động giả nhiều lần
-  còn tệ hơn không có bộ dò: nó dạy người đọc bỏ qua báo cáo.
+  Khi tra bằng key, yêu cầu **đúng một** ứng viên — dùng `_full()`, không dùng `src[k]`.
+- **Đừng dùng độ dài làm tín hiệu.** Đợt 88 đo rồi sai (§8.10); đợt 195 thử lại với
+  "so với trung vị 8 anh em", ra 108 và **đuôi toàn báo giả** — vì tiếng Việt gọn hơn
+  Đức và Nga. Lặp lại lần nữa cũng vậy.
+- **Bốn báo động giả đã biết:** (1) `Tên Channel`/`Số Note` trông đảo nhưng đúng;
+  (2) `gán vào`/`chuyển vào` cần `vào`; (3) `lặng` nằm trong `dấu lặng`, `Over` trong
+  `Cross-Over` khớp `\b` sau gạch nối; (4) `build.py style` cấm ngoặc `(ms)` ở cuối dù
+  là đơn vị — sửa **giá trị**, đừng sửa luật.
+- **Bộ dò báo động giả nhiều lần còn tệ hơn không có bộ dò:** nó dạy người đọc bỏ qua
+  báo cáo. `audit.py --all` tách **LỖI THẬT** khỏi **DẪN ĐƯỜNG** chính vì vậy — 10 bộ
+  dò luôn ra danh sách để đọc tay và không bao giờ im.
 
 ## 8. Bài học về cách sửa
 
 1. **Tra bằng TỪ, không tra bằng key.** Thấy thuật ngữ trong chuỗi mới thì `grep` **từ
    đó** trong `vi.json` và sửa **mọi** chỗ khớp. Sửa 1/5 rồi dừng là thêm biến thể.
+   Luật viết trong AGENT.md **không tự lan** — phải quét lại bằng TỪ khóa luật.
 2. **Bảng thuật ngữ viết sai không tự báo lỗi.** Sửa **cả bản dịch lẫn dòng luật** —
    `Key Signature | hóa biểu` đã sinh 8 chuỗi sai vì luật sai.
-3. **Mỗi đợt một file `fix_reading<N>.py`, không chép bảng của đợt trước.** Bảng cũ **là**
-   một lệnh ghi đè: `glossary_readthrough.py` chạy cuối đã xoá `Lệnh` của `fix_reading4.py`
-   mỗi lần chạy.
-4. **Sau khi ghi, đếm lại từ mình vừa xoá** — không thì bản sửa tạo ra chính lỗi nó đi sửa.
-   Kiểm `NOT IN CUBASE` **trước** khi `--write`. Trong bảng cài đặt, **hai từ Anh đứng cạnh
-   nhau thì nguy hiểm gấp đôi** — dịch từng từ một (`Duration` cạnh `Field`).
-5. **Luật và bản dịch lệch nhau ở quy mô lớn thì luật có thể sai, không phải map.** §3
-   chốt `Time Signature = số chỉ nhịp`; §2 lại bắt giữ tiếng Anh. 49 chuỗi theo §3 là
-   bằng chứng §3 đúng. Đo trước, sửa luật, đừng sửa 49 chuỗi.
-6. **Một bộ dò đúng vẫn tạo báo động giả nếu thiếu ngữ cảnh.** `audit_split.py` xếp
-   `Latency → độ trễ` lên đầu, nhưng lịch sử cho thấy *Độ trễ Channel* là ví dụ **được
-   duyệt**. `grep` chỉ ra chỗ cần nhìn, không quyết định đúng sai.
-7. **Bốn bộ dò tên gần giống, đừng lẫn.** `audit_terms.py` liệt kê cách diễn đạt của một
-   thuật ngữ; `archive/measurement/audit_split.py` hỏi thuật ngữ §2 nào đang bị dịch; `audit.py outlier` tìm
-   chuỗi lạc khỏi gia đình; `archive/measurement/audit_domain.py` hỏi theo miền — **toàn báo động giả**.
+3. **Bảng sửa cũ LÀ một lệnh ghi đè.** Đợt 193 dọn 149 script 1-lần vào
+   `tools/archive/` vì lịch sử cho thấy `glossary_readthrough.py` chạy cuối đã xoá
+   `Lệnh` của `fix_reading4.py` mỗi lần chạy. **Đừng chạy lại chúng.**
+4. **Sau khi ghi, đếm lại từ mình vừa xoá** — không thì bản sửa tạo ra chính lỗi nó đi
+   sửa. Kiểm `NOT IN CUBASE` **trước** khi `--write`. **Hai từ Anh đứng cạnh nhau thì
+   nguy hiểm gấp đôi** — dịch từng từ một (`Duration` cạnh `Field`).
+5. **Luật và bản dịch lệch nhau ở quy mô lớn thì luật có thể sai, không phải map.** Đo
+   trước, sửa luật, đừng sửa hàng chục chuỗi.
+6. **Một bộ dò đúng vẫn tạo báo động giả nếu thiếu ngữ cảnh.** `grep` chỉ ra chỗ cần
+   nhìn, không quyết định đúng sai.
+7. **Đừng lẫn các bộ dò tên gần giống.** `audit.py outlier` tìm chuỗi lạc khỏi gia
+   đình; `audit.py terms` hỏi 9 anh em về một thuật ngữ; `audit.py quality` kiểm thuật
+   ngữ xung đột. Ba việc khác nhau.
 8. **Chỉ thêm mẫu cấm khi cách dịch sai là cách dịch DUY NHẤT.** `thẻ` bắn 13 chuỗi
-   (`Thiết lập thẻ` = Tab, đúng), `vùng` bắn 213 (`vùng chọn` đúng) — sửa chuỗi. Đợt 85:
-   15 mẫu, 8 lỗi sửa tay.
+   (`Thiết lập thẻ` = Tab, đúng), `vùng` bắn 213 (`vùng chọn` đúng).
 9. Lỗi đảo trong câu dài, cách diễn đạt khó đọc, mất câu, sai nghĩa chỉ lộ ra khi **đọc
-   thật**. Đọc tay là bước cuối: `tools/read.py long|short <miền> <bắt đầu>`.
+   thật**. Đọc tay là bước cuối: `tools/read.py long|short <miền> <bắt đầu>`, và
+   `read.py page <bắt đầu>` nếu cần **không bỏ sót** chỗ nào.
 
 10. **ĐỪNG dùng số liệu thay cho việc đọc. Hai vòng đã làm sai theo đúng cách đó.**
     - Đợt 88 lọc bằng *tỉ lệ số từ*, ra 380 chuỗi "dài". **Sai**: 3.234 chuỗi có
       nguồn ≥ 25 ký tự thì trung vị bản dịch **ngắn hơn 2 ký tự**, lệch dài nhất
-      `+21c`, và **không chuỗi nào dài hơn 30 ký tự**. `audit_clarity.py` (nay `clarity.py long`) báo giá
-      trị dài nhất 328c và *in ra trông dài hơn tiếng Anh* — nhưng nó **cắt cụt**
-      chuỗi Anh: nguồn dài 371c, tức bản dịch **ngắn hơn 43c**. Cả hai đúng, một
-      cái hiển thị sai. Lặp từ: 9 chuỗi cả bản dịch.
-    - Đợt 89 đo tiếp, giả thuyết thứ hai: *mất ngữ cảnh vì key chỉ là chuỗi
-      Anh*. **Cũng sai**: 83 chuỗi Anh dùng ở nhiều hơn một entry, và **không
-      chuỗi nào** khác vai trò. Không có chỗ nào mất ngữ cảnh để lo.
-    - Cái thật, và chỉ lộ ra khi **đặt hai chuỗi cạnh nhau**:
-      `Import Audio File → 'Import file Audio'` cạnh
-      `Import Audio Files → 'Import File Audio'` — lệch hoa/thường, mỗi cái
-      rời ra đều đọc được. Đợt 89 sửa 8 chuỗi thuộc loại này.
-    - **Cơ:** key là *chuỗi tiếng Anh*, không id, không đường dẫn, không vai trò.
-      Nên **gia đình = các chuỗi cùng nói một thứ**, và cách tìem gần nhất là
-      **từ đầu tiên**. Dùng `tools/family.py <từ>`.
-    - Khi đọc: `Channel` và `Channel ` là **hai key khác nhau**, giữ khoảng trắng
-      là đúng. `Db` cạnh `dB` là **chính Steinberg viết**, không phải việc của
-      ta. `DRY`/`Dry`, `OFFLINE`/`Offline` đã khác nhau ở tiếng Anh gốc.
+      `+21c`, **không chuỗi nào dài hơn 30 ký tự**. `clarity.py long` báo giá trị dài
+      nhất 328c và *in ra trông dài hơn tiếng Anh* — nhưng nó **cắt cụt** chuỗi Anh:
+      nguồn dài 371c, tức bản dịch **ngắn hơn 43c**. Cả hai đúng, một cái hiển thị sai.
+    - Đợt 89 đo tiếp, giả thuyết *mất ngữ cảnh vì key chỉ là chuỗi Anh*. **Cũng sai**:
+      83 chuỗi Anh dùng ở nhiều hơn một entry, và **không chuỗi nào** khác vai trò.
+    - Cái thật, chỉ lộ ra khi **đặt hai chuỗi cạnh nhau**: `Import Audio File` →
+      `'Import file Audio'` cạnh `Import Audio Files` → `'Import File Audio'` — lệch
+      hoa/thường, mỗi cái rời ra đều đọc được.
+    - **Cơ:** key là *chuỗi tiếng Anh*, không id, không đường dẫn, không vai trò. Nên
+      **gia đình = các chuỗi cùng nói một thứ**, cách tìm gần nhất là **từ đầu tiên**:
+      `tools/family.py <từ>`.
+    - Khi đọc: `Channel` và `Channel ` là **hai key khác nhau**, giữ khoảng trắng là
+      đúng. `Db` cạnh `dB` là **chính Steinberg viết**.
 
-11. **PHÉP THỬ RỖNG LUÔN PASS. Đừng đọc 0 là sự thật — ba lần đã hỏng.**
-    - Đợt 95: tìm `"chỉ dẫn diễn tấu"` trong `vi.json` ra **0**, tưởng đợt 88 đã
-      sạch. Thật ra giá trị bắt đầu bằng `Chỉ` **hoa**, tôi tìm chuỗi **thường**.
-      Bỏ phân biệt hoa/thường thì ra **1** — chỗ đó lọt sót từ đợt 88.
-    - Đợt 96: quét `"bộ lọc"` chỉ trong khoá **ngắn hơn 34 ký tự**, bỏ sót 15
-      chỗ, rồi định sửa cụm `Filter` theo tỉ lệ 17/32. Tỉ lệ 51/49 không phải
-      bằng chứng, và sửa 17 chuỗi theo đa số yếu là đúng loại lỗi đã mắc 4 lần.
-    - Đợt 98: đếm cụm `Template` bằng `if 'emplate' in v` — nhưng **giá trị** là
-      tiếng Việt (`Mẫu`), chữ đó nằm ở **khoá**. Ra 0, rồi so `0 == 0` → pass.
-      Đúng phải là `if 'emplate' in k and 'mẫu' in v`.
-    - **Cơ chung:** mọi phép thử đếm hoặc tìm trong `fix_readingNN.py` phải có
-      **chốt rỗng** — tìm ra 0 chỗ thì **báo lỗi**, không được coi là "đã sạch".
-      Và **đừng so với con số viết tay**: đợt 98 đếm tay ra 10, thực tế 11; hãy so
-      **trước với sau** trên cùng một cách đếm.
-    - Cùng lớp với `score.FORBIDDEN` là `dict` khoá **số** còn test tra `c` là
-      **ký tự** → không bao giờ khớp, `check_text` trả về chuỗi có byte NUL.
-    - **Biến thể phân biệt hoa/thường — đã dính 4 lần** (đợt 95, 104 ×2). Kim
-      tìm chuỗi viết **thường** không khớp giá trị bắt đầu bằng chữ **Hoa**.
-    - **Cạm bẫy kèm theo:** `.lower()` **không bỏ dấu**. "lượt" là **một** ký tự
-      (`ự` U+1EE3), không phải hai. Viết kim ASCII `luot` thì **không bao giờ
-      khớp** "lượt". Đúng phải là: **kim tiếng Việt + `.lower()` cả hai bên**.
+11. **PHÉP THỬ RỖNG LUÔN PASS. Đừng đọc 0 là sự thật — bốn lần đã hỏng.**
+    - Đợt 95: tìm `"chỉ dẫn diễn tấu"` ra **0**, tưởng đã sạch. Thật ra giá trị bắt đầu
+      bằng `Chỉ` **hoa**, tôi tìm chuỗi **thường**. Đợt 104 dính lại y hệt, hai lần.
+    - Đợt 96: quét `"bộ lọc"` chỉ trong khoá **ngắn hơn 34 ký tự**, bỏ sót 15 chỗ, rồi
+      định sửa cụm `Filter` theo tỉ lệ 17/32. Tỉ lệ 51/49 không phải bằng chứng.
+    - Đợt 98: đếm cụm `Template` bằng `if 'emplate' in v` — nhưng **giá trị** là tiếng
+      Việt (`Mẫu`), chữ đó nằm ở **khoá**. Đúng phải là `if 'emplate' in k and 'mẫu' in v`.
+    - **Cơ chung:** mọi phép thử tìm phải có **chốt rỗng** — tìm ra 0 chỗ thì **báo
+      lỗi**, không được coi là "đã sạch". Và **đừng so với con số viết tay**: đợt 98
+      đếm tay ra 10, thực tế 11; hãy so **trước với sau** trên cùng một cách đếm.
+    - Cùng lớp: `score.FORBIDDEN` là `dict` khoá **số** còn test tra `c` là **ký tự** →
+      không bao giờ khớp.
+    - **`.lower()` không bỏ dấu.** "lượt" là **một** ký tự (`ự` U+1EE3), không phải hai.
+      Viết kim ASCII `luot` thì **không bao giờ khớp** "lượt". Đúng: kim tiếng Việt +
+      `.lower()` cả hai bên.
+    - **Trước khi sửa ứng viên, tra `<us> gốc`.** `Switch: Activate Speakers` trông như
+      lỗi copy-paste nhưng **đúng**; `Assume Skipping` lệch nghĩa với cả 8 ngôn ngữ.
 
 ## 9. Quy trình kiểm tra
 
 Dừng ngay khi một bước báo lỗi.
 
-**Mười công cụ, đủ dùng.** `tools/*.py` còn lại đúng 10 file (đợt 193); nhóm
-`inject_wavehook` / `memscan` / `set_prefs`… là tính năng khác, không tính.
+**Mười công cụ, đủ dùng.** `tools/*.py` còn lại đúng 10 file dịch; nhóm
+`inject_wavehook` / `memscan` / `set_prefs`… là tính năng khác.
 
 ```powershell
 python tools\merge_maps.py --check      # gộp batch -> vi.json, bắt key trùng
 python tools\build.py style             # 5 luật cứng (xem dưới)
 python tools\build.py punct             # ? ! ; ... xuống dòng, khoảng trắng đầu/cuối
-python tools\audit.py                   # liệt kê 22 bộ dò
-python tools\audit.py --all             # chạy hết, dừng ở bộ dò có phát hiện
+python tools\audit.py                   # liệt kê 24 bộ dò
+python tools\audit.py --all             # chạy hết, TÁCH lỗi thật khỏi dẫn đường
 python tools\audit.py leak              # từ chức tiếng Anh còn sót trong câu Việt
+python tools\audit.py numbers           # số trong nguồn phải còn trong giá trị
 python tools\audit.py fragments         # TỪNG TỪ Anh còn lại, rút gọn để đọc tay
+python tools\audit.py terms             # thuật ngữ ca zh và jp đều giữ, ta đã dịch
 python tools\audit.py quality           # chưa dịch hẳn + thuật ngữ xung đột + giới từ đảo
 python tools\audit.py quotes            # tên trong ngoặc kép lệch với nhãn nó trích dẫn
 python tools\audit.py rm                # khoá [RM] lệch với khoá gốc
@@ -814,159 +420,128 @@ python tools\audit.py outlier           # chuỗi lạc khỏi gia đình thuậ
 python tools\dupes.py keys              # khoá gần trùng -> hai cách viết
 python tools\dupes.py values            # hai key KHÁC nhau -> một giá trị
 python tools\clarity.py                 # long  dài  |  hard  khó đọc
-python tools\tests\run.py               # 146 test: bất biến + bộ dò
+python tools\tests\run.py               # 169 test: bất biến + độ nhạy + bộ dò
 python tools\family.py <từ>             # đọc cả gia đình chuỗi cùng từ đầu
-python tools\family.py -a               # nhóm còn dùng hai kiểu ghi (chốt hồi quy)
-python tools\read.py long  <miền> <bắt đầu>   # đọc tay: câu dài, chỗ vướng nằm ở đây
-python tools\read.py short <miền> <bắt đầu>   # đọc tay: nhãn menu 1–6 từ
-python tools\read.py page  <bắt đầu> [số]     # đọc TUẦN TỰ, không lọc — không bỏ sót
-python tools\read.py inspect <từ>              # một khoá, đủ 9 ngôn ngữ gốc
+python tools\read.py long|short <miền> <bắt đầu>   # đọc tay
+python tools\read.py page  <bắt đầu> [số]          # đọc TUẦN TỰ, không lọc
+python tools\read.py inspect <từ>                   # một khoá, đủ 9 ngôn ngữ gốc
 python tools\check_translation_build.py # build\translation_vi.xml = bản gốc + <vi>
 python tools\score_instruments.py check # Score Editor: trùng key + 4 bất biến
 python tools\build.py                   # sinh build/translation_vi.xml + validate
-python tools\score_instruments.py build # sinh build/instrumentnames_vi.xml
-pwsh -File scripts\install.ps1 -Action install
+pwsh -File scripts\install.ps1 -Action install -Variant full
 ```
 
-**Trước khi điều tra một cụm đang lệch, đọc `docs/OPEN_QUESTIONS.md`.** Năm cụm
-(`Filter`, `Template`, `Audio Performance`, tên nhạc cụ, `Auto X`) đã bị điều tra
-lại từ 5 vòng khác nhau mỗi lần đều dừng ở "không đủ bằng chứng". File đó ghi
-bằng chứng **một lần** và điều kiện để xoá một mục. Đừng đo lại.
-Một mục chỉ được xoá khi có (a) nhóm anh em buộc phải theo một hướng, hoặc
-(b) **người dùng quyết**. Tỉ lệ 51/49 không phải (b).
-
-**`check_translation_build.py` giữ đúng tiền đề của cả dự án.** Nó chứng minh
-bằng cơ chế, không phải bằng lời: file build **bỏ các dòng `<vi>` đi thì ra
-đúng bằng `keys\translation_original.xml`, từng byte**; 10.737 entry, mỗi entry
-đúng 10 khối `<us>…<ru><vi>`; không `<us>…<ru>` nào bị đổi; mọi `<vi>` bằng
-đúng `vi.json`; và dòng `<vi>` thụt lùi **đúng bằng 9 anh em** nó.
-
-Bản cũ viết thẳng `\t\t` trong bước `build`, nên `<vi>` lệch 1 tab so với
-9 anh em, và `<language key="vi">` lệch 1 tab theo hướng ngược lại — `<vi>` nhìn
-như anh em của `</String>` chứ không phải con của nó. XML không quan tâm, nhưng
-diff 10.737 dòng thì có. Nay thụt lùi lấy từ chính file.
+**`check_translation_build.py` giữ đúng tiền đề của cả dự án.** Nó chứng minh bằng cơ
+chế, không phải bằng lời: file build **bỏ các dòng `<vi>` đi thì ra đúng bằng
+`keys\translation_original.xml`, từng byte**; 10.737 entry, mỗi entry đúng 10 khối
+`<us>…<ru><vi>`; không `<us>…<ru>` nào bị đổi; mọi `<vi>` bằng đúng `vi.json`; và dòng
+`<vi>` thụt lùi **đúng bằng 9 anh em** nó.
 
 **5 luật cứng của `build.py style`**: (1) cấm ngoặc chú thích cuối trừ khi key gốc có;
-(2) cấm dịch thuần Việt thuật ngữ §1 — nay **64 mẫu** trong `terms_do_not_translate.json`;
+(2) cấm dịch thuần Việt thuật ngữ §1 — **64 mẫu trong `terms_do_not_translate.json`**;
 (3) placeholder phải khớp; (4) giá trị không rỗng; (5) cấm `[RM]`. Luật 5 **duy nhất
 không mang tính thẩm mỹ** — nó ngăn chữ lên màn hình.
 
+**`tests/test_detectors.py` là bài test quan trọng nhất trong kho.** Nó đặt lại giá trị
+cũ của **từng lớp lỗi đã thật sự sửa** và hỏi bộ dò có bắt không, rồi khẳng định các
+điểm mù **vẫn còn mù**. Bản dịch sạch **không** chứng minh bộ dò mạnh — bản dịch sạch
+và bộ dò mù nhìn từ bên ngoài giống hệt nhau.
+
 ## 10. Score Editor — bộ luật đặt tên nhạc cụ
 
-Score Editor là `ScoringEngine.dll` (lõi Dorico), **không** dùng `translation.xml`.
-Nó tự lấy chuỗi từ `Components\ScoringEngine\l10n\`. Hai loại file, hai quy trình:
+Score Editor là `ScoringEngine.dll` (lõi Dorico), **không** dùng `translation.xml`. Hai
+loại file, hai quy trình:
 
 | file | công cụ | quy trình |
 | --- | --- | --- |
-| `instrumentnames_vi.xml` | `tools/score_instruments.py` | `import` → 5 vòng `fix_scoreNN.py` → `build` |
-| `strings_vi.qm` | `tools/score_strings.py` | chưa làm |
+| `instrumentnames_vi.xml` | `tools/score_instruments.py` | `import` → `build` → `check` |
+| `strings_vi.qm` | — | chưa làm |
 
 `instrumentnames_en.xml` có 624 entity và **1.126 chuỗi phân biệt** trong 3.115 ô
 (`uiName`, `singularFullName`, `singularShortName`, `pluralFullName`,
-`pluralShortName`). Chỉ 5 ô đó được dịch; `<name>`, `<gender>`,
-`<inheritanceMask>`, `<parentEntityID>` **giữ nguyên ở mọi ngôn ngữ**. Viết bằng
-**cắt chuỗi**, không re-serialise: file dùng CRLF, tab, `<?xml version="1.0" ?>`
-(có khoảng trắng trước `?>`), `<x/>` cho ô rỗng, và entity `aluphone` xếp
-`<name>` **trước** `<entityID>`.
+`pluralShortName`). Chỉ 5 ô đó được dịch; `<name>`, `<gender>`, `<inheritanceMask>`,
+`<parentEntityID>` **giữ nguyên ở mọi ngôn ngữ**. Viết bằng **cắt chuỗi**, không
+re-serialise: file dùng CRLF, tab, `<?xml version="1.0" ?>`, `<x/>` cho ô rỗng, và
+entity `aluphone` xếp `<name>` **trước** `<entityID>`.
 
 ### 6 luật — lấy từ 9 catalogue Steinberg, không phải từ khẩu vị
 
-`instrumentnames_ja.xml` và `instrumentnames_de.xml` đã phải trả lời đúng câu hỏi
-này, và chúng **thống nhất trên từng chuỗi**. Đọc cột `ja=` / `de=` của
-`tools/tests` hay file gốc rồi làm theo:
-
-1. **Tên riêng không dịch; tính ngữ mô tả thì dịch.** `Banjo`, `Charango`,
-   `Cuatro`, `Alphorn`, `Cimbasso`, `Didgeridoo`, `Bansuri`, `Guitarrón`,
-   `Wagner Tuba` giữ nguyên. Còn `Acoustic`, `Electric`, `Fretless`,
-   `Classical`, `Jazz`, `Steel-string`, `Semi-acoustic`, `Resonator` và tên nước
-   thì dịch: `Electric Guitar` → **`Guitar điện`**, `Classical Guitar` →
-   **`Guitar cổ điển`**, `Resonator Guitar` → **`Guitar cộng hưởng`**.
-
-2. **Chữ viết tắt không bao giờ đổi.** ~130/320 chuỗi của `brass`+`wind` là chữ
-   viết tắt, và cả 9 catalogue đều giữ nguyên: `Tbn`, `Tpt`, `V. Tbn.`,
-   `Cbsn`, `Min-bsn`, `Ac. B. Gtr`, `Ban.`, `Dul.`. Chúng là nhãn cố định cho cột
-   tên bè trong bản nhạc — dài thêm là vỡ bố cục. **Số nhiều của chữ viết tắt thì
-   rút gọn**: `Ac. B. Gtrs` → `Ac. B. Gtr`.
-
+1. **Tên riêng không dịch; tính ngữ mô tả thì dịch.** `Banjo`, `Charango`, `Cuatro`,
+   `Alphorn`, `Cimbasso`, `Didgeridoo`, `Bansuri`, `Guitarrón`, `Wagner Tuba` giữ
+   nguyên. Còn `Acoustic`, `Electric`, `Fretless`, `Classical`, `Jazz`, `Steel-string`,
+   `Semi-acoustic`, `Resonator` và tên nước thì dịch: `Electric Guitar` →
+   **`Guitar điện`**, `Classical Guitar` → **`Guitar cổ điển`**, `Resonator Guitar` →
+   **`Guitar cộng hưởng`**.
+2. **Chữ viết tắt không bao giờ đổi.** ~130/320 chuỗi của `brass`+`wind` là chữ viết
+   tắt, và cả 9 catalogue đều giữ nguyên: `Tbn`, `Tpt`, `V. Tbn.`, `Cbsn`, `Min-bsn`,
+   `Ac. B. Gtr`, `Ban.`, `Dul.`. Chúng là nhãn cố định cho cột tên bè — dài thêm là vỡ
+   bố cục. **Số nhiều của chữ viết tắt thì rút gọn**: `Ac. B. Gtrs` → `Ac. B. Gtr`.
 3. **Tiếng Việt không có số nhiều, nên số nhiều lấy đúng từ của số ít.** `Pianos` →
-   `Piano`, `Mezzo-sopranos` → `Mezzo-soprano`, `Basses` → `Bass`, `Cajons` →
-   `Cajon`. `check_consistency` kiểm: có key số ít thì hai giá trị phải bằng nhau.
-
-4. **Từ bên trong ngoặc thì dịch, viết hoa chữ đầu, giữ ngoặc.** Đây là khuôn mẫu
-   mà 40 chuỗi seed đã viết ra: `Bongo (High)` → `Bongo (Cao)`, `Tenor Drum
-   (Medium-high)` → `Trống Tenor (Trung bình cao)`, `Tabla baya (larger)` →
-   `Tabla baya (Lớn hơn)`. Nhưng `(Quinto)`, `(Requinto)`, `(Super Tumba)`,
-   `(pedal)` **giữ** — đó là tên của biến thể, không phải thanh bậc.
-
+   `Piano`, `Mezzo-sopranos` → `Mezzo-soprano`, `Basses` → `Bass`, `Cajons` → `Cajon`.
+4. **Từ bên trong ngoặc thì dịch, viết hoa chữ đầu, giữ ngoặc.** Đây là khuôn mẫu mà
+   40 chuỗi seed đã viết ra: `Bongo (High)` → `Bongo (Cao)`, `Tenor Drum
+   (Medium-high)` → `Trống Tenor (Trung bình cao)`, `Tabla baya (larger)` → `Tabla baya
+   (Lớn hơn)`. Nhưng `(Quinto)`, `(Requinto)`, `(Super Tumba)`, `(pedal)` **giữ** —
+   đó là tên của biến thể, không phải thanh bậc.
 5. **Thanh bậc đã là mượn ngữ thì giữ nguyên chỗ nó đứng.** `Alto Balalaika`,
    `Bass Balalaika`, `Contrabass Balalaika`, `Prima/Secunda Balalaika`,
-   `Piccolo Domra`, `Tenor Lute`, `Tenor Banjo`, `Horn (alto)`, `Horn (basso)`.
-   Đức dịch giữ nó ở đầu (`Alt-Balalaika`, `Kontrabass-Balalaika`), Nhật cũng vậy
-   (アルト + バラライカ). Không engine nào dịch cả, nên ta cũng không.
-
-6. **Tên miền dịch khi tiếng Việt có từ thật.** Bảng chính đã quyết: `Brass` →
-   `Bộ đồng`, `Wind` → `Gió`, `Keyboard` → `Bàn phím`, `Voice` → `Bè`, `Triangle`
-   → `Tam giác`, `Whistle` → `Còi`; nhưng giữ `Percussion`, `Drum`, `Snare`,
-   `Tambourine` — vì tiếng Việt không có từ nào dùng được cho chúng. Vì vậy
-   `Strings` → `Bộ dây`, `Woodwind` → `Bộ gió`, còn `Drum Set` → `Drum Set`.
+   `Piccolo Domra`, `Tenor Lute`, `Tenor Banjo`, `Horn (alto)`, `Horn (basso)`. Đức
+   dịch giữ nó ở đầu (`Alt-Balalaika`, `Kontrabass-Balalaika`), Nhật cũng vậy. Không
+   engine nào dịch cả, nên ta cũng không.
+6. **Tên miền dịch khi tiếng Việt có từ thật.** `Brass` → `Bộ đồng`, `Wind` → `Gió`,
+   `Keyboard` → `Bàn phím`, `Voice` → `Bè`, `Triangle` → `Tam giác`, `Whistle` → `Còi`;
+   nhưng giữ `Percussion`, `Drum`, `Snare`, `Tambourine` — vì tiếng Việt không có từ nào
+   dùng được cho chúng. Vì vậy `Strings` → `Bộ dây`, `Woodwind` → `Bộ gió`, còn
+   `Drum Set` → `Drum Set`.
 
 ### Tiếng Anh lọt là hợp lệ, và đó là điểm cần nói rõ
 
-**591 / 1.126 chuỗi (52%) giữ nguyên tiếng Anh** — và đây là kết quả đúng, không
-phải chỗ sót. Người Việt gọi "guitar", "piano", "kora", "cổ điển" chứ không gọi
-"đàn ghi-ta". Bảng chính đã chốt sẵn 146 chuỗi theo đúng cách đó
-(`tools/score_instruments.py import` nhập 88 chuỗi có sẵn + 58 chuỗi trùng).
+**591 / 1.126 chuỗi (52%) giữ nguyên tiếng Anh** — và đây là kết quả đúng, không phải
+chỗ sót. Người Việt gọi "guitar", "piano", "kora", "cổ điển" chứ không gọi "đàn
+ghi-ta". Vì thế **đừng** dùng `audit.py leftover` vào `translations/score/`, và **đừng**
+ép mọi giá trị khác tiếng Anh. Trái lại là sai: `Snare` → `Trống Snare`? Không — `Snare`
+giữ nguyên, còn `Side Drum` → `Trống phụ` là đúng, vì "snare" không có từ Việt còn
+"drum phụ" thì có.
 
-Vì thế **đừng** dùng `audit.py leftover` vào `translations/score/`, và
-**đừng** ép mọi giá trị khác tiếng Anh. Trái lại là sai: `Snare` → `Trống Snare`?
-Không — `Snare` giữ nguyên, còn `Side Drum` → `Trống phụ` là đúng, vì "snare" không
-có từ Việt còn "drum phụ" thì có.
+### Bốn bất biến của `score_instruments.py check`
 
-### Bốn bất biến của `check_consistency`
-
-`python tools\score_instruments.py check` dừng ngay khi lỗi:
+Nó dừng ngay khi lỗi:
 
 1. Giá trị không rỗng, không ký tự điều khiển, không U+FFFD, không khoảng trắng
-   đầu/cuối. **Ngoại lệ**: map giống hệt thì miễn — vài ô gốc mang khoảng trắng
-   cuối (`<O. M. >`) và giữ nguyên là câu trả lời đúng.
-2. Mọi key phải có thật trong `instrumentnames_en.xml` — lỗi gõ trong batch không
-   được lọt.
+   đầu/cuối. **Ngoại lệ**: map giống hệt thì miễn — vài ô gốc mang khoảng trắng cuối
+   (`<O. M. >`) và giữ nguyên là câu trả lời đúng.
+2. Mọi key phải có thật trong `instrumentnames_en.xml` — lỗi gõ trong batch không được
+   lọt.
 3. Giá trị chỉ được **ngắn hơn** key bằng đúng đuôi số nhiều (`s`/`es`/`n`).
    `Agogôs` → `Agogô` hợp lệ, `Charangos` → `Charang` là bậy.
-4. Số nhiều đã dịch phải khớp số ít. Map **giống hệt** được miễn: số nhiều tiếng
-   Anh giữ nguyên tiếng Anh không phải chỗ lệch của ta. Ngoại lệ có tên:
-   `Voice`/`Voices` — một dòng hát vs cả phần bè.
+4. Số nhiều đã dịch phải khớp số ít. Map **giống hệt** được miễn: số nhiều tiếng Anh
+   giữ nguyên tiếng Anh không phải chỗ lệch của ta. Ngoại lệ có tên: `Voice`/`Voices` —
+   một dòng hát vs cả phần bè.
 
-### Lỗi tìm ra khi làm Score Editor
+### Hai lỗi trong chính code của dự án này
 
-Chi tiết ở `docs/RESEARCH.md`. Hai lỗi **trong file của Steinberg**:
-
-- 8/8 file không-Anh giữ entity `instrumentname.pitchedpercussion.aluphone` ở
-  `kEnglish`; file Đức còn thêm `marching.snare.drum.rim`. Cùng cái entity mang
-  `<customVariantString/>` mà Steinberg thêm tay vào bản tiếng Anh rồi copy sang
-  các bản dịch mà quên dán nhãn lại.
-- `<language>` xuất hiện **625 lần** (một ở đầu, 624 ở entity), và 5 ô tên rỗng
-  (`cajon.low` mất short/plural, `clarinet.contra.alto.eflat` mất plural).
-
-`tools/score_instruments.py build` ghi **đồng nhất** cả 625 marker thành
-`kVietnamese` và liệt kê `mis_tagged`, để lỗi của nguồn không bị sao chép.
-
-Hai lỗi **trong code của chính repo này**, do `tools/tests/test_score.py` phát hiện
-— đúng loại lỗi mà §3 cảnh báo, nên ghi lại ở đây:
+Do `tests/test_score.py` phát hiện — đúng loại lỗi mà §3 cảnh báo, nên ghi lại:
 
 - `score.FORBIDDEN` là `dict.fromkeys` của **số**, còn chỗ kiểm tra lại tra
-  `c in FORBIDDEN` với `c` là **ký tự**. Khớp không bao giờ xảy ra, nên
-  `check_text` vẫy về một chuỗi có byte NUL. Bộ dò mới bắt được.
-  Nay là `frozenset` ký tự.
+  `c in FORBIDDEN` với `c` là **ký tự**. Khớp không bao giờ xảy ra, nên `check_text`
+  trả về một chuỗi có byte NUL. Nay là `frozenset` ký tự.
 - `source_strings` đếm `uiName` và `singularFullName` là hai người dùng, nên
-  `--status` báo ��ội gấp đôi số bè mỗi chuỗi tiết kiệm được. Nay khử trùng
-  theo entity.
+  `--status` báo đội gấp đôi số bè mỗi chuỗi tiết kiệm được. Nay khử trùng theo entity.
+
+Hai lỗi **trong file của Steinberg**: 8/8 file không-Anh giữ entity
+`instrumentname.pitchedpercussion.aluphone` ở `kEnglish`; file Đức còn thêm
+`marching.snare.drum.rim`. Cùng cái entity mang `<customVariantString/>` mà Steinberg
+thêm tay vào bản tiếng Anh rồi copy sang các bản dịch mà quên dán nhãn lại. Thêm nữa,
+`<language>` xuất hiện **625 lần** (một ở đầu, 624 ở entity), và 5 ô tên rỗng
+(`cajon.low` mất short/plural, `clarinet.contra.alto.eflat` mất plural).
+`score_instruments.py build` ghi **đồng nhất** cả 625 marker thành `kVietnamese` và
+liệt kê `mis_tagged`, để lỗi của nguồn không bị sao chép. Chi tiết ở `docs/RESEARCH.md`.
 
 ## 11. Cubase Hub — `hubservice.dll`
 
 Cubase Hub là module độc lập tại `Components\hubservice.dll`. Nó sở hữu bảng XML gồm
 **89 chuỗi riêng** (chứa `Create Empty Project...`, `Recent`, `Tutorials`, `Deals`,
-`User Manuals`, `Hub Settings`, `Choose File...`) nhúng trực tiếp trong binary.
-Các chuỗi này không nằm trong `translation.xml` chính; khi chạy tiếng Việt nếu
-chưa patch bảng XML trong DLL thì các nhãn riêng của Hub sẽ tự động fallback về
-tiếng Anh `<us>`. Chi tiết kỹ thuật và danh sách chuỗi xem tại `docs/HUBSERVICE.md`.
+`User Manuals`, `Hub Settings`, `Choose File...`) nhúng trực tiếp trong binary. Các
+chuỗi này không nằm trong `translation.xml` chính; khi chạy tiếng Việt nếu chưa patch
+bảng XML trong DLL thì các nhãn riêng của Hub sẽ tự động fallback về tiếng Anh `<us>`.
+Chi tiết kỹ thuật và danh sách chuỗi xem tại `docs/HUBSERVICE.md`.
