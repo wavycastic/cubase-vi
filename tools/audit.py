@@ -1417,6 +1417,50 @@ def d_typos(args, vi, src, _):
 
 
 # =====================================================================
+# status        - English STATUS sentence rendered as a Vietnamese IMPERATIVE
+# =====================================================================
+@detector('status', 'câu TRẠNG THÁI (tiếng Anh) bị dịch thành mệnh lệnh (tiếng Việt)')
+def d_status(args, vi, src, _):
+    """Dòng thong bao trang thai cua Cubase - "All clips in editor are used." -
+    KHONG phai lenh. Ban dich "Dung tat ca Clip trong Editor." doc lenh nhu
+    nguoi dung phai bam vao, va do la sai.
+
+    Vong 200 chinh toi lam loi nay: doi 'All parts in editor are used.' thanh
+    menh lenh o round 196, roi o round 199 goi 3 chuoi anh em la "doi xung
+    hoan hao" va nhan ban tiep. Bai hoc: khi sua 1 chuoi, phai kiem la ANH EM
+    cung nhom co bi dong khong - va cau nao trong nhom dang DUNG, no la mau.
+
+    Chot chong bao dong gia, do la ly do bo nay ra DUONG:
+      - nguon bat dau bang DONG TU ("Select which notes are used", "Use Drum
+        Editor when Drum Map is assigned") thi tieng Viet ra lenh la DUNG.
+      - do chi ra 5/56, va 5 do la 4 loi that + 1 vien bien.
+    Do la dan duong: doc tay, khong sua tu dong."""
+    STATUS_WORD = (r'(?:used|selected|included|enabled|locked|hidden|assigned|'
+                   r'defined|available|displayed|shown|loaded|open)')
+    STATUS = re.compile(r'\b(?:are|is)\s+' + STATUS_WORD + r'\b', re.I)
+    EN_IMP = re.compile(r'^(?:Select|Use|Choose|Click|Press|Enable|Disable)\b')
+    VI_IMP = re.compile('^(?:Dùng|Thêm|Xóa|Gỡ|Đặt|Chọn|Bật|Tắt|Ẩn|Hiện|Tạo|Mở|Đóng|'
+                        'Nhập|Áp dụng|Chạy|Di chuyển|Nhân bản|Sao chép|Dán|Bỏ)\\b')
+
+    hits = [(k, u, v) for k, v in vi.items()
+            for u in [src.get(k, '')]
+            if u and STATUS.search(u) and not EN_IMP.match(u) and VI_IMP.match(v)]
+
+    total_status = sum(1 for k in vi for u in [src.get(k, '')]
+                       if u and STATUS.search(u))
+    print(f'nguồn TRẠNG THÁI (are/is + <từ>)     : {total_status}')
+    print(f'  bị dịch thành mệnh lệnh            : {len(hits)}\n')
+    if not hits:
+        print('=> sạch')
+        return 0
+    for k, u, v in hits:
+        print(f'  EN {u[:88]}')
+        print(f'  VI {v[:88]}')
+        print()
+    return len(hits)
+
+
+# =====================================================================
 # outlier       - one string pulled out of a term family that holds together
 # =====================================================================
 @detector('outlier', 'chuỗi lạc khỏi gia đình thuật ngữ [--show N]')
@@ -1871,7 +1915,7 @@ def d_mojibake(args, vi, src, _):
 ORDER = ['mojibake', 'leak', 'numbers', 'quality', 'fragments', 'same_en',
          'quotes', 'rm', 'gloss', 'collapsed', 'prefix', 'dropped', 'thin',
          'funcwords', 'opening', 'frame', 'frame_short', 'leftover', 'terms',
-         'repeat_en', 'repeat_vi', 'pure_en', 'outlier', 'typos']
+         'repeat_en', 'repeat_vi', 'pure_en', 'status', 'outlier', 'typos']
 
 # A LEAD GENERATOR is a detector whose job is to hand you a list to READ, not to
 # assert a defect. `fragments` reports 188 values every single run and 20 of
@@ -1879,7 +1923,7 @@ ORDER = ['mojibake', 'leak', 'numbers', 'quality', 'fragments', 'same_en',
 # so listing them under "defects" would train the reader to skip the summary -
 # which is the failure mode AGENT.md §7 warns about. Keep them separate.
 LEADS = {'fragments', 'thin', 'repeat_en', 'repeat_vi', 'frame', 'frame_short',
-         'pure_en', 'outlier', 'typos', 'opening', 'terms'}
+         'pure_en', 'outlier', 'typos', 'opening', 'terms', 'status'}
 
 # Only these two exit non-zero on a finding, and that reproduces the exit codes
 # the 24 separate scripts had. Round 193 measured this: making the other 20

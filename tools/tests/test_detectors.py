@@ -250,6 +250,58 @@ class TestDetectors(unittest.TestCase):
             self.assertNotEqual({'Temple Block', 'Wood Block'}, set(keys),
                                 'Temple Block and Wood Block share a value again')
 
+    # -- round 200: a STATUS sentence rendered as an IMPERATIVE -------------
+    def test_round200_status_rendered_as_imperative(self):
+        """I made this mistake myself, twice.
+
+        round 196 changed 'All parts in editor are used.' - a line of status text
+        in the Info Line - into 'Dung tat ca Part trong Editor.', which reads as an
+        instruction. round 199 then found the sibling 'All clips in editor are
+        used.', called it "perfectly symmetrical" and copied the defect into it.
+
+        This is the test that had to exist before round 199, and did not.
+        """
+        self.assertFires('status', 'All clips in editor are used.',
+                         'Dùng tất cả Clip trong Editor.',
+                         200, 'status sentence turned into an imperative')
+
+    def test_round200_shipped_family_is_consistent(self):
+        """The whole 'are used' family must use the status form, and the
+        shipped map already carries one correct sibling ('All audio files are
+        used' -> 'Tat ca file Audio deu dang dung'). That sibling is the proof
+        that the imperative reading is the wrong one - so when one string of a
+        family is fixed, ask what the siblings say, not what looks natural.
+        """
+        family = ['All clips in editor are used.',
+                  'All parts in editor are used.',
+                  "All clips specified in 'Clip Editing Mode' are used.",
+                  "All parts specified in 'Part Editing Mode' are used."]
+        if not all(k in REAL for k in family):
+            self.skipTest('keys not in this build')
+        self.assertEqual(0, audit.count_on('status', REAL, SRC, LONGEST))
+        # and the rule cuts the other way too: that same sibling, put back into
+        # the imperative, IS a finding - so "đang dùng" is the required reading
+        self.assertEqual(1, self.fires('status', 'All audio files are used',
+                                       'Dùng tất cả file Audio.'))
+
+    def test_round200_english_imperative_source_is_not_a_finding(self):
+        """'Select which notes are used for ...' contains 'are used' but the
+        English is an instruction too, so an imperative Vietnamese value is
+        correct. Without this guard the detector reports 3 false positives on
+        7 candidates and stops being read (AGENT.md §7).
+        """
+        before = audit.count_on('status', REAL, SRC, LONGEST)
+        for key, bad in [
+            ("Select which notes are used for 'Randomize', 'Create Variation' "
+             "and 'Add Voice'", 'Chọn nốt nào dùng cho \'Ngẫu nhiên hóa\'.'),
+            ('Use Drum Editor when Drum Map is assigned',
+             'Dùng Drum Editor khi có Drum Map.'),
+        ]:
+            if key not in REAL:
+                continue
+            self.assertEqual(before, self.fires('status', key, bad),
+                             f'status fired on an imperative source: {key!r}')
+
 
 class TestKnownBlindSpots(unittest.TestCase):
     """What the set CANNOT see, asserted so it stays true.

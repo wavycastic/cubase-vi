@@ -392,6 +392,21 @@ newline thật. Bộ dò placeholder phải khớp cả `%1.0f` và `%02d` —
     - **Trước khi sửa ứng viên, tra `<us> gốc`.** `Switch: Activate Speakers` trông như
       lỗi copy-paste nhưng **đúng**; `Assume Skipping` lệch nghĩa với cả 8 ngôn ngữ.
 
+12. **ĐỪNG gọi một sửa đổi là "đối xứng" trước khi tra anh em. Đợt 200 tôi tự
+    làm rồi tự nhân bản.** Câu `All parts in editor are used.` là **dòng trạng thái**
+    trong Info Line, tôi đổi thành `Dùng tất cả Part trong Editor.` — đọc ra là
+    mệnh lệnh. Ở đợt 199 tôi thấy anh em `All clips in editor are used.` cùng
+    dạng, tôi gọi đó là *"đối xứng hoàn hảo"* và **nhân bản lỗi**. Người dùng
+    bắt lỗi. Bài học:
+    - **Sửa 1 chuỗi phải hỏi anh em nó đang nói gì — câu nào trong nhóm đang
+      ĐÚNG thì câu đó là mẫu.** Ở đây `All audio files are used` →
+      `Tất cả file Audio đều đang dùng` **đã có sẵn** và đúng; 5 chuỗi, 1 đúng,
+      4 sai. Mẫu nằm ngay trong map mà tôi không đọc.
+    - **Câu trạng thái ≠ mệnh lệnh.** `are/is + <từ>` ở nguồn là *đang* gì đó;
+      tiếng Việt phải giữ `đang`. Bộ dò `status` canh việc này (56 chuỗi trạng
+      thái, dẫn đường, có chốt chống báo giả: **nguồn cũng ra lệnh thì giá trị
+      ra lệnh là đúng**).
+
 ## 9. Quy trình kiểm tra
 
 Dừng ngay khi một bước báo lỗi.
@@ -417,10 +432,11 @@ python tools\audit.py dropped           # mất câu so với nguyên văn
 python tools\audit.py same_en           # một tiếng Anh, hai bản dịch
 python tools\audit.py mojibake          # U+FFFD (thêm --write để vá)
 python tools\audit.py outlier           # chuỗi lạc khỏi gia đình thuật ngữ
+python tools\audit.py status            # câu TRẠNG THÁI (EN) bị dịch thành mệnh lệnh (VI)
 python tools\dupes.py keys              # khoá gần trùng -> hai cách viết
 python tools\dupes.py values            # hai key KHÁC nhau -> một giá trị
 python tools\clarity.py                 # long  dài  |  hard  khó đọc
-python tools\tests\run.py               # 169 test: bất biến + độ nhạy + bộ dò
+python tools\tests\run.py               # 172 test: bất biến + độ nhạy + bộ dò
 python tools\family.py <từ>             # đọc cả gia đình chuỗi cùng từ đầu
 python tools\read.py long|short <miền> <bắt đầu>   # đọc tay
 python tools\read.py page  <bắt đầu> [số]          # đọc TUẦN TỰ, không lọc
