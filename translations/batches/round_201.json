@@ -1,0 +1,6 @@
+{
+ "How many frames of timecode are read before starting system": "Phải đọc bao nhiêu Frame Timecode trước khi khởi động",
+ "How many frames of timecode must be missing before system is stopped": "Phải mất bao nhiêu Frame Timecode thì hệ thống dừng",
+ "The folder should be empty!": "Thư mục phải để trống!",
+ "The locator range is not set. Please set the locators.": "Dải Locator chưa được đặt. Hãy đặt các Locator."
+}
