@@ -965,6 +965,9 @@ refreshed pressed released dragged dropped
     NAMED_PHRASE = {
         'Nhạc cụ dùng Automation Read All và Write All',  # Automation Read/Write All
         'Gửi thông điệp All Notes Off',                   # MIDI All Notes Off
+        'Triads and 4-Note Chords',      # round 219: preset-category name kept EN
+        'Triads with maj9',              # round 219: preset-category name kept EN
+        'Triads with maj9 and min9',     # round 219: preset-category name kept EN
     }
 
     def strip(v):

@@ -1,0 +1,21 @@
+{
+  "Assignment Functions": "Chức năng gán",
+  "Custom Assignment": "Gán tùy chỉnh",
+  "Open Command Destination": "Vị trí mở theo lệnh",
+  "Open Editor Commands open Editors in Lower Zone": "Lệnh mở Editor mở Editor trong Lower Zone",
+  "Open Editor Commands open Editors in a Window": "Lệnh mở Editor mở Editor trong một cửa sổ",
+  "Primary Parameter: Fine Decrease (Channel Level)": "Tham số chính: Giảm tinh vi (Channel Level)",
+  "Primary Parameter: Fine Increase (Channel Level)": "Tham số chính: Tăng tinh vi (Channel Level)",
+  "Secondary Parameter: Fine Decrease (Pan Left-Right)": "Tham số phụ: Giảm tinh vi (Pan Left-Right)",
+  "Secondary Parameter: Fine Increase (Pan Left-Right)": "Tham số phụ: Tăng tinh vi (Pan Left-Right)",
+  "Subsection Assignments": "Gán Subsection",
+  "Tail": "Tail",
+  "Tempo and signature tracks can only be imported if 'Bars+Beats' is selected as 'Primary Time Format'.": "Chỉ Import được Tempo Track và Signature Track khi đã chọn 'Bar+Beat' làm 'Primary Time Format'.",
+  "The time format was changed to Bars+Beats!": "Chuyển định dạng thời gian thành Bar+Beat!",
+  "This plug-in has a Live button (low latency mode)": "Plug-in này có nút Live (chế độ trễ thấp)",
+  "- Use the 'Project>Convert Tracks>Multi-Channel to Mono' option to convert all multi-channel tracks to multiple mono tracks": "- Dùng tùy chọn 'Project>Chuyển đổi Track>Multi-Channel sang Mono' để chuyển tất cả Track đa kênh thành nhiều Track Mono",
+  "Version 2 (skin tag)": "Version 2 (skin tag)",
+  "Write Attributes to File": "Ghi thuộc tính vào file",
+  "Write Definition to Audio Files": "Ghi Definition vào file Audio",
+  "Write Tags to File": "Ghi Tag vào file"
+}

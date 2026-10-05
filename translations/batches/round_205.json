@@ -1,0 +1,13 @@
+{
+  "[Transition Soft]": "Soft",
+  "IP Conflict with client: %s - set client state to logged off.": "Xung đột IP với client: %s - đặt trạng thái client thành đăng xuất.",
+  "Please update your graphics card driver or switch to a more effective graphics card.": "Cập nhật Driver card đồ họa hoặc đổi sang card đồ họa mạnh hơn.",
+  "Rendered files include insert effect, EQ, and channel strip settings.": "File đã Render gồm cài đặt Insert Effect, EQ và Channel Strip.",
+  "The project will be saved as '%s', \\nbecause the program is in an unstable state after crashing \\nand saving might lead to corrupted files. \\nThe original file will be left untouched. \\nPlease restart the program after this operation!": "Project sẽ lưu thành '%s', \\nvì chương trình không ổn định sau khi crash, \\nlưu lúc này có thể làm hỏng file. \\nFile gốc giữ nguyên. \\nHãy khởi động lại chương trình sau bước này!",
+  "MPEX algorithms are not supported by this program version. If you want to modify the process, you can use an Elastique algorithm. To keep the processed audio, you can make all processes permanent.": "Phiên bản này không hỗ trợ thuật toán MPEX. Muốn thay đổi quá trình xử lý, bạn có thể dùng thuật toán Elastique. Để giữ Audio đã xử lý, hãy giữ cố định toàn bộ xử lý.",
+  "MPEX algorithms are not supported by this program version. To modify the process, you can reprocess using a ZTX algorithm. To keep the processed audio, you can make all processes permanent.": "Phiên bản này không hỗ trợ thuật toán MPEX. Muốn thay đổi quá trình xử lý, bạn có thể xử lý lại bằng thuật toán ZTX. Để giữ Audio đã xử lý, hãy giữ cố định toàn bộ xử lý.",
+  "Determines how far before the actual hitpoint position the audio event is sliced": "Xác định Audio Event được Slice sớm hơn vị trí Hitpoint thực tế bao xa",
+  "No Mappable Controller found, please connect a supported MIDI Controller": "Không tìm thấy Controller có thể gán, hãy kết nối MIDI Controller được hỗ trợ",
+  "Bypass will disable the MIDI Learn Mode (only manual placement possible) and the automatic selection in Edit Mode. Bypass should be used when MIDI controller sends frequent undesired MIDI messages.": "Bypass sẽ tắt chế độ MIDI Learn (chỉ đặt tay được) và tính năng tự động chọn trong Chế độ Edit. Nên dùng Bypass khi MIDI Controller gửi liên tục tín hiệu MIDI ngoài ý muốn.",
+  "The MIDI Controller Surface contains invalid elements (highlighted in orange). You can leave the Surface Editor and those elements will be removed automatically, or you can stay and modify the elements.": "MIDI Controller Surface có thành phần không hợp lệ (tô cam). Thoát Surface Editor thì chúng tự xóa, hoặc ở lại để sửa."
+}

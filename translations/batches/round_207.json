@@ -1,0 +1,17 @@
+{
+  "Add All Mono Child Busses to \"%s\"": "Thêm tất cả Mono Child Bus vào \"%s\"",
+  "Align to Event End (Copy)": "Căn chỉnh theo cuối Event (Sao chép)",
+  "Cannot Edit VariAudio: No Note Segments Detected": "Không sửa được VariAudio: Không tìm thấy Note Segment nào",
+  "Empty All Buffers": "Xóa tất cả Buffer",
+  "Filter Target": "Đích lọc",
+  "Get exclusive access": "Lấy quyền truy cập riêng",
+  "Grid + Events + Cursor": "Grid + Event + Cursor",
+  "Open/Close Module\\nSwitch to exclusive mode with [Shift + click]": "Mở/Đóng Module\\nChuyển sang chế độ mở riêng biệt bằng [Shift + nhấp chuột]",
+  "Range Selection Cursor": "Con trỏ chọn vùng",
+  "Snap Type: Events + Cursor": "Loại Snap: Event + Cursor",
+  "Snap Type: Events + Grid + Cursor": "Loại Snap: Event + Grid + Cursor",
+  "Snap Type: Grid + Cursor": "Loại Snap: Grid + Cursor",
+  "Solo\\nUse [Click + Hold] or [ALT + Click] to select Solo Defeat.\\nUse [CTRL + Click] to select Exclusive Solo.": "Solo\\nDùng [nhấp chuột + giữ] hoặc [ALT + nhấp chuột] để chọn Solo Defeat.\\nDùng [CTRL + nhấp chuột] để chọn Exclusive Solo.",
+  "Strip Modules (Exclusive)": "Strip Module (Exclusive)",
+  "The selected device port is used exclusively. This connection will be ended. Do you want to continue?": "Cổng thiết bị đã chọn đang được dùng riêng. Kết nối này sẽ bị ngắt. Bạn có muốn tiếp tục không?"
+}

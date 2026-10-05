@@ -1,0 +1,311 @@
+KEY	US	DE	FR	VI
+In	In	In	Entrée	Vào
+in	in	in	dans	Trong
+Job	Job	Job	Tâche	Tác vụ
+Out	Out	Out	Sortie	Đầu ra
+Snd	Snd	Snd	Snd	Send
+Auto	Auto	Auto	Auto	Tự động
+Idle	Idle	Idle	Idle	Nghỉ
+Info	Info	Info	Information	Thông tin
+Link [short, verb]	Link	Link	Lier	Liên kết
+Max	Max.	Max.	Max.	Tối đa
+Max.	Max.	Max.	Max.	Tối đa
+Min	Min.	Min.	Min.	Tối thiểu
+Min.	Min.	Min.	Min.	Tối thiểu
+Name	Name	Name	Nom	Tên
+PPrb	PPrb	PPrb	PPrb	Poly Pressure
+Port	Port	Port	Port	Cổng
+Push	Push	Push	Poussoir	Nhấn
+Stop	Stop	Stop	Arrêter	Dừng
+Stop[Key]	Stop	Stop	Arrêter	Dừng
+Sync	Sync	Sync	Synchro	Đồng bộ
+Tags	Tags	Tags	Tags	Tag
+Temp	Temp	Temp	Temp	Tạm thời
+Text	Text	Text	Texte	Văn bản
+West	West	West	Ouest	Tây
+cues	cues	cues	cues	Cue
+max	max.	max.	max.	Tối đa
+min	min.	min.	min.	Tối thiểu
+test	test	test	test	Kiểm tra
+AutoQ[RM]	AutoQ	AutoQ	AutoQ	Auto Quantize
+Fades	Fades	Fades	Fondus	Fade
+Genre	Genre	Genre	Genre	Thể loại
+Index	Index	Index	Index	Chỉ mục
+Label	Label	Label	Étiquette	Nhãn
+Loure	Loure	Loure	Loure	Louré
+Moods	Moods	Moods	Ambiances	Mood
+Multi	Multi	Multi	Multi	Bội
+Name:	Name:	Name:	Nom :	Tên:
+PanLR	PanLR	PanLR	PanGD	Pan Trái/Phải
+Pause	Pause	Pause	Pause	Tạm dừng
+Port 	Port 	Port 	Port 	Cổng 
+Quick	Quick	Quick	Instantanés	Nhanh
+Sends [short]	Sends	Sends	Sends	Send
+Skins	Skins	Skins	Skins	Skin
+Start	Start	Start	Démarrer	Bắt đầu
+Steps	Steps	Steps	Pas	Các Step
+Ticks	Ticks	Ticks	Tics	Tick
+index	index	Index	index	Chỉ mục
+port.	port.	port.	port.	Cổng
+Blocks	Blocks	Blocks	Blocks	Khối
+Events	Events	Events	Événements	Các Event
+Format	Format	Format	Format	Định dạng
+Frames	Frames	Frames	Images	Các Frame
+Global	Global	Global	Global	Toàn cục
+Height	Height	Height	Height	Chiều cao
+Linear	Linear	Linear	Linéaire	Tuyến tính
+Macros	Macros	Macros	Macros	Các Macro
+Normal	Normal	Normal	Normal	Bình thường
+Online	Online	Online	En ligne	Trực tuyến
+PanLR2	PanLR2	PanLR2	PanGD2	Pan Trái/Phải 2
+Rating	Rating	Rating	Rating	Đánh giá
+Slices	Slices	Slices	Tranches	Các Slice
+Status	Status	Status	Statut	Trạng thái
+Viewer	Viewer	Viewer	Viewer	Trình xem
+gliss.	gliss.	gliss.	gliss.	Glissando
+minute	minute	Minute	minute	Phút
+Details	Details	Details	Détails	Chi tiết
+Fade-In	Fade-In	Fade-In	Fondu d'entrée	Fade In
+Filter:	Filter:	Filter:	Filtre :	Bộ lọc:
+Insert [Channel Latency Overview]	Inserts	Inserts	Inserts	Insert
+Insert2	Insert2	Insert2	Insert2	Insert 2
+Insert3	Insert3	Insert3	Insert3	Insert 3
+Insert4	Insert4	Insert4	Insert4	Insert 4
+Inserts [short]	Inserts	Inserts	Inserts	Insert
+Layouts	Layouts	Layouts	Dispositions	Layout
+MapMode	MapMode	MapMode	ModeMapping	Chế độ Map
+Maximum	Maximum	Maximum	Maximum	Lớn nhất
+Minimal	Minimal	Minimal	Minimum	Tối giản
+Minimum	Minimum	Minimum	Minimum	Nhỏ nhất
+Samples	Samples	Samples	Échantillons	Các Sample
+Streams	Streams	Streams	Streams	Audio Stream
+Trigger	Trigger	Trigger	Déclencheur	Kích hoạt
+samples	samples	Samples	échantillons	Các Sample
+Fade-Out	Fade-Out	Fade-Out	Fondu de sortie	Fade Out
+Hardware	Hardware	Hardware	Matériel	Phần cứng
+Keyboard	Keyboard	Keyboard	Clavier	Bàn phím
+Original	Original	Original	Original	Gốc
+Ornament	Ornament	Ornament	Ornement	Hoa tiết
+Position	Position	Position	Position	Vị trí
+PreFader	PreFader	PreFader	Pré fader	Pre-Fader
+Pressure	Pressure	Pressure	Pression	Áp lực
+Realtime	Realtime	Realtime	Realtime	Thời gian thực
+Relation	Relation	Relation	Relation	Mối liên hệ
+Revision	Revision	Revision	Révision	Phiên bản sửa đổi
+Rotation	Rotation	Rotation	Rotation	Góc xoay
+Standard	Standard	Standard	Standard	Tiêu chuẩn
+Tensions	Tensions	Tensions	Tensions	Tension
+Transfer	Transfer	Transfer	Transfert	Chuyển giao
+Variable	Variable	Variable	Variable	Biến
+Voicings	Voicings	Voicings	Voicings	Voicing
+hardware	hardware	hardware	hardware	Phần cứng
+ children	 children	 children	 children	 mục con
+Copyright	Copyright	Copyright	Copyright	Bản quyền
+Hitpoints	Hitpoints	Hitpoints	Repères	Hitpoint
+Info/Solo	Info/Solo	Info/Solo	Info/Solo	Thông tin/Solo
+Libraries	Libraries	Libraries	Libraries	Các thư viện
+MediaType	MediaType	MediaType	MediaType	Loại Media
+Parameter	Parameter	Parameter	Paramètre	Tham số
+PolyPress	PolyPress	PolyPress	PolyPress	Poly Pressure
+PrgChange	PrgChange	PrgChange	PrgChange	Program Change
+Re-Record	Re-Record	Re-Record	Réenregistrement	Ghi âm lại
+Re-Record[RM]	Re-Record	Re-Record	Re-Record	Ghi âm lại
+Snapshots	Snapshots	Snapshots	Instantanés	Các Snapshot
+Snapshots[MixConsole]	Snapshots	Snapshots	Instantanés	Các Snapshot
+Syncpoint	Syncpoint	Syncpoint	Syncpoint	Điểm đồng bộ
+Variation	Variation	Variation	Variation	Biến thể
+Crossfades	Crossfades	Crossfades	Fondus enchaînés	Các Crossfade
+Definition	Definition	Definition	Définition	Định nghĩa
+Navigation	Navigation	Navigation	Navigation	Điều hướng
+Production	Production	Production	Production	Sản xuất
+Start/Stop	Start/Stop	Start/Stop	Démarrer/Arrêter	Phát/Dừng
+Information	Information	Information	Information	Thông tin
+Place-holder	Place-holder	Place-holder	Place-holder	Chỗ điền
+International	International	International	International	Quốc tế
+Transposition	Transposition	Transposition	Transposition	Transpose
+Interpretation	Interpretation	Interpretation	Interprétation	Diễn giải
+Pad *[Key]	Num *	Num *	Num *	Phím số *
+Pad +[Key]	Num +	Num +	Num +	Phím số +
+Pad -[Key]	Num -	Num -	Num -	Phím số -
+Pad .[Key]	Num .	Num .	Num .	Phím số .
+Pad /[Key]	Num /	Num /	Num /	Phím số /
+Pad0[Key]	Num 0	Num 0	Num 0	Phím số 0
+Pad1[Key]	Num 1	Num 1	Num 1	Phím số 1
+Pad2[Key]	Num 2	Num 2	Num 2	Phím số 2
+Pad3[Key]	Num 3	Num 3	Num 3	Phím số 3
+Pad4[Key]	Num 4	Num 4	Num 4	Phím số 4
+Pad5[Key]	Num 5	Num 5	Num 5	Phím số 5
+Pad6[Key]	Num 6	Num 6	Num 6	Phím số 6
+Pad7[Key]	Num 7	Num 7	Num 7	Phím số 7
+Pad8[Key]	Num 8	Num 8	Num 8	Phím số 8
+Pad9[Key]	Num 9	Num 9	Num 9	Phím số 9
+Key Nr	Key Nr	Key Nr	Touche n°	Số Key
+Note #	Note #	Note #	Num. note	Số Note
+CD Name	CD Name	CD Name	CD Name	Tên CD
+In Loop	In Loop	In Loop	Le contenu de la boucle	Trong Loop
+Level 1	Level 1	Level 1	Niveau 1	Mức 1
+Level 2	Level 2	Level 2	Niveau 2	Mức 2
+Level 3	Level 3	Level 3	Niveau 3	Mức 3
+Level 4	Level 4	Level 4	Niveau 4	Mức 4
+Level 5	Level 5	Level 5	Niveau 5	Mức 5
+NRPN Nr	NRPN Nr	NRPN Nr	N° NRPN	Số NRPN
+2 frames	2 frames	2 Frames	2 images	2 Frame
+Auto LFO	Auto LFO	Auto LFO	Auto LFO	LFO tự động
+Fixed To	Fixed To	Fixed To	Fixé à	Cố định tại
+Join Now	Join Now	Join Now	Join Now	Gộp ngay
+Min. (0)	Min. (0)	Min. (0)	Min. (0)	Tối thiểu (0)
+RMS Max.	RMS Max.	RMS Max.	RMS max.	RMS tối đa
+Smart Sw	Smart Sw	Smart Sw	Smart Sw	Công tắc thông minh
+Talk Dim	Talk Dim	Talk Dim	Atténuer Talk	Dim Talkback
+Talk Off	Talk Off	Talk Off	Talkback désactivé	Tắt Talkback
+Auto Edit	Auto Edit	Auto Edit	Auto Edit	Edit tự động
+File Size	File Size	File Size	File Size	Kích thước File
+Live Keys	Live Keys	Live Keys	Touches directes	Key trực tiếp
+Peak Max.	Peak Max.	Peak Max.	Crête max.	Đỉnh tối đa
+SMF: Text	SMF: Text	SMF: Text	SMF : Texte	SMF: Văn bản
+Song Name	Song Name	Song Name	Song Name	Tên Song
+Unique ID	Unique ID	Unique ID	Unique ID	ID duy nhất
+10 samples	10 samples	10 Samples	10 échantillons	10 Sample
+100 Events	100 Events	100 Events	100 événements	100 Event
+Local Loop	Local Loop	Local Loop	Local Loop	Loop Local
+Max. (127)	Max. (127)	Max. (127)	Max. (127)	Tối đa (127)
+Meter Max	Meter Max.	Meter Max.	Vumètre max.	Mức Meter tối đa
+Program Nr	Program Nr	Program Nr	N° de programme	Số Program
+Start Time	Start Time	Start Time	Start Time	Thời gian bắt đầu
+Syst. Link	Syst. Link	Syst. Link	Syst. Link	System Link
+100 samples	100 samples	100 Samples	100 échantillons	100 Sample
+1000 Events	1000 Events	1000 Events	1000 événements	1000 Event
+Auto Select	Auto Select	Auto Select	Auto Select	Chọn tự động
+Bypass: EQs	Bypass: EQs	Bypass: EQs	Bypass : EQs	Bypass: EQ
+Center (64)	Center (64)	Center (64)	Centre (64)	Giữa (64)
+False Start	False Start	False Start	False Start	Bắt đầu False
+Frame Count	Frame Count	Frame Count	Frame Count	Số Frame
+Image Width	Image Width	Image Width	Image Width	Chiều rộng hình ảnh
+Parameter 1	Parameter 1	Parameter 1	Paramètre 1	Tham số 1
+Parameter 2	Parameter 2	Parameter 2	Paramètre 2	Tham số 2
+Pitch Decay	Pitch Decay	Pitch Decay	Pitch Decay	Decay của Pitch
+Record Date	Record Date	Record Date	Record Date	Ngày ghi
+Relay Click	Relay Click	Relay Click	Relay Click	Click Relay
+Repeat Rate	Repeat Rate	Repeat Rate	Repeat Rate	Tỉ lệ lặp lại
+Track Count	Track Count	Track Count	Track Count	Số lượng Track
+Track Title	Track Title	Track Title	Track Title	Tiêu đề Track
+%d Return(s)	%d Return(s)	%d Return(s)	%d Return(s)	%d Return
+10000 Events	10000 Events	10000 Events	10000 événements	10000 Event
+All Cadences	All Cadences	All Cadences	Toutes les cadences	Tất cả Cadences
+Date Created	Date Created	Date Created	Date Created	Ngày tạo
+Image Height	Image Height	Image Height	Image Height	Chiều cao hình ảnh
+Parameter %d	Parameter %d	Parameter %d	Paramètre %d	Tham số %d
+Pending Tags	Pending Tags	Pending Tags	Pending Tags	Tag đang chờ
+Prog. Change	Prog. Change	Prog. Change	Prog. Change	Program Change
+Program Name	Program Name	Program Name	Program Name	Tên Program
+Release Date	Release Date	Release Date	Release Date	Ngày phát hành
+Sends Bypass	Sends Bypass	Sends Bypass	Bypass des sends	Bypass Send
+Sleigh Bells	Sleigh Bells	Sleigh Bells	Grelots	Chuông xe trượt tuyết
+Smart Switch	Smart Switch	Smart Switch	Smart Switch	Công tắc thông minh
+Talkback Dim	Talkback Dim	Talkback Dim	Atténuer Talkback	Dim Talkback
+User Content	User Content	User Content	User Content	Nội dung người dùng
+Bypass: Sends	Bypass: Sends	Bypass: Sends	Bypass : Sends	Bypass: Send
+Category Post	Category Post	Category Post	Category Post	Danh mục Post
+Date Modified	Date Modified	Date Modified	Date Modified	Ngày sửa
+Display Width	Display Width	Display Width	Display Width	Chiều rộng hiển thị
+Full Position	Full Position	Full Position	Full Position	Vị trí đầy đủ
+Local Voicing	Local Voicing	Local Voicing	Voicing local	Voicing Local
+Mono Pressure	Mono Pressure	Mono Pressure	Pression mono	Áp lực Mono
+Punch Preview	Punch Preview	Punch Preview	Punch avec pré-écoute	Nghe thử Punch
+Score Dynamic	Score Dynamic	Score Dynamic	Score Dynamic	Dynamic trong Score
+Sound Browser	Sound Browser	Sound Browser	Explorateur de sons	Trình duyệt Sound
+Display Height	Display Height	Display Height	Display Height	Chiều cao hiển thị
+Hide Synthetic	Hide Synthetic	Hide Synthetic	Masquer le synthétique	Ẩn Synthetic
+Inserts Bypass	Inserts Bypass	Inserts Bypass	Inserts Bypass	Bypass Insert
+SMF: Copyright	SMF: Copyright	SMF: Copyright	SMF : Copyright	SMF: Bản quyền
+Start Quantize	Start Quantize	Start Quantize	Start Quantize	Bắt đầu Quantize
+Studio Manager	Studio Manager	Studio Manager	Studio Manager	Trình quản lý Studio
+Track Versions	Track Versions	Track Versions	Track Versions	Các Track Version
+TrackVersions	Track Versions	Track Versions	Track Versions	Các Track Version
+Velocity Decay	Velocity Decay	Velocity Decay	Velocity Decay	Decay của Velocity
+Alternate Tempo	Alternate Tempo	Alternate Tempo	Autre tempo	Tempo thay thế
+BWF Description	BWF Description	BWF Description	BWF Description	Mô tả BWF
+Bypass: Inserts	Bypass: Inserts	Bypass: Inserts	Bypass : Inserts	Bypass: Insert
+Content Summary	Content Summary	Content Summary	Content Summary	Tóm tắt Content
+Program Version	Program Version	Program Version	Program Version	Version Program
+Score Direction	Score Direction	Score Direction	Score Direction	Chỉ dẫn trong Score
+Suspend Preview	Suspend Preview	Suspend Preview	Suspendre la pré-écoute	Tạm dừng Preview
+VST Performance	VST Performance	VST Performance	VST Performance	VST Hiệu năng
+Application Type	Application Type	Application Type	Application Type	Loại ứng dụng
+Channel Rotation	Channel Rotation	Channel Rotation	Rotation des canaux	Xoay vòng Channel
+Cues (Pre-Fader)	Cues (Pre-Fader)	Cues (Pre-Fader)	Cues (Pre-Fader)	Cue (Pre-Fader)
+Write Protection	Write Protection	Write Protection	Write Protection	Bảo vệ ghi
+Absolute Position	Absolute Position	Absolute Position	Position absolue	Vị trí tuyệt đối
+Adaptive Voicings	Adaptive Voicings	Adaptive Voicings	Voicings adaptatifs	Adaptive Voicing
+Cues (Post-Fader)	Cues (Post-Fader)	Cues (Post-Fader)	Cues (Post-Fader)	Cue (Post-Fader)
+Relative Position	Relative Position	Relative Position	Position relative	Vị trí tương đối
+Template Category	Template Category	Template Category	Template Category	Danh mục mẫu
+Compression Factor	Compression Factor	Compression Factor	Compression Factor	Hệ số Compression
+Place-holder text.	Place-holder text.	Place-holder text.	Place-holder text.	Văn bản điền vào.
+Classic (Helmholtz)	Classic (Helmholtz)	Classic (Helmholtz)	Classique (Helmholtz)	Cổ điển (Helmholtz)
+Note To CC	Note To CC	Note To CC	Note To CC	Chuyển Note sang CC
+%s: Ins. %d	%s: Ins. %d	%s: Ins. %d	%s: Ins. %d	%s: Insert %d
+%s: Mod. %d	%s: Mod. %d	%s: Mod. %d	%s : Mod. %d	%s: Modulator %d
+CD Set Name	CD Set Name	CD Set Name	CD Set Name	Tên CD Set
+Tempo in BPM	Tempo in BPM	Tempo in BPM	Tempo en BPM	Tempo tính bằng BPM
+%d fps (User)	%d fps (User)	%d fps (User)	%d fps (Perso)	%d fps (người dùng)
+Insert 1 Edit	Insert 1 Edit	Insert 1 Edit	Insert 1 Edit	Sửa Insert 1
+Insert 2 Edit	Insert 2 Edit	Insert 2 Edit	Insert 2 Edit	Sửa Insert 2
+Insert 3 Edit	Insert 3 Edit	Insert 3 Edit	Insert 3 Edit	Sửa Insert 3
+Insert 4 Edit	Insert 4 Edit	Insert 4 Edit	Insert 4 Edit	Sửa Insert 4
+Punch on Play	Punch on Play	Punch on Play	Punch à la lecture	Punch khi Play
+Audio - Assets	Audio - Assets	Audio - Assets	Audio - Assets	Audio - Tài nguyên
+MSB Control Nr	MSB Control Nr	MSB Control Nr	N° de contrôle MSB	Số Control MSB
+All MIDI Inputs	All MIDI Inputs	All MIDI Inputs	Toutes les entrées MIDI	Tất cả MIDI Input
+CD Track Number	CD Track Number	CD Track Number	CD Track Number	Số CD Track
+Zoom to Project	Zoom to Project	Zoom to Project	Zoom to Project	Zoom tới Project
+Evaluate MIDI In	Evaluate MIDI In	Evaluate MIDI In	Évaluer MIDI In	Đánh giá MIDI In
+Hide Sus2 Chords	Hide Sus2 Chords	Hide Sus2 Chords	Masquer les accords Sus2	Ẩn Chord Sus2
+RF64 File Format	RF64 File Format	RF64 File Format	RF64 File Format	Định dạng file RF64
+Overdub Note Exp.	Overdub Note Exp.	Overdub Note Exp.	Overdub de Note Exp.	Ghi đè Note Exp.
+Yamaha Media Sync	Yamaha Media Sync	Yamaha Media Sync	Yamaha Media Sync	Đồng bộ Media Yamaha
+Audio - Properties	Audio - Properties	Audio - Properties	Audio - Properties	Audio - Thuộc tính
+Auto Edit PRE/POST	Auto Edit PRE/POST	Auto Edit PRE/POST	Auto Edit PRE/POST	Tự động sửa PRE/POST
+BWF Coding History	BWF Coding History	BWF Coding History	BWF Coding History	Lịch sử mã hóa BWF
+BWF Loudness Range	BWF Loudness Range	BWF Loudness Range	BWF Loudness Range	Vùng BWF Loudness
+BWF Loudness Value	BWF Loudness Value	BWF Loudness Value	BWF Loudness Value	Giá trị BWF Loudness
+Stereo Dual Panner	Stereo Dual Panner	Stereo Dual Panner	Stereo Dual Panner	Panner Stereo Dual
+VST Quick Controls	VST Quick Controls	VST Quick Controls	Contrôles instantanés VST	VST Quick Control
+Yamaha Phrase Mark	Yamaha Phrase Mark	Yamaha Phrase Mark	Yamaha Phrase Mark	Dấu phân câu Yamaha
+Relative Signed Bit	Relative Signed Bit	Relative Signed Bit	Bit signé relatif	Bit dấu tương đối
+Yamaha Guitar Track	Yamaha Guitar Track	Yamaha Guitar Track	Yamaha Guitar Track	Track Guitar Yamaha
+B-Format %d channels	B-Format %d channels	B-Format %d channels	B-Format %d channels	B-Format %d Channel
+BWF Origin Reference	BWF Origin Reference	BWF Origin Reference	BWF Origin Reference	Tham chiếu nguồn gốc BWF
+Focus Quick Controls	Focus Quick Controls	Focus Quick Controls	Contrôles instantanés en focus	Focus Quick Control
+Prog. Change Trigger	Prog. Change Trigger	Prog. Change Trigger	Prog. Change Trigger	Kích hoạt Program Change
+Show Cadence Context	Show Cadence Context	Show Cadence Context	Afficher le contexte de cadence	Hiện Cadence Context
+Yamaha Category Name	Yamaha Category Name	Yamaha Category Name	Yamaha Category Name	Tên danh mục Yamaha
+Stereo Balance Panner	Stereo Balance Panner	Stereo Balance Panner	Stereo Balance Panner	Panner Stereo Balance
+Yamaha Channel Status	Yamaha Channel Status	Yamaha Channel Status	Yamaha Channel Status	Trạng thái Yamaha Channel
+Yamaha Guitar Voicing	Yamaha Guitar Voicing	Yamaha Guitar Voicing	Yamaha Guitar Voicing	Voicing Guitar Yamaha
+Ambisonic File Format	Ambisonics File Format	Ambisonics File Format	Ambisonic File Format	Định dạng file Ambisonics
+Baroque (3/5 adaptive)	Baroque (3/5 adaptive)	Baroque (3/5 adaptive)	Baroque (3/5 adaptive)	Baroque (3/5 thích ứng)
+Relative Binary Offset	Relative Binary Offset	Relative Binary Offset	Décalage binaire relatif	Offset nhị phân tương đối
+Stereo Combined Panner	Stereo Combined Panner	Stereo Combined Panner	Stereo Combined Panner	Panner Stereo Combined
+Yamaha Category Status	Yamaha Category Status	Yamaha Category Status	Yamaha Category Status	Trạng thái danh mục Yamaha
+Yamaha Desktop Picture	Yamaha Desktop Picture	Yamaha Desktop Picture	Yamaha Desktop Picture	Hình nền Desktop Yamaha
+Yamaha Function Status	Yamaha Function Status	Yamaha Function Status	Yamaha Function Status	Trạng thái chức năng Yamaha
+Sound Profile Organizer	Sound Profile Organizer	Sound Profile Organizer	Organisateur de profils sonores	Trình sắp xếp Sound Profile
+Yamaha Fingering Number	Yamaha Fingering Number	Yamaha Fingering Number	Yamaha Fingering Number	Số ngón Yamaha
+Relative Twos Complement	Relative Twos Complement	Relative Twos Complement	Complément à deux relatif	Bù hai tương đối
+Performance Validation Settings	Performance Validation Settings	Performance Validation Settings	Performance Validation Settings	Cài đặt kiểm tra hiệu năng
+Yamaha Level 8 Mark	Yamaha Level 8 Mark	Yamaha Level 8 Mark	Yamaha Level 8 Mark	Dấu Level 8 Yamaha
+In 'All MIDI Inputs'	In 'All MIDI Inputs'	In 'All MIDI Inputs'	Dans 'Toutes les entrées MIDI'	Trong 'Tất cả MIDI Input'
+Yamaha XF Version ID	Yamaha XF Version ID	Yamaha XF Version ID	Yamaha XF Version ID	ID phiên bản Yamaha XF
+Yamaha Guitar Info Flag	Yamaha Guitar Info Flag	Yamaha Guitar Info Flag	Yamaha Guitar Info Flag	Cờ thông tin Guitar Yamaha
+BWF Max Momentary Loudness	BWF Max. Momentary Loudness	BWF Max. Momentary Loudness	BWF Max. Momentary Loudness	Loudness Momentary tối đa của BWF
+BWF Max. Momentary Loudness	BWF Max. Momentary Loudness	BWF Max. Momentary Loudness	Loudness momentanée max. BWF	Loudness Momentary tối đa của BWF
+BWF Max Short-term Loudness	BWF Max. Short-term Loudness	BWF Max. Short-term Loudness	BWF Max. Short-term Loudness	Loudness Short-term tối đa của BWF
+BWF Max. Short-term Loudness	BWF Max. Short-term Loudness	BWF Max. Short-term Loudness	Loudness à court terme max. BWF	Loudness Short-term tối đa của BWF
+Performance Analyser Export Settings	Performance Analyser Export Settings	Performance Analyser Export Settings	Performance Analyser Export Settings	Cài đặt Performance Analyser Export
+%s %d  %s %d (Frames)	%s %d  %s %d (Frames)	%s %d  %s %d (Frames)	%s %d  %s %d (Images)	%s %d  %s %d (Frame)
+BWF Max True Peak Level	BWF Max. True Peak Level	BWF Max. True Peak Level	BWF Max. True Peak Level	Mức True Peak tối đa của BWF
+BWF Max. True Peak Level	BWF Max. True Peak Level	BWF Max. True Peak Level	Niveau crête vraie max. BWF	Mức True Peak tối đa của BWF
+Duplicate Selected Tracks without Data	Duplicate Selected Tracks without Data	Duplicate Selected Tracks without Data	Duplicate Selected Tracks without Data	Nhân bản Track đã chọn mà không kèm dữ liệu
+Export Audio Mixdown of entire Project	Export Audio Mixdown of entire Project	Export Audio Mixdown of entire Project	Exporter un mixage audio de tout le projet	Export Audio Mixdown của toàn bộ Project
+Position: H = %d, V = %d	Position: H = %d, V = %d	Position: H = %d, V = %d	Position : H = %d, V = %d	Vị trí: H = %d, V = %d

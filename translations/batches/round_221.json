@@ -1,0 +1,6 @@
+{
+  "Activate this to send a 'Still' command instead of a 'Stop' command to RS422 Out": "Bật để gửi lệnh 'Tạm dừng' thay vì lệnh 'Dừng' tới RS422 Out",
+  "Send 'Still' instead of 'Stop'": "Gửi 'Tạm dừng' thay cho 'Dừng'",
+  "Send Still Command instead of Stop": "Gửi lệnh Tạm dừng thay cho Dừng",
+  "Absolute Mode - Force all parameters to the same value": "Chế độ tuyệt đối - Ép mọi tham số về cùng một giá trị"
+}
