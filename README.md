@@ -2,6 +2,8 @@
 
 **Tiếng Việt: xem [README.vi.md](README.vi.md).**
 
+![Cubase 15 with Vietnamese UI](demo.png)
+
 Cubase ships no Vietnamese localization. Its UI strings are not compiled
 or encrypted — they live in a plain-text XML resource (`TRANSLATION.XML`),
 and Cubase reads `translation.xml` from disk **before** falling back to the

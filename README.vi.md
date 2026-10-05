@@ -2,6 +2,8 @@
 
 **English: see [README.md](README.md).**
 
+![Cubase 15 với giao diện tiếng Việt](demo.png)
+
 Cubase không có bản tiếng Việt. Chuỗi giao diện của nó không nằm trong
 binary mã hoá — mà là **XML văn bản thuần** (`TRANSLATION.XML`), và Cubase
 đọc `translation.xml` từ đĩa **trước khi** dùng bản nhúng trong
