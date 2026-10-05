@@ -4,6 +4,23 @@
 
 ![Cubase 15 with Vietnamese UI](demo.png)
 
+## Why use this?
+
+Cubase is deep but famously hard to learn — and learning it in a second
+language doubles the slope. Menus like `Direct Offline Processing`,
+`Retrospective Record`, or `VCA Faders` stop beginners before they touch
+music.
+
+This translation removes the language wall without dumbing anything down:
+
+- Everyday UI reads Vietnamese: buttons, dialogs, warnings, tooltips.
+- Pro terms stay English (`Cycle`, `Quantize`, `Side-Chain`), so every
+  tutorial on YouTube still matches what you see on screen.
+- Full coverage: all 10,737 strings, including the Score Editor — nothing
+  falls back to English halfway through a session.
+- No crack, no patch: a plain XML file Cubase itself prefers over its
+  embedded copy. Uninstall restores the original in one command.
+
 Cubase ships no Vietnamese localization. Its UI strings are not compiled
 or encrypted — they live in a plain-text XML resource (`TRANSLATION.XML`),
 and Cubase reads `translation.xml` from disk **before** falling back to the
