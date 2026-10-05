@@ -17,13 +17,13 @@ nguyên tiếng Anh để tra được video hướng dẫn (`Bật Cycle`,
 | Chuỗi | 10.737 |
 | Ngôn ngữ gốc để đối chiếu | 9 (`us de fr es it pt jp zh ru`) |
 | Đã dịch | **10.737 (100%)** |
-| Test | **174 test, pass hết** |
+| Test | full suite, pass hết |
 
 ## Dùng nhanh
 
 ```powershell
 # dịch: sửa batch, rồi gộp -> kiểm tra -> build -> test
-notepad translations\batches\round_222.json
+notepad translations\batches\round_NNN.json
 python tools\merge_maps.py
 python tools\build.py style
 python tools\build.py punct
@@ -39,7 +39,7 @@ powershell -ExecutionPolicy Bypass -File scripts\install.ps1 -Variant full
 
 ```
 translations/vi.json            bản dịch hợp nhất — nguồn sự thật duy nhất
-translations/batches/*.json     mỗi vòng sửa là một file batch (round_001 ... round_222)
+translations/batches/*.json     mỗi vòng sửa là một file batch (số tiếp theo)
 keys/all_strings.tsv            10.737 key kèm tiếng Anh gốc (tham chiếu)
 tools/read.py                   đọc bảng dịch: page / long / short / inspect
 tools/merge_maps.py             gộp batch vào vi.json (--check cho CI)
@@ -49,8 +49,8 @@ tools/dupes.py                  trùng giá trị, trôi số nhiều
 tools/family.py                 một thuật ngữ qua mọi anh em
 tools/group_by_offset.py        nhóm chuỗi theo vị trí .rdata (63% có nhóm)
 tools/clarity.py                chuỗi dài + khó đọc
-tools/review_all.xlsx           toàn bảng 10.737 chuỗi, Anh/Đức/Pháp/Việt song song
-tools/tests/run.py              174 test, không cần Cubase
+tools/review_all.xlsx           toàn bảng chuỗi, Anh/Đức/Pháp/Việt song song
+tools/tests/run.py              full test, không cần Cubase
 scripts/install.ps1             cài / gỡ (-Variant full)
 docs/RESEARCH.md                cơ chế loader tìm ra bằng cách nào
 docs/OPEN_QUESTIONS.md          thuật ngữ đã chốt
@@ -66,7 +66,7 @@ AGENT.md                        luật bắt buộc khi dịch
    (`family.py`), rồi đa số toàn bảng — không bao giờ theo một
    chuỗi đơn lẻ.
 3. Ghi `translations/batches/round_NNN.json` (số tiếp theo),
-   chạy pipeline trên. Style, punct và 174 test phải pass hết.
+   chạy pipeline trên. Style, punct và full test phải pass hết.
 4. Commit theo [`COMMIT_CONVENTION.md`](COMMIT_CONVENTION.md), push.
 
 Tên trong ngoặc kép phải khớp đúng nhãn của nó (`audit.py quotes`);

@@ -18,13 +18,13 @@ suggested — see [`AGENT.md`](AGENT.md).
 | Strings | 10,737 |
 | Source languages | 9 (`us de fr es it pt jp zh ru`) |
 | Translated | **10,737 (100%)** |
-| Tests | **174 passing** |
+| Tests | full suite passing |
 
 ## Quick start
 
 ```powershell
 # translate: edit a batch, then merge -> check -> build -> test
-notepad translations\batches\round_222.json
+notepad translations\batches\round_NNN.json
 python tools\merge_maps.py
 python tools\build.py style
 python tools\build.py punct
@@ -40,7 +40,7 @@ powershell -ExecutionPolicy Bypass -File scripts\install.ps1 -Variant full
 
 ```
 translations/vi.json            the merged map — the single source of truth
-translations/batches/*.json     one fix batch per round (round_001 ... round_222)
+translations/batches/*.json     one fix batch per round (next free number)
 keys/all_strings.tsv            10,737 keys with English source (reference)
 tools/read.py                   read the map: page / long / short / inspect
 tools/merge_maps.py             merge batches into vi.json (--check for CI)
@@ -50,8 +50,8 @@ tools/dupes.py                  duplicate values, plural drift
 tools/family.py                 one term across all its siblings
 tools/group_by_offset.py        group strings by .rdata offset (63% covered)
 tools/clarity.py                long + hard-to-read strings
-tools/review_all.xlsx           all 10,737 strings, EN/DE/FR/VI side by side
-tools/tests/run.py              174 tests — no Cubase needed
+tools/review_all.xlsx           all strings, EN/DE/FR/VI side by side
+tools/tests/run.py              full test suite — no Cubase needed
 scripts/install.ps1             install / uninstall (-Variant full)
 docs/RESEARCH.md                how the loader mechanism was found
 docs/OPEN_QUESTIONS.md          frozen terminology decisions
@@ -66,7 +66,7 @@ AGENT.md                        mandatory rules for translation work
 2. Settle terminology against all 9 source languages, then the term's
    family (`family.py`), then the map majority — never one sibling alone.
 3. Write `translations/batches/round_NNN.json` (next free number),
-   run the pipeline above. Style, punct, and all 174 tests must pass.
+   run the pipeline above. Style, punct, and the full test suite must pass.
 4. Commit per [`COMMIT_CONVENTION.md`](COMMIT_CONVENTION.md), push.
 
 Quoted names must match the label they quote (`audit.py quotes`);
