@@ -6,30 +6,29 @@
 
 ## Vì sao nên dùng?
 
-Cubase rất mạnh nhưng nổi tiếng khó học — mà học bằng tiếng Anh thì dốc
-gấp đôi. Những menu như `Direct Offline Processing`,
-`Retrospective Record` hay `VCA Faders` chặn người mới từ trước khi đụng
-tới nhạc.
+Học Cubase đã khó, học bằng tiếng Anh càng khó. Mấy menu kiểu
+`Direct Offline Processing` hay `Retrospective Record` đủ làm người mới
+nản trước khi bấm được nốt nào.
 
-Bản dịch này phá rào cản ngôn ngữ mà không làm mất chất chuyên nghiệp:
+Bản dịch này giải quyết đúng chuyện đó:
 
-- Giao diện thường ngày đọc tiếng Việt: nút bấm, hộp thoại, cảnh báo.
-- Thuật ngữ giữ tiếng Anh (`Cycle`, `Quantize`, `Side-Chain`) nên mọi
-  tutorial trên YouTube vẫn khớp từng chữ trên màn hình.
-- Phủ kín: cả 10.737 chuỗi kể cả Score Editor — không đang làm dở chừng
-  rớt về tiếng Anh.
-- Không crack, không vá: một file XML thuần mà chính Cubase ưu tiên đọc.
-  Gỡ là về nguyên bản bằng một lệnh.
+- Nút bấm, hộp thoại, cảnh báo: tiếng Việt.
+- Thuật ngữ nghề: tiếng Anh (`Cycle`, `Quantize`, `Side-Chain`) để xem
+  tutorial YouTube vẫn khớp từng chữ trên màn hình.
+- Dịch hết 10.737 chuỗi, cả Score Editor. Không có chỗ nào đang dùng
+  rớt về tiếng Anh giữa chừng.
+- Một file XML Cubase tự đọc. Gỡ ra là mọi thứ về như cũ.
 
 Cubase không có bản tiếng Việt. Chuỗi giao diện của nó không nằm trong
-binary mã hoá — mà là **XML văn bản thuần** (`TRANSLATION.XML`), và Cubase
-đọc `translation.xml` từ đĩa **trước khi** dùng bản nhúng trong
-`Cubase15.exe`. Repo này khai thác đúng cơ chế đó: chép file vào là chạy,
-**không cần vá file thực thi.**
+binary mã hoá. Nó là file XML văn bản thuần (`TRANSLATION.XML`), và Cubase
+đọc `translation.xml` trên đĩa trước rồi mới tới bản nhúng trong
+`Cubase15.exe`. Repo này chỉ làm một việc: đặt đúng file vào đúng chỗ.
+Không vá víu gì cả.
 
-Kiểu dịch **lai Anh–Việt**: từ thường dịch tiếng Việt, thuật ngữ DAW giữ
-nguyên tiếng Anh để tra được video hướng dẫn (`Bật Cycle`,
-`Chế độ Absolute`, `Triads`). Quy tắc bắt buộc — xem [`AGENT.md`](AGENT.md).
+Cách dịch cũng cố tình pha hai thứ tiếng. Từ thường ngày viết tiếng Việt,
+thuật ngữ nghề giữ tiếng Anh để còn tra được hướng dẫn
+(`Bật Cycle`, `Chế độ Absolute`, `Triads`). Mỗi chỗ chọn một kiểu đều có
+luật ghi trong [`AGENT.md`](AGENT.md), máy kiểm tra chứ không nói miệng.
 
 | | |
 |---|---|

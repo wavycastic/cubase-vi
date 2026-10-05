@@ -6,31 +6,29 @@
 
 ## Why use this?
 
-Cubase is deep but famously hard to learn — and learning it in a second
-language doubles the slope. Menus like `Direct Offline Processing`,
-`Retrospective Record`, or `VCA Faders` stop beginners before they touch
-music.
+Cubase is hard to pick up, and picking it up in English is harder. Menus
+like `Direct Offline Processing` or `Retrospective Record` turn beginners
+away before they make a sound.
 
-This translation removes the language wall without dumbing anything down:
+This translation fixes that specific problem:
 
-- Everyday UI reads Vietnamese: buttons, dialogs, warnings, tooltips.
-- Pro terms stay English (`Cycle`, `Quantize`, `Side-Chain`), so every
-  tutorial on YouTube still matches what you see on screen.
-- Full coverage: all 10,737 strings, including the Score Editor — nothing
-  falls back to English halfway through a session.
-- No crack, no patch: a plain XML file Cubase itself prefers over its
-  embedded copy. Uninstall restores the original in one command.
+- Buttons, dialogs, warnings: Vietnamese.
+- Trade terms: English (`Cycle`, `Quantize`, `Side-Chain`), so YouTube
+  tutorials still match the screen word for word.
+- All 10,737 strings, Score Editor included. No part of the app drops
+  back to English mid-session.
+- One XML file Cubase reads on its own. Uninstall puts everything back.
 
 Cubase ships no Vietnamese localization. Its UI strings are not compiled
-or encrypted — they live in a plain-text XML resource (`TRANSLATION.XML`),
-and Cubase reads `translation.xml` from disk **before** falling back to the
-copy embedded in `Cubase15.exe`. This repo uses exactly that mechanism:
-drop in a file, no executable patching.
+or encrypted. They sit in a plain-text XML resource (`TRANSLATION.XML`),
+and Cubase reads `translation.xml` from disk before using the copy inside
+`Cubase15.exe`. This repo exploits that order: drop in a file, done.
+No patching.
 
-Translation style is **hybrid English–Vietnamese**: everyday words in
-Vietnamese, DAW terms in English so tutorials stay searchable
-(`Bật Cycle`, `Chế độ Absolute`, `Triads`). Rules are enforced, not
-suggested — see [`AGENT.md`](AGENT.md).
+The translation is mixed on purpose. Ordinary words are Vietnamese, trade
+terms stay English so tutorials stay searchable
+(`Bật Cycle`, `Chế độ Absolute`, `Triads`). The rules behind each choice
+are written down in [`AGENT.md`](AGENT.md) and checked by machine.
 
 | | |
 |---|---|
