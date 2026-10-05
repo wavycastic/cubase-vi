@@ -4,8 +4,8 @@
 
 | Path | Origin | Licence |
 |---|---|---|
-| `translations/**` | written for this repo | same as this repo |
-| `tools/**`, `scripts/**`, `docs/**`, `README.md` | written for this repo | same as this repo |
+| `translations/**` | written for this repo | MIT, see `LICENSE` |
+| `tools/**`, `scripts/**`, `docs/**`, `README.md` | written for this repo | MIT, see `LICENSE` |
 | `keys/all_strings.tsv` | **extracted from `Cubase15.exe`** | © Steinberg Media Technologies GmbH |
 
 ## `keys/all_strings.tsv`
