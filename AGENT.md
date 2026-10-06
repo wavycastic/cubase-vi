@@ -14,6 +14,54 @@ lại từ 5 vòng khác nhau mỗi lần đều dừng ở "không đủ bằng
 được xoá khi có (a) nhóm anh em buộc phải theo một hướng, hoặc (b) **người dùng
 quyết**. Tỉ lệ 51/49 không phải (b).
 
+## 0. ĐỪNG ĐOÁN — thứ tự tra bằng chứng khi một chuỗi mơ hồ
+
+Bản dịch là **XML phẳng 10.737 mục, xếp A-Z, không có trường "nhóm", "màn hình"
+hay "hộp thoại"**. Nên thấy `Spike` thì không có gì trong file cho biết nó là đỉnh
+nhọn trên đường cong automation hay gai trên cây — và đã dịch sai thành "gai".
+`Aspect` dịch thành "tỉ lệ khung hình" (`Aspect Ratio`) trong khi nó là góc nhìn
+MediaBay. Mọi lỗi cùng loại đều xuất phát từ đúng chỗ này.
+
+**Đi theo đúng thứ tự này, dừng ở bước đầu tiên cho ra câu trả lời:**
+
+| # | Bước | Lệnh | Ra được gì |
+|---|---|---|---|
+| 1 | **Cụm `.rdata`** | `group_by_offset.py -k "<từ>"` | chuỗi nằm cạnh những gì trong code |
+| 2 | **9 ngôn ngữ** | `read.py inspect "<từ>"` | nghĩa, khi tiếng Anh trơ trọi |
+| 3 | **Gia đình** | `family.py <từ>` | các cách viết của anh em |
+| 4 | **Hỏi người dùng** | ảnh chụp màn hình | chốt |
+
+Bước 1 mạnh nhất và **rẻ nhất** — tự động, không cần mở Cubase. Đo được:
+
+```
+6.764 / 10.737 chuỗi (63,0%) có literal trong .rdata
+chuỗi CÙNG NHÓM median cách nhau    73.824 byte
+chuỗi KHÁC NHÓM median cách nhau 1.082.648 byte   → gần nhau hơn 14 lần
+333 cụm, đã đặt tên hết (104 từ Key Commands, 229 tự đặt trong group_names.json)
+```
+
+Steinberg cấp phát literal theo module dịch vụ và các module đứng cạnh nhau, nên
+**vị trí trong binary là nguồn nhóm thật**. Ví dụ nó đã xác nhận hai chỗ từng chỉ
+đoán bằng "anh em nên đối xứng":
+
+```
+0x060F8EC0 'Keep Last'   0x060F8F28 'Stacked'   0x060F8FE8 'Mix-Stacked (No Mute)'
+0x060FA3F0 'Cut Head'    0x060FA4C0 'Cut Tail'
+```
+
+**3.946 chuỗi (36,8%) không có literal ở đâu** — đã tìm mọi section, cả ASCII lẫn
+UTF-16; `Show Horizontal Line`, `%d User(s)`, `+18 Scale` chỉ ra `.rsrc` và không
+có chỗ nào khác. `deobf_scan` chạy rồi: 281 chuỗi, toàn đường dẫn `__FILE__`.
+Với 36,8% đó **không có cách tĩnh nào** — dùng bước 2. Và phần lớn chúng là nhãn
+ngắn, không có nhóm cũng không dịch sai.
+
+**27 chuỗi bị lo vì quá chung** (`Transpose` ×85, `Right` ×34, `Full` ×34,
+`BPM`, `Byte`, `Gain`…) — offset đầu tiên không nói được chuỗi đó thuộc module nào.
+
+**Hai hướng RE đã chết — đừng thử lại:** (a) gom nhóm theo hàm gọi: mỗi hàm lá chỉ
+dựng *một* nhãn (`Transport Panel` → 2 hàm, mỗi hàm đúng 1 chuỗi); (b) `xref.py`
+với file offset báo "0 xrefs" — sai cách gọi, target ở `.rdata` phải dùng `--va`.
+
 ## 1. Kiểu dịch
 
 - **Động từ / thao tác / trạng thái / giao diện** → Việt hoá ngắn gọn: `Thêm`,
@@ -438,6 +486,12 @@ python tools\dupes.py values            # hai key KHÁC nhau -> một giá trị
 python tools\clarity.py                 # long  dài  |  hard  khó đọc
 python tools\tests\run.py               # 172 test: bất biến + độ nhạy + bộ dò
 python tools\family.py <từ>             # đọc cả gia đình chuỗi cùng từ đầu
+python tools\group_by_offset.py         # nhóm chuỗi theo vị trí trong .rdata
+python tools\group_by_offset.py -k <từ>  # cụm của một chuỗi — BƯỚC 1, mạnh nhất
+python tools\group_by_offset.py -c <tên> # đọc một cụm
+python tools\group_by_offset.py --gap 200  # cụm mịn hơn (mặc định 4000)
+python tools\group_by_offset.py --ambiguous # chuỗi quá chung nên bị lo
+python tools\group_by_offset.py --uncovered # chuỗi không có literal trong code
 python tools\read.py long|short <miền> <bắt đầu>   # đọc tay
 python tools\read.py page  <bắt đầu> [số]          # đọc TUẦN TỰ, không lọc
 python tools\read.py inspect <từ>                   # một khoá, đủ 9 ngôn ngữ gốc
