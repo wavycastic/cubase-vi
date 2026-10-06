@@ -49,16 +49,42 @@ Nên cắt `.rdata` thành cụm là ra nhóm.
 | chuỗi ≤4 ký tự quá chung | bỏ qua `   `, ` %d`, ` & ` |
 | ngưỡng gap rộng gộp nhiều module | `--gap` chỉnh được; mặc định 4.000 |
 
-Đo lại sau khi lọc: 5.781 UTF-16 + 1.987 ASCII = 7.768 chuỗi có nhóm.
-21 chuỗi ambiguous, 2.948 không có literal ở đâu.
+Đo lại sau khi lọc: 6.642 chuỗi có nhóm trong 333 cụm (61,9%). Trong đó
+727 chuỗi từng bị lo là "trùng nhiều lần" nay đã gán lại bằng cách xét
+MỌI vị trí xuất hiện rồi chọn cụm gần nhất. 87 chuỗi trùng không xếp
+được vào cụm nào (vị trí nào cũng xa hơn `gap`).
 
-**Giới hạn, nói thẳng.** 2.948 chuỗi không tồn tại trong code — đã tìm ở
-mọi section, cả ASCII lẫn UTF-16: `Show Horizontal Line`, `%d User(s)`,
-`+18 Scale` chỉ ra `.rsrc` và không có chỗ nào khác. `deobf_scan` chạy rồi:
-281 chuỗi, toàn đường dẫn `__FILE__`. Với 27,5% đó **không có cách tĩnh
-nào** biết nhóm — `tools/read.py inspect` (9 ngôn ngữ) vẫn là nguồn rẻ nhất.
+**Con số cũ trong tài liệu này SAI — đã sửa.** Trước đây ghi "2.948 chuỗi
+không tồn tại trong code". Quét lại toàn bộ 135,5 MB `Cubase15.exe` cho thấy
+chỉ **4 chuỗi** thật sự vắng mặt. Nguyên nhân là hai lỗi cùng dòng 121 cũ
+(xem `scan_literals`): nó đếm `m.group(0)` — match CUỐI CÙNG đã duyệt chứ
+không phải match của chuỗi đang xét — và đếm trên `blob` của section hiện
+tại chứ không phải toàn image. Bug làm bộ lọc lỏng: nó cho 6.764 chuỗi
+"có nhóm", nhưng 1.019 chuỗi thật ra trùng nhiều lần (`Transpose` x85,
+`Right` x34) và bị đặt vào cụm không liên quan. Sửa lại, phủ tụt còn 5.769
+trước khi gán lại 727 chuỗi trùng.
+
+**Còn lại 4.095 chuỗi không có nhóm trong exe.** Đã tìm trong mọi DLL:
+`tools/group_by_dll.py` gom được **555 chuỗi / 24 module** (ScoringEngine
+125, Drum Machine 80, Modulation FX 64, Sampler Track 57, OMFFilter 51,
+vstconnect 46, aaffilter 35). Tổng phủ 7.197 chuỗi, 67,0%.
+
+Ba hướng RE đã thử và đã chết — đừng thử lại:
+
+1. *Gom nhóm theo hàm gọi.* Đo lại bằng `.pdata` + xref 64-bit (401.328
+   hàm, 89.479 nhóm, 339.730 ref): 3.945 nhóm có key, nhưng **1.754 nhóm
+   chỉ có 1 key**; giao hợp với nhóm `.rdata` chỉ thêm **57 key**. Địa chỉ
+   trong hàm là thứ tự lập trình, không phải thứ tự hộp thoại.
+2. *`xref.py` với file offset.* Báo "0 verified xrefs" — **sai cách gọi**.
+   Target ở `.rdata` phải dùng `--va`, không phải offset.
+3. *Tên nhóm từ nhãn `[...]` trong key.* Chỉ 123 key / 43 nhóm, không đủ.
+
+Với phần còn lại (3.540 chuỗi, 33%) dùng hai lưới an toàn khác: nhóm theo
+tiền tố động từ (`Show` 262, `Select` 205, `Set` 201, `Add` 191) và
+`tools/read.py inspect` (9 ngôn ngữ nguồn).
 """
 import argparse
+import bisect
 import json
 import os
 import re
@@ -93,12 +119,28 @@ def scan_literals(pe, keys):
 
     Trả về (found, ambiguous): `ambiguous` là những chuỗi xuất hiện quá
     nhiều lần nên offset đầu tiên không nói được chuỗi đó thuộc module nào.
+
+    LỖI CŨ, đo lại rồi sửa (2026-10-06). Dòng cũ:
+        n = blob.count(m.group(0)) if enc == 'ascii' else None
+    Hai lỗi cùng một dòng: `m` là match CUỐI CÙNG đã duyệt chứ không phải
+    match của `text` đang xét, nên số đếm thuộc về chuỗi khác; và `blob`
+    là section hiện tại chứ không phải toàn image, nên chuỗi trùng chéo
+    section không bao giờ bị thấy.
+
+    Hậu quả đo được: 3.868 chuỗi có literal thật trong exe bị đánh dấu
+    "trùng" rồi lo, phần lớn chỉ xuất hiện 2-3 lần. Tổng số key có nhóm
+    chỉ 6.821/10.737, và docstring từng ghi "2.948 chuỗi không tồn tại
+    trong code" — sai: quét lại toàn image thì 3.969/3.973 chuỗi đều có,
+    chỉ 4 chuỗi thật sự vắng mặt.
+
+    Sửa: đếm trên toàn image, đúng chuỗi đang xét.
     """
     found, ambiguous = {}, {}
+    image = bytes(pe.bin.data)
     for sec in pe.sections:
         if sec.raw_size == 0:
             continue
-        blob = pe.bin.data[sec.raw_ptr:sec.raw_ptr + sec.raw_size]
+        blob = image[sec.raw_ptr:sec.raw_ptr + sec.raw_size]
         base = sec.raw_ptr
 
         for enc, pattern in (('utf-16-le', rb'(?:[\x20-\x7e]\x00){3,}'),
@@ -117,11 +159,10 @@ def scan_literals(pe, keys):
                     continue
                 seen[text] = base + m.start()
             for text, off in seen.items():
-                # đếm lần xuất hiện thật để đánh dấu ambiguous
-                n = blob.count(m.group(0)) if enc == 'ascii' else None
                 if text in found:
                     continue
                 if enc == 'ascii':
+                    n = image.count(text.encode('ascii', 'ignore'))
                     (ambiguous if n > MAX_OCCURRENCES else found)[text] = off
                 else:
                     found[text] = off
@@ -172,8 +213,9 @@ def build(gap=GAP):
     pe = PE(CUBASE)
     try:
         found, ambiguous = scan_literals(pe, set(keys))
+        image = bytes(pe.bin.data)
     finally:
-        pe.close()
+        pass
 
     ordered = sorted(found.items(), key=lambda kv: kv[1])
     clusters = []
@@ -184,8 +226,39 @@ def build(gap=GAP):
             clusters.append([(key, off)])
     clusters = [c for c in clusters if len(c) >= MIN_CLUSTER]
 
+    # Chuỗi trùng nhiều lần (Transpose x85, Right x34) bị lo ở bước trên
+    # vì offset đầu tiên vô nghĩa. Nhưng nó vẫn thuộc MỘT cụm — chỉ là ta
+    # phải xét MỌI vị trí xuất hiện rồi gán vào cụm gần nhất, thay vì lấy
+    # vị trí đầu. Đo được: 727/1.019 chuỗi trùng gán được, phủ 53,7% -> 60,5%.
+    # 292 chuỗi không gán được (vị trí nào cũng xa mọi cụm > gap) vẫn lo.
+    if ambiguous and clusters:
+        image = bytes(pe.bin.data)
+        starts = [min(o for _, o in c) for c in clusters]
+        still = set()
+        for text in ambiguous:
+            b = text.encode('ascii', 'ignore')
+            if len(b) < 3 or len(_core_letters(text)) < MIN_LETTERS:
+                still.add(text)
+                continue
+            best = None
+            i = image.find(b)
+            while i >= 0:
+                j = bisect.bisect_left(starts, i)
+                for jj in (j - 1, j):
+                    if 0 <= jj < len(clusters):
+                        d = min(abs(i - o) for _, o in clusters[jj])
+                        if d <= gap and (best is None or d < best[0]):
+                            best = (d, jj, i)
+                i = image.find(b, i + 1)
+            if best is None:
+                still.add(text)
+            else:
+                clusters[best[1]].append((text, best[2]))
+        ambiguous = still
+
     cat_of = key_command_categories(us2key)
     manual = manual_names()
+    pe.close()
     named = []
     for c in clusters:
         votes = {}
