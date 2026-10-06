@@ -51,14 +51,54 @@ for line in open(TSV, encoding='utf-8').read().splitlines()[1:]:
         ORDER.append(k)
 
 
-def domain(k):
-    """Which area of Cubase a key belongs to.
+GROUPS_FILE = os.path.join(ROOT, 'keys', 'groups.json')
+_GROUPS = None
 
-    The order below is PRIORITY order: a key is in exactly one bucket, so the
-    first pattern that matches wins. `music-theory` is tested before `notation`
-    because a key like "Chord Symbols" is music theory, not notation, and the
-    naive version put it in notation and never revisited it.
-    """
+
+def _get_groups():
+    global _GROUPS
+    if _GROUPS is None:
+        if os.path.exists(GROUPS_FILE):
+            try:
+                _GROUPS = json.load(open(GROUPS_FILE, encoding='utf-8'))
+            except Exception:
+                _GROUPS = {}
+        else:
+            _GROUPS = {}
+    return _GROUPS
+
+
+def domain(k):
+    """Which area of Cubase a key belongs to, backed by RE groups when available."""
+    grps = _get_groups()
+    if k in grps:
+        dom = grps[k].get('domain', '').lower()
+        if 'transport' in dom:
+            return 'transport'
+        if 'score' in dom or 'notation' in dom:
+            return 'notation'
+        if 'theory' in dom or 'chord' in dom:
+            return 'music-theory'
+        if 'mix' in dom or 'routing' in dom:
+            return 'mixer'
+        if 'midi' in dom or 'sequencing' in dom:
+            return 'midi'
+        if 'audio' in dom or 'processing' in dom:
+            return 'media'
+        if 'project' in dom or 'timeline' in dom:
+            return 'project'
+        if 'plugin' in dom or 'instrument' in dom:
+            return 'plugins'
+        if 'studio' in dom or 'hardware' in dom:
+            return 'studio'
+        if 'pref' in dom or 'command' in dom:
+            return 'ui'
+        if 'export' in dom:
+            return 'export'
+        if 'system' in dom or 'file' in dom:
+            return 'system'
+        return 'ui'
+
     s = k.lower()
     if re.search(r'\b(chord|voicing|tension|scale|articulation|harmony|note)\b', s):
         return 'music-theory'
