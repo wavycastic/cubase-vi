@@ -1,18 +1,22 @@
 #!/usr/bin/env python3
-r"""Cong cu Binary Patch truc tiep vao Cubase15.exe de to mau dải song kieu FL Studio.
+r"""Cong cu Binary Patch truc tiep vao Cubase15.exe de to mau dai song kieu FL Studio.
 
 Khong can runtime DLL hook, khong can injector, chay vinh vien va hoan toan doc lap.
 Tu dong sao luu Cubase15.exe -> Cubase15.exe.bak va cho phep khoi phuc 1 lenh.
 
 Co che:
-  1. Tai 0x141E9AD93 (trong ham to dai song 0x141E9AD10), thay the `call 0x141ea8150` (5 byte)
-     bang `call <code_cave>` nhay vao vung dem 77 byte o cuoi section .text.
+  Can thiep tai diem khoi tao bang mau PSeqEventImageScheme::buildScheme (0x14393BCC0).
+  Day la noi Cubase 15 sinh bang mau cho dai song va vien song tu mau track:
+  1. Tai 0x14393C4B4: thay the `mov [rbx + 0x98], rax` (7 byte)
+     bang `call <code_cave>; nop; nop` nhay vao code cave trong vung dem .text slack.
   2. Trong code cave:
-     - Ghi ma mau 64-bit vao style->fill_color (+0x50)
-     - Ghi ma mau 64-bit vao style->outline_color (+0x88)
-     - Bat bitfield co fill + outline (+0xB0)
-     - Nhay tiep toi ham goc 0x141ea8150 (jmp rel32).
-  3. Hoan toan giu nguyen kich thuoc file PE, khong lech offset bat ky section nao.
+     - Nap rax = fill_color (mau dai song chinh)
+     - Nap r11 = outline_color (mau vien sang kieu FL)
+     - Ghi [rbx + 0x98] = rax
+     - ret
+  3. Tai 0x14393C4D7, 0x14393CBD5, 0x14393CE7F:
+     Thay the `mov [rbx + 0x170], rax` bang `mov [rbx + 0x170], r11` (1 byte prefix 48 -> 4C)
+     de vien song luon mang mau outline viền sang kieu FL Studio.
 
 Cach dung:
   python tools/patch_wave.py status                          # Kiem tra trang thai
@@ -39,9 +43,16 @@ DEFAULT_CUBASE_PATHS = [
     Path(r"D:\Steinberg\Cubase 15\Cubase15.exe"),
 ]
 
-VA_CALL_SITE = 0x141E9AD93
-VA_TARGET_FUNC = 0x141EA8150
-ORIG_CALL_BYTES = bytes((0xE8, 0xB8, 0xD3, 0x00, 0x00))  # call 0x141ea8150
+VA_SITE_FILL = 0x14393C4B4
+ORIG_FILL_BYTES = bytes((0x48, 0x89, 0x83, 0x98, 0x00, 0x00, 0x00))  # mov [rbx+0x98], rax
+
+VA_OUTLINE_SITES = [
+    0x14393C4D7,
+    0x14393CBD5,
+    0x14393CE7F,
+]
+ORIG_OUTLINE_BYTES = bytes((0x48, 0x89, 0x83, 0x70, 0x01, 0x00, 0x00))  # mov [rbx+0x170], rax
+PATCH_OUTLINE_BYTES = bytes((0x4C, 0x89, 0x9B, 0x70, 0x01, 0x00, 0x00)) # mov [rbx+0x170], r11
 
 PRESETS = {
     'neon_blue': {
@@ -83,22 +94,16 @@ def encode_wave_color(r, g, b, a=255):
     return (a16 << 48) | (b16 << 32) | (g16 << 16) | r16
 
 
-def build_code_cave(va_cave, fill_col64, outline_col64):
+def build_code_cave(fill_col64, outline_col64):
     cave = bytearray()
-    # mov rax, fill_col64 (48 B8 <8 bytes>)
+    # movabs rax, fill_col64 (48 B8 <8 bytes>)
     cave += b'\x48\xb8' + struct.pack('<Q', fill_col64)
-    # mov [rdi + 0x50], rax (48 89 47 50)
-    cave += b'\x48\x89\x47\x50'
-    # mov rax, outline_col64 (48 B8 <8 bytes>)
-    cave += b'\x48\xb8' + struct.pack('<Q', outline_col64)
-    # mov [rdi + 0x88], rax (48 89 87 88 00 00 00)
-    cave += b'\x48\x89\x87\x88\x00\x00\x00'
-    # or dword ptr [rdi + 0xB0], 3 (83 8F B0 00 00 00 03)
-    cave += b'\x83\x8f\xb0\x00\x00\x00\x03'
-    # jmp va_target_func (E9 <rel32>)
-    va_after_jmp = va_cave + len(cave) + 5
-    rel32_jmp = VA_TARGET_FUNC - va_after_jmp
-    cave += b'\xe9' + struct.pack('<i', rel32_jmp)
+    # movabs r11, outline_col64 (49 BB <8 bytes>)
+    cave += b'\x49\xbb' + struct.pack('<Q', outline_col64)
+    # mov qword ptr [rbx + 0x98], rax (48 89 83 98 00 00 00)
+    cave += b'\x48\x89\x83\x98\x00\x00\x00'
+    # ret (C3)
+    cave += b'\xc3'
     return bytes(cave)
 
 
@@ -111,9 +116,9 @@ def parse_hex_color(hex_str):
 
 def inspect_status(exe_path):
     pe = PE(str(exe_path))
-    rva_call = VA_CALL_SITE - pe.imagebase
-    off_call = pe.rva_to_off(rva_call)
-    cur_call = pe.bin.data[off_call:off_call + 5]
+    rva_fill = VA_SITE_FILL - pe.imagebase
+    off_fill = pe.rva_to_off(rva_fill)
+    cur_fill = pe.bin.data[off_fill:off_fill + 7]
 
     sec_text = [s for s in pe.sections if s.name == '.text'][0]
     rva_cave = sec_text.vaddr + sec_text.vsize
@@ -121,22 +126,28 @@ def inspect_status(exe_path):
     va_cave = pe.imagebase + rva_cave
 
     print(f"File: {exe_path}")
-    print(f"Call site (0x{VA_CALL_SITE:X}, off 0x{off_call:X}): {cur_call.hex()}")
+    print(f"Fill site (0x{VA_SITE_FILL:X}, off 0x{off_fill:X}): {cur_fill.hex(' ')}")
 
-    if cur_call == ORIG_CALL_BYTES:
+    if cur_fill == ORIG_FILL_BYTES:
         print("  -> Trang thai: NGUYEN BAN (Goc, chua patch)")
-    elif cur_call[0] == 0xE8:
-        rel = struct.unpack('<i', cur_call[1:5])[0]
-        dest = VA_CALL_SITE + 5 + rel
+    elif cur_fill[0] == 0xE8:
+        rel = struct.unpack('<i', cur_fill[1:5])[0]
+        dest = VA_SITE_FILL + 5 + rel
         if dest == va_cave:
             print(f"  -> Trang thai: DA PATCH (tro toi cave 0x{va_cave:X})")
-            cave_bytes = pe.bin.data[off_cave:off_cave + 43]
-            if len(cave_bytes) >= 12 and cave_bytes[:2] == b'\x48\xb8':
+            cave_bytes = pe.bin.data[off_cave:off_cave + 28]
+            if len(cave_bytes) >= 10 and cave_bytes[:2] == b'\x48\xb8':
                 fill_val = struct.unpack('<Q', cave_bytes[2:10])[0]
                 rf = (fill_val >> 8) & 0xFF
                 gf = (fill_val >> 24) & 0xFF
                 bf = (fill_val >> 40) & 0xFF
                 print(f"     Fill color: RGB({rf}, {gf}, {bf})")
+            if len(cave_bytes) >= 20 and cave_bytes[10:12] == b'\x49\xbb':
+                out_val = struct.unpack('<Q', cave_bytes[12:20])[0]
+                ro = (out_val >> 8) & 0xFF
+                go = (out_val >> 24) & 0xFF
+                bo = (out_val >> 40) & 0xFF
+                print(f"     Outline color: RGB({ro}, {go}, {bo})")
         else:
             print(f"  -> Trang thai: TUY BIEN (dest = 0x{dest:X})")
     else:
@@ -148,9 +159,9 @@ def inspect_status(exe_path):
 
 def apply_patch(exe_path, fill_rgb, outline_rgb, dry_run=False):
     pe = PE(str(exe_path))
-    rva_call = VA_CALL_SITE - pe.imagebase
-    off_call = pe.rva_to_off(rva_call)
-    cur_call = pe.bin.data[off_call:off_call + 5]
+    rva_fill = VA_SITE_FILL - pe.imagebase
+    off_fill = pe.rva_to_off(rva_fill)
+    cur_fill = pe.bin.data[off_fill:off_fill + 7]
 
     sec_text = [s for s in pe.sections if s.name == '.text'][0]
     rva_cave = sec_text.vaddr + sec_text.vsize
@@ -158,24 +169,34 @@ def apply_patch(exe_path, fill_rgb, outline_rgb, dry_run=False):
     va_cave = pe.imagebase + rva_cave
     slack_len = sec_text.raw_size - sec_text.vsize
 
-    if cur_call != ORIG_CALL_BYTES and cur_call[0] != 0xE8:
-        sys.exit(f"LOI: Byte tai call site khong khop mau an toan: {cur_call.hex()}")
+    if cur_fill != ORIG_FILL_BYTES and cur_fill[0] != 0xE8:
+        sys.exit(f"LOI: Byte tai fill site khong khop mau an toan: {cur_fill.hex(' ')}")
 
     fill_val = encode_wave_color(*fill_rgb)
     outl_val = encode_wave_color(*outline_rgb)
-    cave_code = build_code_cave(va_cave, fill_val, outl_val)
+    cave_code = build_code_cave(fill_val, outl_val)
 
     if len(cave_code) > slack_len:
         sys.exit(f"LOI: Code cave ({len(cave_code)} bytes) vuot qua slack ({slack_len} bytes)")
 
-    rel32_call = va_cave - (VA_CALL_SITE + 5)
-    patch_call = b'\xe8' + struct.pack('<i', rel32_call)
+    rel32_call = va_cave - (VA_SITE_FILL + 5)
+    patch_call = b'\xe8' + struct.pack('<i', rel32_call) + b'\x90\x90'
 
     print(f"=== Thong so patch ===")
     print(f"  Fill color   : RGB{fill_rgb} -> 0x{fill_val:016X}")
     print(f"  Outline color: RGB{outline_rgb} -> 0x{outl_val:016X}")
     print(f"  Code cave    : off 0x{off_cave:X} (VA 0x{va_cave:X}, {len(cave_code)} bytes)")
-    print(f"  Patch call   : off 0x{off_call:X} -> {patch_call.hex()}")
+    print(f"  Patch call   : off 0x{off_fill:X} -> {patch_call.hex(' ')}")
+
+    outline_offsets = []
+    for va in VA_OUTLINE_SITES:
+        rva = va - pe.imagebase
+        off = pe.rva_to_off(rva)
+        cur = pe.bin.data[off:off + 7]
+        if cur != ORIG_OUTLINE_BYTES and cur != PATCH_OUTLINE_BYTES:
+            sys.exit(f"LOI: Byte tai outline site 0x{va:X} khong hop le: {cur.hex(' ')}")
+        outline_offsets.append((off, va))
+        print(f"  Patch outline: off 0x{off:X} (VA 0x{va:X}) -> {PATCH_OUTLINE_BYTES.hex(' ')}")
 
     if dry_run:
         print("[DRY-RUN] Kiem tra hoan tat, khong ghi file.")
@@ -195,9 +216,13 @@ def apply_patch(exe_path, fill_rgb, outline_rgb, dry_run=False):
         # 1. Ghi code cave vao slack
         f.seek(off_cave)
         f.write(cave_code)
-        # 2. Ghi lenh call vao call site
-        f.seek(off_call)
+        # 2. Ghi lenh call vao fill site
+        f.seek(off_fill)
         f.write(patch_call)
+        # 3. Ghi lenh mov r11 vao cac outline sites
+        for off, _ in outline_offsets:
+            f.seek(off)
+            f.write(PATCH_OUTLINE_BYTES)
 
     print(f"THANH CONG: Da patch Cubase15.exe!")
     print(f"Mo Cubase 15 de trai nghiem dai song moi.")
