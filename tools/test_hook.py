@@ -22,29 +22,36 @@ ROOT = HERE.parent
 BUILD = ROOT / 'build' / 'hooktest'
 DLL = ROOT / 'hook' / 'wavehook.dll'
 
-# 15 byte dau ma Cubase that co - 4 lenh chi doi thoat so. DLL kiem tra
+# 15 byte dau ma Cubase that co tai 0x141E9AD10. DLL kiem tra
 # dung 15 byte nay, nen ham thu nghiem phai co y het (xem ASM_SOURCE).
 PATCH_SIZE = 15
-FAKE_PROLOGUE = bytes((0x48, 0x8B, 0xC4,          # mov rax, rsp
-                       0x4C, 0x89, 0x48, 0x20,     # mov [rax+20h], r9
-                       0x4C, 0x89, 0x40, 0x18,     # mov [rax+18h], r8
-                       0x48, 0x89, 0x50, 0x10))    # mov [rax+10h], rdx
+FAKE_PROLOGUE = bytes((0x48, 0x89, 0x5C, 0x24, 0x08,         # mov [rsp+8], rbx
+                       0x48, 0x89, 0x74, 0x24, 0x10,         # mov [rsp+10h], rsi
+                       0x48, 0x89, 0x7C, 0x24, 0x18))        # mov [rsp+18h], rdi
 
 C_SOURCE = r'''
 /* Process thu nghiem: vong lap goi ham ve song gia lap trong mot luong.
  *
  * File nay KHONG dung `__asm`: MSVC x64 khong ho tro inline asm (chi co o
- * x86), nen 7 byte prologue do MASM sinh ra xem ASM_SOURCE ben canh.
+ * x86), nen 15 byte prologue do MASM sinh ra xem ASM_SOURCE ben canh.
  */
 #include <windows.h>
 #include <stdio.h>
 
-__declspec(dllexport) void target_draw(void);
+#pragma pack(push, 8)
+typedef struct {
+    char pad[0xB8];
+} DummyStyle;
+#pragma pack(pop)
+
+static DummyStyle s_dummy;
+
+__declspec(dllexport) void target_draw(void *dev, void *ctx, void *pen, void *points, int flag, DummyStyle *style);
 __declspec(dllexport) void go_target(void);
 
 __declspec(dllexport) void go_target(void)
 {
-    target_draw();
+    target_draw(NULL, NULL, NULL, NULL, 1, &s_dummy);
 }
 
 /* Bat loi va ghi ra dia chi. Khong co buoc nay thi process chet im lang
@@ -143,14 +150,9 @@ _TEXT SEGMENT
 
 PUBLIC target_draw
 target_draw PROC
-    mov     rax, rsp                 ; 48 8B C4
-    mov     [rax+20h], r9            ; 4C 89 48 20
-    mov     [rax+18h], r8            ; 4C 89 40 18
-    mov     [rax+10h], rdx           ; 48 89 50 10
-    ; Chi con nop roi. KHONG ghi bo nho o day: `inc qword ptr [rsp+28h]`
-    ; se lam dung phan tren shadow space cua chinh no, tuc la khung cua ham
-    ; goi no - lam hong bien cua do. Da gap loi nay: tien trinh chet voi
-    ; ma 0x80000003 (INT3) o dia chi truoc ham.
+    mov     qword ptr [rsp+8], rbx    ; 48 89 5C 24 08
+    mov     qword ptr [rsp+10h], rsi  ; 48 89 74 24 10
+    mov     qword ptr [rsp+18h], rdi  ; 48 89 7C 24 18
     nop
     nop
     nop
