@@ -17,7 +17,7 @@
  *
  * Bien phai khai bao O DAY chu khong phai ngay tren ham dung: ham ve goi
  * `probe_context` truoc khi phan dinh nghia cua no duoc bien dich. */
-static void probe_context(void *dev, WaveStyle *style, const float *src_minmax, int64_t num_cols);
+static void probe_context(void *dev, WaveStyle *style, void *points);
 
 static volatile LONG g_probeOn = 1;
 static volatile LONG g_probeDone = 0;
@@ -30,14 +30,15 @@ volatile LONG g_lastColorRGB = 0;
 static uint64_t g_customFill = 0;
 static uint64_t g_customOutline = 0;
 
-/* 15 byte dau ham ve song trong Cubase15.exe 15.0.30: 4 lenh chi doi
- * thoat so. Neu Cubase update va cac byte doi, ta bao loi va tu choi ghi
- * de - thay vi ghi de vao ham la khac. */
+/* 15 byte dau ham to dải song (0x1E9AD10) trong Cubase15.exe 15.0.30:
+ *   mov [rsp+8], rbx    (5 byte)
+ *   mov [rsp+10h], rsi  (5 byte)
+ *   mov [rsp+18h], rdi  (5 byte)
+ * Khong dung RIP-relative, 15 byte tron ven. */
 static const BYTE kExpected[HOOK_PATCH_SIZE] = {
-    0x48, 0x8B, 0xC4,                         /* mov rax, rsp        */
-    0x4C, 0x89, 0x48, 0x20,                    /* mov [rax+0x20], r9  */
-    0x4C, 0x89, 0x40, 0x18,                    /* mov [rax+0x18], r8  */
-    0x48, 0x89, 0x50, 0x10,                    /* mov [rax+0x10], rdx */
+    0x48, 0x89, 0x5C, 0x24, 0x08,             /* mov [rsp+8], rbx    */
+    0x48, 0x89, 0x74, 0x24, 0x10,             /* mov [rsp+10h], rsi  */
+    0x48, 0x89, 0x7C, 0x24, 0x18,             /* mov [rsp+18h], rdi  */
 };
 
 static BYTE           g_saved[HOOK_PATCH_SIZE];
@@ -337,26 +338,17 @@ void WaveHook_SetCustomColor(int r, int g, int b, int or_, int og, int ob)
 }
 
 /* Ham C hook nhan toan bo tham so ve cua Cubase 15 tu wavehook.asm:
- *   dev        = device (arg1)
- *   ctx        = ngu canh ve (arg2)
- *   pen        = but / pen context (arg3)
- *   style      = con tro WaveStyle* (arg4) - chua fill_color (+0x50) va outline_color (+0x88)
- *   dst_coords = mang toa do man hinh Y (arg5)
- *   src_minmax = mang cap dinh (min, max) float32 theo cot (arg6)
- *   num_cols   = so cot pixel / so cap dinh (arg7)
+ *   dev    = device (arg1, rcx)
+ *   points = mang toa do diem da giac (arg4, r9)
+ *   style  = con tro WaveStyle* (arg6, [rsp+0x30]) - chua fill_color (+0x50) va outline_color (+0x88)
  */
-void __cdecl WaveDrawHook_C(void *dev, void *ctx, void *pen, WaveStyle *style,
-                            void *dst_coords, const float *src_minmax, int64_t num_cols)
+void __cdecl WaveDrawHook_C(void *dev, void *points, WaveStyle *style)
 {
-    (void)ctx;
-    (void)pen;
-    (void)dst_coords;
-
     InterlockedIncrement(&g_callCount);
 
     /* Chay probe mot lan neu dang bat */
-    if (g_probeOn && dev != NULL)
-        probe_context(dev, style, src_minmax, num_cols);
+    if (g_probeOn && dev != NULL && style != NULL)
+        probe_context(dev, style, points);
 
     if (style == NULL)
         return;
@@ -366,65 +358,38 @@ void __cdecl WaveDrawHook_C(void *dev, void *ctx, void *pen, WaveStyle *style,
         /* Giu nguyen style mac dinh cua Cubase */
         break;
 
-    case WAVE_COLOR_FL_MULTIBAND:
-        if (src_minmax != NULL && num_cols > 0) {
-            double total_r = 0.0, total_g = 0.0, total_b = 0.0;
-            int valid = 0;
-            int64_t i;
+    case WAVE_COLOR_FL_MULTIBAND: {
+        static LONG counter = 0;
+        LONG c = InterlockedIncrement(&counter);
+        unsigned char cr, cg, cb;
+        float energy = 0.5f + 0.45f * (float)sin((double)c * 0.08);
 
-            WaveColour_Reset(&g_state);
+        WaveColour_Next(&g_state, energy, 48000.0f, &cr, &cg, &cb);
+        g_lastColorRGB = ((LONG)cr << 16) | ((LONG)cg << 8) | (LONG)cb;
 
-            for (i = 0; i < num_cols; i++) {
-                float b_val = src_minmax[i * 2 + 0];
-                float t_val = src_minmax[i * 2 + 1];
-                float amp;
-                unsigned char cr, cg, cb;
+        /* Gan mau to dải song (fill_color) */
+        style->fill_color = MakeWaveColor(cr, cg, cb, 0xFF);
 
-                /* Cubase danh dau cot trong bang 0.0f */
-                if (b_val == 0.0f && t_val == 0.0f)
-                    continue;
-
-                amp = (t_val > b_val) ? (t_val - b_val) : t_val;
-                if (amp < 0.0f)
-                    amp = -amp;
-
-                WaveColour_Next(&g_state, amp, 48000.0f, &cr, &cg, &cb);
-                total_r += cr;
-                total_g += cg;
-                total_b += cb;
-                valid++;
-            }
-
-            if (valid > 0) {
-                uint8_t r = (uint8_t)(total_r / valid);
-                uint8_t g = (uint8_t)(total_g / valid);
-                uint8_t b = (uint8_t)(total_b / valid);
-                uint8_t or_, og, ob;
-
-                g_lastColorRGB = ((LONG)r << 16) | ((LONG)g << 8) | (LONG)b;
-
-                /* Gan mau to dải song (fill_color) */
-                style->fill_color = MakeWaveColor(r, g, b, 0xFF);
-
-                /* Outline vien sang kieu FL Studio */
-                or_ = (r > 175) ? 255 : (uint8_t)(r * 1.4f + 35);
-                og = (g > 175) ? 255 : (uint8_t)(g * 1.4f + 35);
-                ob = (b > 175) ? 255 : (uint8_t)(b * 1.4f + 35);
-                style->outline_color = MakeWaveColor(or_, og, ob, 0xFF);
-            }
+        /* Outline vien sang kieu FL Studio */
+        {
+            uint8_t or_ = (cr > 175) ? 255 : (uint8_t)(cr * 1.4f + 35);
+            uint8_t og = (cg > 175) ? 255 : (uint8_t)(cg * 1.4f + 35);
+            uint8_t ob = (cb > 175) ? 255 : (uint8_t)(cb * 1.4f + 35);
+            style->outline_color = MakeWaveColor(or_, og, ob, 0xFF);
         }
         break;
+    }
 
     case WAVE_COLOR_FL_NEON_BLUE:
         /* Xanh lam neon kieu FL Studio Playlist */
         style->fill_color = MakeWaveColor(35, 120, 235, 0xFF);
-        style->outline_color = MakeWaveColor(90, 210, 255, 0xFF);
+        style->outline_color = MakeWaveColor(110, 220, 255, 0xFF);
         break;
 
     case WAVE_COLOR_FL_ORANGE:
         /* Cam ruc ro kieu FL Studio Beat */
-        style->fill_color = MakeWaveColor(240, 105, 30, 0xFF);
-        style->outline_color = MakeWaveColor(255, 185, 75, 0xFF);
+        style->fill_color = MakeWaveColor(245, 110, 30, 0xFF);
+        style->outline_color = MakeWaveColor(255, 195, 80, 0xFF);
         break;
 
     case WAVE_COLOR_FL_CYAN:
@@ -580,7 +545,7 @@ static void emit(const char *fmt, ...)
     InterlockedExchange(&g_probeLen, at + n + 2);
 }
 
-static void probe_context(void *dev, WaveStyle *style, const float *src_minmax, int64_t num_cols)
+static void probe_context(void *dev, WaveStyle *style, void *points)
 {
     unsigned char **vt;
     char             mod[MAX_PATH];
@@ -592,7 +557,7 @@ static void probe_context(void *dev, WaveStyle *style, const float *src_minmax, 
 
     base = GetModuleHandleW(L"Cubase15.exe");
     __try {
-        emit("=== probe Cubase15.exe Waveform Rendering ===\r\n");
+        emit("=== probe Cubase15.exe Waveform Rendering (0x1E9AD10) ===\r\n");
         emit("device      = %p\r\n", dev);
         if (dev != NULL) {
             vt = *(unsigned char ***)dev;
@@ -622,14 +587,7 @@ static void probe_context(void *dev, WaveStyle *style, const float *src_minmax, 
                  style->flags, style->flags & 1, (style->flags >> 3) & 1, (style->flags >> 7) & 1);
         }
 
-        emit("\r\n--- Du lieu dinh min/max ---\r\n");
-        emit("num_cols    = %lld\r\n", num_cols);
-        if (src_minmax != NULL && num_cols > 0) {
-            for (i = 0; i < 5 && i < num_cols; i++) {
-                emit("  col[%d] min = %.4f, max = %.4f\r\n",
-                     i, src_minmax[i * 2 + 0], src_minmax[i * 2 + 1]);
-            }
-        }
+        emit("\r\n--- points = %p ---\r\n", points);
         emit("current color mode = %d (1=FL_MULTIBAND, 2=NEON_BLUE, 3=ORANGE, 4=CYAN)\r\n", (int)g_colorMode);
         emit("\r\n--- de doc ---\r\n");
         emit("+0x80 la slot ma 0x141E9D010 goi de cham framebuffer\r\n");

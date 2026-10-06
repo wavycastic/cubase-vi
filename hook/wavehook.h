@@ -22,7 +22,7 @@
  * (3 + 4 + 4 + 4 byte) va 15 la diem dung lenh. 15 byte do duoc copy sang
  * trampoline. Chi tiet va ly do trong `wavehook.asm`.
  */
-#define CUBASE_WAVE_DRAW_RVA   0x1E9E140
+#define CUBASE_WAVE_DRAW_RVA   0x1E9AD10
 #define HOOK_PATCH_SIZE        15
 
 /* Do dai lenh nhay 13 byte: `mov r11, imm64` (10) + `jmp r11` (3).
@@ -120,9 +120,8 @@ __declspec(dllexport) void WaveHook_SetColorMode(int mode);
 __declspec(dllexport) int  WaveHook_GetColorMode(void);
 __declspec(dllexport) void WaveHook_SetCustomColor(int r, int g, int b, int or_, int og, int ob);
 
-/* Ham C hook nhan toan bo tham so ve tu ASM */
-__declspec(dllexport) void WaveDrawHook_C(void *dev, void *ctx, void *pen, WaveStyle *style,
-                                         void *dst_coords, const float *src_minmax, int64_t num_cols);
+/* Ham C hook nhan tham so ve tu ASM */
+__declspec(dllexport) void WaveDrawHook_C(void *dev, void *points, WaveStyle *style);
 
 /* Do dai vtable can xuat cho probe. 0xC0 = 24 slot: vua dat hon
  * slot +0x80 ma `0x141E9D010` goi, vua vua het cac slot danh tieng

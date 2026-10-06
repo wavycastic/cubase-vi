@@ -69,38 +69,31 @@ WaveDrawHook PROC
     push    r13
     push    r14
     push    r15
-    sub     rsp, 68h
+    sub     rsp, 48h
 
-    ; Luu cac thanh ghi tham so goc de khoi phuc truoc khi nhay ve trampoline
-    mov     [rsp+38h], rcx            ; arg1: dev
-    mov     [rsp+40h], rdx            ; arg2: ctx
-    mov     [rsp+48h], r8             ; arg3: pen
-    mov     [rsp+50h], r9             ; arg4: style (WaveStyle*)
+    ; Luu cac thanh ghi tham so goc
+    mov     [rsp+20h], rcx            ; dev (arg1)
+    mov     [rsp+28h], rdx            ; ctx (arg2)
+    mov     [rsp+30h], r8             ; pen (arg3)
+    mov     [rsp+38h], r9             ; points (arg4)
 
-    ; Dat cac tham so 5, 6, 7 len stack cho WaveDrawHook_C
-    ; Khoang cach tu rsp hien tai toi stack goc luc vao ham:
-    ;   68h + 40h (8 lan push) = 0A8h.
-    ; Stack goc luc vao ham:
-    ;   [rsp+00h]: return address
-    ;   [rsp+28h]: caller arg 5 (dst_coords)
-    ;   [rsp+30h]: caller arg 6 (src_minmax)
-    ;   [rsp+38h]: caller arg 7 (num_cols)
-    mov     rax, [rsp+0A8h+28h]       ; caller arg 5: dst_coords
-    mov     [rsp+20h], rax            ; C arg 5
-    mov     rax, [rsp+0A8h+30h]       ; caller arg 6: src_minmax
-    mov     [rsp+28h], rax            ; C arg 6
-    mov     rax, [rsp+0A8h+38h]       ; caller arg 7: num_cols
-    mov     [rsp+30h], rax            ; C arg 7
+    ; Tham so vao WaveDrawHook_C:
+    ;   rcx = dev (arg1)
+    ;   rdx = points (arg4)
+    ;   r8  = style (WaveStyle*, arg6 cua ham to tai [rsp+0B8h])
+    mov     r8, [rsp+0B8h]            ; WaveStyle*
+    mov     rdx, r9                   ; points
+    ; rcx da la dev
 
     call    WaveDrawHook_C
 
-    ; Khoi phuc thanh ghi cho trampoline
-    mov     rcx, [rsp+38h]
-    mov     rdx, [rsp+40h]
-    mov     r8,  [rsp+48h]
-    mov     r9,  [rsp+50h]
+    ; Khoi phuc thanh ghi goc de ham tiep tuc
+    mov     rcx, [rsp+20h]
+    mov     rdx, [rsp+28h]
+    mov     r8,  [rsp+30h]
+    mov     r9,  [rsp+38h]
 
-    add     rsp, 68h
+    add     rsp, 48h
     pop     r15
     pop     r14
     pop     r13
@@ -110,9 +103,7 @@ WaveDrawHook PROC
     pop     rbx
     pop     rbp
 
-    ; Nhay ve TRAMPOLINE - noi chay lai 15 byte da doi chieu cua ham goc.
-    ; KHONG nhay thang ve `WaveDrawResumeVA`: 4 lenh "doi thoat so" o giua
-    ; phai duoc chay, bo qua chung se lam ham goc thay sai gia tri tham so.
+    ; Nhay ve TRAMPOLINE - chay lai 15 byte goc cua 0x141E9AD10
     lea     rax, [WaveDrawTrampolineVA]
     jmp     qword ptr [rax]
 WaveDrawHook ENDP
@@ -120,15 +111,17 @@ WaveDrawHook ENDP
 ; ---------------------------------------------------------------------
 ; WaveDrawTrampoline
 ;
-; 15 byte dau cua ham goc (xem giai thich o dau file), roi nhay ve
-; `WaveDrawResumeVA` - ma DLL gan bang `hook + 15` khi cai dat.
+; 15 byte dau cua 0x141E9AD10:
+;   mov [rsp+8], rbx    (5 byte: 48 89 5C 24 08)
+;   mov [rsp+10h], rsi  (5 byte: 48 89 74 24 10)
+;   mov [rsp+18h], rdi  (5 byte: 48 89 7C 24 18)
+; roi nhay ve WaveDrawResumeVA (0x141E9AD10 + 15)
 ; ---------------------------------------------------------------------
 PUBLIC WaveDrawTrampoline
 WaveDrawTrampoline PROC
-    mov     rax, rsp                 ; 48 8B C4
-    mov     [rax+20h], r9            ; 4C 89 48 20
-    mov     [rax+18h], r8            ; 4C 89 40 18
-    mov     [rax+10h], rdx           ; 48 89 50 10
+    mov     qword ptr [rsp+8], rbx
+    mov     qword ptr [rsp+10h], rsi
+    mov     qword ptr [rsp+18h], rdi
     lea     rax, [WaveDrawResumeVA]
     jmp     qword ptr [rax]
 WaveDrawTrampoline ENDP
